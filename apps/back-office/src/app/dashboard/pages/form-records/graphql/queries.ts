@@ -14,7 +14,6 @@ export const GET_FORM_RECORDS = gql`
       id
       name
       createdAt
-      structure
       metadata {
         name
         canSee

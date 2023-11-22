@@ -30,7 +30,7 @@ import {
   handleTablePageEvent,
 } from '@oort-front/ui';
 import { SnackbarService } from '@oort-front/ui';
-import { GET_APPLICATIONS } from './graphql/queries';
+import { GET_APPLICATIONS, GET_RECENT_APPLICATIONS } from './graphql/queries';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 10;
@@ -112,7 +112,7 @@ export class ApplicationsComponent
       });
     this.apollo
       .query<ApplicationsApplicationNodesQueryResponse>({
-        query: GET_APPLICATIONS,
+        query: GET_RECENT_APPLICATIONS,
         fetchPolicy: 'no-cache',
         variables: {
           first: 5,

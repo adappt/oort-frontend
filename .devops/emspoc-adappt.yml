@@ -11,6 +11,9 @@ schedules:
     include:
     - main
 
+trigger:
+  - main
+
 pool:
   name: 'LinuxPool'
 

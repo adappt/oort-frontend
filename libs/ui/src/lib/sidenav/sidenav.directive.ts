@@ -96,9 +96,11 @@ export class SidenavDirective implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(change: SimpleChanges) {
+    console.log('sidenav changes');
     this.opened = change['opened']?.currentValue ?? false;
     if (this.overlayRef) {
       if (this.opened) {
+        console.log('updating sidenav display');
         this.overlayRef.updateSize({ width: this.portal?.element.offsetWidth });
         this.overlayRef.updatePosition();
       } else {

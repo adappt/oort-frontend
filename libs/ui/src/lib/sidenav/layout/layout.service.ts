@@ -49,6 +49,7 @@ export class UILayoutService {
    * @param container Sidenav container.
    */
   setRightSidenav(container: any): void {
+    console.log('passing right sidenav');
     this.rightSidenav.next(container);
   }
 

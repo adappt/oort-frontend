@@ -52,10 +52,12 @@ export class TabBodyHostDirective
     this.openedTab
       .pipe(takeUntil(this.destroy$))
       .subscribe((tab: TabComponent) => {
+        console.log('will detach');
         if (tab !== this._openedTab && this.hasAttached()) {
           this.detach();
         }
         if (!this.hasAttached()) {
+          console.log('will attach');
           this.attach(tab.content);
         }
       });

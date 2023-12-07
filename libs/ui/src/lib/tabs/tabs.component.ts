@@ -130,6 +130,7 @@ export class TabsComponent implements AfterViewInit, OnDestroy, OnChanges {
    * @param tab tab to display
    */
   showContent(tab: TabComponent) {
+    console.log('showing content');
     this.selectedIndex = tab.index;
     this.setSelectedTab();
 
@@ -170,6 +171,7 @@ export class TabsComponent implements AfterViewInit, OnDestroy, OnChanges {
       tab.openTab
         .pipe(takeUntil(this.reorder$), takeUntil(this.destroy$))
         .subscribe(() => {
+          console.log('open tab');
           if (
             tab.index !== this.selectedIndex ||
             !this.tabBodyHost.hasAttached()

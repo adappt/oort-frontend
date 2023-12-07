@@ -96,6 +96,7 @@ export class TooltipDirective implements OnDestroy {
    */
   @HostListener('mouseleave')
   onMouseLeave() {
+    console.log('tooltip: leave');
     this.removeHint();
   }
 
@@ -104,6 +105,7 @@ export class TooltipDirective implements OnDestroy {
    */
   private removeHint() {
     if (this.currentHost.contains(this.elToolTip)) {
+      console.log('removing');
       this.renderer.removeChild(this.currentHost, this.elToolTip);
     }
   }

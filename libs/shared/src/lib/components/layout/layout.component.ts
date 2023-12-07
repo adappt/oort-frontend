@@ -218,7 +218,7 @@ export class LayoutComponent
               componentRef.instance[key] = value;
             }
           }
-
+          console.log('creating sidenav instance');
           componentRef.instance.cancel.subscribe(() => {
             componentRef.destroy();
             this.layoutService.setRightSidenav(null);

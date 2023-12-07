@@ -30,6 +30,7 @@ export class MapSidenavControlsComponent {
 
   /** Opens the layers menu */
   openLayersMenu() {
+    console.log('open layer');
     this.openSidenavMenu(true);
   }
 
@@ -39,6 +40,7 @@ export class MapSidenavControlsComponent {
    * @param layersMenuExpanded true if we start with the layers expanded
    */
   openSidenavMenu(layersMenuExpanded: boolean) {
+    console.log('open sidenav');
     this.layoutService.setRightSidenav({
       component: SidenavControlsMenuComponent,
       inputs: {

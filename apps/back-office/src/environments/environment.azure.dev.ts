@@ -9,8 +9,8 @@ import { Environment } from './environment.type';
 const authConfig: AuthConfig = {
   issuer:
     'https://login.microsoftonline.com/76d22fc8-2330-45cf-ab36-51074cf8f1e2/v2.0',
-  redirectUri: 'https://emspoc.adapptlabs.com/backoffice/',
-  postLogoutRedirectUri: 'https://emspoc.adapptlabs.com/backoffice/auth',
+  redirectUri: 'https://emspocdev.adapptlabs.com/backoffice/',
+  postLogoutRedirectUri: 'https://emspocdev.adapptlabs.com/backoffice/auth',
   clientId: 'db40357f-374e-476e-9ce8-5c9b3cbe475a',
   scope: 'openid profile email offline_access',
   responseType: 'code',
@@ -26,8 +26,8 @@ export const environment: Environment = {
   production: true,
   apiUrl: 'https://emspocdev.adapptlabs.com/api',
   subscriptionApiUrl: 'wss://emspocdev.adapptlabs.com/api',
-  frontOfficeUri: 'https://emspoc.adapptlabs.com/',
-  backOfficeUri: 'https://emspoc.adapptlabs.com/backoffice/',
+  frontOfficeUri: 'https://emspocdev.adapptlabs.com/',
+  backOfficeUri: 'https://emspocdev.adapptlabs.com/backoffice/',
   module: 'backoffice',
   availableLanguages: ['en'],
   authConfig,
@@ -49,9 +49,6 @@ export const environment: Environment = {
   sentry: {
     environment: 'development',
     dns: 'https://37ca208310369a4cee685fd50e1105ad@o4504696331632640.ingest.sentry.io/4505997745782784',
-    tracePropagationTargets: ['emspoc.adapptlabs.com'],
-  },
-  user: {
-    attributes: ['country', 'region', 'location'],
+    tracePropagationTargets: ['emspocdev.adapptlabs.com'],
   },
 };

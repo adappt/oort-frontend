@@ -7,8 +7,8 @@ import { Environment } from './environment.type';
 const authConfig: AuthConfig = {
   issuer:
     'https://login.microsoftonline.com/76d22fc8-2330-45cf-ab36-51074cf8f1e2/v2.0',
-  redirectUri: 'https://emspoc.adapptlabs.com/',
-  postLogoutRedirectUri: 'https://emspoc.adapptlabs.com/auth',
+  redirectUri: 'https://emspocdev.adapptlabs.com/',
+  postLogoutRedirectUri: 'https://emspocdev.adapptlabs.com/auth',
   clientId: 'db40357f-374e-476e-9ce8-5c9b3cbe475a',
   scope: 'openid profile email offline_access',
   responseType: 'code',
@@ -22,8 +22,8 @@ export const environment: Environment = {
   production: true,
   apiUrl: 'https://emspocdev.adapptlabs.com/api',
   subscriptionApiUrl: 'wss://emspocdev.adapptlabs.com/api',
-  frontOfficeUri: 'https://emspoc.adapptlabs.com/',
-  backOfficeUri: 'https://emspoc.adapptlabs.com/backoffice/',
+  frontOfficeUri: 'https://emspocdev.adapptlabs.com/',
+  backOfficeUri: 'https://emspocdev.adapptlabs.com/backoffice/',
   availableLanguages: ['en'],
   authConfig,
   theme,

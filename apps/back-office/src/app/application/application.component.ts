@@ -146,6 +146,11 @@ export class ApplicationComponent
                 path: './settings/subscriptions',
                 icon: 'add_to_queue',
               },
+              {
+                name: this.translate.instant('New EMS'),
+                path: './settings/newems',
+                icon: 'add_to_queue',
+              },
             ];
           }
           if (application.canUpdate) {

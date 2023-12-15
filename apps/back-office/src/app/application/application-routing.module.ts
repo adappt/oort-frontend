@@ -146,6 +146,14 @@ const routes: Routes = [
             // canActivate: [PermissionGuard]
           },
           {
+            path: 'newems',
+            loadChildren: () =>
+              import('../../../../../libs/shared/src/lib/components/email/email.module').then(
+                (m) => m.EmailModule
+              ),
+            // canActivate: [PermissionGuard]
+          },
+          {
             path: 'templates',
             loadChildren: () =>
               import('@oort-front/shared').then(

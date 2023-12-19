@@ -35,7 +35,8 @@ export class ChartSettingsComponent
     return (this.formGroup?.controls.chart as UntypedFormGroup) || null;
   }
 
-  /** @returns the form for the legend */ public get legendForm(): UntypedFormGroup {
+  /** @returns the form for the legend */
+  public get legendForm(): UntypedFormGroup {
     return (this.chartForm?.controls.legend as UntypedFormGroup) || null;
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CanDeactivateGuard } from '../guards/can-deactivate.guard';
@@ -148,9 +149,9 @@ const routes: Routes = [
           {
             path: 'newems',
             loadChildren: () =>
-              import('../../../../../libs/shared/src/lib/components/email/email.module').then(
-                (m) => m.EmailModule
-              ),
+              import(
+                '../../../../../libs/shared/src/lib/components/email/email.module'
+              ).then((m) => m.EmailModule),
             // canActivate: [PermissionGuard]
           },
           {

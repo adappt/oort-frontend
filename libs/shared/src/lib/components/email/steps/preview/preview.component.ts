@@ -26,89 +26,10 @@ interface DialogData {
  * Component used to display modals regarding layouts
  */
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    FormWrapperModule,
-    QueryBuilderModule,
-    CoreGridModule,
-    DialogModule,
-    ButtonModule,
-  ],
   selector: 'app-preview',
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.scss'],
 })
-export class PreviewComponent 
-  implements AfterViewInit {
-  @Input() layout: any;
-  public form = this.fb.group({
-    name: [this.data.layout?.name, Validators.required],
-    query: createQueryForm(this.data.layout?.query),
-    display: createDisplayForm(this.data.layout?.display),
-  });
-  public templates: any[] = [];
-  public layoutPreviewData!: { form: UntypedFormGroup; defaultLayout: any };
-
-  /**
-   * The constructor function is a special function that is called when a new instance of the class is created
-   *
-   * @param fb This is the service used to build forms.
-   * @param dialogRef This is the reference of the dialog that will be opened.
-   * @param data This is the data that is passed to the modal when it is opened.
-   */
-  constructor(
-    private fb: FormBuilder,
-    public dialogRef: DialogRef<PreviewComponent>,
-    @Inject(DIALOG_DATA) public data: DialogData
-  ) {}
-
-  ngAfterViewInit(): void {
-    this.layoutPreviewData = {
-      form: this.form,
-      defaultLayout: this.data.layout?.display,
-    };
-    // Remove fields from layout that are not part of the query
-    const fieldNames = this.getFieldNames(this.form.getRawValue().query.fields);
-    if (this.layoutPreviewData.defaultLayout) {
-      const layoutFields = this.layoutPreviewData.defaultLayout.fields;
-      for (const key in layoutFields) {
-        if (!fieldNames.includes(key)) {
-          delete layoutFields[key];
-        }
-      }
-    }
-    // Subscribe to changes to set display of the query
-    this.form.get('display')?.valueChanges.subscribe((value: any) => {
-      this.layoutPreviewData.defaultLayout = value;
-    });
-  }
-
-  /**
-   * Closes the modal sending form value.
-   */
-  onSubmit(): void {
-    this.dialogRef.close(this.form?.getRawValue() as any);
-  }
-
-  /**
-   * Get field names
-   *
-   * @param fields list of fields
-   * @param prefix field name prefix
-   * @returns list of field names
-   */
-  private getFieldNames(fields: any[], prefix?: string): any[] {
-    return flattenDeep(
-      fields.map((f) => {
-        if (f.fields) {
-          return this.getFieldNames(f.fields, f.name);
-        } else {
-          return prefix ? `${prefix}.${f.name}` : f.name;
-        }
-      })
-    );
-  }
+export class PreviewComponent {
+  
 }

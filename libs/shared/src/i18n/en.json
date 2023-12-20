@@ -950,8 +950,13 @@
 			}
 		},
 		"queryBuilder": {
+			"block": {
+				"label": "Block Title",
+				"title": "Block"
+			},
 			"dataset": {
-				"select": "Select a dataset"
+				"select": "Select a dataset",
+				"title": "Data set"
 			},
 			"errors": {
 				"field": {
@@ -971,12 +976,14 @@
 			},
 			"filter": {
 				"and": "And",
+				"field": "Field",
 				"logic": "Filter logic",
 				"new": "Add new filter",
 				"newGroup": "Add new filter group",
 				"operator": "Operator",
 				"or": "Or",
-				"title": "Filter"
+				"title": "Filter",
+				"value": "Value"
 			},
 			"hint": {
 				"fields": "Select data points below and drag them to 'selected fields' on the right",

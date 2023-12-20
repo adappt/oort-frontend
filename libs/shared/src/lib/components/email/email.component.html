@@ -105,12 +105,12 @@
       <personal-details *ngIf="currentStep === 1" [personalDetails]="currentGroup"> </personal-details>
       <payment-details *ngIf="currentStep === 2" [paymentDetails]="currentGroup"> </payment-details> -->
       <!-- <span class="k-form-separator"></span> -->
-  <app-create-notification *ngIf="currentStep === 1"></app-create-notification>
-  <app-create-dataset *ngIf="currentStep === 2"></app-create-dataset>
-  <app-select-distribution *ngIf="currentStep === 3"></app-select-distribution>
-  <app-schedule-alert *ngIf="currentStep === 4"></app-schedule-alert>
-  <app-layout *ngIf="currentStep === 5"></app-layout>
-  <!-- <app-preview *ngIf="currentStep === 6"></app-preview> -->
+  <app-create-notification *ngIf="currentStep === 0"></app-create-notification>
+  <app-create-dataset *ngIf="currentStep === 1"></app-create-dataset>
+  <app-select-distribution *ngIf="currentStep === 2"></app-select-distribution>
+  <app-schedule-alert *ngIf="currentStep === 3"></app-schedule-alert>
+  <app-layout *ngIf="currentStep === 4"></app-layout>
+  <app-preview *ngIf="currentStep === 5"></app-preview>
 
   <!-- <span class="k-form-separator"></span> -->
 

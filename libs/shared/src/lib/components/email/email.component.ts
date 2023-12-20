@@ -22,7 +22,7 @@ export class EmailComponent {
   @ViewChild('stepper', { static: true })
     public stepper: StepperComponent | undefined;
 
-    public currentStep = 1;
+    public currentStep = 0;
 
     private sumbitted = false;
 

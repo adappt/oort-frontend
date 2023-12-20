@@ -103,7 +103,9 @@ export class EmailComponent {
     public get currentGroup(): FormGroup {
         return this.getGroupAt(this.currentStep);
     }
-
+    moveTo(step:any){
+        this.currentStep=step;
+    }
     public next(): void {
         this.currentStep += 1;
     }

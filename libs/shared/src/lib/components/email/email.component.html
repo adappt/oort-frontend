@@ -1,43 +1,39 @@
 <div class="example">
-  <!-- <kendo-stepper #stepper 
-  [steps]="steps" 
-  stepType="full" 
-  [(currentStep)]="currentStep" 
-  [style.width.px]="550"
-  orientation="horizontal"
-  > </kendo-stepper> -->
-
-   <div>
+  <div>
     <ol class="flex items-center w-full mb-1 ml-1 sm:mb-2">
       <li
-      class="flex w-full items-center text-white  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
-    >
-      <div
-        class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
-      >
-        1
-      </div>
-    </li>
-      <li
-        class="flex w-full items-center text-white  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
+        (click)="moveTo(1)"
+        class="flex w-full items-center text-white after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
       >
         <div
           class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
         >
+          1
+        </div>
+      </li>
+      <li
+        (click)="moveTo(2)"
+        class="flex w-full items-center text-white after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
+      >
+        <div
+          class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
+        >        
           2
         </div>
       </li>
       <li
-      class="flex w-full items-center text-white  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
-    >
-      <div
-        class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
+        (click)="moveTo(3)"
+        class="flex w-full items-center text-white after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
       >
-        3
-      </div>
-    </li>
-    <li
-        class="flex w-full items-center text-white  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
+        <div
+          class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
+        >
+          3
+        </div>
+      </li>
+      <li
+        (click)="moveTo(4)"
+        class="flex w-full items-center text-white after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
       >
         <div
           class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
@@ -46,74 +42,71 @@
         </div>
       </li>
       <li
-      class="flex w-full items-center text-white after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block dark:after:border-blue-800"
-    >
-      <div
-      class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
-      >
-        5
-      </div>
-    </li>
-      <li
-        class="flex w-full items-center text-gray-300 after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block dark:after:border-blue-800"
+        (click)="moveTo(5)"
+        class="flex w-full items-center text-white after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
       >
         <div
-          class="flex items-center justify-center w-5 h-5 bg-gray-100 rounded-full lg:h-5 lg:w-5 dark:bg-gray-200 shrink-0"
+          class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
+        >
+          5
+        </div>
+      </li>
+      <li
+        (click)="moveTo(6)"
+        class="flex w-full items-center text-white after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
+      >
+        <div
+          class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
         >
           6
         </div>
       </li>
-      <li
-       
-      >
-        <div
-          class="flex items-center  text-gray-300 justify-center w-5 h-5 bg-gray-100 rounded-full lg:h-5 lg:w-5 dark:bg-gray-200 shrink-0"
-        >
-          7
+      <li (click)="moveTo(7)">
+        <div class="flex w-full items-center text-white">
+          <div
+            class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
+          >
+            7
+          </div>
         </div>
       </li>
     </ol>
-    <div class="flex items-center w-full mb-4  ">
-      <div class="mr-2">
+    <div class="max-w-screen-xl mx-auto flex items-center mb-4">
+      <div class="mr-4" (click)="moveTo(1)">
         <div class="text-blue-600 text-xs">Notification</div>
-        <div class="text-blue-600 text-xs"> /Alert</div>
+        <div class="text-blue-600 text-xs">/ Alert</div>
       </div>
-      <div class="mr-2">
-        <div class="text-blue-600 text-xs">Select Dataset</div>
+      <div class="mr-4 ml-12" (click)="moveTo(2)">
+        <div class="text-blue-600 text-xs ml-6">Select Dataset</div>
       </div>
-      <div class=" ml-12">
-        <div class="text-blue-600  text-xs">Select Distribution</div>
+      <div class="mr-4 ml-12" (click)="moveTo(3)">
+        <div class="text-blue-600 text-xs ml-12">Select Distribution</div>
       </div>
-    <div class="ml-6">
-        <div class="text-blue-600 text-xs">Schedule Alert</div>
+      <div class="mr-4 ml-6" (click)="moveTo(4)">
+        <div class="text-blue-600 text-xs ml-12">Schedule Alert</div>
       </div>
-      <div class="ml-11">
-        <div class="text-blue-600 text-xs">Layout</div>
+      <div class="mr-4 ml-12" (click)="moveTo(5)">
+        <div class="text-blue-600 text-xs ml-12">Layout</div>
       </div>
-      <div class="ml-11">
-        <div class="text-blue-600 text-xs">Preview</div>
+      <div class="mr-4 ml-12" (click)="moveTo(6)">
+        <div class="text-blue-600 text-xs ml-12">Preview</div>
       </div>
-      <div class="ml-12">
-        <div class="text-blue-600 text-xs">send</div>
+      <div class="ml-12" (click)="moveTo(7)">
+        <div class="text-blue-600 text-xs ml-12">Send</div>
       </div>
     </div>
   </div>
   <div>
     <span class="k-form-separator"></span>
   </div>
-  <!-- <form class="k-form"> -->
-  <!-- <account-details *ngIf="currentStep === 0" [accountDetails]="currentGroup"> </account-details>
-      <personal-details *ngIf="currentStep === 1" [personalDetails]="currentGroup"> </personal-details>
-      <payment-details *ngIf="currentStep === 2" [paymentDetails]="currentGroup"> </payment-details> -->
-      <!-- <span class="k-form-separator"></span> -->
+
   <app-create-notification *ngIf="currentStep === 1"></app-create-notification>
   <app-create-dataset *ngIf="currentStep === 2"></app-create-dataset>
   <app-select-distribution *ngIf="currentStep === 3"></app-select-distribution>
   <app-schedule-alert *ngIf="currentStep === 4"></app-schedule-alert>
   <app-layout *ngIf="currentStep === 5"></app-layout>
-  <!-- <app-preview *ngIf="currentStep === 6"></app-preview> -->
+  <app-preview *ngIf="currentStep === 6"></app-preview>
 
-  <!-- <span class="k-form-separator"></span> -->
 
   <div class="flex gap-4 mt-4">
     <button
@@ -132,42 +125,18 @@
     >
       Save and Proceed
     </button>
-  </div>
+  </div>  
+</div>
+<!-- <div class="example" >
+<kendo-stepper
+      [steps]="steps"
+      stepType="full"
+      [currentStep]="1"
+      [linear]="false"
+      [style.width.px]="570"
+    >
+    </kendo-stepper>
 
-  <!-- <div class="flex gap-4 mt-4">
-    <button
-      type="button"
-      class="bg-blue-500 text-white px-4 py-2 rounded-md"
-      *ngIf="currentStep !== 0"
-      (click)="prev()"
-    >
-      Back
-    </button>
-    <button
-      type="button"
-      class="bg-blue-500 text-white ml-3 px-4 py-2 rounded-md"
-      (click)="next()"
-      *ngIf="currentStep !== 7"
-    >
-      Save and Proceed
-    </button>
-    <button
-      type="button"
-      class="bg-blue-500 text-white ml-3 px-4 py-2 rounded-md"
-      (click)="next()"
-      *ngIf="currentStep !== 7"
-    >
-      Skip
-    </button>
   </div> -->
 
-  <!-- <div class="k-form-buttons k-buttons-end">
-          <span class="page">Step {{ currentStep }} of 7</span>
-          <div>
-              <button class="k-button prev" *ngIf="currentStep !== 0" (click)="prev()">Previous</button>
-              <button class="k-button k-primary" (click)="next()" *ngIf="currentStep !== 7">Next</button>
-              <button class="k-button k-primary" (click)="submit()" *ngIf="currentStep === 7">Submit</button>
-          </div>
-      </div> -->
-  <!-- </form> -->
-</div>
+

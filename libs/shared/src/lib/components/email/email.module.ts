@@ -30,7 +30,7 @@ import { TabsModule } from 'libs/ui/src/lib/tabs/tabs.module';
     CreateDatasetComponent,
     ScheduleAlertComponent,
     LayoutComponent,
-    // PreviewComponent,
+    PreviewComponent,
   ],
   imports: [CommonModule, EmailRoutingModule, TranslateModule,
     LayoutModule,

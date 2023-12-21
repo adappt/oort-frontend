@@ -6,6 +6,7 @@ import { Component, Input, Inject, OnDestroy } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { DialogSize, dialogSizes } from './types/dialog-size';
+import { TranslateModule } from '@ngx-translate/core';
 
 /**
  * LaunchDialog component.
@@ -144,7 +145,7 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [LaunchDialogComponent],
-      imports: [CommonModule, DialogModule],
+      imports: [CommonModule, DialogModule, TranslateModule.forRoot()],
     }),
   ],
   argTypes: {

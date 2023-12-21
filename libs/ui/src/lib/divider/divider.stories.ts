@@ -36,9 +36,7 @@ export default {
     moduleMetadata({
       imports: [DividerModule],
     }),
-    componentWrapperDecorator(
-      (story) => `<div class="h-screen">${story}</div>`
-    ),
+    componentWrapperDecorator((story) => `<div class="h-20">${story}</div>`),
   ],
 } as Meta<DividerComponent>;
 

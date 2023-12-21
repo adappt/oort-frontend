@@ -4,6 +4,7 @@ import { SpinnerModule } from './spinner.module';
 import { sizes } from '../types/size';
 import { variants } from '../types/variant';
 import { categories } from '../types/category';
+import { TranslateModule } from '@ngx-translate/core';
 
 export default {
   title: 'Components/Spinner',
@@ -11,7 +12,7 @@ export default {
   component: SpinnerComponent,
   decorators: [
     moduleMetadata({
-      imports: [SpinnerModule],
+      imports: [SpinnerModule, TranslateModule.forRoot()],
     }),
   ],
   argTypes: {

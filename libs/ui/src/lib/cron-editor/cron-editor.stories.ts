@@ -7,6 +7,7 @@ import { TabsModule } from '../tabs/tabs.module';
 import { RadioModule } from '../radio/radio.module';
 import { CheckboxModule } from '../checkbox/checkbox.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateModule } from '@ngx-translate/core';
 
 export default {
   title: 'Components/CronEditorComponent',
@@ -22,6 +23,7 @@ export default {
         TabsModule,
         RadioModule,
         CheckboxModule,
+        TranslateModule.forRoot(),
       ],
     }),
   ],

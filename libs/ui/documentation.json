@@ -14168,7 +14168,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "StoryFn<CheckboxComponent>",
-                "defaultValue": "(\n  args: CheckboxComponent\n) => {\n  const formGroup = new FormGroup({\n    checkbox: new FormControl(false),\n  });\n  args.variant = 'default';\n  return {\n    component: CheckboxComponent,\n    template: `\n      <form [formGroup]=\"formGroup\">\n      <ui-checkbox [variant]=\"'${args.variant}'\" formControlName=\"checkbox\">\n      <ng-container ngProjectAs=\"label\">Form control checkbox</ng-container>\n      </ui-checkbox>\n        </form>\n        <br>\n        <p>value: {{formGroup.get('checkbox').value}}</p>\n        <p>touched: {{formGroup.get('checkbox').touched}}</p>\n        `,\n    props: {\n      ...args,\n      formGroup,\n    },\n  };\n}",
+                "defaultValue": "(\n  args: CheckboxComponent\n) => {\n  const formGroup = new FormGroup({\n    checkbox: new FormControl(false),\n  });\n  return {\n    component: CheckboxComponent,\n    template: `\n      <form [formGroup]=\"formGroup\">\n      <ui-checkbox [variant]=\"'${args.variant}'\" formControlName=\"checkbox\">\n      <ng-container ngProjectAs=\"label\">Form control checkbox</ng-container>\n      </ui-checkbox>\n        </form>\n        <br>\n        <p>value: {{formGroup.get('checkbox').value}}</p>\n        <p>touched: {{formGroup.get('checkbox').touched}}</p>\n        `,\n    props: {\n      ...args,\n      formGroup,\n    },\n  };\n}",
                 "rawdescription": "Form control template checkbox",
                 "description": "<p>Form control template checkbox</p>\n"
             },
@@ -14844,6 +14844,18 @@
                 "name": "Primary",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
+                "file": "libs/ui/src/lib/fixed-wrapper/fixed-wrapper.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "Template.bind({})",
+                "rawdescription": "Primary checkbox",
+                "description": "<p>Primary checkbox</p>\n"
+            },
+            {
+                "name": "Primary",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
                 "file": "libs/ui/src/lib/radio/radio.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
@@ -15443,7 +15455,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "StoryFn<CheckboxComponent>",
-                "defaultValue": "(args: CheckboxComponent) => {\n  args.variant = 'default';\n  return {\n    component: CheckboxComponent,\n    template: `\n      <ui-checkbox [variant]=\"'${args.variant}'\">\n      <ng-container ngProjectAs=\"label\">Checkbox text</ng-container>\n      <ng-container ngProjectAs=\"description\">Description text text text.</ng-container>\n      <ng-container ngProjectAs=\"icon\">\n      <ui-icon\n      icon=\"info_outline\"\n      [inline]=\"true\"\n      [size]=\"18\"\n      variant=\"grey\"\n    ></ui-icon>\n      </ng-container>\n      </ui-checkbox>\n        `,\n    props: {\n      ...args,\n    },\n  };\n}",
+                "defaultValue": "(args: CheckboxComponent) => {\n  args.variant = 'default';\n  return {\n    component: CheckboxComponent,\n    template: `\n      <ui-checkbox variant=\"${args.variant}\" [checked]=\"${args.checked}\" [indeterminate]=\"${args.indeterminate}\" ariaLabel=\"${args.ariaLabel}\" name=\"${args.name}\" disabled=\"${args.disabled}\">\n      <ng-container ngProjectAs=\"label\">Checkbox text</ng-container>\n      <ng-container ngProjectAs=\"description\">Description text text text.</ng-container>\n      <ng-container ngProjectAs=\"icon\">\n      <ui-icon\n      icon=\"info_outline\"\n      [inline]=\"true\"\n      [size]=\"18\"\n      variant=\"grey\"\n    ></ui-icon>\n      </ng-container>\n      </ui-checkbox>\n        `,\n    props: {\n      ...args,\n    },\n  };\n}",
                 "rawdescription": "Template checkbox",
                 "description": "<p>Template checkbox</p>\n"
             },
@@ -15482,6 +15494,18 @@
                 "defaultValue": "(args: any) => {\n  return {\n    template: `<div uiFormFieldDirective [outline]=\"${args.outline}\">\n    <label>Phone Number</label>\n    <input type=\"text\" name=\"account-number\" id=\"account-number\" placeholder=\"000-00-0000\"/>\n    <ui-spinner [size]=\"'medium'\" uiSuffix></ui-spinner>\n    <ui-icon icon=\"search\" uiPrefix></ui-icon>\n  </div>`,\n    props: {\n      ...args,\n    },\n  };\n}",
                 "rawdescription": "Template to create form wrapper component's story",
                 "description": "<p>Template to create form wrapper component&#39;s story</p>\n"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "libs/ui/src/lib/fixed-wrapper/fixed-wrapper.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "StoryFn<FixedWrapperComponent>",
+                "defaultValue": "() => {\n  return {\n    component: FixedWrapperComponent,\n    template: `\n    <ng-template #fixedWrapperActions>\n    <div\n      class=\"z-[1] sticky bottom-0 right-0 py-2 px-4 bg-white w-full shadow-lg transition-shadow duration-300 shadow-slate-700 border-t border-gray-300\"\n    >\n      <div class=\"flex w-full justify-end\">\n        <!-- Inject actions -->\n        <ng-content></ng-content>\n      </div>\n    </div>\n  </ng-template>\n    `,\n  };\n}",
+                "rawdescription": "Template expansion panel group",
+                "description": "<p>Template expansion panel group</p>\n"
             },
             {
                 "name": "Template",
@@ -17919,7 +17943,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "StoryFn<CheckboxComponent>",
-                    "defaultValue": "(\n  args: CheckboxComponent\n) => {\n  const formGroup = new FormGroup({\n    checkbox: new FormControl(false),\n  });\n  args.variant = 'default';\n  return {\n    component: CheckboxComponent,\n    template: `\n      <form [formGroup]=\"formGroup\">\n      <ui-checkbox [variant]=\"'${args.variant}'\" formControlName=\"checkbox\">\n      <ng-container ngProjectAs=\"label\">Form control checkbox</ng-container>\n      </ui-checkbox>\n        </form>\n        <br>\n        <p>value: {{formGroup.get('checkbox').value}}</p>\n        <p>touched: {{formGroup.get('checkbox').touched}}</p>\n        `,\n    props: {\n      ...args,\n      formGroup,\n    },\n  };\n}",
+                    "defaultValue": "(\n  args: CheckboxComponent\n) => {\n  const formGroup = new FormGroup({\n    checkbox: new FormControl(false),\n  });\n  return {\n    component: CheckboxComponent,\n    template: `\n      <form [formGroup]=\"formGroup\">\n      <ui-checkbox [variant]=\"'${args.variant}'\" formControlName=\"checkbox\">\n      <ng-container ngProjectAs=\"label\">Form control checkbox</ng-container>\n      </ui-checkbox>\n        </form>\n        <br>\n        <p>value: {{formGroup.get('checkbox').value}}</p>\n        <p>touched: {{formGroup.get('checkbox').touched}}</p>\n        `,\n    props: {\n      ...args,\n      formGroup,\n    },\n  };\n}",
                     "rawdescription": "Form control template checkbox",
                     "description": "<p>Form control template checkbox</p>\n"
                 },
@@ -17943,7 +17967,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "StoryFn<CheckboxComponent>",
-                    "defaultValue": "(args: CheckboxComponent) => {\n  args.variant = 'default';\n  return {\n    component: CheckboxComponent,\n    template: `\n      <ui-checkbox [variant]=\"'${args.variant}'\">\n      <ng-container ngProjectAs=\"label\">Checkbox text</ng-container>\n      <ng-container ngProjectAs=\"description\">Description text text text.</ng-container>\n      <ng-container ngProjectAs=\"icon\">\n      <ui-icon\n      icon=\"info_outline\"\n      [inline]=\"true\"\n      [size]=\"18\"\n      variant=\"grey\"\n    ></ui-icon>\n      </ng-container>\n      </ui-checkbox>\n        `,\n    props: {\n      ...args,\n    },\n  };\n}",
+                    "defaultValue": "(args: CheckboxComponent) => {\n  args.variant = 'default';\n  return {\n    component: CheckboxComponent,\n    template: `\n      <ui-checkbox variant=\"${args.variant}\" [checked]=\"${args.checked}\" [indeterminate]=\"${args.indeterminate}\" ariaLabel=\"${args.ariaLabel}\" name=\"${args.name}\" disabled=\"${args.disabled}\">\n      <ng-container ngProjectAs=\"label\">Checkbox text</ng-container>\n      <ng-container ngProjectAs=\"description\">Description text text text.</ng-container>\n      <ng-container ngProjectAs=\"icon\">\n      <ui-icon\n      icon=\"info_outline\"\n      [inline]=\"true\"\n      [size]=\"18\"\n      variant=\"grey\"\n    ></ui-icon>\n      </ng-container>\n      </ui-checkbox>\n        `,\n    props: {\n      ...args,\n    },\n  };\n}",
                     "rawdescription": "Template checkbox",
                     "description": "<p>Template checkbox</p>\n"
                 }
@@ -18667,6 +18691,32 @@
                     "defaultValue": "(\n  args: SidenavContainerComponent\n) => {\n  args.showSidenav = [true];\n  return {\n    component: SidenavContainerComponent,\n    template: `\n      <ui-sidenav-container>\n        <ng-container ngProjectAs=\"content\">\n        <ui-button (click)=\"nav.toggle()\">Toggle sidenav</ui-button>\n          <p class=\"mt-3\">Main content</p>\n        </ng-container>\n        <div\n          uiSidenavDirective\n          #nav=\"uiSidenavDirective\"\n          [(opened)]=\"showSidenav\"\n          ngProjectAs=\"sidenavContent\"\n        >\n          <div *ngFor=\"let i of [].constructor(25)\">Sidenav Content</div>\n        </div>\n      </ui-sidenav-container>\n    `,\n    props: {\n      ...args,\n    },\n  };\n}",
                     "rawdescription": "Push sidenav template",
                     "description": "<p>Push sidenav template</p>\n"
+                }
+            ],
+            "libs/ui/src/lib/fixed-wrapper/fixed-wrapper.stories.ts": [
+                {
+                    "name": "Primary",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "libs/ui/src/lib/fixed-wrapper/fixed-wrapper.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "Template.bind({})",
+                    "rawdescription": "Primary checkbox",
+                    "description": "<p>Primary checkbox</p>\n"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "libs/ui/src/lib/fixed-wrapper/fixed-wrapper.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "StoryFn<FixedWrapperComponent>",
+                    "defaultValue": "() => {\n  return {\n    component: FixedWrapperComponent,\n    template: `\n    <ng-template #fixedWrapperActions>\n    <div\n      class=\"z-[1] sticky bottom-0 right-0 py-2 px-4 bg-white w-full shadow-lg transition-shadow duration-300 shadow-slate-700 border-t border-gray-300\"\n    >\n      <div class=\"flex w-full justify-end\">\n        <!-- Inject actions -->\n        <ng-content></ng-content>\n      </div>\n    </div>\n  </ng-template>\n    `,\n  };\n}",
+                    "rawdescription": "Template expansion panel group",
+                    "description": "<p>Template expansion panel group</p>\n"
                 }
             ],
             "libs/ui/src/lib/snackbar/snackbar.stories.ts": [
@@ -20153,6 +20203,26 @@
                 "coveragePercent": 60,
                 "coverageCount": "3/5",
                 "status": "good"
+            },
+            {
+                "filePath": "libs/ui/src/lib/fixed-wrapper/fixed-wrapper.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Primary",
+                "coveragePercent": 100,
+                "coverageCount": "1/1",
+                "status": "very-good"
+            },
+            {
+                "filePath": "libs/ui/src/lib/fixed-wrapper/fixed-wrapper.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 100,
+                "coverageCount": "1/1",
+                "status": "very-good"
             },
             {
                 "filePath": "libs/ui/src/lib/form-wrapper/form-control/form-control.component.ts",

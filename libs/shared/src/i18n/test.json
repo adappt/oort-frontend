@@ -950,8 +950,13 @@
 			}
 		},
 		"queryBuilder": {
+			"block": {
+				"label": "******",
+				"title": "******"
+			},
 			"dataset": {
-				"select": "******"
+				"select": "******",
+				"title": "******"
 			},
 			"errors": {
 				"field": {
@@ -971,12 +976,14 @@
 			},
 			"filter": {
 				"and": "******",
+				"field": "******",
 				"logic": "******",
 				"new": "******",
 				"newGroup": "******",
 				"operator": "******",
 				"or": "******",
-				"title": "******"
+				"title": "******",
+				"value": "******"
 			},
 			"hint": {
 				"fields": "******",

@@ -1,490 +1,487 @@
 <form [formGroup]="dataSetFiltersFormGroup" (ngSubmit)="onSubmit()">
   <div class="text-left">
     <div class="mt-4">
-      <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
+      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
         {{ 'common.title' | translate }}*
       </label>
-      <input type="text" [placeholder]="'common.title' | translate" formControlName="name"
-        class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+      <input id="block_title" type="text" [placeholder]="'common.title' | translate" formControlName="name"
+        [(ngModel)]="activeTab.title"
+        class="mt-1 block w-1/3 py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
     </div>
-
-    <div class="mt-2 h-6 w-64">
-      <ul class="flex bg-gray-50 flex-wrap -mb-px">
-        <li class="me-2">
-          <a href="#"
-            class="inline-block p-3 border-b-2 font-bold text-xs border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-800">
-            {{ 'components.queryBuilder.block.title' | translate }} 1
-          </a>
-        </li>
-        <li class="me-2">
-          <a href="#"
-            class="inline-block p-3 border-b-2 font-bold text-xs border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
-            {{ 'components.queryBuilder.block.title' | translate }} 2
-          </a>
-        </li>
-        <li class="me-2">
-          <a href="#"
-            class="inline-block p-3 text-blue-600 border-b-2 font-bold text-xs border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-            aria-current="page">
-            {{ 'components.queryBuilder.block.title' | translate }} 3
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <div class="mt-6 flex gap-4">
-      <div>
-        <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-          {{ 'components.queryBuilder.dataset.title' | translate }}*
-        </label>
-        <select id="exampleSelect" name="exampleSelect" [(ngModel)]="selectedValue"
-          [ngModelOptions]="{ standalone: true }" (change)="getResourceData()"
-          class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-          <option value="" disabled selected>
-            {{ 'components.queryBuilder.dataset.select' | translate }}
-          </option>
-          <ng-container *ngFor="let field of cachedElements">
-            <option [value]="field.id">
-              {{ replaceUnderscores(field.name || "") | titlecase }}
-            </option>
-          </ng-container>
-        </select>
-      </div>
-      <div>
-        <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-          {{ 'components.queryBuilder.block.label' | translate }}*
-        </label>
-        <button type="button"
-          class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-          {{ 'components.queryBuilder.block.label' | translate }}
-        </button>
-      </div>
-    </div>
-    <div class="w-72 mt-2 h-6">
-      <ul class="flex bg-gray-50 flex-wrap -mb-px">
-        <li class="me-2">
-          <a class="inline-block p-3 text-blue-600 font-bold border-b-2 text-xs border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-            aria-current="page" (click)="changeTab('filter')">
-            {{ 'components.queryBuilder.filter.title' | translate }}
-          </a>
-        </li>
-        <li class="me-2">
-          <a class="inline-block p-3 border-b-2 font-bold text-xs border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-            (click)="changeTab('field')">
-            {{ 'components.queryBuilder.fields.title' | translate }}
-          </a>
-        </li>
-        <li class="me-2">
-          <a class="inline-block p-3 border-b-2 text-xs font-bold border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-            (click)="changeTab('style')">
-            {{ 'components.queryBuilder.style.title' | translate }}
-          </a>
-        </li>
-
-        <li class="me-2">
-          <a class="inline-block p-3 border-b-2 font-bold text-xs border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-800"
-            (click)="changeTab('preview')">
-            {{ 'common.preview' | translate }}</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div></div>
-  <!-- <form [formGroup]="form"> -->
-  <ng-container *ngIf="tabIndex === 'filter' && resource?.fields?.length">
-    <div formGroupName="query" class="flex gap-4 mt-6">
-      <div formGroupName="filter" class="mt-2">
-        <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-          {{ 'components.queryBuilder.filter.logic' | translate }}
-        </label>
-        <select id="exampleSelect" name="exampleSelect" formControlName="logic"
-          class="mt-1 text-xs text-left block w-36 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-          <option value="and">
-            {{ 'components.queryBuilder.filter.and' | translate }}
-          </option>
-          <option value="or">
-            {{ 'components.queryBuilder.filter.or' | translate }}
-          </option>
-        </select>
-      </div>
-
-      <button type="button"
-        class="mt-7 text-xs text-left block w-48 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        (click)="addNewDatasetFilter()">
-        {{ 'components.queryBuilder.filter.new' | translate }}
-      </button>
-
-      <button  type="button"
-        class="mt-7 text-xs text-left block w-48 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-        {{ 'components.queryBuilder.filter.newGroup' | translate }}
-      </button>
-    </div>
-    <!-- <form [formGroup]="dataSetFiltersFormGroup" (ngSubmit)="onSubmit()"> -->
-    <div formGroupName="query">
-      <div formGroupName="filter">
-        <div formArrayName="filters">
-          <div *ngFor="let data of filterFields.controls; let fieldIndex = index">
-            <div class="flex gap-5 ml-20" [formGroupName]="fieldIndex">
-              <div class="mt-4">
-                <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-                  {{ 'components.queryBuilder.filter.field' | translate }}
-                </label>
-                <select id="exampleSelect" name="exampleSelect" (change)="setField($event)"
-                  class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  formControlName="field">
-                  <ng-container *ngFor="let fieldDetails of resource?.fields">
-                    <option [value]="fieldDetails?.name">
-                      {{ replaceUnderscores(fieldDetails?.name) | titlecase }}
-                    </option>
-                  </ng-container>
-                </select>
-              </div>
-              <div class="mt-4">
-                <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-                  {{ 'components.queryBuilder.filter.operator' | translate }}
-                </label>
-                <select id="exampleSelect" name="exampleSelect"
-                  class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  formControlName="operator">
-                  <option [value]="operator?.value" *ngFor="let operator of operators">
-                    {{ operator.label | translate | titlecase }}
+    <div class="tab-container">
+    <!-- Block Tabs -->
+    <kendo-tabstrip (tabSelect)="changeTab($event)">
+      <kendo-tabstrip-tab *ngFor="let tab of tabs; let i = index"
+        [title]="tab.title"
+        [selected]="tab.active">
+        <ng-template kendoTabTitle>
+          <div class="flex justify-between items-center">
+            <span>{{tab.title}}</span>
+            <button (click)="deleteTab(i, $event)"><ui-icon icon="delete" variant="danger"></ui-icon></button>
+          </div>
+        </ng-template>
+        <ng-template kendoTabContent>
+          <!-- Dataset Select -->
+          <div class="mt-6 flex gap-4">
+            <div class="w-1/2">
+              <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                {{ 'components.queryBuilder.dataset.title' | translate }}*
+              </label>
+              <select id="exampleSelect" name="exampleSelect" [(ngModel)]="selectedValue"
+                [ngModelOptions]="{ standalone: true }" (change)="getResourceData()"
+                class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="" disabled selected>
+                  {{ 'components.queryBuilder.dataset.select' | translate }}
+                </option>
+                <ng-container *ngFor="let field of cachedElements">
+                  <option [value]="field.id">
+                    {{ replaceUnderscores(field.name || "") | titlecase }}
                   </option>
-                </select>
-              </div>
-              <div class="mt-4">
-                <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-                  {{ 'components.queryBuilder.filter.value' | translate }}
-                </label>
-                <input
-                  class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="Enter the value" formControlName="value" />
-              </div>
-              <svg class="w-6 h-6 mt-8 text-gray-400 text-black-600" aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16"
-                (click)="deleteDatasetFilter(fieldIndex)">
-                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                  d="M8 8v1h4V8m4 7H4a1 1 0 0 1-1-1V5h14v9a1 1 0 0 1-1 1ZM2 1h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Z" />
-              </svg>
+                </ng-container>
+              </select>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </ng-container>
-
-  <!-- </form> -->
-
-  <ng-container *ngIf="tabIndex === 'field'">
-    <!-- <h1>field option</h1> -->
-
-    <div class="mt-8">
-      <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-        {{ 'components.queryBuilder.block.label' | translate }}*
-      </label>
-      <button type="button"
-        class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-        {{ 'components.queryBuilder.block.label' | translate }}
-      </button>
-    </div>
-    <div class="flex gap-4">
-      <div class="mt-4">
-        <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-          Available fields
-        </label>
-        <select id="exampleSelect" name="exampleSelect"
-          class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-          Search feilds
-          <option value="option1">Search feilds</option>
-          <option value="option2">Option 1</option>
-          <option value="option3">Option 2</option>
-          <option value="option2">Option 3</option>
-          <option value="option3">Option 4</option>
-        </select>
-      </div>
-      <div class="mt-4">
-        <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-          Selected fields
-        </label>
-        <select id="exampleSelect" name="exampleSelect"
-          class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-          Search feilds
-          <option value="option1">Search feilds</option>
-          <option value="option2">Option 1</option>
-          <option value="option3">Option 2</option>
-          <option value="option2">Option 3</option>
-          <option value="option3">Option 4</option>
-        </select>
-      </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="tabIndex === 'style'">
-    <div>
-      <div class="block mt-8 text-gray-700 font-bold text-xs">Block Style</div>
-      <div>
-        <div class="h-14 w-full bg-blue-50">
-          <div class="mt-3 flex gap-3">
-            <div class="mt-1">
-              <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-                Font Size
+            <div class="w-1/2">
+              <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                {{ 'components.queryBuilder.block.label' | translate }}*
               </label>
               <button type="button"
-                class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                16px
+                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 font-bold">
+                {{ tab.title }}
               </button>
             </div>
-            <div class="mt-1">
-              <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-                Background Color
-              </label>
-              <button type="button"
-                class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                16px
-              </button>
-            </div>
-            <div class="mt-1">
-              <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-                Text Color
-              </label>
-              <button type="button"
-                class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                16px
-              </button>
-            </div>
-
-            <div class="mt-1">
-              <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-                Text Style
-              </label>
-              <div class="flex gap-3">
-                <button type="button"
-                  class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white font-bold unded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                  B
-                </button>
-
-                <button type="button"
-                  class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                  I
-                </button>
-
-                <button type="button"
-                  class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none underline ocus:ring-indigo-500 focus:border-indigo-500">
-                  U
-                </button>
-              </div>
-            </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="flex gap-3">
-      <div class="mt-4">
-        <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-          Title*
-        </label>
-        <button type="button"
-          class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-          Title
-        </button>
-      </div>
-      <div>
-        <button type="button"
-          class="mt-9 text-xs text-left block w-24 py-1 px-2 text-white order border-gray-300 bg-blue-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-          Add Feild
-        </button>
-      </div>
-    </div>
+          <kendo-tabstrip>
+            <!-- Filter Tab -->
+            <kendo-tabstrip-tab>
+              <ng-template kendoTabTitle>
+                {{ 'components.queryBuilder.filter.title' | translate }}
+              </ng-template>
+              <ng-template kendoTabContent>
+                <ng-container *ngIf="resource?.fields?.length">
+                  <div formGroupName="query" class="flex gap-4 mt-6">
+                    <div formGroupName="filter" class="mt-2">
+                      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                        {{ 'components.queryBuilder.filter.logic' | translate }}
+                      </label>
+                      <select id="exampleSelect" name="exampleSelect" formControlName="logic"
+                        class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="and">
+                          {{ 'components.queryBuilder.filter.and' | translate }}
+                        </option>
+                        <option value="or">
+                          {{ 'components.queryBuilder.filter.or' | translate }}
+                        </option>
+                      </select>
+                    </div>
 
-    <div class="h-14 w-full bg-gray-50">
-      <div class="mt-4 flex gap-3">
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Select Feild
-          </label>
-          <button type="button"
-            class="mt-1 text-xs text-left block w-48 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            Single Id
-          </button>
-        </div>
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Font Size
-          </label>
-          <button type="button"
-            class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            16px
-          </button>
-        </div>
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Background Color
-          </label>
-          <button type="button"
-            class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            16px
-          </button>
-        </div>
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Text Color
-          </label>
-          <button type="button"
-            class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            16px
-          </button>
-        </div>
+                    <button type="button"
+                      class="mt-1 block w-auto py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      (click)="addNewDatasetFilter()">
+                      {{ 'components.queryBuilder.filter.new' | translate }}
+                    </button>
 
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Text Style
-          </label>
-          <div class="flex gap-3">
-            <button type="button"
-              class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white font-bold unded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-              B
-            </button>
+                    <button  type="button"
+                      class="mt-1 block w-auto py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      {{ 'components.queryBuilder.filter.newGroup' | translate }}
+                    </button>
+                  </div>
+                  <!-- <form [formGroup]="dataSetFiltersFormGroup" (ngSubmit)="onSubmit()"> -->
+                  <div formGroupName="query">
+                    <div formGroupName="filter">
+                      <div formArrayName="filters">
+                        <div *ngFor="let data of filterFields.controls; let fieldIndex = index">
+                          <div class="flex gap-5 ml-20" [formGroupName]="fieldIndex">
+                            <div class="mt-4 w-1/3">
+                              <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                                {{ 'components.queryBuilder.filter.field' | translate }}
+                              </label>
+                              <select id="exampleSelect" name="exampleSelect" (change)="setField($event)"
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                formControlName="field">
+                                <ng-container *ngFor="let fieldDetails of resource?.fields">
+                                  <option [value]="fieldDetails?.name">
+                                    {{ replaceUnderscores(fieldDetails?.name) | titlecase }}
+                                  </option>
+                                </ng-container>
+                              </select>
+                            </div>
+                            <div class="mt-4 w-1/3">
+                              <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                                {{ 'components.queryBuilder.filter.operator' | translate }}
+                              </label>
+                              <select id="exampleSelect" name="exampleSelect"
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                formControlName="operator">
+                                <option [value]="operator?.value" *ngFor="let operator of operators">
+                                  {{ operator.label | translate | titlecase }}
+                                </option>
+                              </select>
+                            </div>
+                            <div class="mt-4 w-1/3">
+                              <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                                {{ 'components.queryBuilder.filter.value' | translate }}
+                              </label>
+                              <input
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                placeholder="Enter the value" formControlName="value" />
+                            </div>
+                            <button class="ui-button-icon primary medium button-danger"
+                              (click)="deleteDatasetFilter(fieldIndex)">
+                              <ui-icon icon="delete" variant="danger">
+                              </ui-icon>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-            <button type="button"
-              class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-              I
-            </button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </ng-container>
+              </ng-template>
+            </kendo-tabstrip-tab>
+            <!-- Fields Tab -->
+            <kendo-tabstrip-tab>
+              <ng-template kendoTabTitle>
+                {{ 'components.queryBuilder.fields.title' | translate }}
+              </ng-template>
+              <ng-template kendoTabContent>
+                <ng-container>
+                  <!-- <h1>field option</h1> -->
 
-            <button type="button"
-              class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none underline ocus:ring-indigo-500 focus:border-indigo-500">
-              U
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+                  <div class="mt-8">
+                    <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                      {{ 'components.queryBuilder.block.label' | translate }}*
+                    </label>
+                    <button type="button"
+                      class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                      {{ 'components.queryBuilder.block.label' | translate }}
+                    </button>
+                  </div>
+                  <div class="flex gap-4">
+                    <div class="mt-4">
+                      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                        Available fields
+                      </label>
+                      <select id="exampleSelect" name="exampleSelect"
+                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        Search Fields
+                        <option value="option1">Search Fields</option>
+                        <option value="option2">Option 1</option>
+                        <option value="option3">Option 2</option>
+                        <option value="option2">Option 3</option>
+                        <option value="option3">Option 4</option>
+                      </select>
+                    </div>
+                    <div class="mt-4">
+                      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                        Selected fields
+                      </label>
+                      <select id="exampleSelect" name="exampleSelect"
+                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        Search Fields
+                        <option value="option1">Search Fields</option>
+                        <option value="option2">Option 1</option>
+                        <option value="option3">Option 2</option>
+                        <option value="option2">Option 3</option>
+                        <option value="option3">Option 4</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-template>
+            </kendo-tabstrip-tab>
+            <!-- Style Tab -->
+            <kendo-tabstrip-tab [disabled]="true">
+              <ng-template kendoTabTitle>
+                {{ 'components.queryBuilder.style.title' | translate }}
+              </ng-template>
+              <ng-template kendoTabContent>
+                <ng-container>
+                  <div>
+                    <div class="block mt-8 text-gray-700 font-bold text-xs">Block Style</div>
+                    <div>
+                      <div class="h-14 w-full bg-blue-50">
+                        <div class="mt-3 flex gap-3">
+                          <div class="mt-1">
+                            <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                              Font Size
+                            </label>
+                            <button type="button"
+                              class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                              16px
+                            </button>
+                          </div>
+                          <div class="mt-1">
+                            <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                              Background Color
+                            </label>
+                            <button type="button"
+                              class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                              16px
+                            </button>
+                          </div>
+                          <div class="mt-1">
+                            <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                              Text Color
+                            </label>
+                            <button type="button"
+                              class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                              16px
+                            </button>
+                          </div>
 
-    <div class="h-14 w-full bg-gray-50">
-      <div class="mt-4 flex gap-3">
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Select Feild
-          </label>
-          <button type="button"
-            class="mt-1 text-xs text-left block w-48 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            Single Id
-          </button>
-        </div>
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Font Size
-          </label>
-          <button type="button"
-            class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            16px
-          </button>
-        </div>
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Background Color
-          </label>
-          <button type="button"
-            class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            16px
-          </button>
-        </div>
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Text Color
-          </label>
-          <button type="button"
-            class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            16px
-          </button>
-        </div>
-        <div class="mt-1">
-          <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
-            Text Style
-          </label>
-          <div class="flex gap-3">
-            <button type="button"
-              class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white font-bold unded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-              B
-            </button>
+                          <div class="mt-1">
+                            <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                              Text Style
+                            </label>
+                            <div class="flex gap-3">
+                              <button type="button"
+                                class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white font-bold unded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                B
+                              </button>
 
-            <button type="button"
-              class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-              I
-            </button>
+                              <button type="button"
+                                class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                I
+                              </button>
 
-            <button type="button"
-              class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none underline ocus:ring-indigo-500 focus:border-indigo-500">
-              U
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="tabIndex === 'preview'">
-    <div>
-      <div class="w-1024 h-45 bg-blue-950 border-3 border-blue-800 mt-8 text-white">
-        New signals in the past 24h as of 29 Nov 2023
-      </div>
-      <div class="w-96 text-sky-500 text-sm font-bold font-source-sans-pro">
-        Avian Influenza a (H5N6)
-      </div>
-      <pre class="w-96 text-black text-sm font-normal font-source-sans leading-tight">
-  On 16 October 2021, the National Health Commission of the People’s Republicof China notified WHO of one laboratory-confirmed 
-  case of human infection with avian influenza A(H5N6) virus. The case is a 60-year-old male farmer from Changde City,Hunan
-  Province with the onset of illness on 3 October 2021. She was hospitalized on 13 September and is currently in
-  criticalcondition. The case had exposure to dead and/or sick poultry before theonset of illness. No family members have
-  developed symptoms at the time of reporting. Following the reporting of this case, there have been 23 human  
-   cases of avian influenza A(H5N6) reported from China in 2021.
-  </pre>
-      <div class="w-96 text-sky-500 text-sm font-bold font-source-sans-pro">
-        Dengue
-      </div>
-      <pre class="w-96 text-black text-sm font-small font-source-sans-pro leading-tight">
-  On 16 October 2021, the National Health Commission of the People’s Republicof China notified WHO of one laboratory-confirmed 
-  case of human infection with avian influenza A(H5N6) virus. The case is a 60-year-old male farmer from Changde City,Hunan
-  Province with the onset of illness on 3 October 2021. She was hospitalized on 13 September and is currently in
-  criticalcondition. The case had exposure to dead and/or sick poultry before theonset of illness. No family members have
-  developed symptoms at the time of reporting. Following the reporting of this case, there have been 23 human  
-  cases of avian influenza A(H5N6) reported from China in 2021.
-</pre>
-      <div class="w-1024 h-45 bg-blue-950 border-3 border-blue-800 mt-8 text-white">
-        New events in EMS in the past 24h as of 29 Nov 2023
-      </div>
-    </div>
-    <div class="relative overflow-x-auto">
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-blue-400">
-        <thead class="text-xs text-white-700 uppercase bg-gray-50 dark:bg-blue-700">
-          <tr>
-            <th scope="col" class="px-6 py-3">Event Date</th>
-            <th scope="col" class="px-6 py-3">Disease/Condition</th>
-            <th scope="col" class="px-6 py-3">Country/Area</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" class="px-6 py-4 font-medium text-sky-500 w-full whitespace-nowrap dark:text-white">
-              2023-E065
-            </th>
-            <td class="px-6 py-4">Silver</td>
-            <td class="px-6 py-4">Laptop</td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white">
-              2023-E065
-            </th>
-            <td class="px-6 py-4">White</td>
-            <td class="px-6 py-4">Laptop PC</td>
-          </tr>
-          <tr class="bg-white dark:bg-gray-800">
-            <th scope="row" class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white">
-              2023-E065
-            </th>
-            <td class="px-6 py-4">Black</td>
-            <td class="px-6 py-4">Accessories</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </ng-container>
+                              <button type="button"
+                                class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none underline ocus:ring-indigo-500 focus:border-indigo-500">
+                                U
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex gap-3">
+                    <div class="mt-4">
+                      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                        Title*
+                      </label>
+                      <button type="button"
+                        class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        Title
+                      </button>
+                    </div>
+                    <div>
+                      <button type="button"
+                        class="mt-9 text-xs text-left block w-24 py-1 px-2 text-white order border-gray-300 bg-blue-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        Add Feild
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="h-14 w-full bg-gray-50">
+                    <div class="mt-4 flex gap-3">
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Select Feild
+                        </label>
+                        <button type="button"
+                          class="mt-1 text-xs text-left block w-48 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                          Single Id
+                        </button>
+                      </div>
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Font Size
+                        </label>
+                        <button type="button"
+                          class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                          16px
+                        </button>
+                      </div>
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Background Color
+                        </label>
+                        <button type="button"
+                          class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                          16px
+                        </button>
+                      </div>
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Text Color
+                        </label>
+                        <button type="button"
+                          class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                          16px
+                        </button>
+                      </div>
+
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Text Style
+                        </label>
+                        <div class="flex gap-3">
+                          <button type="button"
+                            class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white font-bold unded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            B
+                          </button>
+
+                          <button type="button"
+                            class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            I
+                          </button>
+
+                          <button type="button"
+                            class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none underline ocus:ring-indigo-500 focus:border-indigo-500">
+                            U
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="h-14 w-full bg-gray-50">
+                    <div class="mt-4 flex gap-3">
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Select Feild
+                        </label>
+                        <button type="button"
+                          class="mt-1 text-xs text-left block w-48 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                          Single Id
+                        </button>
+                      </div>
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Font Size
+                        </label>
+                        <button type="button"
+                          class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                          16px
+                        </button>
+                      </div>
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Background Color
+                        </label>
+                        <button type="button"
+                          class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                          16px
+                        </button>
+                      </div>
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Text Color
+                        </label>
+                        <button type="button"
+                          class="mt-1 text-xs text-left block w-24 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                          16px
+                        </button>
+                      </div>
+                      <div class="mt-1">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 mt-1 text-xs">
+                          Text Style
+                        </label>
+                        <div class="flex gap-3">
+                          <button type="button"
+                            class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white font-bold unded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            B
+                          </button>
+
+                          <button type="button"
+                            class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            I
+                          </button>
+
+                          <button type="button"
+                            class="mt-1 text-xs text-left block w-8 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none underline ocus:ring-indigo-500 focus:border-indigo-500">
+                            U
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-template>
+            </kendo-tabstrip-tab>
+            <!-- Preview Tab -->
+            <kendo-tabstrip-tab>
+              <ng-template kendoTabTitle>
+                {{ 'common.preview' | translate }}
+              </ng-template>
+              <ng-template kendoTabContent>
+                <ng-container>
+                  <div>
+                    <div class="w-1024 h-45 bg-blue-950 border-3 border-blue-800 mt-8 text-white">
+                      New signals in the past 24h as of 29 Nov 2023
+                    </div>
+                    <div class="w-96 text-sky-500 text-sm font-bold font-source-sans-pro">
+                      Avian Influenza a (H5N6)
+                    </div>
+                    <pre class="w-96 text-black text-sm font-normal font-source-sans leading-tight">
+                On 16 October 2021, the National Health Commission of the People’s Republicof China notified WHO of one laboratory-confirmed
+                case of human infection with avian influenza A(H5N6) virus. The case is a 60-year-old male farmer from Changde City,Hunan
+                Province with the onset of illness on 3 October 2021. She was hospitalized on 13 September and is currently in
+                criticalcondition. The case had exposure to dead and/or sick poultry before theonset of illness. No family members have
+                developed symptoms at the time of reporting. Following the reporting of this case, there have been 23 human
+                 cases of avian influenza A(H5N6) reported from China in 2021.
+                </pre>
+                    <div class="w-96 text-sky-500 text-sm font-bold font-source-sans-pro">
+                      Dengue
+                    </div>
+                    <pre class="w-96 text-black text-sm font-small font-source-sans-pro leading-tight">
+                On 16 October 2021, the National Health Commission of the People’s Republicof China notified WHO of one laboratory-confirmed
+                case of human infection with avian influenza A(H5N6) virus. The case is a 60-year-old male farmer from Changde City,Hunan
+                Province with the onset of illness on 3 October 2021. She was hospitalized on 13 September and is currently in
+                criticalcondition. The case had exposure to dead and/or sick poultry before theonset of illness. No family members have
+                developed symptoms at the time of reporting. Following the reporting of this case, there have been 23 human
+                cases of avian influenza A(H5N6) reported from China in 2021.
+              </pre>
+                    <div class="w-1024 h-45 bg-blue-950 border-3 border-blue-800 mt-8 text-white">
+                      New events in EMS in the past 24h as of 29 Nov 2023
+                    </div>
+                  </div>
+                  <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-blue-400">
+                      <thead class="text-xs text-white-700 uppercase bg-gray-50 dark:bg-blue-700">
+                        <tr>
+                          <th scope="col" class="px-6 py-3">Event Date</th>
+                          <th scope="col" class="px-6 py-3">Disease/Condition</th>
+                          <th scope="col" class="px-6 py-3">Country/Area</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th scope="row" class="px-6 py-4 font-medium text-sky-500 w-full whitespace-nowrap dark:text-white">
+                            2023-E065
+                          </th>
+                          <td class="px-6 py-4">Silver</td>
+                          <td class="px-6 py-4">Laptop</td>
+                        </tr>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th scope="row" class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white">
+                            2023-E065
+                          </th>
+                          <td class="px-6 py-4">White</td>
+                          <td class="px-6 py-4">Laptop PC</td>
+                        </tr>
+                        <tr class="bg-white dark:bg-gray-800">
+                          <th scope="row" class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white">
+                            2023-E065
+                          </th>
+                          <td class="px-6 py-4">Black</td>
+                          <td class="px-6 py-4">Accessories</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </ng-container>
+              </ng-template>
+            </kendo-tabstrip-tab>
+          </kendo-tabstrip>
+        </ng-template>
+      </kendo-tabstrip-tab>
+    </kendo-tabstrip>
+    <button class="add-tab-button" (click)="addTab()">
+      <ui-icon icon="add" variant="primary"></ui-icon>
+    </button>
+  </div>
+</div>
 </form>

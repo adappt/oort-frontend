@@ -32,6 +32,14 @@ export class CreateDatasetComponent implements OnInit {
   public selectedValue: string | undefined;
   public operators?: { value: string; label: string }[];
   public dataSetFiltersFormGroup: FormGroup | any;
+  public tabs: any[] = [
+    {
+      title: `Tab 1`,
+      content: `Tab 1 Content`,
+      active: true,
+    },
+  ];
+  public activeTab = this.tabs[0];
 
   /**
    * Composite filter group.
@@ -57,6 +65,11 @@ export class CreateDatasetComponent implements OnInit {
       });
     }
     this.prepareDatasetFilters();
+  }
+
+  onTabSelect(tab: any): void {
+    this.activeTab = tab;
+    this.activeTab.active = true;
   }
 
   /**
@@ -92,10 +105,12 @@ export class CreateDatasetComponent implements OnInit {
   /**
    * To change the tab
    *
-   * @param tabIndex params
+   * @param $event params
    */
-  changeTab(tabIndex: string) {
-    this.tabIndex = tabIndex;
+  changeTab($event: any) {    
+    this.tabIndex = $event?.index;
+    this.activeTab = this.tabs[$event?.index];
+    this.activeTab.active = true;
   }
 
   /**
@@ -199,5 +214,31 @@ export class CreateDatasetComponent implements OnInit {
   onSubmit(): void {
     const finalResponse = this.dataSetFiltersFormGroup.value;
     console.log('Final Response', finalResponse);
+  }
+
+  /**
+   * Adds a tab
+   */
+  public addTab() {
+    this.tabs.forEach((tab) => (tab.active = false));
+    this.tabs.push({
+      title: `Tab ${this.tabs.length + 1}`,
+      content: `Tab ${this.tabs.length + 1} Content`,
+      active: true,
+    });
+    this.activeTab = this.tabs.filter((tab: any) => tab.active == true).length > 0 ? this.tabs.filter((tab: any) => tab.active == true)[0] : "";
+  }
+
+  /**
+   * Deletes a block tab at the specified index.
+   *
+   * @param index The index of the tab to delete.
+   * @param event The event that triggered the deletion.
+   */
+  public deleteTab(index: number, event: Event) {
+    event.stopPropagation();
+    this.tabs.splice(index, 1);
+    this.activeTab = this.activeTab.active == true && this.tabs.length > 0 ? this.tabs[this.tabs.length - 1] : this.activeTab;
+    this.activeTab.active = true;
   }
 }

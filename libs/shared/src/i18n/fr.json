@@ -961,8 +961,13 @@
 			}
 		},
 		"queryBuilder": {
+			"block": {
+				"label": "Titre du Bloc",
+				"title": "Bloc"
+			},
 			"dataset": {
-				"select": "Sélectionner un jeu de données"
+				"select": "Sélectionner un jeu de données",
+				"title": "Jeu de données"
 			},
 			"errors": {
 				"field": {
@@ -982,12 +987,14 @@
 			},
 			"filter": {
 				"and": "Et",
+				"field": "Champ",
 				"logic": "Logique de filtre",
 				"new": "Ajouter un nouveau filtre",
 				"newGroup": "Ajouter un nouveau groupe de filtres",
 				"operator": "Opérateur",
 				"or": "Ou",
-				"title": "Filtre"
+				"title": "Filtre",
+				"value": "Valeur"
 			},
 			"hint": {
 				"fields": "Sélectionnez des champs ci-dessous et déplacez-les vers les 'champs sélectionnés' sur la droite",

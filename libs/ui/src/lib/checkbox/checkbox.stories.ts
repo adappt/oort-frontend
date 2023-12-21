@@ -53,7 +53,7 @@ const Template: StoryFn<CheckboxComponent> = (args: CheckboxComponent) => {
   return {
     component: CheckboxComponent,
     template: `
-      <ui-checkbox [variant]="'${args.variant}'">
+      <ui-checkbox variant="${args.variant}" [checked]="${args.checked}" [indeterminate]="${args.indeterminate}" ariaLabel="${args.ariaLabel}" name="${args.name}" disabled="${args.disabled}">
       <ng-container ngProjectAs="label">Checkbox text</ng-container>
       <ng-container ngProjectAs="description">Description text text text.</ng-container>
       <ng-container ngProjectAs="icon">
@@ -84,7 +84,6 @@ const FormControlTemplate: StoryFn<CheckboxComponent> = (
   const formGroup = new FormGroup({
     checkbox: new FormControl(false),
   });
-  args.variant = 'default';
   return {
     component: CheckboxComponent,
     template: `

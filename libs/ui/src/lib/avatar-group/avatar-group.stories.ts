@@ -3,7 +3,7 @@ import { AvatarGroupComponent } from './avatar-group.component';
 import { AvatarGroupModule } from './avatar-group.module';
 import { AvatarShape, avatarShapes } from '../avatar/types/avatar-shape';
 import { Size, sizes } from '../types/size';
-import { Category, categories } from '../types/category';
+import { Category } from '../types/category';
 
 type MockedAvatar = {
   size: Size;
@@ -61,11 +61,6 @@ export default {
       options: avatarShapes,
       control: 'select',
     },
-    variant: {
-      description: 'Variant: defines the colors',
-      options: categories,
-      control: 'select',
-    },
     size: {
       options: sizes,
       control: 'select',
@@ -82,7 +77,7 @@ export default {
   render: (args) => {
     let avatarGroupContent = '';
     for (const avatar of avatars) {
-      avatarGroupContent += `<ui-avatar variant=${avatar.variant} image="${avatar.image}" shape=${avatar.shape} initials=${avatar.initials}></ui-avatar>`;
+      avatarGroupContent += `<ui-avatar variant="${avatar.variant}" image="${avatar.image}" shape="${avatar.shape}" initials="${avatar.initials}"></ui-avatar>`;
     }
     return {
       props: args,

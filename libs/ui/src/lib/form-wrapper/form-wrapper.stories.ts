@@ -7,6 +7,7 @@ import { SelectMenuModule } from '../select-menu/select-menu.module';
 import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 import { ButtonModule } from '../button/button.module';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 export default {
   title: 'Components/Form Wrapper',
@@ -22,6 +23,7 @@ export default {
         AutocompleteModule,
         ButtonModule,
         ReactiveFormsModule,
+        TranslateModule.forRoot(),
       ],
     }),
   ],

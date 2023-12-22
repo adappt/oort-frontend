@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   GraphQLSelectModule,
@@ -26,6 +26,7 @@ import { ScheduleAlertComponent } from './steps/schedule-alert/schedule-alert.co
 import { SelectDistributionComponent } from './steps/select-ditribution/select-distribution.component';
 import { PreviewComponent } from './steps/preview/preview.component';
 import { TabStripModule } from '@progress/kendo-angular-layout';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 //import {  MatStepperModule } from '@angular/material/stepper'
 /**
@@ -61,6 +62,8 @@ import { TabStripModule } from '@progress/kendo-angular-layout';
     GraphQLSelectModule,
     TabStripModule,
     IconModule,
+    NgSelectModule,
   ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class EmailModule {}

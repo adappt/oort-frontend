@@ -12,7 +12,7 @@ import { FIELD_TYPES, FILTER_OPERATORS } from './filter/filter.constant';
 import { GET_RESOURCE, GET_RESOURCES } from './graphql/queries';
 
 /** Default items per query, for pagination */
-const ITEMS_PER_PAGE = 10;
+let ITEMS_PER_PAGE = 0;
 
 /**
  * create-datasetpage component.
@@ -50,21 +50,31 @@ export class CreateDatasetComponent implements OnInit {
   constructor(private fb: FormBuilder, private apollo: Apollo) {}
 
   ngOnInit(): void {
-    this.resourcesQuery = this.apollo.watchQuery<ResourcesQueryResponse>({
-      query: GET_RESOURCES,
-      variables: {
-        first: ITEMS_PER_PAGE,
-        sortField: 'name',
-      },
-    });
-    if (this.resourcesQuery) {
-      this.resourcesQuery.valueChanges.subscribe(({ data }) => {
-        const resources =
-          data?.resources?.edges?.map((edge) => edge.node) || [];
-        this.cachedElements.push(...resources);
-      });
-    }
+    this.getResourceDataOnScroll(undefined);
     this.prepareDatasetFilters();
+  }
+
+  getResourceDataOnScroll(event: any) {
+    if (ITEMS_PER_PAGE > -1) {
+      ITEMS_PER_PAGE = ITEMS_PER_PAGE > -1 ? ITEMS_PER_PAGE + 15 : ITEMS_PER_PAGE;
+      this.resourcesQuery = this.apollo.watchQuery<ResourcesQueryResponse>({
+        query: GET_RESOURCES,
+        variables: {
+          first: ITEMS_PER_PAGE,
+          sortField: 'name',
+        },
+      });
+      if (this.resourcesQuery && ITEMS_PER_PAGE > -1) {
+        this.resourcesQuery.valueChanges.subscribe(({ data }) => {
+          ITEMS_PER_PAGE = ITEMS_PER_PAGE > data?.resources?.totalCount ? -1 : ITEMS_PER_PAGE;
+          const resources =
+            data?.resources?.edges?.map((edge) => edge.node) || [];
+          this.cachedElements = resources.map(
+            element => { return  { id : element?.id?.toString(), name: element?.name};
+          }); 
+        });
+      }
+    }
   }
 
   onTabSelect(tab: any): void {

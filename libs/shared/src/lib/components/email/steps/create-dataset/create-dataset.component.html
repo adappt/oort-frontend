@@ -27,18 +27,25 @@
               <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                 {{ 'components.queryBuilder.dataset.title' | translate }}*
               </label>
-              <select id="exampleSelect" name="exampleSelect" [(ngModel)]="selectedValue"
-                [ngModelOptions]="{ standalone: true }" (change)="getResourceData()"
-                class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                <option value="" disabled selected>
-                  {{ 'components.queryBuilder.dataset.select' | translate }}
-                </option>
-                <ng-container *ngFor="let field of cachedElements">
-                  <option [value]="field.id">
-                    {{ replaceUnderscores(field.name || "") | titlecase }}
-                  </option>
-                </ng-container>
-              </select>
+              <ng-select id="exampleSelect" name="exampleSelect"  [ngModelOptions]="{ standalone: true }"
+                #select
+                [items]="cachedElements"
+                bindLabel="name"
+                [searchable]="true"
+                bindValue="id"
+                [(ngModel)]="selectedValue"
+                [virtualScroll]="true"
+                appendTo="body"
+                (scrollToEnd)="getResourceDataOnScroll($event)"
+                (change)="getResourceData()"
+                placeholder="{{ 'components.queryBuilder.dataset.select' | translate }}">
+                <ng-template disabled selected>
+                  <span></span>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                  <span>{{ replaceUnderscores(item.name || "") | titlecase }}</span>
+                </ng-template>
+              </ng-select>
             </div>
             <div class="w-1/2">
               <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">

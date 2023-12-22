@@ -63,6 +63,11 @@
   border-color: #2E90FA !important;
 }
 
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+  background-color: #1a67bb !important;
+  color: white !important;
+}
+
 
 :host button > * {
   pointer-events: none;

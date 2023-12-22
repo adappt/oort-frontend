@@ -968,6 +968,7 @@
 			}
 		},
 		"queryBuilder": {
+			"apply": "Appliquer le filtre",
 			"block": {
 				"label": "Titre du Bloc",
 				"title": "Bloc"

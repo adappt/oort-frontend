@@ -186,7 +186,7 @@ export class CreateDatasetComponent implements OnInit {
    * Adds a tab
    */
   public addTab() {
-    this.datasetsFormArray.push(this.emailService.createNewDataSetGroup());
+    this.datasetsFormArray.push(this.dataSetGroup);
     this.tabs.forEach((tab) => (tab.active = false));
     this.tabs.push({
       title: `Block ${this.tabs.length + 1}`,

@@ -43,21 +43,21 @@
               </ng-template>
             </ng-template>
             <ng-template kendoTabTitle>
-              
+
             </ng-template>
           </kendo-tabstrip-tab>
-        </ng-container>        
+        </ng-container>
 
         <!-- Preview Tab -->
       <kendo-tabstrip-tab *ngIf="showPreview === true" [selected]="showPreview === true">
         <ng-template kendoTabTitle>
           {{ 'common.preview' | translate }}
-        </ng-template>        
-          
+        </ng-template>
+
       <ng-template kendoTabContent>
         <ng-container *ngFor="let previewData of allPreviewData; let preIndex = index">
           <label class="block text-gray-700 text-sm font-bold">
-            {{ previewData?.tabName }} 
+            {{ previewData?.tabName }}
           </label>
           <table
           id="tblPreview"
@@ -95,7 +95,7 @@
         </label>
         <br>
         </ng-container>
-        
+
         <button
         type="button"
         (click)="showPreview=false"
@@ -104,7 +104,7 @@
         {{ 'common.back' | translate }}
       </button>
       </ng-template>
-          
+
       </kendo-tabstrip-tab>
       </kendo-tabstrip>
       <button *ngIf="tabs.length  === 0" class="add-tab-button" type="button" (click)="addTab()">

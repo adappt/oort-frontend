@@ -957,6 +957,7 @@
 			}
 		},
 		"queryBuilder": {
+			"apply": "Apply filter",
 			"block": {
 				"label": "Block Title",
 				"title": "Block"

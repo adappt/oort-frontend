@@ -950,6 +950,7 @@
 			}
 		},
 		"queryBuilder": {
+			"apply": "******",
 			"block": {
 				"label": "******",
 				"title": "******"
@@ -992,6 +993,9 @@
 			},
 			"pagination": {
 				"first": "******",
+				"title": "******"
+			},
+			"preview": {
 				"title": "******"
 			},
 			"sort": {

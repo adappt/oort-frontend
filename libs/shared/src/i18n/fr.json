@@ -961,6 +961,7 @@
 			}
 		},
 		"queryBuilder": {
+			"apply": "Appliquer le filtre",
 			"block": {
 				"label": "Titre du Bloc",
 				"title": "Bloc"
@@ -1004,6 +1005,9 @@
 			"pagination": {
 				"first": "Limite",
 				"title": "Pagination"
+			},
+			"preview": {
+				"title": "Aperçu"
 			},
 			"sort": {
 				"ascending": "Croissant",

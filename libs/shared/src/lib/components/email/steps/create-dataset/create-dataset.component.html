@@ -1,4 +1,4 @@
-<form [formGroup]="dataSetFiltersFormGroup" (ngSubmit)="onSubmit()">
+<form class="p-4" [formGroup]="dataSetFiltersFormGroup" (ngSubmit)="onSubmit()">
   <div class="text-left">
     <div class="mt-4">
       <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
@@ -27,25 +27,18 @@
               <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                 {{ 'components.queryBuilder.dataset.title' | translate }}*
               </label>
-              <ng-select id="exampleSelect" name="exampleSelect"  [ngModelOptions]="{ standalone: true }"
-                #select
-                [items]="cachedElements"
-                bindLabel="name"
-                [searchable]="true"
-                bindValue="id"
-                [(ngModel)]="selectedValue"
-                [virtualScroll]="true"
-                appendTo="body"
-                (scrollToEnd)="getResourceDataOnScroll($event)"
-                (change)="getResourceData()"
-                placeholder="{{ 'components.queryBuilder.dataset.select' | translate }}">
-                <ng-template disabled selected>
-                  <span></span>
-                </ng-template>
-                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                  <span>{{ replaceUnderscores(item.name || "") | titlecase }}</span>
-                </ng-template>
-              </ng-select>
+              <select id="exampleSelect" name="exampleSelect" [(ngModel)]="selectedResourceId"
+                [ngModelOptions]="{ standalone: true }" (change)="getResourceData()"
+                class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="" disabled selected>
+                  {{ 'components.queryBuilder.dataset.select' | translate }}
+                </option>
+                <ng-container *ngFor="let field of cachedElements">
+                  <option [value]="field.id">
+                    {{ replaceUnderscores(field.name || "") | titlecase }}
+                  </option>
+                </ng-container>
+              </select>
             </div>
             <div class="w-1/2">
               <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
@@ -65,32 +58,42 @@
               </ng-template>
               <ng-template kendoTabContent>
                 <ng-container *ngIf="resource?.fields?.length">
-                  <div formGroupName="query" class="flex gap-4 mt-6">
-                    <div formGroupName="filter" class="mt-2">
-                      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
-                        {{ 'components.queryBuilder.filter.logic' | translate }}
-                      </label>
-                      <select id="exampleSelect" name="exampleSelect" formControlName="logic"
-                        class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="and">
-                          {{ 'components.queryBuilder.filter.and' | translate }}
-                        </option>
-                        <option value="or">
-                          {{ 'components.queryBuilder.filter.or' | translate }}
-                        </option>
-                      </select>
+                  <div formGroupName="query" class="flex-row gap-4 mt-6">
+                    <div class="flex gap-4">
+                      <div class="mt-2">
+                        <label htmlFor="data_set_limit" class="block text-gray-700 text-sm">
+                          {{ 'components.queryBuilder.sort.limit' | translate }}
+                        </label>
+                        <input id="data_set_limit"
+                          class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          type="number" min="0" [placeholder]="'components.queryBuilder.sort.limit' | translate" formControlName="pageSize">
+                      </div>
+                      <div formGroupName="filter" class="mt-2">
+                        <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                          {{ 'components.queryBuilder.filter.logic' | translate }}
+                        </label>
+                        <select id="exampleSelect" name="exampleSelect" formControlName="logic"
+                          class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                          <option value="and">
+                            {{ 'components.queryBuilder.filter.and' | translate }}
+                          </option>
+                          <option value="or">
+                            {{ 'components.queryBuilder.filter.or' | translate }}
+                          </option>
+                        </select>
+                      </div>
                     </div>
-
-                    <button type="button"
-                      class="mt-1 block w-auto py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      (click)="addNewDatasetFilter()">
-                      {{ 'components.queryBuilder.filter.new' | translate }}
-                    </button>
-
-                    <button  type="button"
-                      class="mt-1 block w-auto py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                      {{ 'components.queryBuilder.filter.newGroup' | translate }}
-                    </button>
+                    <div class="flex gap-4">
+                      <button type="button"
+                        class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        (click)="addNewDatasetFilter()">
+                        {{ 'components.queryBuilder.filter.new' | translate }}
+                      </button>                    
+                      <button type="button"
+                        class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        {{ 'components.queryBuilder.filter.newGroup' | translate }}
+                      </button>
+                    </div>
                   </div>
                   <!-- <form [formGroup]="dataSetFiltersFormGroup" (ngSubmit)="onSubmit()"> -->
                   <div formGroupName="query">
@@ -142,8 +145,6 @@
                       </div>
                     </div>
                   </div>
-
-                  <button type="submit" class="btn btn-primary">Submit</button>
                 </ng-container>
               </ng-template>
             </kendo-tabstrip-tab>
@@ -165,34 +166,34 @@
                       {{ 'components.queryBuilder.block.label' | translate }}
                     </button>
                   </div>
-                  <div class="flex gap-4">
+                  <div class="flex gap-4 mt-4">
                     <div class="mt-4">
-                      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
-                        Available fields
+                      <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
+                        {{ 'components.queryBuilder.fields.available' | translate }}
                       </label>
-                      <select id="exampleSelect" name="exampleSelect"
-                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        Search Fields
-                        <option value="option1">Search Fields</option>
-                        <option value="option2">Option 1</option>
-                        <option value="option3">Option 2</option>
-                        <option value="option2">Option 3</option>
-                        <option value="option3">Option 4</option>
-                      </select>
+                      <div
+                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-blue-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <ng-container *ngFor="let fieldDetails of resource?.fields">
+                          <p (click)="addSelectiveFields(fieldDetails?.name)"
+                            class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            {{ replaceUnderscores(fieldDetails?.name) | titlecase }}
+                          </p>
+                        </ng-container>
+                      </div>
                     </div>
                     <div class="mt-4">
-                      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
-                        Selected fields
+                      <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
+                        {{ 'components.queryBuilder.fields.selected' | translate }}
                       </label>
-                      <select id="exampleSelect" name="exampleSelect"
-                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        Search Fields
-                        <option value="option1">Search Fields</option>
-                        <option value="option2">Option 1</option>
-                        <option value="option3">Option 2</option>
-                        <option value="option2">Option 3</option>
-                        <option value="option3">Option 4</option>
-                      </select>
+                      <div
+                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-blue-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <ng-container *ngFor="let fiels of selectedFields">
+                          <p
+                            class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            {{ replaceUnderscores(fiels.name) | titlecase }}
+                          </p>
+                        </ng-container>
+                      </div>
                     </div>
                   </div>
                 </ng-container>
@@ -414,75 +415,29 @@
                 {{ 'common.preview' | translate }}
               </ng-template>
               <ng-template kendoTabContent>
-                <ng-container>
-                  <div>
-                    <div class="w-1024 h-45 bg-blue-950 border-3 border-blue-800 mt-8 text-white">
-                      New signals in the past 24h as of 29 Nov 2023
-                    </div>
-                    <div class="w-96 text-sky-500 text-sm font-bold font-source-sans-pro">
-                      Avian Influenza a (H5N6)
-                    </div>
-                    <pre class="w-96 text-black text-sm font-normal font-source-sans leading-tight">
-                On 16 October 2021, the National Health Commission of the People’s Republicof China notified WHO of one laboratory-confirmed
-                case of human infection with avian influenza A(H5N6) virus. The case is a 60-year-old male farmer from Changde City,Hunan
-                Province with the onset of illness on 3 October 2021. She was hospitalized on 13 September and is currently in
-                criticalcondition. The case had exposure to dead and/or sick poultry before theonset of illness. No family members have
-                developed symptoms at the time of reporting. Following the reporting of this case, there have been 23 human
-                 cases of avian influenza A(H5N6) reported from China in 2021.
-                </pre>
-                    <div class="w-96 text-sky-500 text-sm font-bold font-source-sans-pro">
-                      Dengue
-                    </div>
-                    <pre class="w-96 text-black text-sm font-small font-source-sans-pro leading-tight">
-                On 16 October 2021, the National Health Commission of the People’s Republicof China notified WHO of one laboratory-confirmed
-                case of human infection with avian influenza A(H5N6) virus. The case is a 60-year-old male farmer from Changde City,Hunan
-                Province with the onset of illness on 3 October 2021. She was hospitalized on 13 September and is currently in
-                criticalcondition. The case had exposure to dead and/or sick poultry before theonset of illness. No family members have
-                developed symptoms at the time of reporting. Following the reporting of this case, there have been 23 human
-                cases of avian influenza A(H5N6) reported from China in 2021.
-              </pre>
-                    <div class="w-1024 h-45 bg-blue-950 border-3 border-blue-800 mt-8 text-white">
-                      New events in EMS in the past 24h as of 29 Nov 2023
-                    </div>
-                  </div>
-                  <div class="relative overflow-x-auto">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-blue-400">
-                      <thead class="text-xs text-white-700 uppercase bg-gray-50 dark:bg-blue-700">
-                        <tr>
-                          <th scope="col" class="px-6 py-3">Event Date</th>
-                          <th scope="col" class="px-6 py-3">Disease/Condition</th>
-                          <th scope="col" class="px-6 py-3">Country/Area</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                          <th scope="row" class="px-6 py-4 font-medium text-sky-500 w-full whitespace-nowrap dark:text-white">
-                            2023-E065
-                          </th>
-                          <td class="px-6 py-4">Silver</td>
-                          <td class="px-6 py-4">Laptop</td>
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                          <th scope="row" class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white">
-                            2023-E065
-                          </th>
-                          <td class="px-6 py-4">White</td>
-                          <td class="px-6 py-4">Laptop PC</td>
-                        </tr>
-                        <tr class="bg-white dark:bg-gray-800">
-                          <th scope="row" class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white">
-                            2023-E065
-                          </th>
-                          <td class="px-6 py-4">Black</td>
-                          <td class="px-6 py-4">Accessories</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </ng-container>
+                <table *ngIf="dataList?.length" class="w-full border border-blue-600 shadow-xs m-1">
+                  <thead class="bg-blue-600  border-blue-600 shadow-xs text-white">
+                    <tr class="bg-blue-600  border-blue-600 shadow-xs text-white">
+                      <ng-container *ngFor="let item of dataList[0] | keyvalue">
+                        <th class="bg-blue-600  border-white-600 shadow-xs text-white p-2  text-center">{{
+                          replaceUnderscores(item.key) | titlecase }}</th>
+                      </ng-container>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of dataList" class=" bg-white-600 border-blue-600 text-blue-600">
+                      <ng-container *ngFor="let item of data | keyvalue">
+                        <td class="p-2 border border-blue-600 shadow-xs m-1 text-center">{{ item.value }}</td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
               </ng-template>
             </kendo-tabstrip-tab>
           </kendo-tabstrip>
+          <button *ngIf="filterFields.controls" type="submit"
+            class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1">
+            {{ 'components.queryBuilder.apply' | translate }}</button>
         </ng-template>
       </kendo-tabstrip-tab>
     </kendo-tabstrip>

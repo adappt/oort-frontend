@@ -950,6 +950,7 @@
 			}
 		},
 		"queryBuilder": {
+			"apply": "Apply filter",
 			"block": {
 				"label": "Block Title",
 				"title": "Block"
@@ -993,6 +994,9 @@
 			"pagination": {
 				"first": "Limit",
 				"title": "Pagination"
+			},
+			"preview": {
+				"title": "Preview"
 			},
 			"sort": {
 				"ascending": "Ascending",

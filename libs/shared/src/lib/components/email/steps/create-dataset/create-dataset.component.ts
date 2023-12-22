@@ -9,7 +9,12 @@ import {
   ResourcesQueryResponse,
 } from '../../../../models/resource.model';
 import { FIELD_TYPES, FILTER_OPERATORS } from './filter/filter.constant';
-import { GET_RESOURCE, GET_RESOURCES } from './graphql/queries';
+import { GET_DATA_SET, GET_RESOURCE, GET_RESOURCES } from './graphql/queries';
+import { ADD_LAYOUT } from './graphql/mutations';
+import {
+  AddLayoutMutationResponse,
+  Layout,
+} from '../../../../models/layout.model';
 
 /** Default items per query, for pagination */
 let ITEMS_PER_PAGE = 0;
@@ -25,12 +30,12 @@ let ITEMS_PER_PAGE = 0;
 export class CreateDatasetComponent implements OnInit {
   public tabIndex = 'filter';
   public resourcesQuery!: QueryRef<ResourcesQueryResponse>;
-  public availableQueries?: Observable<any[]>;
-  public resource?: Resource;
+  public availableQueries!: Observable<any[]>;
+  public resource!: Resource;
   public filterFields: FormArray | any = new FormArray([]);
   public cachedElements: Resource[] = [];
-  public selectedValue: string | undefined;
-  public operators?: { value: string; label: string }[];
+  public selectedResourceId: string | undefined;
+  public operators!: { value: string; label: string }[];
   public dataSetFiltersFormGroup: FormGroup | any;
   public tabs: any[] = [
     {
@@ -40,6 +45,10 @@ export class CreateDatasetComponent implements OnInit {
     },
   ];
   public activeTab = this.tabs[0];
+  public selectedFields!: { name: string; type: string }[];
+  private layoutData?: Layout;
+  private dataSet!: { [key: string]: { [key: string]: any } };
+  public dataList!: { [key: string]: string }[];
 
   /**
    * Composite filter group.
@@ -117,7 +126,7 @@ export class CreateDatasetComponent implements OnInit {
    *
    * @param $event params
    */
-  changeTab($event: any) {    
+  changeTab($event: any) {
     this.tabIndex = $event?.index;
     this.activeTab = this.tabs[$event?.index];
     this.activeTab.active = true;
@@ -127,17 +136,18 @@ export class CreateDatasetComponent implements OnInit {
    * To fetch resource details
    */
   getResourceData() {
-    if (this.selectedValue) {
+    if (this.selectedResourceId) {
       this.dataSetFiltersFormGroup.controls.query.controls.name.setValue(
-        this.cachedElements.find((element) => element.id === this.selectedValue)
-          ?.name
+        this.cachedElements.find(
+          (element) => element.id === this.selectedResourceId
+        )?.name
       );
       this.resource = {};
       this.apollo
         .query<ResourceQueryResponse>({
           query: GET_RESOURCE,
           variables: {
-            id: this.selectedValue,
+            id: this.selectedResourceId,
           },
         })
         .subscribe((res) => {
@@ -154,12 +164,32 @@ export class CreateDatasetComponent implements OnInit {
       name: '',
       query: this.fb.group({
         name: '',
+        pageSize: 0,
         filter: this.fb.group({
           logic: 'and',
           filters: new FormArray([]),
         }),
+        fields: [],
       }),
+      display: {},
     });
+  }
+
+  /**
+   * To add the selective fields in the layout
+   *
+   * @param fieldName string
+   */
+  addSelectiveFields(fieldName: string): void {
+    const existFields =
+      this.dataSetFiltersFormGroup.get('query').value.fields || [];
+    if (!JSON.stringify(existFields).includes(fieldName)) {
+      existFields.push({ name: fieldName, type: typeof fieldName });
+      this.dataSetFiltersFormGroup.controls.query.controls.fields.setValue(
+        existFields
+      );
+      this.selectedFields = existFields;
+    }
   }
 
   /**
@@ -219,11 +249,51 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
+   * Tp get data set
+   */
+  getDataSet(): void {
+    this.apollo
+      .query<any>({
+        query: GET_DATA_SET,
+        variables: {
+          resourceId: this.selectedResourceId,
+          layoutId: this.layoutData?.id,
+        },
+      })
+      .subscribe((res) => {
+        this.dataSet = res.data.dataSet;
+        this.dataList = this.dataSet.records.map(
+          (record: { data: { [key: string]: string } }) => record.data
+        );
+      });
+  }
+
+  /**
+   * To store layout in the resource
+   */
+  saveLayoutInResource(): void {
+    const layout = this.dataSetFiltersFormGroup.value;
+    this.apollo
+      .mutate<AddLayoutMutationResponse>({
+        mutation: ADD_LAYOUT,
+        variables: {
+          resource: this.selectedResourceId,
+          layout,
+        },
+      })
+      .subscribe(({ data }) => {
+        this.layoutData = data?.addLayout;
+        if (this.layoutData?.id) this.getDataSet();
+      });
+  }
+
+  /**
    * Dynamic Form Submission
    */
   onSubmit(): void {
     const finalResponse = this.dataSetFiltersFormGroup.value;
     console.log('Final Response', finalResponse);
+    this.saveLayoutInResource();
   }
 
   /**
@@ -236,7 +306,10 @@ export class CreateDatasetComponent implements OnInit {
       content: `Tab ${this.tabs.length + 1} Content`,
       active: true,
     });
-    this.activeTab = this.tabs.filter((tab: any) => tab.active == true).length > 0 ? this.tabs.filter((tab: any) => tab.active == true)[0] : "";
+    this.activeTab =
+      this.tabs.filter((tab: any) => tab.active == true).length > 0
+        ? this.tabs.filter((tab: any) => tab.active == true)[0]
+        : '';
   }
 
   /**
@@ -248,7 +321,10 @@ export class CreateDatasetComponent implements OnInit {
   public deleteTab(index: number, event: Event) {
     event.stopPropagation();
     this.tabs.splice(index, 1);
-    this.activeTab = this.activeTab.active == true && this.tabs.length > 0 ? this.tabs[this.tabs.length - 1] : this.activeTab;
+    this.activeTab =
+      this.activeTab.active == true && this.tabs.length > 0
+        ? this.tabs[this.tabs.length - 1]
+        : this.activeTab;
     this.activeTab.active = true;
   }
 }

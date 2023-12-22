@@ -4,7 +4,7 @@ import { breadCrumbDisplays } from './types/breadcrumb-display';
 import { breadcrumbSeparators } from './types/breadcrumb-separator';
 import { BreadcrumbsModule } from './breadcrumbs.module';
 import { RouterTestingModule } from '@angular/router/testing';
-import { StorybookTranslateModule } from '../../storybook-translate.module';
+import { StorybookTranslateModule } from '../../../.storybook/storybook-translate.module';
 
 export default {
   title: 'Components/Breadcrumbs',

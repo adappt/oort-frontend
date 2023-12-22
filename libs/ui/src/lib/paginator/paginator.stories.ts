@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PagerModule } from '@progress/kendo-angular-pager';
 import { PaginatorComponent } from './paginator.component';
 import { UIPageChangeEvent } from './interfaces/paginator.interfaces';
-import { StorybookTranslateModule } from '../../storybook-translate.module';
+import { StorybookTranslateModule } from '../../../.storybook/storybook-translate.module';
 
 export default {
   title: 'Components/Paginator',

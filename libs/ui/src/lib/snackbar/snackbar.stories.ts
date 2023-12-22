@@ -7,7 +7,7 @@ import { SNACKBAR_DATA, SnackBarData } from './snackbar.token';
 import { SnackbarService } from './snackbar.service';
 import { IconModule } from '../icon/icon.module';
 import { SpinnerModule } from '../spinner/spinner.module';
-import { StorybookTranslateModule } from '../../storybook-translate.module';
+import { StorybookTranslateModule } from '../../../.storybook/storybook-translate.module';
 
 /**
  * LaunchSnackbarComponent component.

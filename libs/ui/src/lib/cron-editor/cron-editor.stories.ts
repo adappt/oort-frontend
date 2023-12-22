@@ -8,6 +8,7 @@ import { RadioModule } from '../radio/radio.module';
 import { CheckboxModule } from '../checkbox/checkbox.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
+import { StorybookTranslateModule } from '../../../.storybook/storybook-translate.module';
 
 export default {
   title: 'Components/CronEditorComponent',
@@ -24,6 +25,7 @@ export default {
         RadioModule,
         CheckboxModule,
         TranslateModule.forRoot(),
+        StorybookTranslateModule,
       ],
     }),
   ],

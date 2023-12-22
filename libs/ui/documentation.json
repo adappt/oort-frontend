@@ -4448,7 +4448,7 @@
         },
         {
             "name": "EditDialogComponent",
-            "id": "component-EditDialogComponent-d8f1590c6bf31308c660c9a0f003fd4998f4521853225304d0a98ed6c57290a19723d52e190cb67eb3179b5de63f8a8d423f9126db7934e2a96d71b40fa7d2b0",
+            "id": "component-EditDialogComponent-3f9ca1eddcf47dc5545c9df5cc59d4917ae4af59463732e118e0216f48429104b3f135196fcfa47f44fdc3088fa37bccee780bf76b8681e635602c4c518f0a33",
             "file": "libs/ui/src/lib/dialog/dialog.stories.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -4472,7 +4472,7 @@
                     "type": "literal type",
                     "optional": false,
                     "description": "Injected dialog data",
-                    "line": 133,
+                    "line": 134,
                     "decorators": [
                         {
                             "name": "Inject",
@@ -4491,7 +4491,7 @@
                     "type": "DialogRef<EditDialogComponent>",
                     "optional": false,
                     "description": "Dialog ref",
-                    "line": 131,
+                    "line": 132,
                     "modifierKind": [
                         123
                     ]
@@ -4516,7 +4516,7 @@
             "description": "<p>EditDialog component.</p>\n",
             "rawdescription": "\n\nEditDialog component.\n",
             "type": "component",
-            "sourceCode": "import { moduleMetadata, Story, Meta } from '@storybook/angular';\nimport { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';\nimport { DialogModule } from './dialog.module';\nimport { CommonModule } from '@angular/common';\nimport { Component, Input, Inject, OnDestroy } from '@angular/core';\nimport { DialogRef } from '@angular/cdk/dialog';\nimport { Subject, takeUntil } from 'rxjs';\nimport { DialogSize, dialogSizes } from './types/dialog-size';\n\n/**\n * LaunchDialog component.\n */\n@Component({\n  selector: 'ui-dialog-launcher',\n  template: `\n    <button\n      type=\"button\"\n      class=\"rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n      (click)=\"openDialog()\"\n    >\n      Open dialog\n    </button>\n  `,\n})\nclass LaunchDialogComponent implements OnDestroy {\n  /** Animal name */\n  @Input() animal = '';\n  /** Dialog size */\n  @Input() size: DialogSize = 'medium';\n  /** Destroy subject */\n  private destroy$ = new Subject<void>();\n\n  /**\n   * Constructor for the launchDialog component\n   *\n   * @param _dialog Dialog service\n   */\n  constructor(private _dialog: Dialog) {}\n\n  /**\n   * open Dialog.\n   */\n  openDialog(): void {\n    const dialogRef: any = this._dialog.open(EditDialogComponent, {\n      data: {\n        animal: this.animal,\n        size: this.size,\n      },\n    });\n    dialogRef.closed.pipe(takeUntil(this.destroy$)).subscribe((result: any) => {\n      console.log(`Dialog result: ${result}`);\n    });\n  }\n\n  ngOnDestroy(): void {\n    this.destroy$.next();\n    this.destroy$.complete();\n  }\n}\n\n/**\n * EditDialog component.\n */\n@Component({\n  standalone: true,\n  imports: [CommonModule, DialogModule],\n  selector: 'ui-edit-dialog',\n  template: `\n    <ui-dialog [size]=\"data.size\">\n      <ng-container ngProjectAs=\"header\">\n        <div\n          class=\"mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100\"\n        >\n          <svg\n            class=\"h-6 w-6 text-green-600\"\n            fill=\"none\"\n            viewBox=\"0 0 24 24\"\n            stroke-width=\"1.5\"\n            stroke=\"currentColor\"\n            aria-hidden=\"true\"\n          >\n            <path\n              stroke-linecap=\"round\"\n              stroke-linejoin=\"round\"\n              d=\"M4.5 12.75l6 6 9-13.5\"\n            />\n          </svg>\n        </div>\n      </ng-container>\n      <ng-container ngProjectAs=\"content\">\n        <div class=\"flex flex-col h-full\">\n          <div class=\"my-auto text-center\">\n            <h3\n              class=\"text-base font-semibold leading-6 text-gray-900\"\n              id=\"modal-title\"\n            >\n              Payment successful\n            </h3>\n            <div class=\"mt-2\">\n              <p class=\"text-sm text-gray-500\">\n                Lorem ipsum dolor sit amet consectetur adipisicing elit.\n                Consequatur amet labore.\n              </p>\n            </div>\n          </div>\n        </div>\n      </ng-container>\n      <ng-container ngProjectAs=\"actions\">\n        <br />\n        <button\n          type=\"button\"\n          class=\"inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          [uiDialogClose]=\"data.animal\"\n        >\n          Go back\n        </button>\n      </ng-container>\n    </ui-dialog>\n  `,\n})\nclass EditDialogComponent {\n  /**\n   * Edit Dialog component\n   *\n   * @param dialogRef Dialog ref\n   * @param data Injected dialog data\n   * @param data.animal animal data\n   * @param data.size size data\n   */\n  constructor(\n    public dialogRef: DialogRef<EditDialogComponent>,\n    @Inject(DIALOG_DATA)\n    public data: {\n      animal: string;\n      size: DialogSize;\n    }\n  ) {}\n}\n\nexport default {\n  title: 'Components/Dialog',\n  tags: ['autodocs'],\n  component: LaunchDialogComponent,\n  decorators: [\n    moduleMetadata({\n      declarations: [LaunchDialogComponent],\n      imports: [CommonModule, DialogModule],\n    }),\n  ],\n  argTypes: {\n    size: {\n      options: dialogSizes,\n      control: {\n        type: 'select',\n      },\n    },\n  },\n} as Meta;\n\n/**\n * Template launchDialog\n *\n * @param {LaunchDialogComponent} args args\n * @returns LaunchDialogComponent\n */\nconst Template: Story<LaunchDialogComponent> = (\n  args: LaunchDialogComponent\n) => ({\n  props: args,\n});\n\n/** Primary launchDialog */\nexport const Default = Template.bind({});\nDefault.args = {\n  animal: 'panda',\n  size: 'small',\n};\n",
+            "sourceCode": "import { moduleMetadata, Story, Meta } from '@storybook/angular';\nimport { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';\nimport { DialogModule } from './dialog.module';\nimport { CommonModule } from '@angular/common';\nimport { Component, Input, Inject, OnDestroy } from '@angular/core';\nimport { DialogRef } from '@angular/cdk/dialog';\nimport { Subject, takeUntil } from 'rxjs';\nimport { DialogSize, dialogSizes } from './types/dialog-size';\nimport { TranslateModule } from '@ngx-translate/core';\n\n/**\n * LaunchDialog component.\n */\n@Component({\n  selector: 'ui-dialog-launcher',\n  template: `\n    <button\n      type=\"button\"\n      class=\"rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n      (click)=\"openDialog()\"\n    >\n      Open dialog\n    </button>\n  `,\n})\nclass LaunchDialogComponent implements OnDestroy {\n  /** Animal name */\n  @Input() animal = '';\n  /** Dialog size */\n  @Input() size: DialogSize = 'medium';\n  /** Destroy subject */\n  private destroy$ = new Subject<void>();\n\n  /**\n   * Constructor for the launchDialog component\n   *\n   * @param _dialog Dialog service\n   */\n  constructor(private _dialog: Dialog) {}\n\n  /**\n   * open Dialog.\n   */\n  openDialog(): void {\n    const dialogRef: any = this._dialog.open(EditDialogComponent, {\n      data: {\n        animal: this.animal,\n        size: this.size,\n      },\n    });\n    dialogRef.closed.pipe(takeUntil(this.destroy$)).subscribe((result: any) => {\n      console.log(`Dialog result: ${result}`);\n    });\n  }\n\n  ngOnDestroy(): void {\n    this.destroy$.next();\n    this.destroy$.complete();\n  }\n}\n\n/**\n * EditDialog component.\n */\n@Component({\n  standalone: true,\n  imports: [CommonModule, DialogModule],\n  selector: 'ui-edit-dialog',\n  template: `\n    <ui-dialog [size]=\"data.size\">\n      <ng-container ngProjectAs=\"header\">\n        <div\n          class=\"mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100\"\n        >\n          <svg\n            class=\"h-6 w-6 text-green-600\"\n            fill=\"none\"\n            viewBox=\"0 0 24 24\"\n            stroke-width=\"1.5\"\n            stroke=\"currentColor\"\n            aria-hidden=\"true\"\n          >\n            <path\n              stroke-linecap=\"round\"\n              stroke-linejoin=\"round\"\n              d=\"M4.5 12.75l6 6 9-13.5\"\n            />\n          </svg>\n        </div>\n      </ng-container>\n      <ng-container ngProjectAs=\"content\">\n        <div class=\"flex flex-col h-full\">\n          <div class=\"my-auto text-center\">\n            <h3\n              class=\"text-base font-semibold leading-6 text-gray-900\"\n              id=\"modal-title\"\n            >\n              Payment successful\n            </h3>\n            <div class=\"mt-2\">\n              <p class=\"text-sm text-gray-500\">\n                Lorem ipsum dolor sit amet consectetur adipisicing elit.\n                Consequatur amet labore.\n              </p>\n            </div>\n          </div>\n        </div>\n      </ng-container>\n      <ng-container ngProjectAs=\"actions\">\n        <br />\n        <button\n          type=\"button\"\n          class=\"inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          [uiDialogClose]=\"data.animal\"\n        >\n          Go back\n        </button>\n      </ng-container>\n    </ui-dialog>\n  `,\n})\nclass EditDialogComponent {\n  /**\n   * Edit Dialog component\n   *\n   * @param dialogRef Dialog ref\n   * @param data Injected dialog data\n   * @param data.animal animal data\n   * @param data.size size data\n   */\n  constructor(\n    public dialogRef: DialogRef<EditDialogComponent>,\n    @Inject(DIALOG_DATA)\n    public data: {\n      animal: string;\n      size: DialogSize;\n    }\n  ) {}\n}\n\nexport default {\n  title: 'Components/Dialog',\n  tags: ['autodocs'],\n  component: LaunchDialogComponent,\n  decorators: [\n    moduleMetadata({\n      declarations: [LaunchDialogComponent],\n      imports: [CommonModule, DialogModule, TranslateModule.forRoot()],\n    }),\n  ],\n  argTypes: {\n    size: {\n      options: dialogSizes,\n      control: {\n        type: 'select',\n      },\n    },\n  },\n} as Meta;\n\n/**\n * Template launchDialog\n *\n * @param {LaunchDialogComponent} args args\n * @returns LaunchDialogComponent\n */\nconst Template: Story<LaunchDialogComponent> = (\n  args: LaunchDialogComponent\n) => ({\n  props: args,\n});\n\n/** Primary launchDialog */\nexport const Default = Template.bind({});\nDefault.args = {\n  animal: 'panda',\n  size: 'small',\n};\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -4539,13 +4539,13 @@
                         "deprecationMessage": ""
                     }
                 ],
-                "line": 121,
+                "line": 122,
                 "rawdescription": "\n\nEdit Dialog component\n\n",
                 "jsdoctags": [
                     {
                         "name": {
-                            "pos": 3613,
-                            "end": 3622,
+                            "pos": 3668,
+                            "end": 3677,
                             "flags": 8388608,
                             "modifierFlagsCache": 0,
                             "transformFlags": 0,
@@ -4556,8 +4556,8 @@
                         "deprecated": false,
                         "deprecationMessage": "",
                         "tagName": {
-                            "pos": 3607,
-                            "end": 3612,
+                            "pos": 3662,
+                            "end": 3667,
                             "flags": 8388608,
                             "modifierFlagsCache": 0,
                             "transformFlags": 0,
@@ -4568,8 +4568,8 @@
                     },
                     {
                         "name": {
-                            "pos": 3646,
-                            "end": 3650,
+                            "pos": 3701,
+                            "end": 3705,
                             "flags": 8388608,
                             "modifierFlagsCache": 0,
                             "transformFlags": 0,
@@ -4580,8 +4580,8 @@
                         "deprecated": false,
                         "deprecationMessage": "",
                         "tagName": {
-                            "pos": 3640,
-                            "end": 3645,
+                            "pos": 3695,
+                            "end": 3700,
                             "flags": 8388608,
                             "modifierFlagsCache": 0,
                             "transformFlags": 0,
@@ -7071,7 +7071,7 @@
         },
         {
             "name": "LaunchDialogComponent",
-            "id": "component-LaunchDialogComponent-d8f1590c6bf31308c660c9a0f003fd4998f4521853225304d0a98ed6c57290a19723d52e190cb67eb3179b5de63f8a8d423f9126db7934e2a96d71b40fa7d2b0",
+            "id": "component-LaunchDialogComponent-3f9ca1eddcf47dc5545c9df5cc59d4917ae4af59463732e118e0216f48429104b3f135196fcfa47f44fdc3088fa37bccee780bf76b8681e635602c4c518f0a33",
             "file": "libs/ui/src/lib/dialog/dialog.stories.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -7093,7 +7093,7 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nAnimal name",
                     "description": "<p>Animal name</p>\n",
-                    "line": 27,
+                    "line": 28,
                     "type": "string",
                     "decorators": []
                 },
@@ -7104,7 +7104,7 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nDialog size",
                     "description": "<p>Dialog size</p>\n",
-                    "line": 29,
+                    "line": 30,
                     "type": "DialogSize",
                     "decorators": []
                 }
@@ -7119,7 +7119,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Destroy subject</p>\n",
-                    "line": 31,
+                    "line": 32,
                     "rawdescription": "\nDestroy subject",
                     "modifierKind": [
                         121
@@ -7133,7 +7133,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 55,
+                    "line": 56,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -7143,7 +7143,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 43,
+                    "line": 44,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "rawdescription": "\n\nopen Dialog.\n",
@@ -7159,7 +7159,7 @@
             "description": "<p>LaunchDialog component.</p>\n",
             "rawdescription": "\n\nLaunchDialog component.\n",
             "type": "component",
-            "sourceCode": "import { moduleMetadata, Story, Meta } from '@storybook/angular';\nimport { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';\nimport { DialogModule } from './dialog.module';\nimport { CommonModule } from '@angular/common';\nimport { Component, Input, Inject, OnDestroy } from '@angular/core';\nimport { DialogRef } from '@angular/cdk/dialog';\nimport { Subject, takeUntil } from 'rxjs';\nimport { DialogSize, dialogSizes } from './types/dialog-size';\n\n/**\n * LaunchDialog component.\n */\n@Component({\n  selector: 'ui-dialog-launcher',\n  template: `\n    <button\n      type=\"button\"\n      class=\"rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n      (click)=\"openDialog()\"\n    >\n      Open dialog\n    </button>\n  `,\n})\nclass LaunchDialogComponent implements OnDestroy {\n  /** Animal name */\n  @Input() animal = '';\n  /** Dialog size */\n  @Input() size: DialogSize = 'medium';\n  /** Destroy subject */\n  private destroy$ = new Subject<void>();\n\n  /**\n   * Constructor for the launchDialog component\n   *\n   * @param _dialog Dialog service\n   */\n  constructor(private _dialog: Dialog) {}\n\n  /**\n   * open Dialog.\n   */\n  openDialog(): void {\n    const dialogRef: any = this._dialog.open(EditDialogComponent, {\n      data: {\n        animal: this.animal,\n        size: this.size,\n      },\n    });\n    dialogRef.closed.pipe(takeUntil(this.destroy$)).subscribe((result: any) => {\n      console.log(`Dialog result: ${result}`);\n    });\n  }\n\n  ngOnDestroy(): void {\n    this.destroy$.next();\n    this.destroy$.complete();\n  }\n}\n\n/**\n * EditDialog component.\n */\n@Component({\n  standalone: true,\n  imports: [CommonModule, DialogModule],\n  selector: 'ui-edit-dialog',\n  template: `\n    <ui-dialog [size]=\"data.size\">\n      <ng-container ngProjectAs=\"header\">\n        <div\n          class=\"mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100\"\n        >\n          <svg\n            class=\"h-6 w-6 text-green-600\"\n            fill=\"none\"\n            viewBox=\"0 0 24 24\"\n            stroke-width=\"1.5\"\n            stroke=\"currentColor\"\n            aria-hidden=\"true\"\n          >\n            <path\n              stroke-linecap=\"round\"\n              stroke-linejoin=\"round\"\n              d=\"M4.5 12.75l6 6 9-13.5\"\n            />\n          </svg>\n        </div>\n      </ng-container>\n      <ng-container ngProjectAs=\"content\">\n        <div class=\"flex flex-col h-full\">\n          <div class=\"my-auto text-center\">\n            <h3\n              class=\"text-base font-semibold leading-6 text-gray-900\"\n              id=\"modal-title\"\n            >\n              Payment successful\n            </h3>\n            <div class=\"mt-2\">\n              <p class=\"text-sm text-gray-500\">\n                Lorem ipsum dolor sit amet consectetur adipisicing elit.\n                Consequatur amet labore.\n              </p>\n            </div>\n          </div>\n        </div>\n      </ng-container>\n      <ng-container ngProjectAs=\"actions\">\n        <br />\n        <button\n          type=\"button\"\n          class=\"inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          [uiDialogClose]=\"data.animal\"\n        >\n          Go back\n        </button>\n      </ng-container>\n    </ui-dialog>\n  `,\n})\nclass EditDialogComponent {\n  /**\n   * Edit Dialog component\n   *\n   * @param dialogRef Dialog ref\n   * @param data Injected dialog data\n   * @param data.animal animal data\n   * @param data.size size data\n   */\n  constructor(\n    public dialogRef: DialogRef<EditDialogComponent>,\n    @Inject(DIALOG_DATA)\n    public data: {\n      animal: string;\n      size: DialogSize;\n    }\n  ) {}\n}\n\nexport default {\n  title: 'Components/Dialog',\n  tags: ['autodocs'],\n  component: LaunchDialogComponent,\n  decorators: [\n    moduleMetadata({\n      declarations: [LaunchDialogComponent],\n      imports: [CommonModule, DialogModule],\n    }),\n  ],\n  argTypes: {\n    size: {\n      options: dialogSizes,\n      control: {\n        type: 'select',\n      },\n    },\n  },\n} as Meta;\n\n/**\n * Template launchDialog\n *\n * @param {LaunchDialogComponent} args args\n * @returns LaunchDialogComponent\n */\nconst Template: Story<LaunchDialogComponent> = (\n  args: LaunchDialogComponent\n) => ({\n  props: args,\n});\n\n/** Primary launchDialog */\nexport const Default = Template.bind({});\nDefault.args = {\n  animal: 'panda',\n  size: 'small',\n};\n",
+            "sourceCode": "import { moduleMetadata, Story, Meta } from '@storybook/angular';\nimport { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';\nimport { DialogModule } from './dialog.module';\nimport { CommonModule } from '@angular/common';\nimport { Component, Input, Inject, OnDestroy } from '@angular/core';\nimport { DialogRef } from '@angular/cdk/dialog';\nimport { Subject, takeUntil } from 'rxjs';\nimport { DialogSize, dialogSizes } from './types/dialog-size';\nimport { TranslateModule } from '@ngx-translate/core';\n\n/**\n * LaunchDialog component.\n */\n@Component({\n  selector: 'ui-dialog-launcher',\n  template: `\n    <button\n      type=\"button\"\n      class=\"rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n      (click)=\"openDialog()\"\n    >\n      Open dialog\n    </button>\n  `,\n})\nclass LaunchDialogComponent implements OnDestroy {\n  /** Animal name */\n  @Input() animal = '';\n  /** Dialog size */\n  @Input() size: DialogSize = 'medium';\n  /** Destroy subject */\n  private destroy$ = new Subject<void>();\n\n  /**\n   * Constructor for the launchDialog component\n   *\n   * @param _dialog Dialog service\n   */\n  constructor(private _dialog: Dialog) {}\n\n  /**\n   * open Dialog.\n   */\n  openDialog(): void {\n    const dialogRef: any = this._dialog.open(EditDialogComponent, {\n      data: {\n        animal: this.animal,\n        size: this.size,\n      },\n    });\n    dialogRef.closed.pipe(takeUntil(this.destroy$)).subscribe((result: any) => {\n      console.log(`Dialog result: ${result}`);\n    });\n  }\n\n  ngOnDestroy(): void {\n    this.destroy$.next();\n    this.destroy$.complete();\n  }\n}\n\n/**\n * EditDialog component.\n */\n@Component({\n  standalone: true,\n  imports: [CommonModule, DialogModule],\n  selector: 'ui-edit-dialog',\n  template: `\n    <ui-dialog [size]=\"data.size\">\n      <ng-container ngProjectAs=\"header\">\n        <div\n          class=\"mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100\"\n        >\n          <svg\n            class=\"h-6 w-6 text-green-600\"\n            fill=\"none\"\n            viewBox=\"0 0 24 24\"\n            stroke-width=\"1.5\"\n            stroke=\"currentColor\"\n            aria-hidden=\"true\"\n          >\n            <path\n              stroke-linecap=\"round\"\n              stroke-linejoin=\"round\"\n              d=\"M4.5 12.75l6 6 9-13.5\"\n            />\n          </svg>\n        </div>\n      </ng-container>\n      <ng-container ngProjectAs=\"content\">\n        <div class=\"flex flex-col h-full\">\n          <div class=\"my-auto text-center\">\n            <h3\n              class=\"text-base font-semibold leading-6 text-gray-900\"\n              id=\"modal-title\"\n            >\n              Payment successful\n            </h3>\n            <div class=\"mt-2\">\n              <p class=\"text-sm text-gray-500\">\n                Lorem ipsum dolor sit amet consectetur adipisicing elit.\n                Consequatur amet labore.\n              </p>\n            </div>\n          </div>\n        </div>\n      </ng-container>\n      <ng-container ngProjectAs=\"actions\">\n        <br />\n        <button\n          type=\"button\"\n          class=\"inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          [uiDialogClose]=\"data.animal\"\n        >\n          Go back\n        </button>\n      </ng-container>\n    </ui-dialog>\n  `,\n})\nclass EditDialogComponent {\n  /**\n   * Edit Dialog component\n   *\n   * @param dialogRef Dialog ref\n   * @param data Injected dialog data\n   * @param data.animal animal data\n   * @param data.size size data\n   */\n  constructor(\n    public dialogRef: DialogRef<EditDialogComponent>,\n    @Inject(DIALOG_DATA)\n    public data: {\n      animal: string;\n      size: DialogSize;\n    }\n  ) {}\n}\n\nexport default {\n  title: 'Components/Dialog',\n  tags: ['autodocs'],\n  component: LaunchDialogComponent,\n  decorators: [\n    moduleMetadata({\n      declarations: [LaunchDialogComponent],\n      imports: [CommonModule, DialogModule, TranslateModule.forRoot()],\n    }),\n  ],\n  argTypes: {\n    size: {\n      options: dialogSizes,\n      control: {\n        type: 'select',\n      },\n    },\n  },\n} as Meta;\n\n/**\n * Template launchDialog\n *\n * @param {LaunchDialogComponent} args args\n * @returns LaunchDialogComponent\n */\nconst Template: Story<LaunchDialogComponent> = (\n  args: LaunchDialogComponent\n) => ({\n  props: args,\n});\n\n/** Primary launchDialog */\nexport const Default = Template.bind({});\nDefault.args = {\n  animal: 'panda',\n  size: 'small',\n};\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -7176,13 +7176,13 @@
                         "deprecationMessage": ""
                     }
                 ],
-                "line": 31,
+                "line": 32,
                 "rawdescription": "\n\nConstructor for the launchDialog component\n\n",
                 "jsdoctags": [
                     {
                         "name": {
-                            "pos": 1171,
-                            "end": 1178,
+                            "pos": 1226,
+                            "end": 1233,
                             "flags": 8388608,
                             "modifierFlagsCache": 0,
                             "transformFlags": 0,
@@ -7193,8 +7193,8 @@
                         "deprecated": false,
                         "deprecationMessage": "",
                         "tagName": {
-                            "pos": 1165,
-                            "end": 1170,
+                            "pos": 1220,
+                            "end": 1225,
                             "flags": 8388608,
                             "modifierFlagsCache": 0,
                             "transformFlags": 0,
@@ -14132,7 +14132,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "",
-                "defaultValue": "`\n<div [formGroup]=\"formGroup\" class=\"py-5\">\n  <ui-select-menu \n    formControlName=\"selectMenu\"\n    (opened)=\"openEvent($event)\" \n    (closed)=\"closeEvent($event)\" \n    (selectedOption)=\"selectEvent($event)\" \n    [multiselect]=\"multiselect\"\n    [filterable]=\"filterable\"\n  >\n    <ui-select-option\n      *ngFor=\"let option of options\"\n      [value]=\"option\"\n      [selected]=\"formGroup.get('selectMenu')?.value.includes(option)\">\n      {{option}}\n    </ui-select-option>\n  </ui-select-menu>\n</div>\n`",
+                "defaultValue": "`\n<div [formGroup]=\"formGroup\" class=\"py-5\">\n  <ui-select-menu \n    formControlName=\"selectMenu\"\n    (opened)=\"openEvent($event)\" \n    (closed)=\"closeEvent($event)\" \n    (selectedOption)=\"selectEvent($event)\" \n    [multiselect]=\"multiselect\"\n    [disabled]=\"disabled\"\n    [filterable]=\"filterable\"\n  >\n    <ui-select-option\n      *ngFor=\"let option of options\"\n      [value]=\"option\"\n      [selected]=\"formGroup.get('selectMenu')?.value.includes(option)\">\n      {{option}}\n    </ui-select-option>\n  </ui-select-menu>\n</div>\n`",
                 "rawdescription": "Template used to render the stories (using a formGroup with pre-selected values)",
                 "description": "<p>Template used to render the stories (using a formGroup with pre-selected values)</p>\n"
             },
@@ -14207,18 +14207,6 @@
                 "defaultValue": "(\n  args: ToggleComponent\n) => {\n  const formGroup = new FormGroup({\n    toggle: new FormControl(true),\n  });\n  return {\n    component: ToggleComponent,\n    template: `\n      <form [formGroup]=\"formGroup\">\n      <ui-toggle [type]=\"'${args.type}'\" [variant]=\"'${args.variant}'\" [labelPosition]=\"'${args.labelPosition}'\" formControlName=\"toggle\">\n        <ng-container ngProjectAs=\"label\">Test test test!</ng-container>\n        <ng-container ngProjectAs=\"description\">\n          Test test test test test test test test test test test test test\n        </ng-container>\n      </ui-toggle>\n        </form>\n        <br>\n        <p>value: {{formGroup.get('toggle').value}}</p>\n        <p>touched: {{formGroup.get('toggle').touched}}</p>\n        `,\n    props: {\n      ...args,\n      formGroup,\n    },\n  };\n}",
                 "rawdescription": "Form control template toggle",
                 "description": "<p>Form control template toggle</p>\n"
-            },
-            {
-                "name": "formGroup",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "libs/ui/src/lib/select-menu/select-menu.stories.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "type": "",
-                "defaultValue": "new FormGroup({\n  selectMenu: new FormControl(),\n})",
-                "rawdescription": "Form group to test select-menu control value accessor",
-                "description": "<p>Form group to test select-menu control value accessor</p>\n"
             },
             {
                 "name": "formGroup",
@@ -15191,7 +15179,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "",
-                "defaultValue": "(event: any) => {\n  console.log('Select Event: ', event);\n  console.log('Form control: ', formGroup.get('selectMenu')?.value);\n}",
+                "defaultValue": "(event: any, formGroup: FormGroup) => {\n  console.log('Select Event: ', event);\n  console.log('Form control: ', formGroup.get('selectMenu')?.value);\n}",
                 "rawdescription": "Used to test if emission of output \"selectedOption\" works",
                 "description": "<p>Used to test if emission of output &quot;selectedOption&quot; works</p>\n"
             },
@@ -15487,18 +15475,6 @@
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "libs/ui/src/lib/form-wrapper/form-wrapper.stories.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "type": "StoryFn<any>",
-                "defaultValue": "(args: any) => {\n  return {\n    template: `<div uiFormFieldDirective [outline]=\"${args.outline}\">\n    <label>Phone Number</label>\n    <input type=\"text\" name=\"account-number\" id=\"account-number\" placeholder=\"000-00-0000\"/>\n    <ui-spinner [size]=\"'medium'\" uiSuffix></ui-spinner>\n    <ui-icon icon=\"search\" uiPrefix></ui-icon>\n  </div>`,\n    props: {\n      ...args,\n    },\n  };\n}",
-                "rawdescription": "Template to create form wrapper component's story",
-                "description": "<p>Template to create form wrapper component&#39;s story</p>\n"
-            },
-            {
-                "name": "Template",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
                 "file": "libs/ui/src/lib/fixed-wrapper/fixed-wrapper.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
@@ -15506,6 +15482,18 @@
                 "defaultValue": "() => {\n  return {\n    component: FixedWrapperComponent,\n    template: `\n    <ng-template #fixedWrapperActions>\n    <div\n      class=\"z-[1] sticky bottom-0 right-0 py-2 px-4 bg-white w-full shadow-lg transition-shadow duration-300 shadow-slate-700 border-t border-gray-300\"\n    >\n      <div class=\"flex w-full justify-end\">\n        <!-- Inject actions -->\n        <ng-content></ng-content>\n      </div>\n    </div>\n  </ng-template>\n    `,\n  };\n}",
                 "rawdescription": "Template expansion panel group",
                 "description": "<p>Template expansion panel group</p>\n"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "libs/ui/src/lib/form-wrapper/form-wrapper.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "StoryFn<any>",
+                "defaultValue": "(args: any) => {\n  return {\n    template: `<div uiFormFieldDirective [outline]=\"${args.outline}\">\n    <label>Phone Number</label>\n    <input type=\"text\" name=\"account-number\" id=\"account-number\" placeholder=\"000-00-0000\"/>\n    <ui-spinner [size]=\"'medium'\" uiSuffix></ui-spinner>\n    <ui-icon icon=\"search\" uiPrefix></ui-icon>\n  </div>`,\n    props: {\n      ...args,\n    },\n  };\n}",
+                "rawdescription": "Template to create form wrapper component's story",
+                "description": "<p>Template to create form wrapper component&#39;s story</p>\n"
             },
             {
                 "name": "Template",
@@ -15539,7 +15527,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "StoryFn<RadioComponent>",
-                "defaultValue": "(args: RadioComponent) => {\n  args.name = 'notification-method';\n  return {\n    component: RadioComponent,\n    template: `\n    <div class=\"space-y-4\" (groupValueChange)=\"getRadioChangeSelection($event)\" [uiRadioGroupDirective]=\"'${args.name}'\">\n    <ui-radio *ngFor=\"let option of radioOptions; \" [disabled]=\"${args.disabled}\" [variant]=\"'${args.variant}'\" [value]=\"option.value\">\n      <ng-container ngProjectAs=\"label\">{{option.label}}</ng-container>\n    </ui-radio>\n    </div>\n    <br>\n    <p>value: {{selectedOption}}</p>\n    `,\n    props: {\n      ...args,\n      radioOptions,\n      getRadioChangeSelection,\n      selectedOption,\n    },\n  };\n}",
+                "defaultValue": "(args: RadioComponent) => {\n  args.name = 'notification-method';\n  return {\n    component: RadioComponent,\n    template: `\n    <div class=\"space-y-4\" (groupValueChange)=\"getRadioChangeSelection($event)\" [uiRadioGroupDirective]=\"'${args.name}'\">\n    <ui-radio *ngFor=\"let option of radioOptions; \" [disabled]=\"${args.disabled}\" [variant]=\"${args.variant}\" [value]=\"option.value\">\n      <ng-container ngProjectAs=\"label\">{{option.label}}</ng-container>\n    </ui-radio>\n    </div>\n    <br>\n    <p>value: {{selectedOption}}</p>\n    `,\n    props: {\n      ...args,\n      radioOptions,\n      getRadioChangeSelection,\n      selectedOption,\n    },\n  };\n}",
                 "rawdescription": "Template radio group",
                 "description": "<p>Template radio group</p>\n"
             },
@@ -15635,7 +15623,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "StoryFn<SelectMenuComponent>",
-                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  args.disabled = true;\n  return {\n    component: SelectMenuComponent,\n    template: selectMenuTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  args.disabled = true;\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: selectMenuTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                 "rawdescription": "Template for disabled selection select menu",
                 "description": "<p>Template for disabled selection select menu</p>\n"
             },
@@ -15659,7 +15647,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "StoryFn<SelectMenuComponent>",
-                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  args.multiselect = true;\n  formGroup.get('selectMenu')?.setValue([options[0], options[1]]);\n  return {\n    component: SelectMenuComponent,\n    template: formControlSelectTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  args.multiselect = true;\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([options[0], options[1]]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: formControlSelectTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                 "rawdescription": "Template for multi selection select menu",
                 "description": "<p>Template for multi selection select menu</p>\n"
             },
@@ -15707,7 +15695,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "StoryFn<SelectMenuComponent>",
-                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  formGroup.get('selectMenu')?.setValue([]);\n  return {\n    component: SelectMenuComponent,\n    template: selectMenuTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: selectMenuTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                 "rawdescription": "Template for standalone selection select menu",
                 "description": "<p>Template for standalone selection select menu</p>\n"
             },
@@ -15719,7 +15707,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "StoryFn<SelectMenuComponent>",
-                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  formGroup.get('selectMenu')?.setValue([options[0]]);\n  return {\n    component: SelectMenuComponent,\n    template: formControlSelectTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([options[0]]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: formControlSelectTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                 "rawdescription": "Template for standalone selection default value select menu",
                 "description": "<p>Template for standalone selection default value select menu</p>\n"
             },
@@ -15743,7 +15731,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "StoryFn<SelectMenuComponent>",
-                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  formGroup.get('selectMenu')?.setValue([options[0]]);\n  return {\n    component: SelectMenuComponent,\n    template: singleSelectMenuTemplateWithTrigger,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([options[0]]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: singleSelectMenuTemplateWithTrigger,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                 "rawdescription": "Template for single select menu using a ngTemplate as input",
                 "description": "<p>Template for single select menu using a ngTemplate as input</p>\n"
             },
@@ -17053,21 +17041,9 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "",
-                    "defaultValue": "`\n<div [formGroup]=\"formGroup\" class=\"py-5\">\n  <ui-select-menu \n    formControlName=\"selectMenu\"\n    (opened)=\"openEvent($event)\" \n    (closed)=\"closeEvent($event)\" \n    (selectedOption)=\"selectEvent($event)\" \n    [multiselect]=\"multiselect\"\n    [filterable]=\"filterable\"\n  >\n    <ui-select-option\n      *ngFor=\"let option of options\"\n      [value]=\"option\"\n      [selected]=\"formGroup.get('selectMenu')?.value.includes(option)\">\n      {{option}}\n    </ui-select-option>\n  </ui-select-menu>\n</div>\n`",
+                    "defaultValue": "`\n<div [formGroup]=\"formGroup\" class=\"py-5\">\n  <ui-select-menu \n    formControlName=\"selectMenu\"\n    (opened)=\"openEvent($event)\" \n    (closed)=\"closeEvent($event)\" \n    (selectedOption)=\"selectEvent($event)\" \n    [multiselect]=\"multiselect\"\n    [disabled]=\"disabled\"\n    [filterable]=\"filterable\"\n  >\n    <ui-select-option\n      *ngFor=\"let option of options\"\n      [value]=\"option\"\n      [selected]=\"formGroup.get('selectMenu')?.value.includes(option)\">\n      {{option}}\n    </ui-select-option>\n  </ui-select-menu>\n</div>\n`",
                     "rawdescription": "Template used to render the stories (using a formGroup with pre-selected values)",
                     "description": "<p>Template used to render the stories (using a formGroup with pre-selected values)</p>\n"
-                },
-                {
-                    "name": "formGroup",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "libs/ui/src/lib/select-menu/select-menu.stories.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "",
-                    "defaultValue": "new FormGroup({\n  selectMenu: new FormControl(),\n})",
-                    "rawdescription": "Form group to test select-menu control value accessor",
-                    "description": "<p>Form group to test select-menu control value accessor</p>\n"
                 },
                 {
                     "name": "MultiSelection",
@@ -17113,7 +17089,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "",
-                    "defaultValue": "(event: any) => {\n  console.log('Select Event: ', event);\n  console.log('Form control: ', formGroup.get('selectMenu')?.value);\n}",
+                    "defaultValue": "(event: any, formGroup: FormGroup) => {\n  console.log('Select Event: ', event);\n  console.log('Form control: ', formGroup.get('selectMenu')?.value);\n}",
                     "rawdescription": "Used to test if emission of output \"selectedOption\" works",
                     "description": "<p>Used to test if emission of output &quot;selectedOption&quot; works</p>\n"
                 },
@@ -17185,7 +17161,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "StoryFn<SelectMenuComponent>",
-                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  args.disabled = true;\n  return {\n    component: SelectMenuComponent,\n    template: selectMenuTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  args.disabled = true;\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: selectMenuTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                     "rawdescription": "Template for disabled selection select menu",
                     "description": "<p>Template for disabled selection select menu</p>\n"
                 },
@@ -17197,7 +17173,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "StoryFn<SelectMenuComponent>",
-                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  args.multiselect = true;\n  formGroup.get('selectMenu')?.setValue([options[0], options[1]]);\n  return {\n    component: SelectMenuComponent,\n    template: formControlSelectTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  args.multiselect = true;\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([options[0], options[1]]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: formControlSelectTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                     "rawdescription": "Template for multi selection select menu",
                     "description": "<p>Template for multi selection select menu</p>\n"
                 },
@@ -17233,7 +17209,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "StoryFn<SelectMenuComponent>",
-                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  formGroup.get('selectMenu')?.setValue([]);\n  return {\n    component: SelectMenuComponent,\n    template: selectMenuTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: selectMenuTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                     "rawdescription": "Template for standalone selection select menu",
                     "description": "<p>Template for standalone selection select menu</p>\n"
                 },
@@ -17245,7 +17221,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "StoryFn<SelectMenuComponent>",
-                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  formGroup.get('selectMenu')?.setValue([options[0]]);\n  return {\n    component: SelectMenuComponent,\n    template: formControlSelectTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([options[0]]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: formControlSelectTemplate,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                     "rawdescription": "Template for standalone selection default value select menu",
                     "description": "<p>Template for standalone selection default value select menu</p>\n"
                 },
@@ -17269,7 +17245,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "StoryFn<SelectMenuComponent>",
-                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  formGroup.get('selectMenu')?.setValue([options[0]]);\n  return {\n    component: SelectMenuComponent,\n    template: singleSelectMenuTemplateWithTrigger,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
+                    "defaultValue": "(\n  args: SelectMenuComponent\n) => {\n  const formGroup = new FormGroup({\n    selectMenu: new FormControl([options[0]]),\n  });\n  return {\n    component: SelectMenuComponent,\n    template: singleSelectMenuTemplateWithTrigger,\n    props: {\n      ...args,\n      options,\n      formGroup,\n      selectEvent,\n      openEvent,\n      closeEvent,\n    },\n  };\n}",
                     "rawdescription": "Template for single select menu using a ngTemplate as input",
                     "description": "<p>Template for single select menu using a ngTemplate as input</p>\n"
                 }
@@ -18206,7 +18182,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "StoryFn<RadioComponent>",
-                    "defaultValue": "(args: RadioComponent) => {\n  args.name = 'notification-method';\n  return {\n    component: RadioComponent,\n    template: `\n    <div class=\"space-y-4\" (groupValueChange)=\"getRadioChangeSelection($event)\" [uiRadioGroupDirective]=\"'${args.name}'\">\n    <ui-radio *ngFor=\"let option of radioOptions; \" [disabled]=\"${args.disabled}\" [variant]=\"'${args.variant}'\" [value]=\"option.value\">\n      <ng-container ngProjectAs=\"label\">{{option.label}}</ng-container>\n    </ui-radio>\n    </div>\n    <br>\n    <p>value: {{selectedOption}}</p>\n    `,\n    props: {\n      ...args,\n      radioOptions,\n      getRadioChangeSelection,\n      selectedOption,\n    },\n  };\n}",
+                    "defaultValue": "(args: RadioComponent) => {\n  args.name = 'notification-method';\n  return {\n    component: RadioComponent,\n    template: `\n    <div class=\"space-y-4\" (groupValueChange)=\"getRadioChangeSelection($event)\" [uiRadioGroupDirective]=\"'${args.name}'\">\n    <ui-radio *ngFor=\"let option of radioOptions; \" [disabled]=\"${args.disabled}\" [variant]=\"${args.variant}\" [value]=\"option.value\">\n      <ng-container ngProjectAs=\"label\">{{option.label}}</ng-container>\n    </ui-radio>\n    </div>\n    <br>\n    <p>value: {{selectedOption}}</p>\n    `,\n    props: {\n      ...args,\n      radioOptions,\n      getRadioChangeSelection,\n      selectedOption,\n    },\n  };\n}",
                     "rawdescription": "Template radio group",
                     "description": "<p>Template radio group</p>\n"
                 }
@@ -20742,16 +20718,6 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "formControlSelectTemplate",
-                "coveragePercent": 100,
-                "coverageCount": "1/1",
-                "status": "very-good"
-            },
-            {
-                "filePath": "libs/ui/src/lib/select-menu/select-menu.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "formGroup",
                 "coveragePercent": 100,
                 "coverageCount": "1/1",
                 "status": "very-good"

@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectMenuComponent } from './select-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SelectOptionModule } from './components/select-option.module';
-import { StorybookTranslateModule } from '../../storybook-translate.module';
+import { StorybookTranslateModule } from '../../../.storybook/storybook-translate.module';
 import { ButtonModule } from '../button/button.module';
 import { SpinnerModule } from '../spinner/spinner.module';
 import { TooltipModule } from '../tooltip/tooltip.module';

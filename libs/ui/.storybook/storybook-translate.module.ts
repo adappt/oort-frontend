@@ -39,6 +39,8 @@ export class StorybookTranslateModule {
    * @param translateService The translate service that will be used to translate the text.
    */
   constructor(translateService: TranslateService) {
+    console.log('Configuring the translation service: ', translateService);
+    console.log('Translations: ', translateService.translations);
     translateService.setDefaultLang('en');
     translateService.use('en');
   }

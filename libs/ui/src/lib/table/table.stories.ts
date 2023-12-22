@@ -1,7 +1,7 @@
 import { moduleMetadata, Meta, StoryFn } from '@storybook/angular';
 
 import { TableModule } from './table.module';
-import { StorybookTranslateModule } from '../../storybook-translate.module';
+import { StorybookTranslateModule } from '../../../.storybook/storybook-translate.module';
 import { ToggleModule } from '../toggle/toggle.module';
 import { TableSort } from './interfaces/table-column.interface';
 

@@ -22,7 +22,7 @@ describe('CreateNotificationComponent', () => {
           },
         }),
       ],
-      providers: [TranslateService]
+      providers: [TranslateService],
     }).compileComponents();
   });
 

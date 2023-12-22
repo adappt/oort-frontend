@@ -22,7 +22,7 @@ describe('LayoutComponent', () => {
           },
         }),
       ],
-      providers: [TranslateService]
+      providers: [TranslateService],
     }).compileComponents();
   });
 

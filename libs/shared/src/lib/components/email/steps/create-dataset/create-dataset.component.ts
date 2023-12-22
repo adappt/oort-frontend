@@ -63,9 +63,15 @@ export class CreateDatasetComponent implements OnInit {
     this.prepareDatasetFilters();
   }
 
+  /**
+   *
+   * @param event
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getResourceDataOnScroll(event: any) {
     if (ITEMS_PER_PAGE > -1) {
-      ITEMS_PER_PAGE = ITEMS_PER_PAGE > -1 ? ITEMS_PER_PAGE + 15 : ITEMS_PER_PAGE;
+      ITEMS_PER_PAGE =
+        ITEMS_PER_PAGE > -1 ? ITEMS_PER_PAGE + 15 : ITEMS_PER_PAGE;
       this.resourcesQuery = this.apollo.watchQuery<ResourcesQueryResponse>({
         query: GET_RESOURCES,
         variables: {
@@ -75,17 +81,22 @@ export class CreateDatasetComponent implements OnInit {
       });
       if (this.resourcesQuery && ITEMS_PER_PAGE > -1) {
         this.resourcesQuery.valueChanges.subscribe(({ data }) => {
-          ITEMS_PER_PAGE = ITEMS_PER_PAGE > data?.resources?.totalCount ? -1 : ITEMS_PER_PAGE;
+          ITEMS_PER_PAGE =
+            ITEMS_PER_PAGE > data?.resources?.totalCount ? -1 : ITEMS_PER_PAGE;
           const resources =
             data?.resources?.edges?.map((edge) => edge.node) || [];
-          this.cachedElements = resources.map(
-            element => { return  { id : element?.id?.toString(), name: element?.name};
-          }); 
+          this.cachedElements = resources.map((element) => {
+            return { id: element?.id?.toString(), name: element?.name };
+          });
         });
       }
     }
   }
 
+  /**
+   *
+   * @param tab
+   */
   onTabSelect(tab: any): void {
     this.activeTab = tab;
     this.activeTab.active = true;

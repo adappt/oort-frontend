@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * schedule-alert page component.
@@ -8,6 +8,4 @@ import { Component, ViewChild } from '@angular/core';
   templateUrl: './schedule-alert.component.html',
   styleUrls: ['./schedule-alert.component.scss'],
 })
-export class ScheduleAlertComponent {
-  
-}
+export class ScheduleAlertComponent {}

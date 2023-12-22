@@ -106,7 +106,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ListFilterComponent,
     StatusOptionsComponent,
     DashboardFilterIconComponent,
-    NgSelectModule
+    NgSelectModule,
   ],
 })
 export class Module {}

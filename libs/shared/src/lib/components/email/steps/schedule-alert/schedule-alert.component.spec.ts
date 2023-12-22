@@ -22,7 +22,7 @@ describe('ScheduleAlertComponent', () => {
           },
         }),
       ],
-      providers: [TranslateService]
+      providers: [TranslateService],
     }).compileComponents();
   });
 

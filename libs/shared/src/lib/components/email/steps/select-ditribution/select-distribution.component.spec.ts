@@ -22,7 +22,7 @@ describe('SelectDistributionComponent', () => {
           },
         }),
       ],
-      providers: [TranslateService]
+      providers: [TranslateService],
     }).compileComponents();
   });
 

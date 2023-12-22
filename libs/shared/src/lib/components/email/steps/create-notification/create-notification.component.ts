@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * create notification page component.
@@ -9,10 +9,12 @@ import { Component, ViewChild } from '@angular/core';
   styleUrls: ['./create-notification.component.scss'],
 })
 export class CreateNotificationComponent {
-  
-  isExisting=false;
+  isExisting = false;
 
-  toggle(){
-    this.isExisting=!this.isExisting;
+  /**
+   *
+   */
+  toggle() {
+    this.isExisting = !this.isExisting;
   }
 }

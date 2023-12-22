@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * Emailpage component.
@@ -8,6 +8,4 @@ import { Component, ViewChild } from '@angular/core';
   templateUrl: './select-distribution.component.html',
   styleUrls: ['./select-distribution.component.scss'],
 })
-export class SelectDistributionComponent {
-  
-}
+export class SelectDistributionComponent {}

@@ -22,7 +22,7 @@ describe('CreateDatasetComponent', () => {
           },
         }),
       ],
-      providers: [TranslateService]
+      providers: [TranslateService],
     }).compileComponents();
   });
 

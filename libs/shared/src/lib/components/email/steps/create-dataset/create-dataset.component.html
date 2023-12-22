@@ -422,7 +422,7 @@
                 {{ 'common.preview' | translate }}
               </ng-template>
               <ng-template kendoTabContent>
-                <table *ngIf="dataList?.length" class="w-full border border-blue-600 shadow-xs m-1">
+                <table id="tblPreview" *ngIf="dataList?.length" class="w-full border border-blue-600 shadow-xs m-1">
                   <thead class="bg-blue-600  border-blue-600 shadow-xs text-white">
                     <tr class="bg-blue-600  border-blue-600 shadow-xs text-white">
                       <ng-container *ngFor="let item of dataList[0] | keyvalue">

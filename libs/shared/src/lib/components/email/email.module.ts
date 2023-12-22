@@ -64,6 +64,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
     IconModule,
     NgSelectModule,
   ],
-  schemas: [NO_ERRORS_SCHEMA]
+  schemas: [NO_ERRORS_SCHEMA],
 })
 export class EmailModule {}

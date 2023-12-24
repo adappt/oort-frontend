@@ -1207,6 +1207,13 @@
 				"title": "******"
 			}
 		},
+		"selectDistribution": {
+			"alertMe": "******",
+			"createFilterLogic": "******",
+			"email": "******",
+			"label": "******",
+			"to": "******"
+		},
 		"share": {
 			"modal": {
 				"copy": "******",

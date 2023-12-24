@@ -8,9 +8,13 @@ import {
   ResourceQueryResponse,
   ResourcesQueryResponse,
 } from '../../../../models/resource.model';
-import { FIELD_TYPES, FILTER_OPERATORS } from './filter/filter.constant';
-import { GET_DATA_SET, GET_RESOURCE, GET_RESOURCES } from './graphql/queries';
-import { ADD_LAYOUT } from './graphql/mutations';
+import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
+import {
+  GET_DATA_SET,
+  GET_RESOURCE,
+  GET_RESOURCES,
+} from '../../graphql/queries';
+import { ADD_LAYOUT } from '../../graphql/mutations';
 import {
   AddLayoutMutationResponse,
   Layout,
@@ -37,6 +41,7 @@ export class CreateDatasetComponent implements OnInit {
   public selectedResourceId: string | undefined;
   public operators!: { value: string; label: string }[];
   public dataSetFiltersFormGroup: FormGroup | any;
+  public searchQuery = '';
   public tabs: any[] = [
     {
       title: `Tab 1`,
@@ -49,6 +54,7 @@ export class CreateDatasetComponent implements OnInit {
   private layoutData?: Layout;
   private dataSet!: { [key: string]: { [key: string]: any } };
   public dataList!: { [key: string]: string }[];
+  public filteredFields: any[] = [];
 
   /**
    * Composite filter group.
@@ -61,6 +67,7 @@ export class CreateDatasetComponent implements OnInit {
   ngOnInit(): void {
     this.getResourceDataOnScroll(undefined);
     this.prepareDatasetFilters();
+    this.filteredFields = this.resource?.fields;
   }
 
   /**
@@ -94,8 +101,9 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
+   * This function is used to select a tab.
    *
-   * @param tab
+   * @param tab The tab to be selected.
    */
   onTabSelect(tab: any): void {
     this.activeTab = tab;
@@ -187,6 +195,17 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
+   * Filters the available fields based on the search query.
+   *
+   * @param searchQuery
+   */
+  filterAvailableFields(searchQuery: string): void {
+    this.filteredFields = this.resource?.fields.filter((field: any) =>
+      field.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  /**
    * To add the selective fields in the layout
    *
    * @param fieldName string
@@ -204,7 +223,27 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
-   * To get the new dataset filter
+   * This function removes selected fields from the block table.
+   *
+   * @param fieldName The name of the field to remove.
+   */
+  removeSelectiveFields(fieldName: string): void {
+    const existFields =
+      this.dataSetFiltersFormGroup.controls.query.controls.fields.value || [];
+    const index = existFields.findIndex(
+      (field: { name: string }) => field.name === fieldName
+    );
+    if (index !== -1) {
+      existFields.splice(index, 1);
+      this.dataSetFiltersFormGroup.controls.query.controls.fields.setValue(
+        existFields
+      );
+      this.selectedFields = existFields;
+    }
+  }
+
+  /**
+   * Grabs filter row values.
    *
    *  @returns FormGroup
    */

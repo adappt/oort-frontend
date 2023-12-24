@@ -69,7 +69,7 @@
                     <div class="flex gap-4">
                       <div class="mt-2">
                         <label htmlFor="data_set_limit" class="block text-gray-700 text-sm">
-                          {{ 'components.queryBuilder.sort.limit' | translate }}
+                          Table Row {{ 'components.queryBuilder.sort.limit' | translate | titlecase }}
                         </label>
                         <input id="data_set_limit"
                           class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -95,7 +95,7 @@
                         class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         (click)="addNewDatasetFilter()">
                         {{ 'components.queryBuilder.filter.new' | translate }}
-                      </button>                    
+                      </button>
                       <button type="button"
                         class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         {{ 'components.queryBuilder.filter.newGroup' | translate }}
@@ -162,44 +162,48 @@
               </ng-template>
               <ng-template kendoTabContent>
                 <ng-container>
-                  <!-- <h1>field option</h1> -->
-
-                  <div class="mt-8">
-                    <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
-                      {{ 'components.queryBuilder.block.label' | translate }}*
-                    </label>
-                    <button type="button"
-                      class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                      {{ 'components.queryBuilder.block.label' | translate }}
-                    </button>
-                  </div>
                   <div class="flex gap-4 mt-4">
-                    <div class="mt-4">
-                      <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
+                    <!-- Available Fields -->
+                    <div class="mt-4 w-1/2">
+                      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                         {{ 'components.queryBuilder.fields.available' | translate }}
                       </label>
-                      <div
-                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-blue-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                      <div class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <div class="mt-4">
+                          <input id="searchBar" type="text" [(ngModel)]="searchQuery"
+                            placeholder="Search" class="mt-1 block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
                         <ng-container *ngFor="let fieldDetails of resource?.fields">
-                          <p (click)="addSelectiveFields(fieldDetails?.name)"
-                            class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                          <div *ngIf="fieldDetails?.name.includes(searchQuery)" (click)="addSelectiveFields(fieldDetails?.name)"
+                            class="group mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center">
                             {{ replaceUnderscores(fieldDetails?.name) | titlecase }}
-                          </p>
+                            <div class="hidden group-hover:block">
+                              <ui-icon icon="arrow_right" variant="grey"></ui-icon>
+                            </div>
+                          </div>
                         </ng-container>
                       </div>
                     </div>
-                    <div class="mt-4">
-                      <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-                        {{ 'components.queryBuilder.fields.selected' | translate }}
+
+                    <!-- Selected Fields -->
+                    <div class="mt-4 w-1/2">
+                      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                       {{ 'components.queryBuilder.fields.selected' | translate }}
                       </label>
-                      <div
-                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-blue-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        <ng-container *ngFor="let fiels of selectedFields">
-                          <p
-                            class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                            {{ replaceUnderscores(fiels.name) | titlecase }}
-                          </p>
-                        </ng-container>
+                      <div class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                       <div class="mt-4">
+                         <input id="searchBarSelected" type="text"
+                           placeholder="Search" class="mt-1 block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                       </div>
+                       <ng-container *ngFor="let fields of selectedFields">
+                        <div (click)="removeSelectiveFields(fields.name)"
+                          class="group mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center">
+                          <div class="hidden group-hover:block">
+                            <ui-icon icon="arrow_left" variant="grey"></ui-icon>
+                          </div>
+                          {{ replaceUnderscores(fields.name) | titlecase }}
+                        </div>
+                      </ng-container>
                       </div>
                     </div>
                   </div>

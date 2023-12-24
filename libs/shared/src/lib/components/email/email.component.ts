@@ -2,16 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StepperComponent } from '@progress/kendo-angular-layout';
 
-// import {
-//   bookIcon,
-//   eyeIcon,
-//   fileAddIcon,
-//   paperclipIcon,
-//   userIcon,
-// } from "@progress/kendo-svg-icons";
-
 /**
- * Emailpage component.
+ * Email Notification setup
  */
 @Component({
   selector: 'app-email',
@@ -24,7 +16,7 @@ export class EmailComponent {
 
   public currentStep = 0;
 
-  private sumbitted = false;
+  private submitted = false;
 
   public steps: any[];
 
@@ -59,7 +51,7 @@ export class EmailComponent {
   };
 
   private shouldValidate = (): boolean => {
-    return this.sumbitted === true;
+    return this.submitted === true;
   };
 
   /**
@@ -145,7 +137,7 @@ export class EmailComponent {
    *
    */
   public submit(): void {
-    this.sumbitted = true;
+    this.submitted = true;
 
     // if (!this.form.valid) {
     //     this.form.markAllAsTouched();

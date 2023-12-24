@@ -1,0 +1,11 @@
+#show-selected-emails {
+  div {
+      display: flex;
+      gap:2px;
+      background-color: #cfc8c8;
+      border-radius: 5px;
+      p {
+          text-align: center;
+      }
+  }
+}

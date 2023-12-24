@@ -1207,12 +1207,14 @@
 				"title": "******"
 			}
 		},
-		"selectDistribution": {
-			"alertMe": "******",
-			"createFilterLogic": "******",
-			"email": "******",
-			"label": "******",
-			"to": "******"
+		"select": {
+			"distribution": {
+				"alertMe": "******",
+				"createFilterLogic": "******",
+				"email": "******",
+				"label": "******",
+				"to": "******"
+			}
 		},
 		"share": {
 			"modal": {

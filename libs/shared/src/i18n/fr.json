@@ -1218,12 +1218,14 @@
 				"title": "Modifier les permissions des rôles et les canaux de diffusion"
 			}
 		},
-		"selectDistribution": {
-			"alertMe": "Alerte moi",
-			"createFilterLogic": "Créer une logique de filtre",
-			"email": "Email",
-			"label": "Nom de la liste de distribution*",
-			"to": "À"
+		"select": {
+			"distribution": {
+				"alertMe": "Alerte moi",
+				"createFilterLogic": "Créer une logique de filtre",
+				"email": "Email",
+				"label": "Nom de la liste de distribution*",
+				"to": "À"
+			}
 		},
 		"share": {
 			"modal": {

@@ -23,14 +23,13 @@ import { CreateDatasetComponent } from './steps/create-dataset/create-dataset.co
 import { CreateNotificationComponent } from './steps/create-notification/create-notification.component';
 import { LayoutComponent } from './steps/layout/layout.component';
 import { ScheduleAlertComponent } from './steps/schedule-alert/schedule-alert.component';
-import { SelectDistributionComponent } from './steps/select-ditribution/select-distribution.component';
+import { SelectDistributionComponent } from './steps/select-distribution/select-distribution.component';
 import { PreviewComponent } from './steps/preview/preview.component';
 import { TabStripModule } from '@progress/kendo-angular-layout';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-//import {  MatStepperModule } from '@angular/material/stepper'
 /**
- * Emailpage module.
+ * Email module.
  */
 @NgModule({
   declarations: [

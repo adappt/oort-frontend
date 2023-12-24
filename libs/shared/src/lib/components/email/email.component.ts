@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StepperComponent } from '@progress/kendo-angular-layout';
 
 /**
- * Email Notification setup
+ * Email Notification setup component.
  */
 @Component({
   selector: 'app-email',
@@ -14,7 +14,7 @@ export class EmailComponent {
   @ViewChild('stepper', { static: true })
   public stepper: StepperComponent | undefined;
 
-  public currentStep = 0;
+  public currentStep = 2;
 
   private submitted = false;
 
@@ -104,7 +104,9 @@ export class EmailComponent {
   //   ];
 
   /**
+   * Getter for the current form group.
    *
+   * @returns The current form group.
    */
   public get currentGroup(): FormGroup {
     return this.getGroupAt(this.currentStep);

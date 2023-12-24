@@ -1207,12 +1207,14 @@
 				"title": "Update role permissions and channels"
 			}
 		},
-		"selectDistribution": {
-			"alertMe": "Alert me",
-			"createFilterLogic": "Create Filter Logic",
-			"email": "Email",
-			"label": "Distribution List Name*",
-			"to": "To"
+		"select": {
+			"distribution": {
+				"alertMe": "Alert me",
+				"createFilterLogic": "Create Filter Logic",
+				"email": "Email",
+				"label": "Distribution List Name*",
+				"to": "To"
+			}
 		},
 		"share": {
 			"modal": {

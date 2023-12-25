@@ -950,7 +950,6 @@
 			}
 		},
 		"queryBuilder": {
-			"apply": "Apply filter",
 			"block": {
 				"label": "Block Title",
 				"title": "Block"
@@ -977,6 +976,7 @@
 			},
 			"filter": {
 				"and": "And",
+				"apply": "Apply filter",
 				"field": "Field",
 				"logic": "Filter logic",
 				"new": "Add new filter",

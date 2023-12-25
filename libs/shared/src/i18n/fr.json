@@ -961,7 +961,6 @@
 			}
 		},
 		"queryBuilder": {
-			"apply": "Appliquer le filtre",
 			"block": {
 				"label": "Titre du Bloc",
 				"title": "Bloc"
@@ -988,6 +987,7 @@
 			},
 			"filter": {
 				"and": "Et",
+				"apply": "Appliquer le filtre",
 				"field": "Champ",
 				"logic": "Logique de filtre",
 				"new": "Ajouter un nouveau filtre",

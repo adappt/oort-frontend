@@ -185,7 +185,7 @@ export class CreateDatasetComponent implements OnInit {
         name: '',
         pageSize: 0,
         filter: this.fb.group({
-          logic: 'and',
+          logic: 'and', // set default value here
           filters: new FormArray([]),
         }),
         fields: [],
@@ -220,6 +220,11 @@ export class CreateDatasetComponent implements OnInit {
       );
       this.selectedFields = existFields;
     }
+    // Removes the selected field from the available fields list
+    this.resource.fields = this.resource.fields.filter(
+      (field: { name: string }) => field.name !== fieldName
+    );
+    this.onSubmit();
   }
 
   /**
@@ -240,6 +245,9 @@ export class CreateDatasetComponent implements OnInit {
       );
       this.selectedFields = existFields;
     }
+    // Adds the deselected field back to the available fields list
+    this.resource.fields.push({ name: fieldName, type: typeof fieldName });
+    this.onSubmit();
   }
 
   /**
@@ -256,7 +264,7 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
-   * to get the form controlls
+   * Gets the form controls
    *
    * @returns form control
    */
@@ -265,9 +273,9 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
-   * To
+   * Grabs the data from each dataset filter row.
    *
-   * @returns Formarray
+   * @returns Formarray of dataset filters
    */
   get datasetFilterInfo(): FormArray {
     return this.dataSetFiltersFormGroup
@@ -287,6 +295,10 @@ export class CreateDatasetComponent implements OnInit {
 
     // this.filterFields = this.filter.get('filters') as FormArray;
     this.filterFields.push(this.getNewFilterFields);
+  }
+
+  addNewDatasetGroup(): void {
+    //TODO: Implement Filter Group
   }
 
   /**

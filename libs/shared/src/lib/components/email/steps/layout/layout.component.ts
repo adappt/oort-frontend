@@ -8,4 +8,80 @@ import { Component } from '@angular/core';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent {}
+export class LayoutComponent {
+  headerLogo: string | ArrayBuffer | null = null;
+  bannerImage: string | ArrayBuffer | null = null;
+  footerLogo: string | ArrayBuffer | null = null;
+
+  /**
+   * This method handles the selection of the header logo.
+   *
+   * @param event - The event triggered when a header logo is selected.
+   */
+  onHeaderLogoSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => (this.headerLogo = reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  /**
+   * This method handles the selection of the Banner Image.
+   *
+   * @param event - The event triggered when a Banner Image is selected.
+   */
+  onBannerSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => (this.bannerImage = reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  /**
+   * This method handles the selection of the footer logo.
+   *
+   * @param event - The event triggered when a footer logo is selected.
+   */
+  onFooterLogoSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => (this.footerLogo = reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  /**
+   * This method retrieves the color values from the form.
+   *
+   * @returns An object containing color values.
+   */
+  getColors() {
+    const colors = {
+      titleBackgroundColor: (
+        document.getElementById('titleBackgroundColor') as HTMLInputElement
+      ).value,
+      headerColor: (document.getElementById('headerColor') as HTMLInputElement)
+        .value,
+      titleColor: (document.getElementById('titleColor') as HTMLInputElement)
+        .value,
+      containerColor: (
+        document.getElementById('containerColor') as HTMLInputElement
+      ).value,
+      anchorColor: (document.getElementById('anchorColor') as HTMLInputElement)
+        .value,
+      footerColor: (document.getElementById('footerColor') as HTMLInputElement)
+        .value,
+      textColor: (document.getElementById('textColor') as HTMLInputElement)
+        .value,
+      dividerColor: (
+        document.getElementById('dividerColor') as HTMLInputElement
+      ).value,
+    };
+    return colors;
+  }
+}

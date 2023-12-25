@@ -67,6 +67,7 @@
                 <ng-container *ngIf="resource?.fields?.length">
                   <div formGroupName="query" class="flex-row gap-4 mt-6">
                     <div class="flex gap-4">
+                      <!-- Table Row Limit -->
                       <div class="mt-2">
                         <label htmlFor="data_set_limit" class="block text-gray-700 text-sm">
                           Table Row {{ 'components.queryBuilder.sort.limit' | translate | titlecase }}
@@ -74,8 +75,9 @@
                         <input id="data_set_limit"
                           class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           type="number" min="0" [placeholder]="'components.queryBuilder.sort.limit' | translate" formControlName="pageSize">
-                      </div>
-                      <div formGroupName="filter" class="mt-2">
+                        </div>
+                        <!-- Filter Logic -->
+                        <div formGroupName="filter" class="mt-2">
                         <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                           {{ 'components.queryBuilder.filter.logic' | translate }}
                         </label>
@@ -89,13 +91,13 @@
                           </option>
                         </select>
                       </div>
-                    </div>
-                    <div class="flex gap-4">
+                      <!-- Filter Row -->
                       <button type="button"
                         class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         (click)="addNewDatasetFilter()">
                         {{ 'components.queryBuilder.filter.new' | translate }}
                       </button>
+                      <!-- Filter Group -->
                       <button type="button"
                         class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         {{ 'components.queryBuilder.filter.newGroup' | translate }}
@@ -175,7 +177,7 @@
                         </div>
                         <ng-container *ngFor="let fieldDetails of resource?.fields">
                           <div *ngIf="fieldDetails?.name.includes(searchQuery)" (click)="addSelectiveFields(fieldDetails?.name)"
-                            class="group mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center">
+                            class="group mt-1 text-sm text-left w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center">
                             {{ replaceUnderscores(fieldDetails?.name) | titlecase }}
                             <div class="hidden group-hover:block">
                               <ui-icon icon="arrow_right" variant="grey"></ui-icon>
@@ -197,7 +199,7 @@
                        </div>
                        <ng-container *ngFor="let fields of selectedFields">
                         <div (click)="removeSelectiveFields(fields.name)"
-                          class="group mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center">
+                          class="group mt-1 text-sm text-left w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center">
                           <div class="hidden group-hover:block">
                             <ui-icon icon="arrow_left" variant="grey"></ui-icon>
                           </div>
@@ -426,7 +428,7 @@
                 {{ 'common.preview' | translate }}
               </ng-template>
               <ng-template kendoTabContent>
-                <table id="tblPreview" *ngIf="dataList?.length" class="w-full border border-blue-600 shadow-xs m-1">
+                <table id="tblPreview" *ngIf="dataList?.length" class="dataset-preview w-full border border-blue-600 shadow-xs m-1">
                   <thead class="bg-blue-600  border-blue-600 shadow-xs text-white">
                     <tr class="bg-blue-600  border-blue-600 shadow-xs text-white">
                       <ng-container *ngFor="let item of dataList[0] | keyvalue">
@@ -448,7 +450,7 @@
           </kendo-tabstrip>
           <button *ngIf="filterFields.controls" type="submit"
             class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1">
-            {{ 'components.queryBuilder.apply' | translate }}</button>
+            {{ 'components.queryBuilder.filter.apply' | translate }}</button>
         </ng-template>
       </kendo-tabstrip-tab>
     </kendo-tabstrip>

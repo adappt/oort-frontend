@@ -186,29 +186,29 @@
 <div class="distribution_list">
   <div class="flex gap-4">
     <div class="mt-8">
-      <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
-        {{'components.selectDistribution.label' | translate}}
+      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+        {{'components.select.distribution.label' | translate}}
       </label>
       <input
-        class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         [placeholder]="'common.search' | translate" />
     </div>
     <div class="text-gray-700 text-xs gap-5 flex items-end">
       <input id="Alert_me" type="checkbox">
       <label for="Alert_me">
-        {{'components.selectDistribution.alertMe' | translate}}
+        {{'components.select.distribution.alertMe' | translate}}
       </label>
     </div>
   </div>
   <div>
     <button class="w-full flex p-2 space-y-4 flex-col items-start self-stretch bg-blue-50"
       (ngModel)="showEmailTemplate">
-      {{'components.selectDistribution.to' | translate}}
+      {{'components.select.distribution.to' | translate}}
     </button>
     <div class="Email_Template">
       <input
-        class="mt-1 text-xs text-left block w-52 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        type="text" [placeholder]="'components.selectDistribution.email' | translate">
+        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        type="text" [placeholder]="'components.select.distribution.email' | translate">
       <select
         class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
         <ng-container *ngFor="let email of emails">
@@ -220,7 +220,7 @@
     </div>
     <div class="Create filters">
       <p class="text-blue-700 text-base font-semibold font-small eading-normal">
-        {{'components.selectDistribution.createFilterLogic' | translate}}</p>
+        {{'components.select.distribution.createFilterLogic' | translate}}</p>
       <div>
         <div class="mt-6 flex-row gap-4">
           <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
@@ -230,7 +230,7 @@
             class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             [placeholder]="'components.queryBuilder.dataset.select' | translate" />
         </div>
-        <table *ngIf="dataList?.length" class="w-full border border-blue-600 shadow-xs m-1">
+        <table *ngIf="dataList?.length" class="dataset-preview w-full border border-blue-600 shadow-xs m-1">
           <thead class="bg-blue-600  border-blue-600 shadow-xs text-white">
             <tr class="bg-blue-600  border-blue-600 shadow-xs text-white">
               <ng-container *ngFor="let item of dataList[0] | keyvalue">
@@ -250,7 +250,7 @@
         <div [formGroup]="filterQuery">
           <div class="flex gap-4 mt-6">
             <div class="mt-2">
-              <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
+              <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                 {{ 'components.queryBuilder.filter.logic' | translate }}
               </label>
               <select formControlName="logic"
@@ -273,7 +273,7 @@
               <div *ngFor="let data of filterFields.controls; let fieldIndex = index">
                 <div class="flex gap-5 ml-20" [formGroupName]="fieldIndex">
                   <div class="mt-4">
-                    <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
+                    <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                       {{ 'components.queryBuilder.filter.field' | translate }}
                     </label>
                     <select id="exampleSelect" name="exampleSelect" (change)="setField($event)"
@@ -287,7 +287,7 @@
                     </select>
                   </div>
                   <div class="mt-4">
-                    <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
+                    <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                       {{ 'components.queryBuilder.filter.operator' | translate }}
                     </label>
                     <select id="exampleSelect" name="exampleSelect"

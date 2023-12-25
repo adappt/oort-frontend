@@ -14,7 +14,7 @@ export class EmailComponent {
   @ViewChild('stepper', { static: true })
   public stepper: StepperComponent | undefined;
 
-  public currentStep = 2;
+  public currentStep = 4;
 
   private submitted = false;
 
@@ -122,21 +122,21 @@ export class EmailComponent {
   }
 
   /**
-   *
+   * Increments the current step by one.
    */
   public next(): void {
     this.currentStep += 1;
   }
 
   /**
-   *
+   * Decrements the current step by one.
    */
   public prev(): void {
     this.currentStep -= 1;
   }
 
   /**
-   *
+   * Dynamic form submission.
    */
   public submit(): void {
     this.submitted = true;
@@ -150,8 +150,10 @@ export class EmailComponent {
   }
 
   /**
+   * This function returns the form group at the specified index.
    *
-   * @param index
+   * @param index The index of the form group.
+   * @returns {FormGroup} The form group at the specified index.
    */
   private getGroupAt(index: number): FormGroup {
     const groups = Object.keys(this.form.controls).map((groupName) =>

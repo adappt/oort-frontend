@@ -56,6 +56,7 @@ export class CreateDatasetComponent implements OnInit {
   public dataList!: { [key: string]: string }[];
   public filteredFields: any[] = [];
   filterOperators = FILTER_OPERATORS;
+  public searchSelectedField = '';
 
   /**
    * Composite filter group.
@@ -400,7 +401,7 @@ export class CreateDatasetComponent implements OnInit {
    * @param selectedOperator
    * @param filterData
    */
-  onOperatorChange(selectedOperator: string, filterData: any) {
+  public onOperatorChange(selectedOperator: string, filterData: any) {
     const operator = this.filterOperators.find(
       (x) => x.value === selectedOperator
     );

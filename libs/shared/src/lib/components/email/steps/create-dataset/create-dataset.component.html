@@ -172,7 +172,7 @@
                       </label>
                       <div class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         <div class="mt-4">
-                          <input id="searchBar" type="text" [(ngModel)]="searchQuery"
+                          <input id="searchBar" type="text" [(ngModel)]="searchQuery" [ngModelOptions]="{ standalone: true }"
                             placeholder="Search" class="mt-1 block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <ng-container *ngFor="let fieldDetails of resource?.fields">
@@ -194,11 +194,11 @@
                       </label>
                       <div class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                        <div class="mt-4">
-                         <input id="searchBarSelected" type="text"
+                         <input id="searchBarSelected" type="text" [(ngModel)]="searchSelectedField" [ngModelOptions]="{ standalone: true }"
                            placeholder="Search" class="mt-1 block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                        </div>
                        <ng-container *ngFor="let fields of selectedFields">
-                        <div (click)="removeSelectiveFields(fields.name)"
+                        <div *ngIf="fields?.name?.includes(searchSelectedField)" (click)="removeSelectiveFields(fields.name)"
                           class="group mt-1 text-sm text-left w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center">
                           <div class="hidden group-hover:block">
                             <ui-icon icon="arrow_left" variant="grey"></ui-icon>

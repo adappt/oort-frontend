@@ -55,6 +55,7 @@ export class CreateDatasetComponent implements OnInit {
   private dataSet!: { [key: string]: { [key: string]: any } };
   public dataList!: { [key: string]: string }[];
   public filteredFields: any[] = [];
+  filterOperators = FILTER_OPERATORS;
 
   /**
    * Composite filter group.
@@ -260,6 +261,7 @@ export class CreateDatasetComponent implements OnInit {
       field: [],
       operator: [],
       value: [],
+      hideEditor: false,
     });
   }
 
@@ -297,6 +299,9 @@ export class CreateDatasetComponent implements OnInit {
     this.filterFields.push(this.getNewFilterFields);
   }
 
+  /**
+   *
+   */
   addNewDatasetGroup(): void {
     //TODO: Implement Filter Group
   }
@@ -388,5 +393,21 @@ export class CreateDatasetComponent implements OnInit {
         ? this.tabs[this.tabs.length - 1]
         : this.activeTab;
     this.activeTab.active = true;
+  }
+
+  /**
+   *
+   * @param selectedOperator
+   * @param filterData
+   */
+  onOperatorChange(selectedOperator: string, filterData: any) {
+    const operator = this.filterOperators.find(
+      (x) => x.value === selectedOperator
+    );
+    if (operator?.disableValue) {
+      filterData.get('hideEditor').setValue(true);
+    } else {
+      filterData.get('hideEditor').setValue(false);
+    }
   }
 }

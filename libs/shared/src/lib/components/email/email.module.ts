@@ -48,6 +48,10 @@ import { EmsTemplateComponent } from './components/ems-template/ems-template.com
     ScheduleAlertComponent,
     LayoutComponent,
     PreviewComponent,
+    EmailTemplateComponent,
+    EmailTemplateComponent,
+    DatasetFilterComponent,
+    EmsTemplateComponent,
   ],
   imports: [
     FormsModule,

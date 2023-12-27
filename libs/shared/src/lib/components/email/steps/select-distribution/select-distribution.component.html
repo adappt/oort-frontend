@@ -24,7 +24,7 @@
       <span class="w-4" *ngIf="!showEmailTemplate"><ui-icon icon="expand_more" fontFamily="material" variant="primary"></ui-icon></span>
     </div>
     <shared-email-template (emailLoad)="to($event)" [emailBackLoad]="recipients.To" [emailFilter]="toEmailFilter" *ngIf="showEmailTemplate && templateFor === 'to'">To</shared-email-template>
-    
+
     <!-- CC -->
     <div class="w-full flex p-1 pl-2 space-y-4 flex-row items-start self-stretch bg-blue-50 cursor-pointer"
       (click)="toggleDropdown('cc')">
@@ -33,7 +33,7 @@
       <span class="w-4" *ngIf="!showEmailTemplate"><ui-icon icon="expand_more" fontFamily="material" variant="primary"></ui-icon></span>
     </div>
     <shared-email-template (emailLoad)="cc($event)" [emailBackLoad]="recipients.Cc" [emailFilter]="ccEmailFilter" *ngIf="showEmailTemplate && templateFor === 'cc'">cc</shared-email-template>
-    
+
     <!-- BCC -->
     <div class="w-full flex p-1 pl-2 space-y-4 flex-row items-start self-stretch bg-blue-50 cursor-pointer"
       (click)="toggleDropdown('bcc')">

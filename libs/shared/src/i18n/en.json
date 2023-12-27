@@ -1209,7 +1209,10 @@
 		},
 		"select": {
 			"distribution": {
+				"SelectFromList": "Select from List",
 				"alertMe": "Alert me",
+				"bcc": "bcc",
+				"cc": "cc",
 				"createFilterLogic": "Create Filter Logic",
 				"email": "Email",
 				"label": "Distribution List Name*",

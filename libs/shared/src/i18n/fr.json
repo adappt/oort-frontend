@@ -1220,7 +1220,10 @@
 		},
 		"select": {
 			"distribution": {
+				"SelectFromList": "Selecteer uit Lijst",
 				"alertMe": "Alerte moi",
+				"bcc": "Cci",
+				"cc": "Cc",
 				"createFilterLogic": "Créer une logique de filtre",
 				"email": "Email",
 				"label": "Nom de la liste de distribution*",

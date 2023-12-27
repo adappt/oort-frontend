@@ -51,25 +51,25 @@ export class EmailService {
     userValue: string | Date | number
   ) {
     let result;
-    if (!operator || !fieldValue || !userValue) return;
+    if (!operator || !fieldValue) return;
     switch (operator) {
       case 'eq':
-        result = fieldValue === userValue;
+        result = userValue && fieldValue === userValue;
         break;
       case 'neq':
-        result = fieldValue !== userValue;
+        result = userValue && fieldValue !== userValue;
         break;
       case 'gte':
-        result = fieldValue >= userValue;
+        result = userValue && fieldValue >= userValue;
         break;
       case 'gt':
-        result = fieldValue > userValue;
+        result = userValue && fieldValue > userValue;
         break;
       case 'lte':
-        result = fieldValue <= userValue;
+        result = userValue && fieldValue <= userValue;
         break;
       case 'lt':
-        result = fieldValue < userValue;
+        result = userValue && fieldValue < userValue;
         break;
       case 'isnull':
         result = fieldValue === null;
@@ -84,22 +84,22 @@ export class EmailService {
         result = fieldValue !== '';
         break;
       case 'contains':
-        result = fieldValue.includes(userValue as string);
+        result = userValue && fieldValue.includes(userValue as string);
         break;
       case 'doesnotcontain':
-        result = !fieldValue.includes(userValue as string);
+        result = userValue && !fieldValue.includes(userValue as string);
         break;
       case 'startswith':
-        result = fieldValue.startsWith(userValue as string);
+        result = userValue && fieldValue.startsWith(userValue as string);
         break;
       case 'endswith':
-        result = fieldValue.endsWith(userValue as string);
+        result = userValue && fieldValue.endsWith(userValue as string);
         break;
       case 'in':
-        result = (userValue as string | number) in fieldValue;
+        result = userValue && (userValue as string | number) in fieldValue;
         break;
       case 'notin':
-        result = !((userValue as string | number) in fieldValue);
+        result = userValue && !((userValue as string | number) in fieldValue);
         break;
       default:
         console.error('Invalid operator', operator, fieldValue, userValue);

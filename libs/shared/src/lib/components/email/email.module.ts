@@ -27,7 +27,8 @@ import { SelectDistributionComponent } from './steps/select-distribution/select-
 import { PreviewComponent } from './steps/preview/preview.component';
 import { TabStripModule } from '@progress/kendo-angular-layout';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { EditorModule } from '@tinymce/tinymce-angular';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { EmailTemplateComponent } from './components/email-template/email-template.component';
 
 /**
  * Email module.
@@ -41,6 +42,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     ScheduleAlertComponent,
     LayoutComponent,
     PreviewComponent,
+    EmailTemplateComponent,
   ],
   imports: [
     FormsModule,

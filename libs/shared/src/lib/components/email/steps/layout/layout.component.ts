@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-
+import { EMAIL_LAYOUT_CONFIG } from 'libs/shared/src/lib/const/tinymce.const';
+import { EditorService } from 'libs/shared/src/lib/services/editor/editor.service';
 /**
  * layout page component.
  */
@@ -12,6 +13,23 @@ export class LayoutComponent {
   headerLogo: string | ArrayBuffer | null = null;
   bannerImage: string | ArrayBuffer | null = null;
   footerLogo: string | ArrayBuffer | null = null;
+  /** Tinymce editor configuration */
+  public editor: any = EMAIL_LAYOUT_CONFIG;
+  bodyHtml: any = '';
+  headerHtml: any = '';
+  footerHtml: any = '';
+
+  /**
+   * Component used for the selection of fields to display the fields in tabs.
+   *
+   * @param editorService Editor service used to get main URL and current language
+   */
+  constructor(private editorService: EditorService) {
+    // Set the editor base url based on the environment file
+    this.editor.base_url = editorService.url;
+    // Set the editor language
+    this.editor.language = editorService.language;
+  }
 
   /**
    * This method handles the selection of the header logo.

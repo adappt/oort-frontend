@@ -27,7 +27,7 @@ import { SelectDistributionComponent } from './steps/select-distribution/select-
 import { PreviewComponent } from './steps/preview/preview.component';
 import { TabStripModule } from '@progress/kendo-angular-layout';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 /**
  * Email module.
@@ -66,8 +66,5 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
     EditorModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
-  providers: [
-    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
-  ],
 })
 export class EmailModule {}

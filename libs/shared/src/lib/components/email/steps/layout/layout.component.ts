@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { EMAIL_LAYOUT_CONFIG } from 'libs/shared/src/lib/const/tinymce.const';
-import { EditorService } from 'libs/shared/src/lib/services/editor/editor.service';
+import { EMAIL_LAYOUT_CONFIG } from '../../../../const/tinymce.const';
+import { EditorService } from '../../../../services/editor/editor.service';
 /**
  * layout page component.
  */

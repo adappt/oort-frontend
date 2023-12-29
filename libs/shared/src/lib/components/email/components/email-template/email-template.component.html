@@ -14,9 +14,9 @@
         <div class="flex flex-col p-1 gap-1 rounded-lg items-center justify-center"
             *ngIf="isDropdownVisible && emails?.length">
             <ng-container *ngFor="let email of emails; let emailIndex = index">
-                <span class="cursor-pointer flex p-1 rounded-lg items-center w-full justify-center bg-gray-400"
+                <span class="cursor-pointer text-white-700 flex p-1 rounded-lg items-center w-full justify-center bg-gray-400"
                     (click)="addSelectiveEmails(emailIndex)" [value]="email">
-                    {{ email }}*
+                    {{ email }}
                 </span>
             </ng-container>
         </div>
@@ -26,13 +26,22 @@
             {{ 'components.select.distribution.createFilterLogic' | translate }}
         </p>
         <div>
-            <div class="mt-6 flex-row gap-4">
-                <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+            <div class="w-1/2 mt-6 flex-row gap-4">
+                <label htmlFor="select__data__set" class="block text-gray-700 text-sm mb-1">
                     {{ 'components.queryBuilder.dataset.title' | translate }}*
                 </label>
-                <input
-                    class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    [placeholder]="'components.queryBuilder.dataset.select' | translate" />
+                <ng-select id="select__data__set" name="select__data__set" [ngModelOptions]="{ standalone: true }"
+                    [items]="dataSets" bindLabel="name" [searchable]="true" bindValue="id" [virtualScroll]="true"
+                    (change)="bindDataSetDetails($event)" placeholder="{{
+            'components.queryBuilder.dataset.select' | translate
+          }}">
+                    <ng-template disabled selected>
+                        <span></span>
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{ replaceUnderscores(item.name || '') | titlecase }}</span>
+                    </ng-template>
+                </ng-select>
             </div>
             <table *ngIf="dataList?.length" class="dataset-preview w-full border border-blue-600 shadow-xs m-1">
                 <thead class="bg-blue-600 border-blue-600 shadow-xs text-white">
@@ -117,7 +126,7 @@
                                         class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                                         placeholder="Enter the value" formControlName="value" />
                                 </div>
-                                <div class="deleteIcon" (click)="deleteDatasetFilter(fieldIndex)">
+                                <div class="deleteIcon mt-5" (click)="deleteDatasetFilter(fieldIndex)">
                                     <svg class="mt-4" xmlns="http://www.w3.org/2000/svg" width="25" height="24"
                                         viewBox="0 0 25 24" fill="none">
                                         <path

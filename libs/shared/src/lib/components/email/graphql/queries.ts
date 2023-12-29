@@ -60,8 +60,8 @@ export const GET_RESOURCES = gql`
 
 /** Graphql query for getting data set by filter layout */
 export const GET_DATA_SET = gql`
-  query getDataSet($layout: JSON!, $resourceId: ID!) {
-    dataSet(layout: $layout, resourceId: $resourceId) {
+  query getDataSet($query: JSON!) {
+    dataSet(query: $query) {
       records
       emails
       totalCount

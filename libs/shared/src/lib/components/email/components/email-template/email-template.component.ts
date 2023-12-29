@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { Apollo } from 'apollo-angular';
 import { clone } from 'lodash';
 import { debounceTime } from 'rxjs/operators';
-import {
-  Resource,
-  ResourceQueryResponse,
-} from '../../../../models/resource.model';
+import { Resource } from '../../../../models/resource.model';
 import { EmailService } from '../../email.service';
 import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
-import { GET_DATA_SET, GET_RESOURCE } from '../../graphql/queries';
 
 /**
  * Email template to create distribution list
@@ -32,115 +27,29 @@ export class EmailTemplateComponent implements OnInit {
   public dataSetEmails!: string[];
   public dataSetFields!: string[];
   public filterQuery: FormGroup | any;
-  public cachedElements: Resource[] = [];
   public selectedEmails: string[] | any = [];
   public operators!: { value: string; label: string }[];
   public filterFields: FormArray | any = new FormArray([]);
   public replaceUnderscores: any = this.emailService.replaceUnderscores;
+  public datasetsForm: FormGroup | any = this.emailService.datasetsForm;
   public filterData = this.emailService.filterData;
   public isDropdownVisible = false;
+  public dataSets: any;
 
   /**
    * Composite filter group.
    *
    * @param fb Angular form builder
-   * @param apollo apollo server
    * @param emailService helper functions
    */
-  constructor(
-    private fb: FormBuilder,
-    private apollo: Apollo,
-    public emailService: EmailService
-  ) {}
+  constructor(private fb: FormBuilder, public emailService: EmailService) {}
 
   ngOnInit(): void {
-    this.apollo
-      .query<any>({
-        query: GET_DATA_SET,
-        variables: {
-          layout: {
-            name: 'Test Query',
-            query: {
-              name: 'Alerts',
-              filter: {
-                logic: 'and',
-                filters: [
-                  {
-                    field: 'status',
-                    operator: 'neq',
-                    value: 'pending',
-                    hideEditor: false,
-                  },
-                ],
-              },
-              pageSize: 10,
-              fields: [
-                {
-                  name: 'point_of_contact',
-                  type: 'string',
-                },
-                {
-                  name: 'description',
-                  type: 'string',
-                },
-                {
-                  name: 'region',
-                  type: 'string',
-                },
-                {
-                  name: 'status',
-                  type: 'string',
-                },
-              ],
-            },
-          },
-          resourceId: '',
-        },
-      })
-      .subscribe(
-        (res: {
-          data: {
-            dataSet: {
-              emails: string[];
-              records: any[];
-            };
-          };
-        }) => {
-          this.dataSet = res.data.dataSet;
-          if (this.dataSet) {
-            this.dataList = this.dataSet.records?.map((record) => record.data);
-            if (this.dataList?.length) {
-              this.dataSetFields = [
-                ...new Set(
-                  this.dataList
-                    .map((data: { [key: string]: any }) => Object.keys(data))
-                    .flat()
-                ),
-              ];
-            }
-            this.dataSetEmails = this.dataSet.records
-              ?.map((record) => record.email)
-              ?.filter(Boolean)
-              ?.flat();
-            this.emails = [...this.dataSetEmails];
-          }
-        }
-      );
-    this.apollo
-      .query<ResourceQueryResponse>({
-        query: GET_RESOURCE,
-        variables: {
-          id: '',
-        },
-      })
-      .subscribe((res) => {
-        this.resource = res.data.resource;
-      });
+    this.dataSets = this.datasetsForm.value.dataSets;
     this.prepareDatasetFilters();
     this.filterQuery.valueChanges
       .pipe(debounceTime(1500))
       .subscribe((res: any) => {
-        this.cacheFilterData = JSON.stringify(res);
         if (res?.filters?.length && res?.logic) {
           const { logic } = res;
           let emailsList: string[] | undefined;
@@ -188,6 +97,27 @@ export class EmailTemplateComponent implements OnInit {
           }
         }
       });
+  }
+
+  /**
+   * To bind the dataset details
+   *
+   * @param dataSet data of the data set
+   */
+  bindDataSetDetails(dataSet: any): void {
+    if (dataSet.cacheData) {
+      const { dataList, resource, dataSetFields, dataSetResponse } =
+        dataSet.cacheData;
+      this.dataList = dataList;
+      this.resource = resource;
+      this.dataSetFields = dataSetFields;
+      this.dataSet = dataSetResponse;
+      this.dataSetEmails = dataSetResponse.records
+        ?.map((record: { email: string }) => record.email)
+        ?.filter(Boolean)
+        ?.flat();
+      this.emails = [...this.dataSetEmails];
+    }
   }
 
   /**

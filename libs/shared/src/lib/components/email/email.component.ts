@@ -14,7 +14,7 @@ export class EmailComponent {
   @ViewChild('stepper', { static: true })
   public stepper: StepperComponent | undefined;
 
-  public currentStep = 4;
+  public currentStep = 1;
 
   private submitted = false;
 

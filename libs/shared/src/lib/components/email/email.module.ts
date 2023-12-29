@@ -27,8 +27,9 @@ import { SelectDistributionComponent } from './steps/select-distribution/select-
 import { PreviewComponent } from './steps/preview/preview.component';
 import { TabStripModule } from '@progress/kendo-angular-layout';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { EditorModule } from '@tinymce/tinymce-angular';
 import { EmailTemplateComponent } from './components/email-template/email-template.component';
+import { DatasetFilterComponent } from './components/dataset-filter/dataset-filter.component';
 
 /**
  * Email module.
@@ -43,6 +44,8 @@ import { EmailTemplateComponent } from './components/email-template/email-templa
     LayoutComponent,
     PreviewComponent,
     EmailTemplateComponent,
+    EmailTemplateComponent,
+    DatasetFilterComponent,
   ],
   imports: [
     FormsModule,

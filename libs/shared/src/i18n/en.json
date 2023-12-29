@@ -2088,6 +2088,7 @@
 		"customNotification": {
 			"lastExecution": "Last execution",
 			"schedule": "Schedule",
+			"select": "Select Notification type",
 			"type": "Notification type"
 		},
 		"dashboard": {

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { EmailService } from '../../email.service';
 
 /**
  * create notification page component.
@@ -10,6 +12,15 @@ import { Component } from '@angular/core';
 })
 export class CreateNotificationComponent {
   isExisting = false;
+  public dataSetFormGroup: FormGroup | any = this.emailService.datasetsForm;
+  public notificationTypes: string[] = this.emailService.notificationTypes;
+
+  /**
+   * initializing Email Service
+   *
+   * @param emailService helper functions
+   */
+  constructor(public emailService: EmailService) {}
 
   /**
    *

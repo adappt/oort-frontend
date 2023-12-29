@@ -1,19 +1,53 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { GET_DATA_SET } from './graphql/queries';
+import { Apollo } from 'apollo-angular';
 
 /**
- * Helper fuctions for emails template
+ * Helper functions for emails template
  */
 @Injectable({
   providedIn: 'root',
 })
 export class EmailService {
+  public resourcesNameId!: {
+    name: string | undefined;
+    id: string | undefined;
+  }[];
+  public notificationTypes: string[] = ['email', 'alert', 'push notification'];
+  public tabs: any[] = [
+    {
+      title: `Tab 1`,
+      content: `Tab 1 Content`,
+      active: true,
+    },
+  ];
+
+  public dataSetGroup: FormGroup = this.formBuilder.group({
+    resource: null,
+    name: null,
+    pageSize: 10,
+    filter: this.formBuilder.group({
+      logic: 'and',
+      filters: new FormArray([]),
+    }),
+    fields: [],
+    cacheData: {},
+  });
+
+  public datasetsForm: FormGroup = this.formBuilder.group({
+    name: null,
+    notificationType: null,
+    dataSets: new FormArray([this.dataSetGroup]),
+  });
+
   /**
    * Constructs the EmailService instance.
    *
    * @param formBuilder
+   * @param apollo apollo server
    */
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private apollo: Apollo) {}
 
   /**
    * To replace all special characters with space
@@ -51,7 +85,7 @@ export class EmailService {
     userValue: string | Date | number
   ) {
     let result;
-    if (!operator || !fieldValue) return;
+    if (!operator) return;
     switch (operator) {
       case 'eq':
         result = userValue && fieldValue === userValue;
@@ -78,7 +112,7 @@ export class EmailService {
         result = fieldValue !== null;
         break;
       case 'isempty':
-        result = fieldValue === '';
+        result = fieldValue === '' || !fieldValue;
         break;
       case 'isnotempty':
         result = fieldValue !== '';
@@ -102,9 +136,23 @@ export class EmailService {
         result = userValue && !((userValue as string | number) in fieldValue);
         break;
       default:
-        console.error('Invalid operator', operator, fieldValue, userValue);
         return;
     }
     return result;
+  }
+
+  /**
+   * To get data set
+   *
+   * @param filterQuery query details to fetch data set
+   * @returns data set
+   */
+  fetchDataSet(filterQuery: any) {
+    return this.apollo.query<any>({
+      query: GET_DATA_SET,
+      variables: {
+        query: filterQuery,
+      },
+    });
   }
 }

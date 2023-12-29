@@ -2088,6 +2088,7 @@
 		"customNotification": {
 			"lastExecution": "******",
 			"schedule": "******",
+			"select": "******",
 			"type": "******"
 		},
 		"dashboard": {

@@ -283,3 +283,6 @@ button.ui-button-icon:disabled {
   @apply text-neutral-400 bg-opacity-20;
 }
 
+::ng-deep .block::placeholder {
+  display: block;
+}

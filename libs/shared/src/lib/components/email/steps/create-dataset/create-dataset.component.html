@@ -29,7 +29,7 @@
           <ng-template kendoTabTitle>
             <div class="flex gap-5 justify-between items-center">
               <span>{{ tab.title }}</span>
-              <button (click)="deleteTab(tabIndex, $event)" type="button">
+              <button class="ui-button-icon primary medium button-danger" (click)="deleteTab(tabIndex, $event)" type="button">
                 <ui-icon icon="delete" variant="danger"></ui-icon>
               </button>
             </div>

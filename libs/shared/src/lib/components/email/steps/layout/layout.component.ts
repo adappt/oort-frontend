@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EMAIL_LAYOUT_CONFIG } from '../../../../const/tinymce.const';
 import { EditorService } from '../../../../services/editor/editor.service';
+import { EmailService } from '../../email.service';
 /**
  * layout page component.
  */
@@ -18,13 +19,18 @@ export class LayoutComponent {
   bodyHtml: any = '';
   headerHtml: any = '';
   footerHtml: any = '';
+  txtSubject: any = '';
 
   /**
    * Component used for the selection of fields to display the fields in tabs.
    *
    * @param editorService Editor service used to get main URL and current language
+   * @param emailService
    */
-  constructor(private editorService: EditorService) {
+  constructor(
+    private editorService: EditorService,
+    private emailService: EmailService
+  ) {
     // Set the editor base url based on the environment file
     this.editor.base_url = editorService.url;
     // Set the editor language
@@ -42,6 +48,7 @@ export class LayoutComponent {
       const reader = new FileReader();
       reader.onload = () => (this.headerLogo = reader.result);
       reader.readAsDataURL(file);
+      this.emailService.allLayoutdata.headerLogo = file;
     }
   }
 
@@ -70,6 +77,7 @@ export class LayoutComponent {
       const reader = new FileReader();
       reader.onload = () => (this.footerLogo = reader.result);
       reader.readAsDataURL(file);
+      this.emailService.allLayoutdata.footerLogo = file;
     }
   }
 
@@ -101,5 +109,15 @@ export class LayoutComponent {
       ).value,
     };
     return colors;
+  }
+
+  /**
+   *
+   */
+  onDataChange() {
+    this.emailService.allLayoutdata.bodyHtml = this.bodyHtml;
+    this.emailService.allLayoutdata.headerHtml = this.headerHtml;
+    this.emailService.allLayoutdata.footerHtml = this.footerHtml;
+    this.emailService.allLayoutdata.txtSubject = this.txtSubject;
   }
 }

@@ -1,18 +1,23 @@
 <div class="border-blue-800 border-2 w-full h-full border-solid border-solid">
-
-  <div class="p-10 bg-whitem inline flex">
+  <div class="p-3 bg-whitem inline flex">
+    <img id="headerImg1" src=".../../../../images/WHO.png" class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="WHO logo"
+    style="max-width: 9.5rem !important;">
     <img src="path/to/your/image.jpg" alt="Description of the image">
-    <img src="path/to/your/image.jpg" alt="Description of the image">
-    <img src="path/to/your/image.jpg" alt="Description of the image">
-
+    <img src=".../../../../images/EMS_logo.jpg" class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="EMS logo"
+    style="max-width: 9.5rem !important;">
   </div>
 
-  <div class="p-6 bg-blue-800">
-    <div class="text-white font-bold text-center ">Daily list of signals/events, PHI/HQ</div>
-    <div class="text-center text-white">From 28 November 2023 15:00 as of 29 November 2023 15:00 This product is for the
-      WHO internal use only.</div>
+  <div class="">
+    <div class="text-center " id="headerHtml"></div>
+    <!-- <div class="text-white font-bold text-center " id="headerHtml"></div> -->
+    <!-- <div class="text-center text-white">From 28 November 2023 15:00 as of 29 November 2023 15:00 This product is for the
+      WHO internal use only.</div> -->
   </div>
-  <div class="m-1 bg-blue-800 text-white text-left font-bold ">
+
+  <div class="">
+    <div class="text-center " id="bodyHtml"></div>
+  </div>
+  <!-- <div class="m-1 bg-blue-800 text-white text-left font-bold ">
     New signals in the past 24h as of 29 Nov 2023
   </div>
   <div class="m-1 flex">
@@ -53,21 +58,30 @@
 
   <div class="m-2 bg-blue-800 text-white text-left font-bold ">
     New signals in the past 24h as of 29 Nov 2023
-  </div>
+  </div> -->
   <div class="relative mt-2 m-2 overflow-x-auto">
-    <table
+    <table *ngIf="dataList?.length"
       class="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-blue-400"
     >
       <thead
         class="text-xs text-white uppercase bg-blue-800 dark:bg-blue-700"
       >
         <tr>
-          <th scope="col" class="px-6 py-3">Event ID</th>
-          <th scope="col" class="px-6 py-3">Disease/Condition</th>
-          <th scope="col" class="px-6 py-3">Country/Area</th>
+          <ng-container *ngFor="let item of dataListKey[0] | keyvalue">
+            <th class="dark:text-blue-400  border-white-600 shadow-xs text-white p-2  text-center">{{
+              replaceUnderscores(item.key) | titlecase }}</th>
+          </ng-container>
         </tr>
       </thead>
+
       <tbody>
+        <tr *ngFor="let data of dataList" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <ng-container *ngFor="let item of data | keyvalue">
+            <td class="p-2 border border-blue-600 shadow-xs m-1 text-center">{{ item.value }}</td>
+          </ng-container>
+        </tr>
+      </tbody>
+      <!-- <tbody>
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
           <th
             scope="row"
@@ -98,7 +112,7 @@
           <td class="px-6 py-4">Black</td>
           <td class="px-6 py-4">Accessories</td>
         </tr>
-      </tbody>
+      </tbody> -->
     </table>
   </div>
 
@@ -152,9 +166,10 @@
       </tbody>
     </table>
   </div>
-  <div  class="inline flex">
+  <div  class="m-2 inline flex">
     <div class="text-left">
-      <img src="path/to/your/image.jpg" alt="Description of the image">
+      <img id="footerImg" src="path/to/your/image.jpg"  class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="Description of the image"
+      style="max-width: 9.5rem !important;">
     </div>
     <div class="text-center text-xs m-2  bg-white h-14 ">Public Health Intelligence (acute events) (PHI) Alert and Response Coordination Department (ARC) Emergency Response Division (WRE) WHO Health Emergencies Programme (WHE) Geneva, Switzerland World Health Organization HQ | 20, Avenue Appia | 1211 Geneva 27 | Switzerland email: outbreak@who.int</div>
   </div>

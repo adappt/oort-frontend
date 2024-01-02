@@ -60,6 +60,7 @@ export class EmailService {
     dataSets: new FormArray([this.createNewDataSetGroup()]),
     recipients: this.recipients,
   });
+  allLayoutdata: any = {};
 
   /**
    * Constructs the EmailService instance.

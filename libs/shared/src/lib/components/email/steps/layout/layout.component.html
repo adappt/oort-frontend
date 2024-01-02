@@ -12,6 +12,7 @@
       type="text"
       class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
       placeholder="Enter Value"
+      [(ngModel)]="txtSubject" [ngModelOptions]="{ standalone: true }"  (ngModelChange)="onDataChange()"
     />
   </div>
 
@@ -31,15 +32,19 @@
       class="mt-1 text-sm text-left block flex-grow py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
     />
   </div>
-
+<br>
   <!-- Header -->
-  <editor [(ngModel)]="bodyHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
-      <br>
-    <div>
+  <div>
     <div class="block text-gray-700 text-sm">Header Style</div>
-    <editor [(ngModel)]="headerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
+    <editor [(ngModel)]="headerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor" (ngModelChange)="onDataChange()"></editor>
   </div>
-
+<br>
+   <!-- Body -->
+   <div>
+    <div class="block text-gray-700 text-sm">Body</div>
+    <editor [(ngModel)]="bodyHtml" [ngModelOptions]="{ standalone: true }" [init]="editor" (ngModelChange)="onDataChange()"></editor>
+  </div>
+  <br>  
 
   <!-- Banner Image -->
   <div class="mt-8 bg-[#F5FAFF] flex items-center p-5">
@@ -57,7 +62,7 @@
       class="mt-1 text-sm text-left block flex-grow py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
     />
   </div>
-
+<br>
   <!-- Footer Logo -->
   <div class="mt-8 bg-[#F5FAFF] flex items-center p-5">
     <div class="inline-block px-5">
@@ -77,9 +82,9 @@
 
 
   <div class="bold mt-3 text-gray-800">Footer</div>
-  <editor [(ngModel)]="footerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
+  <editor [(ngModel)]="footerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor" (ngModelChange)="onDataChange()"></editor>
   
-  <div class="grid grid-cols-2 gap-4">
+  <!-- <div class="grid grid-cols-2 gap-4">
     <div class="bg-[#F5FAFF] flex m-4 rounded-lg p-4">
       <label for="titleBackgroundColor" class="mr-4 w-1/3">Title Background Color:</label>
       <input type="color" id="titleBackgroundColor" name="titleBackgroundColor" class="rounded-xl w-2/3">
@@ -112,5 +117,5 @@
       <label for="dividerColor" class="mr-4 w-1/3">Divider Color:</label>
       <input type="color" id="dividerColor" name="dividerColor" class="rounded-lg w-2/3">
     </div>
-  </div>
+  </div> -->
 </div>

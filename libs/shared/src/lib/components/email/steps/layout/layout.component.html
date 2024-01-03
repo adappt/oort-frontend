@@ -12,7 +12,7 @@
       type="text"
       class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
       placeholder="Enter Value"
-      [(ngModel)]="txtSubject" [ngModelOptions]="{ standalone: true }"  (ngModelChange)="onDataChange()"
+      [(ngModel)]="emailService.allLayoutdata.txtSubject" [ngModelOptions]="{ standalone: true }"
     />
   </div>
 
@@ -23,11 +23,11 @@
         Header Logo*
       </label>
     </div>
-    <img *ngIf="headerLogo" [src]="headerLogo" class="w-20 h-20 object-cover mb-2">
+    <img id="headerLogo" *ngIf="headerLogo" [src]="headerLogo" class="w-20 h-20 object-cover mb-2">
     <input
       id="headerLogoInput"
       type="file"
-      accept="image/*"
+      accept="image/*"      
       (change)="onHeaderLogoSelected($event)"
       class="mt-1 text-sm text-left block flex-grow py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
     />
@@ -36,13 +36,13 @@
   <!-- Header -->
   <div>
     <div class="block text-gray-700 text-sm">Header Style</div>
-    <editor [(ngModel)]="headerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor" (ngModelChange)="onDataChange()"></editor>
+    <editor [(ngModel)]="emailService.allLayoutdata.headerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
   </div>
 <br>
    <!-- Body -->
    <div>
     <div class="block text-gray-700 text-sm">Body</div>
-    <editor [(ngModel)]="bodyHtml" [ngModelOptions]="{ standalone: true }" [init]="editor" (ngModelChange)="onDataChange()"></editor>
+    <editor [(ngModel)]="emailService.allLayoutdata.bodyHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
   </div>
   <br>  
 
@@ -82,7 +82,7 @@
 
 
   <div class="bold mt-3 text-gray-800">Footer</div>
-  <editor [(ngModel)]="footerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor" (ngModelChange)="onDataChange()"></editor>
+  <editor [(ngModel)]="emailService.allLayoutdata.footerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
   
   <!-- <div class="grid grid-cols-2 gap-4">
     <div class="bg-[#F5FAFF] flex m-4 rounded-lg p-4">

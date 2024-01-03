@@ -1,10 +1,11 @@
 <div class="border-blue-800 border-2 w-full h-full border-solid border-solid">
-  <div class="p-3 bg-whitem inline flex">
-    <img id="headerImg1" src=".../../../../images/WHO.png" class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="WHO logo"
-    style="max-width: 9.5rem !important;">
-    <img src="path/to/your/image.jpg" alt="Description of the image">
-    <img src=".../../../../images/EMS_logo.jpg" class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="EMS logo"
-    style="max-width: 9.5rem !important;">
+  <div class="p-3 bg-whitem inline flex container">
+    <img id="whoLogo" src="{{whoLogo}}" class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="WHO logo"
+    style="width: 15% !important;">
+    <img id="headerLogo" src="path/to/your/image.jpg" alt="Description of the image"
+    style=" width: 69% !important;">
+    <img id="emsLogo" src=".../../../../images/EMS_logo.jpg" class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="EMS logo"
+    style="width: 15% !important;">
   </div>
 
   <div class="">
@@ -116,7 +117,7 @@
     </table>
   </div>
 
-  <div class="m-2 bg-blue-800 text-white text-left font-bold ">
+  <!-- <div class="m-2 bg-blue-800 text-white text-left font-bold ">
     New signals in the past 24h as of 29 Nov 2023
   </div>
   <div class="relative mt-2 m-2 overflow-x-auto">
@@ -165,13 +166,13 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </div> -->
   <div  class="m-2 inline flex">
     <div class="text-left">
       <img id="footerImg" src="path/to/your/image.jpg"  class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="Description of the image"
       style="max-width: 9.5rem !important;">
     </div>
-    <div class="text-center text-xs m-2  bg-white h-14 ">Public Health Intelligence (acute events) (PHI) Alert and Response Coordination Department (ARC) Emergency Response Division (WRE) WHO Health Emergencies Programme (WHE) Geneva, Switzerland World Health Organization HQ | 20, Avenue Appia | 1211 Geneva 27 | Switzerland email: outbreak@who.int</div>
+    <div class="text-center text-xs m-2  bg-white h-14 " id="footerHtml"></div>
   </div>
 
   <div class="m-2 bg-blue-800 text-white text-left font-bold ">

@@ -39,6 +39,8 @@ export class PreviewComponent {
   public selectedResourceId: string | undefined = '653642baa37293bb1706506e';
   public dataList!: { [key: string]: string }[];
   public dataListKey!: { [key: string]: string }[];
+  whoLogo = '../../images/WHO.png';
+  emsLogo = '../../images/EMS_logo.jpg';
 
   /**
    *
@@ -57,10 +59,19 @@ export class PreviewComponent {
       this.emailService.allLayoutdata.headerHtml;
     (document.getElementById('bodyHtml') as HTMLInputElement).innerHTML =
       this.emailService.allLayoutdata.bodyHtml;
-    // (document.getElementById('headerImg1') as HTMLInputElement).src =
-    //   URL.createObjectURL(this.emailService.allLayoutdata.headerLogo);
-    (document.getElementById('footerImg') as HTMLInputElement).src =
-      URL.createObjectURL(this.emailService.allLayoutdata.footerLogo);
+
+    if (this.emailService.allLayoutdata.headerLogo) {
+      (document.getElementById('headerLogo') as HTMLInputElement).src =
+        URL.createObjectURL(this.emailService.allLayoutdata.headerLogo);
+    }
+
+    if (this.emailService.allLayoutdata.footerLogo) {
+      (document.getElementById('footerImg') as HTMLInputElement).src =
+        URL.createObjectURL(this.emailService.allLayoutdata.footerLogo);
+    }
+
+    (document.getElementById('footerHtml') as HTMLInputElement).innerHTML =
+      this.emailService.allLayoutdata.footerHtml;
     this.getDataSet();
   }
 

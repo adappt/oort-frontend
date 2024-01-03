@@ -29,12 +29,26 @@ export class LayoutComponent {
    */
   constructor(
     private editorService: EditorService,
-    private emailService: EmailService
+    public emailService: EmailService
   ) {
     // Set the editor base url based on the environment file
     this.editor.base_url = editorService.url;
     // Set the editor language
     this.editor.language = editorService.language;
+  }
+
+  ngOnInit(): void {
+    if (this.emailService.allLayoutdata?.headerLogo) {
+      this.headerLogo = URL.createObjectURL(
+        this.emailService.allLayoutdata.headerLogo
+      );
+    }
+
+    if (this.emailService.allLayoutdata?.footerLogo) {
+      this.footerLogo = URL.createObjectURL(
+        this.emailService.allLayoutdata.footerLogo
+      );
+    }
   }
 
   /**
@@ -109,15 +123,5 @@ export class LayoutComponent {
       ).value,
     };
     return colors;
-  }
-
-  /**
-   *
-   */
-  onDataChange() {
-    this.emailService.allLayoutdata.bodyHtml = this.bodyHtml;
-    this.emailService.allLayoutdata.headerHtml = this.headerHtml;
-    this.emailService.allLayoutdata.footerHtml = this.footerHtml;
-    this.emailService.allLayoutdata.txtSubject = this.txtSubject;
   }
 }

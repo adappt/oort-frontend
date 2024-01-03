@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { GET_DATA_SET } from './graphql/queries';
@@ -15,6 +16,17 @@ export class EmailService {
     id: string | undefined;
   }[];
   public notificationTypes: string[] = ['email', 'alert', 'push notification'];
+  public recipients: {
+    distributionListName: string;
+    To: string[];
+    Cc: string[];
+    Bcc: string[];
+  } = {
+    distributionListName: '',
+    To: [],
+    Cc: [],
+    Bcc: [],
+  };
   public tabs: any[] = [
     {
       title: `Tab 1`,
@@ -23,22 +35,30 @@ export class EmailService {
     },
   ];
 
-  public dataSetGroup: FormGroup = this.formBuilder.group({
-    resource: null,
-    name: null,
-    pageSize: 10,
-    filter: this.formBuilder.group({
-      logic: 'and',
-      filters: new FormArray([]),
-    }),
-    fields: [],
-    cacheData: {},
-  });
+  /**
+   * To replace all special characters with space
+   *
+   * @returns form group
+   */
+  createNewDataSetGroup(): FormGroup {
+    return this.formBuilder.group({
+      resource: null,
+      name: null,
+      pageSize: 10,
+      filter: this.formBuilder.group({
+        logic: 'and',
+        filters: new FormArray([]),
+      }),
+      fields: [],
+      cacheData: {},
+    });
+  }
 
   public datasetsForm: FormGroup = this.formBuilder.group({
     name: null,
     notificationType: null,
-    dataSets: new FormArray([this.dataSetGroup]),
+    dataSets: new FormArray([this.createNewDataSetGroup()]),
+    recipients: this.recipients,
   });
 
   /**

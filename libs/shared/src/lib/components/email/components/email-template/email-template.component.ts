@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { clone } from 'lodash';
 import { debounceTime } from 'rxjs/operators';
@@ -14,7 +21,7 @@ import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
   templateUrl: './email-template.component.html',
   styleUrls: ['./email-template.component.scss'],
 })
-export class EmailTemplateComponent implements OnInit {
+export class EmailTemplateComponent implements OnInit, OnDestroy {
   public dataSet?: {
     emails: string[];
     records: any[];
@@ -35,6 +42,8 @@ export class EmailTemplateComponent implements OnInit {
   public filterData = this.emailService.filterData;
   public isDropdownVisible = false;
   public dataSets: any;
+  @Output() emailLoad = new EventEmitter<string[]>();
+  @Input() emailBackLoad: string[] | undefined;
 
   /**
    * Composite filter group.
@@ -45,6 +54,7 @@ export class EmailTemplateComponent implements OnInit {
   constructor(private fb: FormBuilder, public emailService: EmailService) {}
 
   ngOnInit(): void {
+    this.selectedEmails = this.emailBackLoad;
     this.dataSets = this.datasetsForm.value.dataSets;
     this.prepareDatasetFilters();
     this.filterQuery.valueChanges
@@ -112,12 +122,13 @@ export class EmailTemplateComponent implements OnInit {
       this.resource = resource;
       this.dataSetFields = dataSetFields;
       this.dataSet = dataSetResponse;
-      this.dataSetEmails = dataSetResponse.records
+      this.dataSetEmails = dataSetResponse?.records
         ?.map((record: { email: string }) => record.email)
         ?.filter(Boolean)
         ?.flat();
       this.emails = [...this.dataSetEmails];
     }
+    console.log(dataSet.cacheData);
   }
 
   /**
@@ -237,6 +248,14 @@ export class EmailTemplateComponent implements OnInit {
    * To show/hide the dropdown content
    */
   toggleDropdown() {
+    if (this.emails?.length) {
+      this.selectedEmails.forEach((email: string) => {
+        const indexToRemove = this.emails.indexOf(email);
+        if (indexToRemove !== -1) {
+          this.emails.splice(indexToRemove, 1);
+        }
+      });
+    }
     this.isDropdownVisible = !this.isDropdownVisible;
   }
 
@@ -246,5 +265,9 @@ export class EmailTemplateComponent implements OnInit {
   onSubmit(): void {
     const filterLogics = this.filterQuery.value;
     console.log('🚀 filterLogics:', filterLogics);
+  }
+
+  ngOnDestroy(): void {
+    this.emailLoad.emit(this.selectedEmails);
   }
 }

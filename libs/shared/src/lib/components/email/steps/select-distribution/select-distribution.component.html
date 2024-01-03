@@ -6,7 +6,7 @@
       </label>
       <input
         class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        [placeholder]="'common.search' | translate" />
+        [(ngModel)]="recipients.distributionListName" [placeholder]="'common.name' | translate" />
     </div>
     <div class="text-gray-700 text-xs gap-5 flex items-end">
       <input id="Alert_me" type="checkbox">
@@ -20,17 +20,17 @@
       (click)="toggleDropdown('to')">
       {{'components.select.distribution.to' | translate}}
     </button>
-    <shared-email-template *ngIf="showEmailTemplate && templateFor === 'to'">To</shared-email-template>
+    <shared-email-template (emailLoad)="to($event)" [emailBackLoad]="recipients.To" *ngIf="showEmailTemplate && templateFor === 'to'">To</shared-email-template>
     <button class="w-full flex p-2 space-y-4 flex-col items-start self-stretch bg-blue-50"
       (click)="toggleDropdown('cc')">
       {{'components.select.distribution.cc' | translate}}
     </button>
-    <shared-email-template *ngIf="showEmailTemplate && templateFor === 'cc'">cc</shared-email-template>
+    <shared-email-template (emailLoad)="cc($event)" [emailBackLoad]="recipients.Cc" *ngIf="showEmailTemplate && templateFor === 'cc'">cc</shared-email-template>
     <button class="w-full flex p-2 space-y-4 flex-col items-start self-stretch bg-blue-50"
       (click)="toggleDropdown('bcc')">
       {{'components.select.distribution.bcc' | translate}}
     </button>
-    <shared-email-template *ngIf="showEmailTemplate && templateFor === 'bcc'">bcc</shared-email-template>
+    <shared-email-template (emailLoad)="bcc($event)" [emailBackLoad]="recipients.Bcc" *ngIf="showEmailTemplate && templateFor === 'bcc'">bcc</shared-email-template>
   </div>
 </div>
 

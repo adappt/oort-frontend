@@ -27,7 +27,8 @@ export class CreateDatasetComponent implements OnInit {
   public operators!: { value: string; label: string }[];
   public notificationTypes: string[] = this.emailService.notificationTypes;
   public dataSetFormGroup: FormGroup | any = this.emailService.datasetsForm;
-  public dataSetGroup: FormGroup | any = this.emailService.dataSetGroup;
+  public dataSetGroup: FormGroup | any =
+    this.emailService.createNewDataSetGroup();
   public tabs: {
     title: string;
     content: string;
@@ -37,7 +38,8 @@ export class CreateDatasetComponent implements OnInit {
   public searchQuery = '';
   public searchSelectedField = '';
   public filteredFields: any[] = [];
-  public activeTab: any = this.tabs[0];
+  public activeTab: any =
+    this.emailService.tabs[this.emailService.tabs.length - 1];
   public dataList!: { [key: string]: string }[];
   public selectedFields!: { name: string; type: string }[];
   public previewData: any = {};
@@ -73,12 +75,17 @@ export class CreateDatasetComponent implements OnInit {
    * @param $event params
    * @param tabIndex
    */
-  changeTab(tabIndex: any) {
-    this.tabIndex = tabIndex;
-    this.activeTab = this.tabs[tabIndex];
-    this.activeTab.active = true;
-    this.activeTab.index = tabIndex;
-    this.kendoStrip.selectTab(tabIndex);
+  changeTab($event: any) {
+    const selectedIndex = $event?.index;
+
+    if (selectedIndex !== undefined) {
+      this.activeTab = this.emailService.tabs[selectedIndex];
+      this.activeTab.active = true;
+
+      this.emailService.tabs.forEach((tab, index) => {
+        tab.active = index === selectedIndex; // Set active to true for the selected index, false otherwise
+      });
+    }
   }
 
   /**
@@ -180,6 +187,7 @@ export class CreateDatasetComponent implements OnInit {
    * Adds a tab
    */
   public addTab() {
+    this.datasetsFormArray.push(this.emailService.createNewDataSetGroup());
     this.tabs.forEach((tab) => (tab.active = false));
     this.tabs.push({
       title: `Tab ${this.tabs.length + 1}`,
@@ -203,6 +211,7 @@ export class CreateDatasetComponent implements OnInit {
    */
   public deleteTab(index: number, event: Event) {
     event.stopPropagation();
+    this.datasetsFormArray.removeAt(index); // Remove the associated form group from datasetsFormArray
     this.tabs.splice(index, 1);
     this.activeTab =
       this.activeTab.active == true && this.tabs.length > 0

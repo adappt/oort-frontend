@@ -46,48 +46,52 @@
       <kendo-tabstrip-tab *ngIf="showPreview === true" [selected]="showPreview === true">
         <ng-template kendoTabTitle>
           {{ 'common.preview' | translate }}
-        </ng-template>
-        <ng-template kendoTabContent>
+        </ng-template>        
+          
+      <ng-template kendoTabContent>
+        <ng-container *ngFor="let previewData of allPreviewData; let preIndex = index">
           <table
-            id="tblPreview"
-            *ngIf="previewData?.dataList?.length"
-            class="dataset-preview w-full border border-blue-600 shadow-xs m-1"
-          >
-            <thead class="bg-blue-600 border-blue-600 shadow-xs text-white">
-              <tr class="bg-blue-600 border-blue-600 shadow-xs text-white">
-                <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
-                  <th
-                    class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center"
-                  >
-                    {{ replaceUnderscores(fieldKeyString) | titlecase }}
-                  </th>
-                </ng-container>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="let data of previewData?.dataList"
-                class="bg-white-600 border-blue-600 text-blue-600"
-              >
-                <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
-                  <td
-                    class="p-2 border border-blue-600 shadow-xs m-1 text-center"
-                  >
-                    {{ data[fieldKeyString] }}
-                  </td>
-                </ng-container>
-              </tr>
-            </tbody>
-          </table>
-
-          <button
-          type="button"
-          (click)="showPreview=false"
-          class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+          id="tblPreview"
+          *ngIf="previewData?.dataList?.length"
+          class="dataset-preview w-full border border-blue-600 shadow-xs m-1"
         >
-          {{ 'common.back' | translate }}
-        </button>
-        </ng-template>
+          <thead class="bg-blue-600 border-blue-600 shadow-xs text-white">
+            <tr class="bg-blue-600 border-blue-600 shadow-xs text-white">
+              <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
+                <th
+                  class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center"
+                >
+                  {{ replaceUnderscores(fieldKeyString) | titlecase }}
+                </th>
+              </ng-container>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let data of previewData?.dataList"
+              class="bg-white-600 border-blue-600 text-blue-600"
+            >
+              <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
+                <td
+                  class="p-2 border border-blue-600 shadow-xs m-1 text-center"
+                >
+                  {{ data[fieldKeyString] }}
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+        </ng-container>
+        
+        <button
+        type="button"
+        (click)="showPreview=false"
+        class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+      >
+        {{ 'common.back' | translate }}
+      </button>
+      </ng-template>
+          
       </kendo-tabstrip-tab>
       </kendo-tabstrip>
       <button class="add-tab-button" type="button" (click)="addTab()">

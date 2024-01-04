@@ -309,31 +309,39 @@ export class DatasetFilterComponent implements OnDestroy {
         this.tabs.findIndex((x: any) => x.content == this.activeTab.content) + 1
       );
     }
-
-    this.fetchDataSet(this.query.value).subscribe(
-      (res: { data: { dataSet: any } }) => {
-        if (res?.data?.dataSet) {
-          this.dataSetResponse = res?.data?.dataSet;
-          this.dataList = res?.data?.dataSet.records?.map(
-            (record: { data: any }) => record.data
-          );
-          if (this.dataList?.length) {
-            this.dataSetFields = [
-              ...new Set(
-                this.dataList
-                  .map((data: { [key: string]: any }) => Object.keys(data))
-                  .flat()
-              ),
-            ];
+    const allPreviewData: any = [];
+    if (tabName == 'preview') {
+      let count = 0;
+      for (const query of this.queryValue) {
+        query.tabIndex = count;
+        count++;
+        this.fetchDataSet(query).subscribe(
+          (res: { data: { dataSet: any } }) => {
+            if (res?.data?.dataSet) {
+              this.dataSetResponse = res?.data?.dataSet;
+              this.dataList = res?.data?.dataSet.records?.map(
+                (record: { data: any }) => record.data
+              );
+              if (this.dataList?.length) {
+                this.dataSetFields = [
+                  ...new Set(
+                    this.dataList
+                      .map((data: { [key: string]: any }) => Object.keys(data))
+                      .flat()
+                  ),
+                ];
+              }
+              allPreviewData.push({
+                dataList: this.dataList,
+                dataSetFields: this.dataSetFields,
+              });
+              if (this.tabs.length == allPreviewData.length) {
+                this.navigateToPreview.emit(allPreviewData);
+              }
+            }
           }
-          if (tabName == 'preview') {
-            this.navigateToPreview.emit({
-              dataList: this.dataList,
-              dataSetFields: this.dataSetFields,
-            });
-          }
-        }
+        );
       }
-    );
+    }
   }
 }

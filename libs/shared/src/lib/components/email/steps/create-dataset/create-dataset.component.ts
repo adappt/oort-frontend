@@ -42,7 +42,7 @@ export class CreateDatasetComponent implements OnInit {
     this.emailService.tabs[this.emailService.tabs.length - 1];
   public dataList!: { [key: string]: string }[];
   public selectedFields!: { name: string; type: string }[];
-  public previewData: any = {};
+  public allPreviewData: any = {};
   public showPreview = false;
   public replaceUnderscores: any = this.emailService.replaceUnderscores;
   @ViewChild('kendoStrip') kendoStrip: any;
@@ -224,7 +224,7 @@ export class CreateDatasetComponent implements OnInit {
    * @param previewData
    */
   public bindPreviewTbl(previewData: any) {
-    this.previewData = previewData;
+    this.allPreviewData = previewData;
     this.showPreview = true;
   }
 }

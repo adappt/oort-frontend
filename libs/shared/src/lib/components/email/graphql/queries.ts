@@ -65,6 +65,7 @@ export const GET_DATA_SET = gql`
       records
       emails
       totalCount
+      tabIndex
       __typename
     }
   }

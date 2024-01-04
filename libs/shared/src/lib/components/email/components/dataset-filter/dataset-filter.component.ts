@@ -309,7 +309,7 @@ export class DatasetFilterComponent implements OnDestroy {
         this.tabs.findIndex((x: any) => x.content == this.activeTab.content) + 1
       );
     }
-    const allPreviewData: any = [];
+    let allPreviewData: any = [];
     if (tabName == 'preview') {
       let count = 0;
       for (const query of this.queryValue) {
@@ -320,7 +320,7 @@ export class DatasetFilterComponent implements OnDestroy {
             if (res?.data?.dataSet) {
               this.dataSetResponse = res?.data?.dataSet;
               this.dataList = res?.data?.dataSet.records?.map(
-                (record: { data: any }) => record.data
+                (record: any) => record
               );
               if (this.dataList?.length) {
                 this.dataSetFields = [
@@ -334,8 +334,16 @@ export class DatasetFilterComponent implements OnDestroy {
               allPreviewData.push({
                 dataList: this.dataList,
                 dataSetFields: this.dataSetFields,
+                tabIndex: res?.data?.dataSet?.tabIndex,
+                tabName:
+                  res?.data?.dataSet?.tabIndex < this.tabs.length
+                    ? this.tabs[res.data.dataSet.tabIndex].title
+                    : '',
               });
               if (this.tabs.length == allPreviewData.length) {
+                allPreviewData = allPreviewData.sort(
+                  (a: any, b: any) => a.tabIndex - b.tabIndex
+                );
                 this.navigateToPreview.emit(allPreviewData);
               }
             }

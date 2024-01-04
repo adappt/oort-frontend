@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GET_DATA_SET } from './graphql/queries';
 import { Apollo } from 'apollo-angular';
 
@@ -55,8 +55,8 @@ export class EmailService {
   }
 
   public datasetsForm: FormGroup = this.formBuilder.group({
-    name: null,
-    notificationType: null,
+    name: ['', Validators.required],
+    notificationType: [null, Validators.required],
     dataSets: new FormArray([this.createNewDataSetGroup()]),
     recipients: this.recipients,
   });

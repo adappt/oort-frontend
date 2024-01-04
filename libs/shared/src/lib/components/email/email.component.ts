@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StepperComponent } from '@progress/kendo-angular-layout';
+import { EmailService } from './email.service';
 
 /**
  * Email Notification setup component.
@@ -14,7 +15,7 @@ export class EmailComponent {
   @ViewChild('stepper', { static: true })
   public stepper: StepperComponent | undefined;
 
-  public currentStep = 1;
+  public currentStep = 0;
 
   private submitted = false;
 
@@ -55,22 +56,24 @@ export class EmailComponent {
   };
 
   /**
-   * Constructs the EmailComponent and initializes the kendo stepoer.
+   * initializing Email Service
+   *
+   * @param emailService helper functions
    */
-  constructor() {
+  constructor(public emailService: EmailService) {
     this.steps = [
       {
-        label: 'Create Notification/Alert',
+        label: 'Notification/Alert',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
       },
       {
-        label: 'Create dataset',
+        label: 'Dataset',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
       },
       {
-        label: 'select distribution',
+        label: 'Distribution List',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
       },
@@ -80,7 +83,7 @@ export class EmailComponent {
         validate: this.shouldValidate,
       },
       {
-        label: 'layout',
+        label: 'Layout',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
       },
@@ -125,7 +128,21 @@ export class EmailComponent {
    * Increments the current step by one.
    */
   public next(): void {
-    this.currentStep += 1;
+    if (this.currentStep === 0) {
+      if (
+        this.emailService.datasetsForm.controls['name'].valid &&
+        this.emailService.datasetsForm.controls['notificationType'].valid
+      ) {
+        this.currentStep += 1;
+      } else {
+        this.emailService.datasetsForm.controls['name'].markAsTouched();
+        this.emailService.datasetsForm.controls[
+          'notificationType'
+        ].markAsTouched();
+      }
+    } else {
+      this.currentStep += 1;
+    }
   }
 
   /**

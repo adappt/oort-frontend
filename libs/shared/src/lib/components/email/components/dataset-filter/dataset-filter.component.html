@@ -47,7 +47,7 @@
       />
     </div>
   </div>
-  <kendo-tabstrip #datasetPreview>
+  <kendo-tabstrip #datasetPreview *ngIf="resource?.fields?.length">
     <!-- Filter Tab -->
     <kendo-tabstrip-tab  *ngIf="showPreview === false" [selected]="true">
       <ng-template kendoTabTitle>

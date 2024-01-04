@@ -75,11 +75,10 @@ export class CreateDatasetComponent implements OnInit {
    * @param $event params
    * @param tabIndex
    */
-  changeTab($event: any) {
-    const selectedIndex = $event?.index;
-
-    if (selectedIndex !== undefined) {
-      this.activeTab = this.emailService.tabs[selectedIndex];
+  changeTab(tabIndex: any) {
+    if (tabIndex !== undefined) {
+      this.tabIndex = tabIndex;
+      this.activeTab = this.emailService.tabs[tabIndex];
       this.activeTab.active = true;
 
       this.emailService.tabs.forEach((tab, index) => {

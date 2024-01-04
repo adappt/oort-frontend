@@ -9,7 +9,6 @@ import {
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { clone } from 'lodash';
 import { debounceTime } from 'rxjs/operators';
-import { Resource } from '../../../../models/resource.model';
 import { EmailService } from '../../email.service';
 import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
 
@@ -28,7 +27,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   };
   public dataList!: any[];
   public emails!: string[];
-  public resource!: Resource;
+  public resource!: any;
   public selectedValue!: string;
   public cacheFilterData!: string;
   public dataSetEmails!: string[];
@@ -65,37 +64,39 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
           let emailsList: string[] | undefined;
           if (logic === 'and') {
             emailsList = this.dataSet?.records
-              ?.map(({ data, email }) => {
+              ?.map((data) => {
                 if (
-                  res.filters.every(
-                    (filter: any) =>
-                      data[filter.field] &&
-                      this.filterData(
-                        filter.operator,
-                        data[filter.field]?.toLowerCase(),
-                        filter?.value?.toLowerCase()
-                      )
+                  res.filters.every((filter: any) =>
+                    this.filterData(
+                      filter.operator,
+                      this.fetchValue(data, filter.field.replace(/-/g, '.'))
+                        ?.toString()
+                        .toLowerCase(),
+                      filter?.value?.toLowerCase()
+                    )
                   )
                 ) {
-                  return email;
+                  return data.email;
                 }
               })
               ?.filter(Boolean);
           } else if (logic === 'or') {
             emailsList = this.dataSet?.records
-              ?.map(({ data, email }) => {
+              ?.map((data) => {
                 if (
                   res.filters.some(
                     (filter: any) =>
-                      data[filter.field] &&
+                      data?.filter?.field &&
                       this.filterData(
                         filter.operator,
-                        data[filter.field]?.toLowerCase(),
+                        data?.(filter?.field.replace(/-/g, '.'))
+                          .toString()
+                          ?.toLowerCase(),
                         filter?.value?.toLowerCase()
                       )
                   )
                 ) {
-                  return email;
+                  return data.email;
                 }
               })
               ?.filter(Boolean);
@@ -137,14 +138,39 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
    * @param event field name
    */
   public setField(event: any) {
-    const name = event.target.value;
-    const fields = clone(this.resource?.fields);
-    const field = fields.find((x: { name: any }) => x.name === name);
+    const name = event.target.value.replace(/^_+/, '');
+    const fields = clone(this.resource?.metadata);
+    const field = fields.find(
+      (x: { name: any }) => x.name === name.split('-')[0]
+    );
+    let type: { operators: any; editor: string; defaultOperator: string } = {
+      operators: undefined,
+      editor: '',
+      defaultOperator: '',
+    };
     if (field) {
-      const type = {
-        ...FIELD_TYPES.find((x) => x.editor === field.type),
+      type = {
+        ...FIELD_TYPES.find((x) => x.editor === (field.type || 'text')),
         ...field.filter,
       };
+      if (!Object.keys(type).length) {
+        type = {
+          editor: 'text',
+          defaultOperator: 'eq',
+          operators: [
+            'eq',
+            'neq',
+            'contains',
+            'doesnotcontain',
+            'startswith',
+            'endswith',
+            'isnull',
+            'isnotnull',
+            'isempty',
+            'isnotempty',
+          ],
+        };
+      }
       this.operators = FILTER_OPERATORS.filter((x) =>
         type?.operators?.includes(x.value)
       );
@@ -159,6 +185,24 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
       logic: 'and',
       filters: new FormArray([]),
     });
+  }
+
+  /**
+   * Preparing dataset filters dynamically
+   */
+  fetchValue(data: any, field: string) {
+    const keys = field.split('.');
+    let result = data;
+
+    for (const key of keys) {
+      if (result && typeof result === 'object' && key in result) {
+        result = result[key];
+      } else {
+        return null;
+      }
+    }
+
+    return result;
   }
 
   /**

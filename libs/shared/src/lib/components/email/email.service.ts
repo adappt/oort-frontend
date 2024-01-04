@@ -135,19 +135,23 @@ export class EmailService {
         result = fieldValue === '' || !fieldValue;
         break;
       case 'isnotempty':
-        result = fieldValue !== '';
+        result = fieldValue !== '' && fieldValue !== undefined;
         break;
       case 'contains':
-        result = userValue && fieldValue.includes(userValue as string);
+        result =
+          fieldValue && userValue && fieldValue.includes(userValue as string);
         break;
       case 'doesnotcontain':
-        result = userValue && !fieldValue.includes(userValue as string);
+        result =
+          fieldValue && userValue && !fieldValue.includes(userValue as string);
         break;
       case 'startswith':
-        result = userValue && fieldValue.startsWith(userValue as string);
+        result =
+          fieldValue && userValue && fieldValue.startsWith(userValue as string);
         break;
       case 'endswith':
-        result = userValue && fieldValue.endsWith(userValue as string);
+        result =
+          fieldValue && userValue && fieldValue.endsWith(userValue as string);
         break;
       case 'in':
         result = userValue && (userValue as string | number) in fieldValue;

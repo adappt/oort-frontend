@@ -159,7 +159,7 @@
                       formControlName="field"
                     >
                       <ng-container
-                        *ngFor="let fieldDetails of resource?.fields"
+                        *ngFor="let fieldDetails of filterFields"
                       >
                         <option [value]="fieldDetails?.name">
                           {{
@@ -282,10 +282,10 @@
                 <ng-container *ngFor="let fieldDetails of availableFields">
                   <div
                     *ngIf="fieldDetails?.name?.includes(searchAvailableField)"
-                    (click)="addSelectiveFields(fieldDetails.name)"
+                    (click)="addSelectiveFields(fieldDetails)"
                     class="group mt-1 text-sm text-left w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center"
                   >
-                    {{ replaceUnderscores(fieldDetails?.name) | titlecase }}
+                    {{ replaceUnderscores(removeUserString(fieldDetails?.name)) | titlecase }}
                     <div class="hidden group-hover:block">
                       <ui-icon icon="arrow_right" variant="grey"></ui-icon>
                     </div>
@@ -318,13 +318,13 @@
                 <ng-container *ngFor="let fields of selectedFields">
                   <div
                     *ngIf="fields?.name?.includes(searchSelectedField)"
-                    (click)="removeSelectiveFields(fields.name)"
+                    (click)="removeSelectiveFields(fields)"
                     class="group mt-1 text-sm text-left w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center"
                   >
                     <div class="hidden group-hover:block">
                       <ui-icon icon="arrow_left" variant="grey"></ui-icon>
                     </div>
-                    {{ replaceUnderscores(fields.name) | titlecase }}
+                    {{ replaceUnderscores(removeUserString(fields.name)) | titlecase }}
                   </div>
                 </ng-container>
               </div>

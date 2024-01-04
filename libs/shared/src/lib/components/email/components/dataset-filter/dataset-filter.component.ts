@@ -17,7 +17,6 @@ import {
 import { EmailService } from '../../email.service';
 import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
 import { GET_RESOURCE, GET_RESOURCES } from '../../graphql/queries';
-
 /** Default items per query, for pagination */
 let ITEMS_PER_PAGE = 0;
 /**
@@ -42,11 +41,13 @@ export class DatasetFilterComponent implements OnDestroy {
   public fetchDataSet: any = this.emailService.fetchDataSet;
 
   public resource!: Resource;
+  public metaData!: any;
   public dataSetResponse: any;
   public dataSetFields!: string[];
   public selectedResourceId!: string;
   public dataList!: { [key: string]: any }[];
   public selectedFields!: { name: string; type: string }[];
+  public filterFields!: { name: string; type: string }[];
   public availableFields!: { name: string; type: string }[];
   public operators: { [key: number]: { value: string; label: string }[] } = {};
 
@@ -82,6 +83,7 @@ export class DatasetFilterComponent implements OnDestroy {
         dataSetFields,
         selectedFields,
         availableFields,
+        filterFields,
         selectedResourceId,
       } = this.query.controls.cacheData.value;
 
@@ -90,6 +92,7 @@ export class DatasetFilterComponent implements OnDestroy {
       this.operators = operators;
       this.dataSetFields = dataSetFields;
       this.selectedFields = selectedFields;
+      this.filterFields = filterFields;
       this.availableFields = availableFields;
       this.selectedResourceId = selectedResourceId;
     }
@@ -103,6 +106,7 @@ export class DatasetFilterComponent implements OnDestroy {
       dataSetFields: this.dataSetFields,
       selectedFields: this.selectedFields,
       availableFields: this.availableFields,
+      filterFields: this.filterFields,
       dataSetResponse: this.dataSetResponse,
       selectedResourceId: this.selectedResourceId,
     };
@@ -142,6 +146,11 @@ export class DatasetFilterComponent implements OnDestroy {
    * To fetch resource details
    */
   getResourceData() {
+    this.availableFields = [];
+    this.selectedFields = [];
+    this.filterFields = [];
+    this.query.get('fields').reset();
+    console.log(this.query.value.fields);
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
       this.query.controls.resource.setValue(
         this.emailService.resourcesNameId.find(
@@ -158,8 +167,58 @@ export class DatasetFilterComponent implements OnDestroy {
         })
         .subscribe((res) => {
           this.resource = res.data.resource;
-          if (this.resource.fields) {
-            this.availableFields = this.resource.fields;
+          this.metaData = res.data?.resource?.metadata;
+          if (this.metaData?.length) {
+            this.metaData.forEach((field: any) => {
+              if (field) {
+                if (field.name === 'createdBy' && field.fields?.length) {
+                  field.fields.forEach((obj: any) => {
+                    obj.name = '_createdBy.user.' + obj.name;
+                    this.availableFields.push(clone(obj));
+                    obj.name = 'createdBy.' + obj.name.split('.')[2];
+                    this.filterFields.push(obj);
+                  });
+                } else if (
+                  field.name === 'lastUpdatedBy' &&
+                  field.fields?.length
+                ) {
+                  field.fields.forEach((obj: any) => {
+                    obj.name = '_lastUpdatedBy.user.' + obj.name;
+                    this.availableFields.push(clone(obj));
+                    obj.name = 'lastUpdatedBy.' + obj.name.split('.')[2];
+                    this.filterFields.push(obj);
+                  });
+                } else if (
+                  field.name === 'lastUpdateForm' &&
+                  field.fields?.length
+                ) {
+                  field.fields.forEach((obj: any) => {
+                    obj.name = '_lastUpdateForm.' + obj.name;
+                    this.availableFields.push(clone(obj));
+                    obj.name = 'lastUpdateForm.' + obj.name.split('.')[1];
+                    this.filterFields.push(obj);
+                  });
+                } else if (field.name === 'form' && field.fields?.length) {
+                  field.fields.forEach((obj: any) => {
+                    obj.name = '_form.' + obj.name;
+                    this.availableFields.push(clone(obj));
+                    obj.name = 'form.' + obj.name.split('.')[1];
+                    this.filterFields.push(obj);
+                  });
+                } else if (field.type === 'resource') {
+                  field.fields.forEach((obj: any) => {
+                    obj.name = `${field.name}.${obj.name}`;
+                    obj.type = 'resource';
+                    this.availableFields.push(clone(obj));
+                    this.filterFields.push(obj);
+                  });
+                } else {
+                  this.availableFields.push(clone(field));
+                  this.filterFields.push(clone(field));
+                }
+              }
+            });
+            console.log(this.availableFields);
           }
         });
     }
@@ -242,6 +301,22 @@ export class DatasetFilterComponent implements OnDestroy {
   }
 
   /**
+   * To add the selective fields in the layout
+   *
+   * @param inputString string
+   * @returns modifiedSegments
+   */
+  removeUserString(inputString: any): any {
+    if (inputString !== undefined) {
+      const segments: string[] = inputString.split('.');
+      const modifiedSegments: string[] = segments.map((segment) =>
+        segment === 'user' ? '-' : segment
+      );
+      return modifiedSegments.join('.');
+    }
+  }
+
+  /**
    * On the operator change
    *
    * @param selectedOperator string
@@ -266,13 +341,38 @@ export class DatasetFilterComponent implements OnDestroy {
    */
   public setField(event: any, fieldIndex: number) {
     const name = event.target.value;
-    const fields = clone(this.resource?.fields);
-    const field = fields.find((x: { name: any }) => x.name === name);
+    const fields = clone(this.metaData);
+    const field = fields.find(
+      (x: { name: any }) => x.name === name.split('.')[0]
+    );
+    let type: { operators: any; editor: string; defaultOperator: string } = {
+      operators: undefined,
+      editor: '',
+      defaultOperator: '',
+    };
     if (field) {
-      const type = {
-        ...FIELD_TYPES.find((x) => x.editor === field.type),
+      type = {
+        ...FIELD_TYPES.find((x) => x.editor === (field.type || 'text')),
         ...field.filter,
       };
+      if (!Object.keys(type).length) {
+        type = {
+          editor: 'text',
+          defaultOperator: 'eq',
+          operators: [
+            'eq',
+            'neq',
+            'contains',
+            'doesnotcontain',
+            'startswith',
+            'endswith',
+            'isnull',
+            'isnotnull',
+            'isempty',
+            'isnotempty',
+          ],
+        };
+      }
       const fieldOperator = FILTER_OPERATORS.filter((x) =>
         type?.operators?.includes(x.value)
       );
@@ -286,30 +386,30 @@ export class DatasetFilterComponent implements OnDestroy {
   /**
    * To add the selective fields in the layout
    *
-   * @param fieldName string
+   * @param field string
    */
-  addSelectiveFields(fieldName: string): void {
+  addSelectiveFields(field: any): void {
     const existFields = clone(this.query.value.fields) || [];
-    if (!JSON.stringify(existFields).includes(fieldName)) {
-      existFields.push({ name: fieldName, type: typeof fieldName });
+    if (!JSON.stringify(existFields).includes(field.name)) {
+      existFields.push(field);
       this.query.controls.fields.setValue(existFields);
       this.selectedFields = existFields;
     }
     // Removes the selected field from the available fields list
     this.availableFields = this.availableFields
-      .filter((field: { name: string }) => field.name !== fieldName)
+      .filter((f: { name: string }) => f.name !== field.name)
       .sort((a, b) => (a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1));
   }
 
   /**
    * This function removes selected fields from the block table.
    *
-   * @param fieldName The name of the field to remove.
+   * @param field The name of the field to remove.
    */
-  removeSelectiveFields(fieldName: string): void {
+  removeSelectiveFields(field: any): void {
     const existFields = this.query.controls.fields.value || [];
     const index = existFields.findIndex(
-      (field: { name: string }) => field.name === fieldName
+      (f: { name: string }) => f.name === field.name
     );
     if (index !== -1) {
       existFields.splice(index, 1);
@@ -317,7 +417,7 @@ export class DatasetFilterComponent implements OnDestroy {
       this.selectedFields = existFields;
     }
     // Adds the deselected field back to the available fields list
-    this.availableFields.push({ name: fieldName, type: typeof fieldName });
+    this.availableFields.push(field);
 
     this.availableFields.sort((a, b) =>
       a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
@@ -353,9 +453,19 @@ export class DatasetFilterComponent implements OnDestroy {
           (res: { data: { dataSet: any } }) => {
             if (res?.data?.dataSet) {
               this.dataSetResponse = res?.data?.dataSet;
-              this.dataList = res?.data?.dataSet.records?.map(
-                (record: any) => record
-              );
+              this.dataList = res?.data?.dataSet.records?.map((record: any) => {
+                const flattenedObject = this.flattenRecord(record);
+
+                delete flattenedObject.data;
+
+                const flatData = Object.fromEntries(
+                  Object.entries(flattenedObject).filter(
+                    ([, value]) => value !== null && value !== undefined
+                  )
+                );
+
+                return flatData;
+              });
               if (this.dataList?.length) {
                 this.dataSetFields = [
                   ...new Set(
@@ -385,5 +495,37 @@ export class DatasetFilterComponent implements OnDestroy {
         );
       }
     }
+  }
+
+  /**
+   * Flatten a record object.
+   *
+   * @param record
+   * @returns flattened object
+   */
+  flattenRecord(record: any): any {
+    const result: any = {};
+
+    for (const key in record) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (record.hasOwnProperty(key)) {
+        const value = record[key];
+
+        if (typeof value === 'object' && value !== null) {
+          const flattenedValue = this.flattenRecord(value);
+
+          for (const subKey in flattenedValue) {
+            // eslint-disable-next-line no-prototype-builtins
+            if (flattenedValue.hasOwnProperty(subKey)) {
+              result[`${key}-${subKey}`] = flattenedValue[subKey];
+            }
+          }
+        } else {
+          result[key] = value;
+        }
+      }
+    }
+
+    return result;
   }
 }

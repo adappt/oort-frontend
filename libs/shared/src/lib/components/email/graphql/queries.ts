@@ -23,6 +23,10 @@ export const GET_RESOURCE = gql`
       metadata {
         name
         type
+        fields {
+          name
+          type
+        }
       }
     }
   }

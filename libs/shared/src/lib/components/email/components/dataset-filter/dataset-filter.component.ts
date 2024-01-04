@@ -174,7 +174,9 @@ export class DatasetFilterComponent implements OnDestroy {
   getFieldType(fieldIndex: number): string {
     const fieldControl = this.datasetFilterInfo.at(fieldIndex).get('field');
     const fieldName = fieldControl ? fieldControl.value : null;
-    const field = fieldName ? this.resource.fields.find((field: any) => field.name === fieldName) : null;
+    const field = fieldName
+      ? this.resource.fields.find((field: any) => field.name === fieldName)
+      : null;
     return field ? field.type : '';
   }
 
@@ -187,11 +189,15 @@ export class DatasetFilterComponent implements OnDestroy {
   isDateOrDatetimeOperator(fieldIndex: number): boolean {
     const operators = ['eq', 'neq', 'gte', 'gt', 'lte', 'lt'];
     const fieldType = this.getFieldType(fieldIndex);
-    const operatorControl = this.datasetFilterInfo.at(fieldIndex).get('operator');
+    const operatorControl = this.datasetFilterInfo
+      .at(fieldIndex)
+      .get('operator');
     const fieldOperator = operatorControl ? operatorControl.value : null;
-    return (fieldType === 'date' || fieldType === 'datetime') && operators.includes(fieldOperator);
+    return (
+      (fieldType === 'date' || fieldType === 'datetime') &&
+      operators.includes(fieldOperator)
+    );
   }
-
 
   /**
    * Grabs filter row values.
@@ -321,7 +327,7 @@ export class DatasetFilterComponent implements OnDestroy {
   /**
    * To get data set for the applied filters.
    *
-   * @param tabName
+   * @param tabName - The name of the tab for which to get the data set.
    */
   getDataSet(tabName?: any): void {
     if (tabName == 'filter') {

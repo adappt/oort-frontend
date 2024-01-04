@@ -37,7 +37,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * To show/hide the email temple
+   * This method is used to show/hide the email template
    *
    * @param templateFor distribution email template for [ to | cc | bcc ]
    */
@@ -49,24 +49,27 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * data for to
-   * @param data
+   * This method is used to set the 'To' field of the email.
+   *
+   * @param data The data to be set in the 'To' field.
    */
   to(data: any): void {
     this.recipients.To = data;
   }
 
   /**
-   * data for cc
-   * @param data
+   * This method is used to set the 'CC' field of the email.
+   *
+   * @param data The data to be set in the 'CC' field.
    */
   cc(data: any): void {
     this.recipients.Cc = data;
   }
 
   /**
-   * data for bcc
-   * @param data
+   * This method is used to set the 'BCC' field of the email.
+   *
+   * @param data The data to be set in the 'BCC' field.
    */
   bcc(data: any): void {
     this.recipients.Bcc = data;

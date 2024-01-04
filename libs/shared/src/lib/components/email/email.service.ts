@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GET_DATA_SET } from './graphql/queries';
@@ -11,6 +10,7 @@ import { Apollo } from 'apollo-angular';
   providedIn: 'root',
 })
 export class EmailService {
+  public datasetsForm!: FormGroup;
   public resourcesNameId!: {
     name: string | undefined;
     id: string | undefined;
@@ -54,32 +54,26 @@ export class EmailService {
     });
   }
 
-  public datasetsForm: FormGroup = this.formBuilder.group({
-    name: ['', Validators.required],
-    notificationType: [null, Validators.required],
-    dataSets: new FormArray([this.createNewDataSetGroup()]),
-    recipients: this.recipients,
-  });
-  allLayoutdata: any = {
-    txtSubject: '',
-    headerHtml: '',
-    bodyHtml: '',
-    footerHtml: '',
-  };
-
   /**
    * Constructs the EmailService instance.
    *
-   * @param formBuilder
-   * @param apollo apollo server
+   * @param formBuilder - The FormBuilder instance used to create form groups and controls
+   * @param apollo - The Apollo server instance used for GraphQL queries
    */
-  constructor(private formBuilder: FormBuilder, private apollo: Apollo) {}
+  constructor(private formBuilder: FormBuilder, private apollo: Apollo) {
+    this.datasetsForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      notificationType: [null, Validators.required],
+      dataSets: new FormArray([this.createNewDataSetGroup()]),
+      recipients: this.recipients,
+    });
+  }
 
   /**
-   * To replace all special characters with space
+   * To replace all special characters with whitespace
    *
-   * @param userValue string
-   * @returns string
+   * @param userValue The user's input value
+   * @returns A string where all non-alphanumeric and non-hyphen characters are replaced with a whitespace.
    */
   replaceUnderscores(userValue: string): string {
     return userValue ? userValue.replace(/[^a-zA-Z0-9-]/g, ' ') : '';

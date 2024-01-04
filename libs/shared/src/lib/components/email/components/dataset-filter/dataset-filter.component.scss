@@ -1,6 +1,22 @@
 .clsFilters {
     align-items: flex-end;
 }
+
+::ng-deep .k-tabstrip > .k-content {
+  padding: 5px 5px 5px 0px !important;
+}
+
+.btnDataSet {
+  border-radius: 8px;
+  border: 1px solid var(--Gray-300, #D0D5DD);
+  background: var(--Base-White, #FFF);
+  /* Shadow/xs */
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+  width: fit-content;
+  font-weight: 600;
+  color: #344054;
+}
+
 :host button > * {
   pointer-events: none;
 }

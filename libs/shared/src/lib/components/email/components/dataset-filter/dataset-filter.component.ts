@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { clone } from 'lodash';
@@ -23,7 +30,10 @@ let ITEMS_PER_PAGE = 0;
 })
 export class DatasetFilterComponent implements OnDestroy {
   @Input() activeTab: any;
+  @Input() tabs: any;
   @Input() query: FormGroup | any;
+  @Input() queryValue: FormGroup | any;
+  showPreview = false;
   public searchSelectedField = '';
   public searchAvailableField = '';
   public filteredFields: any[] = [];
@@ -41,6 +51,9 @@ export class DatasetFilterComponent implements OnDestroy {
   public operators: { [key: number]: { value: string; label: string }[] } = {};
 
   filterOperators = FILTER_OPERATORS;
+  @ViewChild('datasetPreview') datasetPreview: any;
+  @Output() changeMainTab: EventEmitter<any> = new EventEmitter();
+  @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
 
   /**
    * To use helper functions, Apollo serve
@@ -279,8 +292,24 @@ export class DatasetFilterComponent implements OnDestroy {
 
   /**
    * To get data set for the applied filters.
+   *
+   * @param tabName
    */
-  getDataSet(): void {
+  getDataSet(tabName?: any): void {
+    if (tabName == 'filter') {
+      this.datasetPreview.selectTab(1);
+    }
+    if (
+      tabName == 'fields' &&
+      this.showPreview == false &&
+      this.tabs.findIndex((x: any) => x.content == this.activeTab.content) <
+        this.tabs.length - 1
+    ) {
+      this.changeMainTab.emit(
+        this.tabs.findIndex((x: any) => x.content == this.activeTab.content) + 1
+      );
+    }
+
     this.fetchDataSet(this.query.value).subscribe(
       (res: { data: { dataSet: any } }) => {
         if (res?.data?.dataSet) {
@@ -296,6 +325,12 @@ export class DatasetFilterComponent implements OnDestroy {
                   .flat()
               ),
             ];
+          }
+          if (tabName == 'preview') {
+            this.navigateToPreview.emit({
+              dataList: this.dataList,
+              dataSetFields: this.dataSetFields,
+            });
           }
         }
       }

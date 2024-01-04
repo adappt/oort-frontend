@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs';
@@ -32,6 +32,7 @@ export class CreateDatasetComponent implements OnInit {
     title: string;
     content: string;
     active: boolean;
+    index: number;
   }[] = this.emailService.tabs;
   public searchQuery = '';
   public searchSelectedField = '';
@@ -39,6 +40,10 @@ export class CreateDatasetComponent implements OnInit {
   public activeTab: any = this.tabs[0];
   public dataList!: { [key: string]: string }[];
   public selectedFields!: { name: string; type: string }[];
+  public previewData: any = {};
+  public showPreview = false;
+  public replaceUnderscores: any = this.emailService.replaceUnderscores;
+  @ViewChild('kendoStrip') kendoStrip: any;
 
   /**
    * Composite filter group.
@@ -66,11 +71,14 @@ export class CreateDatasetComponent implements OnInit {
    * To change the tab
    *
    * @param $event params
+   * @param tabIndex
    */
-  changeTab($event: any) {
-    this.tabIndex = $event?.index;
-    this.activeTab = this.tabs[$event?.index];
+  changeTab(tabIndex: any) {
+    this.tabIndex = tabIndex;
+    this.activeTab = this.tabs[tabIndex];
     this.activeTab.active = true;
+    this.activeTab.index = tabIndex;
+    this.kendoStrip.selectTab(tabIndex);
   }
 
   /**
@@ -172,17 +180,19 @@ export class CreateDatasetComponent implements OnInit {
    * Adds a tab
    */
   public addTab() {
-    this.datasetsFormArray.push(this.dataSetGroup);
     this.tabs.forEach((tab) => (tab.active = false));
     this.tabs.push({
       title: `Tab ${this.tabs.length + 1}`,
       content: `Tab ${this.tabs.length + 1} Content`,
       active: true,
+      index: this.tabs.length,
     });
     this.activeTab =
       this.tabs.filter((tab: any) => tab.active == true).length > 0
         ? this.tabs.filter((tab: any) => tab.active == true)[0]
         : '';
+    this.dataSetGroup.value.name = this.activeTab.title;
+    this.datasetsFormArray.push(this.dataSetGroup);
   }
 
   /**
@@ -199,5 +209,14 @@ export class CreateDatasetComponent implements OnInit {
         ? this.tabs[this.tabs.length - 1]
         : this.activeTab;
     this.activeTab.active = true;
+  }
+
+  /**
+   *
+   * @param previewData
+   */
+  public bindPreviewTbl(previewData: any) {
+    this.previewData = previewData;
+    this.showPreview = true;
   }
 }

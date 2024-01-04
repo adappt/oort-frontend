@@ -48,9 +48,9 @@
       />
     </div>
   </div>
-  <kendo-tabstrip>
+  <kendo-tabstrip #datasetPreview>
     <!-- Filter Tab -->
-    <kendo-tabstrip-tab>
+    <kendo-tabstrip-tab  *ngIf="showPreview === false" [selected]="true">
       <ng-template kendoTabTitle>
         {{ 'components.queryBuilder.filter.title' | translate }}
       </ng-template>
@@ -102,21 +102,37 @@
                   </option>
                 </select>
               </div>
-              <!-- Filter Row -->
-              <button
+              <div class="mt-2">
+                <!-- Filter Row -->
+                <label
+                  htmlFor="exampleSelect"
+                  class="block text-gray-700 text-sm" style="color: white;"
+                >a
+                </label>
+                <button
                 type="button"
-                class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm btnDataSet"
                 (click)="addNewDatasetFilter()"
-              >
+                >
                 {{ 'components.queryBuilder.filter.new' | translate }}
-              </button>
-              <!-- Filter Group -->
-              <button
-                type="button"
-                class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              >
-                {{ 'components.queryBuilder.filter.newGroup' | translate }}
-              </button>
+                </button>
+              </div>
+
+              <div class="mt-2">
+                <!-- Filter Group -->
+                <label
+                  htmlFor="exampleSelect"
+                  class="block text-gray-700 text-sm" style="color: white;"
+                >a
+                </label>
+                <button
+                  type="button"
+                  class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm btnDataSet"
+                >
+                  {{ 'components.queryBuilder.filter.newGroup' | translate }}
+                </button>
+              </div>
+              
             </div>
           </div>
           <div formGroupName="filter">
@@ -202,11 +218,20 @@
               </div>
             </div>
           </div>
+
+          <button
+            *ngIf="datasetFilterInfo.controls"
+            type="button"
+            (click)="getDataSet('filter')"
+            class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+          >
+            {{ 'components.queryBuilder.filter.apply' | translate }}
+          </button>
         </ng-container>
       </ng-template>
     </kendo-tabstrip-tab>
     <!-- Fields Tab -->
-    <kendo-tabstrip-tab>
+    <kendo-tabstrip-tab *ngIf="showPreview === false">
       <ng-template kendoTabTitle>
         {{ 'components.queryBuilder.fields.title' | translate }}
       </ng-template>
@@ -286,10 +311,26 @@
             </div>
           </div>
         </ng-container>
+        <button
+        *ngIf="tabs?.length > 1 && datasetFilterInfo.controls && activeTab.index !== tabs.length-1"
+        type="button"
+        (click)="getDataSet('fields')"
+        class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+      >
+        {{ 'components.queryBuilder.filter.apply' | translate }}
+      </button>
+        <button
+        *ngIf="tabs?.length === 1 || activeTab?.index === tabs?.length-1"
+        type="button"
+        (click)="getDataSet('preview');showPreview=true"
+        class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+      >
+        {{ 'common.preview' | translate }}
+      </button>
       </ng-template>
     </kendo-tabstrip-tab>
     <!-- Style Tab -->
-    <kendo-tabstrip-tab [disabled]="true">
+    <kendo-tabstrip-tab [disabled]="true"  *ngIf="showPreview === false">
       <ng-template kendoTabTitle>
         {{ 'components.queryBuilder.style.title' | translate }}
       </ng-template>
@@ -590,7 +631,7 @@
       </ng-template>
     </kendo-tabstrip-tab>
     <!-- Preview Tab -->
-    <kendo-tabstrip-tab>
+    <!-- <kendo-tabstrip-tab *ngIf="showPreview === true" [selected]="showPreview === true">
       <ng-template kendoTabTitle>
         {{ 'common.preview' | translate }}
       </ng-template>
@@ -626,15 +667,16 @@
             </tr>
           </tbody>
         </table>
+
+        <button
+        type="button"
+        (click)="showPreview=false"
+        class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+      >
+        {{ 'common.back' | translate }}
+      </button>
       </ng-template>
-    </kendo-tabstrip-tab>
+    </kendo-tabstrip-tab> -->
   </kendo-tabstrip>
-  <button
-    *ngIf="datasetFilterInfo.controls"
-    type="button"
-    (click)="getDataSet()"
-    class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
-  >
-    {{ 'components.queryBuilder.filter.apply' | translate }}
-  </button>
+  
 </form>

@@ -24,21 +24,71 @@
     </div>
     <div class="tab-container">
       <!-- Block Tabs -->
-      <kendo-tabstrip formArrayName="dataSets" (tabSelect)="changeTab($event)">
-        <kendo-tabstrip-tab *ngFor="let tab of tabs; let tabIndex = index" [title]="tab.title" [selected]="tab.active">
-          <ng-template kendoTabTitle>
-            <div class="flex gap-5 justify-between items-center">
-              <span>{{ tab.title }}</span>
-              <button class="ui-button-icon primary medium button-danger" (click)="deleteTab(tabIndex, $event)" type="button">
-                <ui-icon icon="delete" variant="danger"></ui-icon>
-              </button>
-            </div>
-            <ng-template [formGroupName]="tabIndex" kendoTabContent>
-              <shared-dataset-filter [query]="datasetsFormArray.controls[tabIndex]"
-                [activeTab]="activeTab"></shared-dataset-filter>
+      <kendo-tabstrip #kendoStrip formArrayName="dataSets" (tabSelect)="changeTab($event.index)">
+        <ng-container *ngIf="showPreview === false" >
+          <kendo-tabstrip-tab *ngFor="let tab of tabs; let tabIndex = index" [title]="tab.title" [selected]="tab.active">
+            <ng-template kendoTabTitle>
+              <div class="flex gap-5 justify-between items-center">
+                <span>{{ tab.title }}</span>
+                <button class="ui-button-icon primary medium button-danger" (click)="deleteTab(tabIndex, $event)" type="button">
+                  <ui-icon icon="delete" variant="danger"></ui-icon>
+                </button>
+              </div>
+              <ng-template [formGroupName]="tabIndex" kendoTabContent>
+                <shared-dataset-filter [query]="datasetsFormArray.controls[tabIndex]" [queryValue]="datasetsFormArray.value" (changeMainTab)="changeTab($event)"
+                  (navigateToPreview)="bindPreviewTbl($event)" [activeTab]="activeTab" [tabs]="tabs"></shared-dataset-filter>
+              </ng-template>
             </ng-template>
-          </ng-template>
-        </kendo-tabstrip-tab>
+          </kendo-tabstrip-tab>
+        </ng-container>        
+
+        <!-- Preview Tab -->
+      <kendo-tabstrip-tab *ngIf="showPreview === true" [selected]="showPreview === true">
+        <ng-template kendoTabTitle>
+          {{ 'common.preview' | translate }}
+        </ng-template>
+        <ng-template kendoTabContent>
+          <table
+            id="tblPreview"
+            *ngIf="previewData?.dataList?.length"
+            class="dataset-preview w-full border border-blue-600 shadow-xs m-1"
+          >
+            <thead class="bg-blue-600 border-blue-600 shadow-xs text-white">
+              <tr class="bg-blue-600 border-blue-600 shadow-xs text-white">
+                <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
+                  <th
+                    class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center"
+                  >
+                    {{ replaceUnderscores(fieldKeyString) | titlecase }}
+                  </th>
+                </ng-container>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let data of previewData?.dataList"
+                class="bg-white-600 border-blue-600 text-blue-600"
+              >
+                <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
+                  <td
+                    class="p-2 border border-blue-600 shadow-xs m-1 text-center"
+                  >
+                    {{ data[fieldKeyString] }}
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+
+          <button
+          type="button"
+          (click)="showPreview=false"
+          class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+        >
+          {{ 'common.back' | translate }}
+        </button>
+        </ng-template>
+      </kendo-tabstrip-tab>
       </kendo-tabstrip>
       <button class="add-tab-button" type="button" (click)="addTab()">
         <ui-icon icon="add" variant="primary"></ui-icon>

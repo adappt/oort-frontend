@@ -143,6 +143,7 @@
                 "
               >
                 <div class="flex gap-5 ml-20" [formGroupName]="fieldIndex">
+                  <!-- Filter Field -->
                   <div class="mt-4 w-1/3">
                     <label
                       htmlFor="exampleSelect"
@@ -168,6 +169,7 @@
                       </ng-container>
                     </select>
                   </div>
+                  <!-- Filter Operator -->
                   <div class="mt-4 w-1/3" *ngIf="operators?.[fieldIndex]">
                     <label
                       htmlFor="operator__dropdown"
@@ -191,9 +193,10 @@
                       </option>
                     </select>
                   </div>
+                  <!-- Filter Value -->
                   <div
                     class="mt-4 w-1/3"
-                    *ngIf="operators?.[fieldIndex] && data.get('hideEditor')?.value === false"
+                    *ngIf="operators?.[fieldIndex] && !data.get('hideEditor')?.value"
                   >
                     <label
                       htmlFor="exampleSelect"
@@ -201,11 +204,29 @@
                     >
                       {{ 'components.queryBuilder.filter.value' | translate }}
                     </label>
-                    <input
-                      class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      placeholder="Enter the value"
-                      formControlName="value"
-                    />
+                    <ng-container *ngIf="!isDateOrDatetimeOperator(fieldIndex)">
+                      <input
+                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        placeholder="Enter the value"
+                        formControlName="value"
+                      />
+                    </ng-container>
+                    <ng-container *ngIf="isDateOrDatetimeOperator(fieldIndex)">
+                      <input
+                        *ngIf="getFieldType(fieldIndex) === 'date'"
+                        type="date"
+                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        placeholder="Enter the value"
+                        formControlName="value"
+                      />
+                      <input
+                        *ngIf="getFieldType(fieldIndex) === 'datetime'"
+                        type="datetime-local"
+                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        placeholder="Enter the value"
+                        formControlName="value"
+                      />
+                    </ng-container>
                   </div>
                   <button
                     class="ui-button-icon primary medium button-danger mt-8"

@@ -166,6 +166,34 @@ export class DatasetFilterComponent implements OnDestroy {
   }
 
   /**
+   * Retrieves the field type of the field.
+   *
+   * @param fieldIndex - Index of the field in graphql.
+   * @returns field type
+   */
+  getFieldType(fieldIndex: number): string {
+    const fieldControl = this.datasetFilterInfo.at(fieldIndex).get('field');
+    const fieldName = fieldControl ? fieldControl.value : null;
+    const field = fieldName ? this.resource.fields.find((field: any) => field.name === fieldName) : null;
+    return field ? field.type : '';
+  }
+
+  /**
+   * Checks if the current field is date or time field.
+   *
+   * @param fieldIndex - Index of the field in graphql.
+   * @returns true if the field is date or datetime
+   */
+  isDateOrDatetimeOperator(fieldIndex: number): boolean {
+    const operators = ['eq', 'neq', 'gte', 'gt', 'lte', 'lt'];
+    const fieldType = this.getFieldType(fieldIndex);
+    const operatorControl = this.datasetFilterInfo.at(fieldIndex).get('operator');
+    const fieldOperator = operatorControl ? operatorControl.value : null;
+    return (fieldType === 'date' || fieldType === 'datetime') && operators.includes(fieldOperator);
+  }
+
+
+  /**
    * Grabs filter row values.
    *
    *  @returns FormGroup
@@ -173,7 +201,7 @@ export class DatasetFilterComponent implements OnDestroy {
   get getNewFilterFields(): FormGroup {
     return this.formGroup.group({
       field: [],
-      operator: [],
+      operator: ['eq'],
       value: [],
       hideEditor: false,
     });

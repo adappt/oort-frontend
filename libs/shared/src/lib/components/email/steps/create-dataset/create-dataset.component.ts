@@ -110,7 +110,7 @@ export class CreateDatasetComponent implements OnInit {
   /**
    * To add the selective fields in the layout
    *
-   * @param fieldName string
+   * @param fieldName name of the field.
    */
   addSelectiveFields(fieldName: string): void {
     const existFields = this.dataSetFormGroup.get('query').value.fields || [];

@@ -56,6 +56,9 @@ export const GET_APPLICATIONS = gql`
   }
 `;
 
+/**
+ *
+ */
 export const GET_RECENT_APPLICATIONS = gql`
   query GetApplications(
     $first: Int

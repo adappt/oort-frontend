@@ -57,7 +57,7 @@ export const GET_APPLICATIONS = gql`
 `;
 
 /**
- *
+ * Get Recent applications list
  */
 export const GET_RECENT_APPLICATIONS = gql`
   query GetApplications(

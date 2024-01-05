@@ -170,51 +170,53 @@ export class DatasetFilterComponent implements OnDestroy {
           this.metaData = res.data?.resource?.metadata;
           if (this.metaData?.length) {
             this.metaData.forEach((field: any) => {
-              if (field) {
-                if (field.name === 'createdBy' && field.fields?.length) {
-                  field.fields.forEach((obj: any) => {
-                    obj.name = '_createdBy.user.' + obj.name;
-                    this.availableFields.push(clone(obj));
-                    obj.name = 'createdBy.' + obj.name.split('.')[2];
-                    this.filterFields.push(obj);
-                  });
-                } else if (
-                  field.name === 'lastUpdatedBy' &&
-                  field.fields?.length
-                ) {
-                  field.fields.forEach((obj: any) => {
-                    obj.name = '_lastUpdatedBy.user.' + obj.name;
-                    this.availableFields.push(clone(obj));
-                    obj.name = 'lastUpdatedBy.' + obj.name.split('.')[2];
-                    this.filterFields.push(obj);
-                  });
-                } else if (
-                  field.name === 'lastUpdateForm' &&
-                  field.fields?.length
-                ) {
-                  field.fields.forEach((obj: any) => {
-                    obj.name = '_lastUpdateForm.' + obj.name;
-                    this.availableFields.push(clone(obj));
-                    obj.name = 'lastUpdateForm.' + obj.name.split('.')[1];
-                    this.filterFields.push(obj);
-                  });
-                } else if (field.name === 'form' && field.fields?.length) {
-                  field.fields.forEach((obj: any) => {
-                    obj.name = '_form.' + obj.name;
-                    this.availableFields.push(clone(obj));
-                    obj.name = 'form.' + obj.name.split('.')[1];
-                    this.filterFields.push(obj);
-                  });
-                } else if (field.type === 'resource') {
-                  field.fields.forEach((obj: any) => {
-                    obj.name = `${field.name}.${obj.name}`;
-                    obj.type = 'resource';
-                    this.availableFields.push(clone(obj));
-                    this.filterFields.push(obj);
-                  });
-                } else {
-                  this.availableFields.push(clone(field));
-                  this.filterFields.push(clone(field));
+              if (field && field.type !== 'resource') {
+                if (field) {
+                  if (field.name === 'createdBy' && field.fields?.length) {
+                    field.fields.forEach((obj: any) => {
+                      obj.name = '_createdBy.user.' + obj.name;
+                      this.availableFields.push(clone(obj));
+                      obj.name = 'createdBy.' + obj.name.split('.')[2];
+                      this.filterFields.push(obj);
+                    });
+                  } else if (
+                    field.name === 'lastUpdatedBy' &&
+                    field.fields?.length
+                  ) {
+                    field.fields.forEach((obj: any) => {
+                      obj.name = '_lastUpdatedBy.user.' + obj.name;
+                      this.availableFields.push(clone(obj));
+                      obj.name = 'lastUpdatedBy.' + obj.name.split('.')[2];
+                      this.filterFields.push(obj);
+                    });
+                  } else if (
+                    field.name === 'lastUpdateForm' &&
+                    field.fields?.length
+                  ) {
+                    field.fields.forEach((obj: any) => {
+                      obj.name = '_lastUpdateForm.' + obj.name;
+                      this.availableFields.push(clone(obj));
+                      obj.name = 'lastUpdateForm.' + obj.name.split('.')[1];
+                      this.filterFields.push(obj);
+                    });
+                  } else if (field.name === 'form' && field.fields?.length) {
+                    field.fields.forEach((obj: any) => {
+                      obj.name = '_form.' + obj.name;
+                      this.availableFields.push(clone(obj));
+                      obj.name = 'form.' + obj.name.split('.')[1];
+                      this.filterFields.push(obj);
+                    });
+                  } else if (field.type === 'resource') {
+                    field.fields.forEach((obj: any) => {
+                      obj.name = `${field.name}.${obj.name}`;
+                      obj.type = 'resource';
+                      this.availableFields.push(clone(obj));
+                      this.filterFields.push(obj);
+                    });
+                  } else {
+                    this.availableFields.push(clone(field));
+                    this.filterFields.push(clone(field));
+                  }
                 }
               }
             });

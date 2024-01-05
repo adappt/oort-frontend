@@ -8,9 +8,10 @@ const authConfig: AuthConfig = {
   issuer:
     'https://login.microsoftonline.com/76d22fc8-2330-45cf-ab36-51074cf8f1e2/v2.0',
   redirectUri: 'https://emspocdev.adapptlabs.com/',
-  postLogoutRedirectUri: 'https://emspocdev.adapptlabs.com/auth',
+  postLogoutRedirectUri: 'https://emspocdev.adapptlabs.com/auth/',
   clientId: 'db40357f-374e-476e-9ce8-5c9b3cbe475a',
-  scope: 'openid profile email offline_access',
+  scope:
+    'openid profile email offline_access offline_access api://db40357f-374e-476e-9ce8-5c9b3cbe475a/access_as_user',
   responseType: 'code',
   showDebugInformation: true,
   strictDiscoveryDocumentValidation: false,
@@ -27,4 +28,7 @@ export const environment: Environment = {
   availableLanguages: ['en'],
   authConfig,
   theme,
+  user: {
+    attributes: ['country', 'region', 'location'],
+  },
 };

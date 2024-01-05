@@ -12,7 +12,8 @@ const authConfig: AuthConfig = {
   redirectUri: 'https://emspocdev.adapptlabs.com/backoffice/',
   postLogoutRedirectUri: 'https://emspocdev.adapptlabs.com/backoffice/auth',
   clientId: 'db40357f-374e-476e-9ce8-5c9b3cbe475a',
-  scope: 'openid profile email offline_access',
+  scope:
+    'openid profile email offline_access offline_access api://db40357f-374e-476e-9ce8-5c9b3cbe475a/access_as_user',
   responseType: 'code',
   showDebugInformation: true,
   strictDiscoveryDocumentValidation: false,
@@ -50,5 +51,8 @@ export const environment: Environment = {
     environment: 'development',
     dns: 'https://37ca208310369a4cee685fd50e1105ad@o4504696331632640.ingest.sentry.io/4505997745782784',
     tracePropagationTargets: ['emspocdev.adapptlabs.com'],
+  },
+  user: {
+    attributes: ['country', 'region', 'location'],
   },
 };

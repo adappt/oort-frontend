@@ -1,6 +1,6 @@
 <div class="distribution_list">
   <div class="flex gap-4">
-    <div class="mt-8">
+    <div class="mt-4">
       <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
         {{'components.select.distribution.label' | translate}}
       </label>
@@ -15,21 +15,32 @@
       </label>
     </div>
   </div>
-  <div class="flex flex-col gap-4 p-4">
-    <button class="w-full flex p-2 space-y-4 flex-col items-start self-stretch bg-blue-50"
-      (click)="toggleDropdown('to')">
-      {{'components.select.distribution.to' | translate}}
-    </button>
+  <div class="flex flex-col gap-4 p-4 pl-0 pr-0">
+    <!-- TO -->
+    <div class="w-full flex p-1 pl-2 space-y-4 flex-row items-start self-stretch bg-blue-50"
+    (click)="toggleDropdown('to')">
+      <span class="w-96 text-style">{{'components.select.distribution.to' | translate}}</span>
+      <span class="w-4" *ngIf="showEmailTemplate"><ui-icon icon="expand_less" fontFamily="material" variant="primary"></ui-icon></span>
+      <span class="w-4" *ngIf="!showEmailTemplate"><ui-icon icon="expand_more" fontFamily="material" variant="primary"></ui-icon></span>
+    </div>
     <shared-email-template (emailLoad)="to($event)" [emailBackLoad]="recipients.To" *ngIf="showEmailTemplate && templateFor === 'to'">To</shared-email-template>
-    <button class="w-full flex p-2 space-y-4 flex-col items-start self-stretch bg-blue-50"
+    
+    <!-- CC -->
+    <div class="w-full flex p-1 pl-2 space-y-4 flex-row items-start self-stretch bg-blue-50"
       (click)="toggleDropdown('cc')">
-      {{'components.select.distribution.cc' | translate}}
-    </button>
+      <span class="w-96 text-style">{{'components.select.distribution.cc' | translate}}</span>
+      <span class="w-4" *ngIf="showEmailTemplate"><ui-icon icon="expand_less" fontFamily="material" variant="primary"></ui-icon></span>
+      <span class="w-4" *ngIf="!showEmailTemplate"><ui-icon icon="expand_more" fontFamily="material" variant="primary"></ui-icon></span>
+    </div>
     <shared-email-template (emailLoad)="cc($event)" [emailBackLoad]="recipients.Cc" *ngIf="showEmailTemplate && templateFor === 'cc'">cc</shared-email-template>
-    <button class="w-full flex p-2 space-y-4 flex-col items-start self-stretch bg-blue-50"
+    
+    <!-- BCC -->
+    <div class="w-full flex p-1 pl-2 space-y-4 flex-row items-start self-stretch bg-blue-50"
       (click)="toggleDropdown('bcc')">
-      {{'components.select.distribution.bcc' | translate}}
-    </button>
+      <span class="w-96 text-style">{{'components.select.distribution.bcc' | translate}}</span>
+      <span class="w-4" *ngIf="showEmailTemplate"><ui-icon icon="expand_less" fontFamily="material" variant="primary"></ui-icon></span>
+      <span class="w-4" *ngIf="!showEmailTemplate"><ui-icon icon="expand_more" fontFamily="material" variant="primary"></ui-icon></span>
+    </div>
     <shared-email-template (emailLoad)="bcc($event)" [emailBackLoad]="recipients.Bcc" *ngIf="showEmailTemplate && templateFor === 'bcc'">bcc</shared-email-template>
   </div>
 </div>

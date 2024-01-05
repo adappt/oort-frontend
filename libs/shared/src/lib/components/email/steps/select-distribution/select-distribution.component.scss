@@ -28,3 +28,18 @@
   tr:nth-child(odd) { background: white }
   .border { border-width: 0px !important ;}
 }
+.w-96 {
+  width: 96%;
+}
+.w-4 {
+  width: 4%;
+  margin: 0 !important;
+}
+.pl-2 {
+  padding-left: 0.5rem;
+}
+.text-style {
+  color: #667085;
+  font-weight: 400;
+  font-size: 16px;
+}

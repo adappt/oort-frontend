@@ -142,7 +142,7 @@
                   let fieldIndex = index
                 "
               >
-                <div class="flex gap-5 ml-20" [formGroupName]="fieldIndex">
+                <div class="flex gap-5 ml-6" [formGroupName]="fieldIndex">
                   <!-- Filter Field -->
                   <div class="mt-4 w-1/3">
                     <label
@@ -243,7 +243,7 @@
             *ngIf="datasetFilterInfo.controls"
             type="button"
             (click)="getDataSet('filter')"
-            class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+            class="text-white float-right block mt-2 w-24 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
           >
             {{ 'components.queryBuilder.filter.apply' | translate }}
           </button>
@@ -335,7 +335,7 @@
         *ngIf="tabs?.length > 1 && datasetFilterInfo.controls && activeTab.index !== tabs.length-1"
         type="button"
         (click)="getDataSet('fields')"
-        class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+        class="text-white float-right block mt-2 w-24 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
       >
         {{ 'components.queryBuilder.filter.apply' | translate }}
       </button>
@@ -343,7 +343,7 @@
         *ngIf="tabs?.length === 1 || activeTab?.index === tabs?.length-1"
         type="button"
         (click)="getDataSet('preview');showPreview=true"
-        class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+        class="text-white float-right block mt-2 w-24 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
       >
         {{ 'common.preview' | translate }}
       </button>

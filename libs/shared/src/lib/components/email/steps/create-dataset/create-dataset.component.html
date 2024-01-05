@@ -1,4 +1,4 @@
-<form class="p-4" [formGroup]="dataSetFormGroup" (ngSubmit)="onSubmit()">
+<form class="" [formGroup]="dataSetFormGroup" (ngSubmit)="onSubmit()">
   <div class="text-left">
     <div class="flex gap-5">
       <div class="mt-4 w-1/3">
@@ -34,10 +34,16 @@
                   <ui-icon icon="delete" variant="danger"></ui-icon>
                 </button>
               </div>
+              <button *ngIf="tabIndex === tabs.length-1" class="" type="button" (click)="addTab()">
+                <ui-icon icon="add" variant="primary"></ui-icon>
+              </button>
               <ng-template [formGroupName]="tabIndex" kendoTabContent>
                 <shared-dataset-filter [query]="datasetsFormArray.controls[tabIndex]" [queryValue]="datasetsFormArray.value" (changeMainTab)="changeTab($event)"
                   (navigateToPreview)="bindPreviewTbl($event)" [activeTab]="activeTab" [tabs]="tabs"></shared-dataset-filter>
               </ng-template>
+            </ng-template>
+            <ng-template kendoTabTitle>
+              
             </ng-template>
           </kendo-tabstrip-tab>
         </ng-container>        
@@ -93,7 +99,7 @@
         <button
         type="button"
         (click)="showPreview=false"
-        class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+        class="text-white float-right block mt-2 w-24 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
       >
         {{ 'common.back' | translate }}
       </button>
@@ -101,9 +107,9 @@
           
       </kendo-tabstrip-tab>
       </kendo-tabstrip>
-      <button class="add-tab-button" type="button" (click)="addTab()">
+      <!-- <button class="add-tab-button" type="button" (click)="addTab()">
         <ui-icon icon="add" variant="primary"></ui-icon>
-      </button>
+      </button> -->
     </div>
   </div>
 </form>

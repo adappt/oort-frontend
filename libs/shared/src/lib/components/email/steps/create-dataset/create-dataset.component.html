@@ -107,9 +107,9 @@
           
       </kendo-tabstrip-tab>
       </kendo-tabstrip>
-      <!-- <button class="add-tab-button" type="button" (click)="addTab()">
+      <button *ngIf="tabs.length  === 0" class="add-tab-button" type="button" (click)="addTab()">
         <ui-icon icon="add" variant="primary"></ui-icon>
-      </button> -->
+      </button>
     </div>
   </div>
 </form>

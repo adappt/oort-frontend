@@ -425,70 +425,82 @@ export class DatasetFilterComponent implements OnDestroy {
    * @param tabName - The name of the tab for which to get the data set.
    */
   getDataSet(tabName?: any): void {
-    if (tabName == 'filter') {
-      this.datasetPreview.selectTab(1);
-    }
     if (
-      tabName == 'fields' &&
-      this.showPreview == false &&
-      this.tabs.findIndex((x: any) => x.content == this.activeTab.content) <
-        this.tabs.length - 1
+      this.query.controls['name'].value !== null &&
+      this.query.controls['name'].value !== ''
     ) {
-      this.changeMainTab.emit(
-        this.tabs.findIndex((x: any) => x.content == this.activeTab.content) + 1
-      );
-    }
-    let allPreviewData: any = [];
-    if (tabName == 'preview') {
-      let count = 0;
-      for (const query of this.queryValue) {
-        query.tabIndex = count;
-        count++;
-        this.fetchDataSet(query).subscribe(
-          (res: { data: { dataSet: any } }) => {
-            if (res?.data?.dataSet) {
-              this.dataSetResponse = res?.data?.dataSet;
-              this.dataList = res?.data?.dataSet.records?.map((record: any) => {
-                const flattenedObject = this.flattenRecord(record);
-
-                delete flattenedObject.data;
-
-                const flatData = Object.fromEntries(
-                  Object.entries(flattenedObject).filter(
-                    ([, value]) => value !== null && value !== undefined
-                  )
-                );
-
-                return flatData;
-              });
-              if (this.dataList?.length) {
-                this.dataSetFields = [
-                  ...new Set(
-                    this.dataList
-                      .map((data: { [key: string]: any }) => Object.keys(data))
-                      .flat()
-                  ),
-                ];
-              }
-              allPreviewData.push({
-                dataList: this.dataList,
-                dataSetFields: this.dataSetFields,
-                tabIndex: res?.data?.dataSet?.tabIndex,
-                tabName:
-                  res?.data?.dataSet?.tabIndex < this.tabs.length
-                    ? this.tabs[res.data.dataSet.tabIndex].title
-                    : '',
-              });
-              if (this.tabs.length == allPreviewData.length) {
-                allPreviewData = allPreviewData.sort(
-                  (a: any, b: any) => a.tabIndex - b.tabIndex
-                );
-                this.navigateToPreview.emit(allPreviewData);
-              }
-            }
-          }
+      if (tabName == 'filter') {
+        this.datasetPreview.selectTab(1);
+      }
+      if (
+        tabName == 'fields' &&
+        this.showPreview == false &&
+        this.tabs.findIndex((x: any) => x.content == this.activeTab.content) <
+          this.tabs.length - 1
+      ) {
+        this.changeMainTab.emit(
+          this.tabs.findIndex((x: any) => x.content == this.activeTab.content) +
+            1
         );
       }
+      let allPreviewData: any = [];
+      if (tabName == 'preview') {
+        let count = 0;
+        for (const query of this.queryValue) {
+          query.tabIndex = count;
+          count++;
+          this.fetchDataSet(query).subscribe(
+            (res: { data: { dataSet: any } }) => {
+              if (res?.data?.dataSet) {
+                this.dataSetResponse = res?.data?.dataSet;
+                this.dataList = res?.data?.dataSet.records?.map(
+                  (record: any) => {
+                    const flattenedObject = this.flattenRecord(record);
+
+                    delete flattenedObject.data;
+
+                    const flatData = Object.fromEntries(
+                      Object.entries(flattenedObject).filter(
+                        ([, value]) => value !== null && value !== undefined
+                      )
+                    );
+
+                    return flatData;
+                  }
+                );
+                if (this.dataList?.length) {
+                  this.dataSetFields = [
+                    ...new Set(
+                      this.dataList
+                        .map((data: { [key: string]: any }) =>
+                          Object.keys(data)
+                        )
+                        .flat()
+                    ),
+                  ];
+                }
+                allPreviewData.push({
+                  dataList: this.dataList,
+                  dataSetFields: this.dataSetFields,
+                  tabIndex: res?.data?.dataSet?.tabIndex,
+                  tabName:
+                    res?.data?.dataSet?.tabIndex < this.tabs.length
+                      ? this.tabs[res.data.dataSet.tabIndex].title
+                      : '',
+                });
+                if (this.tabs.length == allPreviewData.length) {
+                  allPreviewData = allPreviewData.sort(
+                    (a: any, b: any) => a.tabIndex - b.tabIndex
+                  );
+                  this.navigateToPreview.emit(allPreviewData);
+                }
+              }
+            }
+          );
+        }
+      }
+    } else {
+      this.query.controls['name'].markAsTouched();
     }
   }
 

@@ -70,10 +70,9 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
-   * To change the tab
+   *  This function is used to change to the correct tab.
    *
-   * @param $event params
-   * @param tabIndex
+   * @param tabIndex The index of the tab thats been selected.
    */
   changeTab(tabIndex: any) {
     if (tabIndex !== undefined) {
@@ -88,9 +87,9 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
-   * To get datasetsFormArray
+   * Gets the datasets form array from the dataSetFormGroup
    *
-   * @returns FormArray
+   * @returns The datasets form array from the dataSetFormGroup
    */
   get datasetsFormArray() {
     return this.dataSetFormGroup.get('dataSets') as FormArray;
@@ -220,8 +219,9 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
+   * This function binds the preview table with the provided data.
    *
-   * @param previewData
+   * @param previewData The data to be used for the preview table.
    */
   public bindPreviewTbl(previewData: any) {
     this.allPreviewData = previewData;

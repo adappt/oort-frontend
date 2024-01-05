@@ -149,7 +149,7 @@ export class ApplicationComponent
               {
                 name: this.translate.instant('New EMS'),
                 path: './settings/newems',
-                icon: 'add_to_queue',
+                icon: 'mail',
               },
             ];
           }

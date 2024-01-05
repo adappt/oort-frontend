@@ -253,7 +253,9 @@ export class DatasetFilterComponent implements OnDestroy {
       .get('operator');
     const fieldOperator = operatorControl ? operatorControl.value : null;
     return (
-      (fieldType === 'date' || fieldType === 'datetime') &&
+      (fieldType === 'date' ||
+        fieldType === 'datetime' ||
+        fieldType === 'datetime-local') &&
       operators.includes(fieldOperator)
     );
   }
@@ -351,26 +353,15 @@ export class DatasetFilterComponent implements OnDestroy {
       defaultOperator: '',
     };
     if (field) {
-      type = {
-        ...FIELD_TYPES.find((x) => x.editor === (field.type || 'text')),
-        ...field.filter,
-      };
-      if (!Object.keys(type).length) {
+      const fieldType = FIELD_TYPES.find(
+        (x) =>
+          x.editor ===
+          (field.type === 'datetime-local' ? 'datetime' : field.type || 'text')
+      );
+      if (fieldType) {
         type = {
-          editor: 'text',
-          defaultOperator: 'eq',
-          operators: [
-            'eq',
-            'neq',
-            'contains',
-            'doesnotcontain',
-            'startswith',
-            'endswith',
-            'isnull',
-            'isnotnull',
-            'isempty',
-            'isnotempty',
-          ],
+          ...fieldType,
+          ...field.filter,
         };
       }
       const fieldOperator = FILTER_OPERATORS.filter((x) =>
@@ -395,6 +386,8 @@ export class DatasetFilterComponent implements OnDestroy {
       this.query.controls.fields.setValue(existFields);
       this.selectedFields = existFields;
     }
+    // Print the field type to the console
+    console.log(`Field type of ${field.name}: ${field.type}`);
     // Removes the selected field from the available fields list
     this.availableFields = this.availableFields
       .filter((f: { name: string }) => f.name !== field.name)
@@ -498,10 +491,10 @@ export class DatasetFilterComponent implements OnDestroy {
   }
 
   /**
-   * Flatten a record object.
+   * Flattens the given record object into a single level object.
    *
-   * @param record
-   * @returns flattened object
+   * @param record The record to flatten.
+   * @returns The flattened record.
    */
   flattenRecord(record: any): any {
     const result: any = {};

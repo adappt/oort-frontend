@@ -1,11 +1,19 @@
 <div class="Email_Template">
-    <input #filterInput (keyup.enter)="addEmailManually(filterInput)"
+    <div class="mt-4 w-1/3">
+        <input #filterInput (keyup.enter)="addEmailManually(filterInput)"
         class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         type="text" [placeholder]="'components.select.distribution.email' | translate" />
+    </div>
     <div
-        class="p-1 gap-1 w-4/12 text-blue-700 text-base border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-        <span class="cursor-pointer flex p-1 rounded-lg items-center justify-center" (click)="toggleDropdown()">
+        class="mt-4 p-1 gap-1 w-4/12 text-blue-700 text-base border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+        <span class="cursor-pointer flex rounded-lg items-center justify-center" (click)="toggleDropdown()">
             {{ 'components.select.distribution.SelectFromList' | translate }}
+            <span class="w-4" *ngIf="(isDropdownVisible)">
+                <i class="flex items-center material-icons icon-primary" style="height: 24px; width: 24px; line-height: 24px; font-size: 24px; color: #175CD3 !important;"> expand_less </i>
+            </span>
+            <span class="w-4" *ngIf="!isDropdownVisible">
+                <i class="flex items-center material-icons icon-primary" style="height: 24px; width: 24px; line-height: 24px; font-size: 24px; color: #175CD3 !important;"> expand_more </i>
+            </span>
         </span>
         <span class="cursor-pointer flex p-1 rounded-lg items-center justify-center" (click)="toggleDropdown()"
             *ngIf="isDropdownVisible && !emails?.length">
@@ -33,8 +41,7 @@
                 <ng-select id="select__data__set" name="select__data__set" [ngModelOptions]="{ standalone: true }"
                     [items]="dataSets" bindLabel="name" [searchable]="true" bindValue="id" [virtualScroll]="true"
                     (change)="bindDataSetDetails($event)" placeholder="{{
-            'components.queryBuilder.dataset.select' | translate
-          }}">
+                        'components.queryBuilder.dataset.select' | translate}}">
                     <ng-template disabled selected>
                         <span></span>
                     </ng-template>
@@ -64,26 +71,37 @@
                 </tbody>
             </table>
             <div [formGroup]="filterQuery">
-                <div class="flex gap-4 mt-6">
-                    <div class="mt-2">
-                        <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
-                            {{ 'components.queryBuilder.filter.logic' | translate }}
-                        </label>
-                        <select formControlName="logic"
-                            class="mt-1 text-xs text-left block w-36 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <option value="and">
-                                {{ 'components.queryBuilder.filter.and' | translate }}
-                            </option>
-                            <option value="or">
-                                {{ 'components.queryBuilder.filter.or' | translate }}
-                            </option>
-                        </select>
+                <div class="flex-row gap-4 mt-6">
+                    <div class="flex gap-4">
+                        <div class="mt-2">
+                            <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                                {{ 'components.queryBuilder.filter.logic' | translate }}
+                            </label>
+                            <select formControlName="logic"
+                                class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="and">
+                                    {{ 'components.queryBuilder.filter.and' | translate }}
+                                </option>
+                                <option value="or">
+                                    {{ 'components.queryBuilder.filter.or' | translate }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mt-2">
+                            <label
+                            htmlFor="exampleSelect"
+                            class="block text-gray-700 text-sm" style="color: white;"
+                            >a
+                            </label>
+                            <button type="button" [disabled]="!(!!dataSetFields && !!dataSetFields.length)"
+                                (click)="addNewDatasetFilter()"
+                                class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm btnDataSet">
+                                {{ 'components.queryBuilder.filter.new' | translate }}
+                            </button>
+                        </div>
+                        
                     </div>
-                    <button type="button" [disabled]="!(!!dataSetFields && !!dataSetFields.length)"
-                        (click)="addNewDatasetFilter()"
-                        class="mt-7 text-xs text-left block w-48 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        {{ 'components.queryBuilder.filter.new' | translate }}
-                    </button>
                 </div>
                 <div>
                     <div formArrayName="filters">
@@ -91,13 +109,14 @@
                 let data of filterFields?.controls;
                 let fieldIndex = index
               ">
-                            <div class="flex gap-5 ml-20" [formGroupName]="fieldIndex">
-                                <div class="mt-4">
-                                    <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                            <div class="flex gap-5 ml-6" [formGroupName]="fieldIndex">
+                                <div class="mt-4 w-1/3">
+                                    <label htmlFor="exampleSelect" 
+                                    class="block text-gray-700 text-sm">
                                         {{ 'components.queryBuilder.filter.field' | translate }}
                                     </label>
                                     <select id="exampleSelect" name="exampleSelect" (change)="setField($event)"
-                                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         formControlName="field">
                                         <ng-container *ngFor="let fieldName of dataSetFields">
                                             <option [value]="fieldName">
@@ -106,27 +125,32 @@
                                         </ng-container>
                                     </select>
                                 </div>
-                                <div class="mt-4">
+                                <div class="mt-4 w-1/3">
                                     <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                                         {{ 'components.queryBuilder.filter.operator' | translate }}
                                     </label>
                                     <select id="exampleSelect" name="exampleSelect"
-                                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         formControlName="operator">
                                         <option [value]="operator?.value" *ngFor="let operator of operators">
-                                            {{ operator.value | titlecase }}
+                                            {{ operator.label | translate | titlecase }}
                                         </option>
                                     </select>
                                 </div>
-                                <div class="mt-4">
-                                    <label htmlFor="exampleSelect" class="block text-gray-700 text-xs">
+                                <div class="mt-4 w-1/3">
+                                    <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                                         {{ 'components.queryBuilder.filter.value' | translate }}
                                     </label>
                                     <input
-                                        class="mt-1 text-xs text-left block w-64 py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         placeholder="Enter the value" formControlName="value" />
                                 </div>
-                                <div class="deleteIcon mt-5" (click)="deleteDatasetFilter(fieldIndex)">
+                                <button
+                                    class="ui-button-icon primary medium button-danger mt-8"
+                                    (click)="deleteDatasetFilter(fieldIndex)">
+                                    <ui-icon class="text-3xl" icon="delete" variant="danger"> </ui-icon>
+                                </button>
+                                <!-- <div class="deleteIcon mt-5" (click)="deleteDatasetFilter(fieldIndex)">
                                     <svg class="mt-4" xmlns="http://www.w3.org/2000/svg" width="25" height="24"
                                         viewBox="0 0 25 24" fill="none">
                                         <path
@@ -134,12 +158,12 @@
                                             stroke="#667085" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round" />
                                     </svg>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="p-3 flex flex-wrap gap-4 items-center justify-start">
+                <div class="p-3 pl-0 flex flex-wrap gap-4 items-center justify-start">
                     <div class="flex gap-2 p-2 w-fit-content rounded-full items-center justify-center bg-gray-300"
                         *ngFor="let emailText of selectedEmails; let chipIndex = index">
                         <p>{{ emailText }}</p>

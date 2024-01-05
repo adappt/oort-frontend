@@ -89,9 +89,9 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
                       data?.filter?.field &&
                       this.filterData(
                         filter.operator,
-                        data?.(filter?.field.replace(/-/g, '.'))
-                          .toString()
-                          ?.toLowerCase(),
+                        this.fetchValue(data, filter.field.replace(/-/g, '.'))
+                          ?.toString()
+                          .toLowerCase(),
                         filter?.value?.toLowerCase()
                       )
                   )

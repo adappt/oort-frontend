@@ -21,6 +21,11 @@ steps:
     npx nx run back-office:build:azure-dev
   displayName: 'npm install and build the apps'
 
+- task: WhiteSource@21
+  inputs:
+    cwd: '$(System.DefaultWorkingDirectory)'
+    projectName: 'WHO_EMSSAFE-POC'
+
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/apps/front-office'

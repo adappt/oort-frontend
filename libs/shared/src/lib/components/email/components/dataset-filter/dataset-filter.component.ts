@@ -71,6 +71,10 @@ export class DatasetFilterComponent implements OnDestroy {
 
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnInit(): void {
+    if (this.query.value.name == null) {
+      const name = 'Block ' + (this.activeTab.index + 1);
+      this.query.controls['name'].setValue(name);
+    }
     if (!this.emailService?.resourcesNameId?.length) {
       this.getResourceDataOnScroll();
     }

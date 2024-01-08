@@ -29,9 +29,10 @@ export class EmailService {
   };
   public tabs: any[] = [
     {
-      title: `Tab 1`,
-      content: `Tab 1 Content`,
+      title: `Block 1`,
+      content: `Block 1 Content`,
       active: true,
+      index: 0,
     },
   ];
 

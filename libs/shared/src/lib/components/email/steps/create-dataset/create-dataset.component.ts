@@ -188,8 +188,8 @@ export class CreateDatasetComponent implements OnInit {
     this.datasetsFormArray.push(this.emailService.createNewDataSetGroup());
     this.tabs.forEach((tab) => (tab.active = false));
     this.tabs.push({
-      title: `Tab ${this.tabs.length + 1}`,
-      content: `Tab ${this.tabs.length + 1} Content`,
+      title: `Block ${this.tabs.length + 1}`,
+      content: `Block ${this.tabs.length + 1} Content`,
       active: true,
       index: this.tabs.length,
     });
@@ -197,8 +197,7 @@ export class CreateDatasetComponent implements OnInit {
       this.tabs.filter((tab: any) => tab.active == true).length > 0
         ? this.tabs.filter((tab: any) => tab.active == true)[0]
         : '';
-    this.dataSetGroup.value.name = this.activeTab.title;
-    this.datasetsFormArray.push(this.dataSetGroup);
+    this.datasetsFormArray.push(this.emailService.createNewDataSetGroup());
   }
 
   /**

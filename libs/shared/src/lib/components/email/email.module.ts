@@ -6,6 +6,7 @@ import {
   TabsModule,
   SelectOptionModule,
   IconModule,
+  ButtonModule,
 } from '@oort-front/ui';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
@@ -30,6 +31,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { EmailTemplateComponent } from './components/email-template/email-template.component';
 import { DatasetFilterComponent } from './components/dataset-filter/dataset-filter.component';
+import { EmsTemplateComponent } from './components/ems-template/ems-template.component';
 
 /**
  * Email module.
@@ -46,6 +48,7 @@ import { DatasetFilterComponent } from './components/dataset-filter/dataset-filt
     EmailTemplateComponent,
     EmailTemplateComponent,
     DatasetFilterComponent,
+    EmsTemplateComponent,
   ],
   imports: [
     FormsModule,
@@ -69,6 +72,7 @@ import { DatasetFilterComponent } from './components/dataset-filter/dataset-filt
     IconModule,
     NgSelectModule,
     EditorModule,
+    ButtonModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

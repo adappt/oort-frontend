@@ -59,8 +59,8 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * This method is used to set the 'To' field of the email.
    *
    * @param data The data to be set in the 'To' field.
-   * @param data.emails
-   * @param data.emailFilter
+   * @param data.emails Array of email addresses to be set in the 'To' field.
+   * @param data.emailFilter The form group representing the email filter.
    */
   to(data: { emails: string[]; emailFilter: any }): void {
     this.recipients.To = data.emails;
@@ -71,8 +71,8 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * This method is used to set the 'CC' field of the email.
    *
    * @param data The data to be set in the 'CC' field.
-   * @param data.emails
-   * @param data.emailFilter
+   * @param data.emails Array of email addresses to be set in the 'CC' field.
+   * @param data.emailFilter The form group representing the email filter.
    */
   cc(data: { emails: string[]; emailFilter: any }): void {
     this.recipients.Cc = data.emails;
@@ -83,8 +83,8 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * This method is used to set the 'BCC' field of the email.
    *
    * @param data The data to be set in the 'BCC' field.
-   * @param data.emails
-   * @param data.emailFilter
+   * @param data.emails Array of email addresses to be set in the 'BCC' field.
+   * @param data.emailFilter The form group representing the email filter.
    */
   bcc(data: { emails: string[]; emailFilter: any }): void {
     this.recipients.Bcc = data.emails;

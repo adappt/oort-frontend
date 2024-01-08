@@ -126,10 +126,10 @@ export class EmailService {
   /**
    * Preparing dataset filters dynamically
    *
-   * @param operator operator string
-   * @param fieldValue value present in the Data set
-   * @param userValue value provided by user
-   * @returns form group
+   * @param operator The comparison operator to be used in the filter
+   * @param fieldValue The value of the field to be compared
+   * @param userValue The value provided by the user to compare against the field value
+   * @returns The result of the filter operation or undefined if no operator is provided
    */
   filterData(
     operator: string,
@@ -201,7 +201,7 @@ export class EmailService {
    * To get data set
    *
    * @param filterQuery query details to fetch data set
-   * @returns data set
+   * @returns the dataset.
    */
   fetchDataSet(filterQuery: any) {
     return this.apollo.query<any>({
@@ -212,20 +212,38 @@ export class EmailService {
     });
   }
 
-  // Method to handle header logo selection
+  /**
+   * Handles the user selection of a header logo file.
+   *
+   * @param file The selected file or null if no file is selected.
+   */
   onHeaderLogoSelected(file: File | null): void {
     this.allLayoutdata.headerLogo = file;
   }
 
+  /**
+   * Handles the user selection of a banner image file.
+   *
+   * @param file The selected file or null if no file is selected.
+   */
   onBannerSelected(file: File | null): void {
     this.allLayoutdata.bannerImage = file;
   }
 
-  // Method to handle footer logo selection
+  /**
+   * Handles the user selection of a footer logo file.
+   *
+   * @param file The selected file or null if no file is selected.
+   */
   onFooterLogoSelected(file: File | null): void {
     this.allLayoutdata.footerLogo = file;
   }
 
+  /**
+   * Retrieves email notifications.
+   *
+   * @returns Email notifications query result.
+   */
   getEmailNotifications() {
     return this.apollo.query<any>({
       query: GET_EMAIL_NOTIFICATIONS,

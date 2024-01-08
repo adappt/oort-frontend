@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EMAIL_LAYOUT_CONFIG } from '../../../../const/tinymce.const';
 import { EditorService } from '../../../../services/editor/editor.service';
 import { EmailService } from '../../email.service';
@@ -10,7 +10,7 @@ import { EmailService } from '../../email.service';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
   headerLogo: string | ArrayBuffer | null = null;
   bannerImage: string | ArrayBuffer | null = null;
   footerLogo: string | ArrayBuffer | null = null;
@@ -25,7 +25,7 @@ export class LayoutComponent {
    * Component used for the selection of fields to display the fields in tabs.
    *
    * @param editorService Editor service used to get main URL and current language
-   * @param emailService
+   * @param emailService Service used for email-related operations and state management
    */
   constructor(
     private editorService: EditorService,

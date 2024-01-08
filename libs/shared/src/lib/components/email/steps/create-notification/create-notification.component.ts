@@ -22,7 +22,7 @@ export class CreateNotificationComponent {
   constructor(public emailService: EmailService) {}
 
   /**
-   *
+   * Toggles the state of `isExisting` property in the `EmailService`.
    */
   toggle() {
     this.emailService.isExisting = !this.emailService.isExisting;

@@ -15,6 +15,10 @@ export class EmailService {
     name: string | undefined;
     id: string | undefined;
   }[];
+  public selectedDataSet: any;
+  public toEmailFilter!: FormGroup | any;
+  public ccEmailFilter!: FormGroup | any;
+  public bccEmailFilter!: FormGroup | any;
   public notificationTypes: string[] = ['email', 'alert', 'push notification'];
   public recipients: {
     distributionListName: string;
@@ -68,6 +72,23 @@ export class EmailService {
       dataSets: new FormArray([this.createNewDataSetGroup()]),
       recipients: this.recipients,
     });
+  }
+
+  /**
+   * set selected data set
+   *
+   * @param dataSet
+   */
+  setSelectedDataSet(dataSet: any): void {
+    this.selectedDataSet = dataSet;
+  }
+
+  /**
+   * get selected data set
+   *@returns dataset
+   */
+  getSelectedDataSet(): any {
+    return this.selectedDataSet;
   }
 
   /**

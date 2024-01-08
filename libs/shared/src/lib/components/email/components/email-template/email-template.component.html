@@ -38,8 +38,8 @@
                 <label htmlFor="select__data__set" class="block text-gray-700 text-sm mb-1">
                     {{ 'components.queryBuilder.dataset.title' | translate }}*
                 </label>
-                <ng-select id="select__data__set" name="select__data__set" [ngModelOptions]="{ standalone: true }"
-                    [items]="dataSets" bindLabel="name" [searchable]="true" bindValue="id" [virtualScroll]="true"
+                <ng-select id="select__data__set" name="select__data__set" [(ngModel)]="selectedDataset" [ngModelOptions]="{ standalone: true }"
+                    [items]="dataSets" bindLabel="name" [searchable]="true"  [virtualScroll]="true"
                     (change)="bindDataSetDetails($event)" placeholder="{{
                         'components.queryBuilder.dataset.select' | translate}}">
                     <ng-template disabled selected>

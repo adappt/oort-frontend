@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmailService } from '../../email.service';
+import { FormGroup } from '@angular/forms';
 
 /**
  * Select Distribution component.
@@ -19,6 +20,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
 
   public showEmailTemplate = false;
   public templateFor = '';
+  public toEmailFilter!: FormGroup | any;
+  public ccEmailFilter!: FormGroup | any;
+  public bccEmailFilter!: FormGroup | any;
   public recipients: {
     distributionListName: string;
     To: string[];
@@ -33,6 +37,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.recipients = this.emailService.recipients;
+    this.toEmailFilter = this.emailService.toEmailFilter;
+    this.ccEmailFilter = this.emailService.ccEmailFilter;
+    this.bccEmailFilter = this.emailService.bccEmailFilter;
     console.log('SelectDistributionComponent');
   }
 
@@ -52,30 +59,42 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * This method is used to set the 'To' field of the email.
    *
    * @param data The data to be set in the 'To' field.
+   * @param data.emails
+   * @param data.emailFilter
    */
-  to(data: any): void {
-    this.recipients.To = data;
+  to(data: { emails: string[]; emailFilter: any }): void {
+    this.recipients.To = data.emails;
+    this.toEmailFilter = data.emailFilter;
   }
 
   /**
    * This method is used to set the 'CC' field of the email.
    *
    * @param data The data to be set in the 'CC' field.
+   * @param data.emails
+   * @param data.emailFilter
    */
-  cc(data: any): void {
-    this.recipients.Cc = data;
+  cc(data: { emails: string[]; emailFilter: any }): void {
+    this.recipients.Cc = data.emails;
+    this.ccEmailFilter = data.emailFilter;
   }
 
   /**
    * This method is used to set the 'BCC' field of the email.
    *
    * @param data The data to be set in the 'BCC' field.
+   * @param data.emails
+   * @param data.emailFilter
    */
-  bcc(data: any): void {
-    this.recipients.Bcc = data;
+  bcc(data: { emails: string[]; emailFilter: any }): void {
+    this.recipients.Bcc = data.emails;
+    this.bccEmailFilter = data.emailFilter;
   }
 
   ngOnDestroy(): void {
     this.emailService.recipients = this.recipients;
+    this.emailService.toEmailFilter = this.toEmailFilter;
+    this.emailService.ccEmailFilter = this.ccEmailFilter;
+    this.emailService.bccEmailFilter = this.bccEmailFilter;
   }
 }

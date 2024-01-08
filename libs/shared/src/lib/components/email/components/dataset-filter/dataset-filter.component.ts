@@ -224,7 +224,6 @@ export class DatasetFilterComponent implements OnDestroy {
                 }
               }
             });
-            console.log(this.availableFields);
           }
         });
     }

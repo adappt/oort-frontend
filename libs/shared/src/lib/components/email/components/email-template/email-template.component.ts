@@ -30,9 +30,10 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   public resource!: any;
   public selectedValue!: string;
   public cacheFilterData!: string;
+  public selectedDataset!: any | undefined;
   public dataSetEmails!: string[];
   public dataSetFields!: string[];
-  public filterQuery: FormGroup | any;
+  public filterQuery: FormGroup | any | undefined;
   public selectedEmails: string[] | any = [];
   public operators!: { value: string; label: string }[];
   public filterFields: FormArray | any = new FormArray([]);
@@ -41,8 +42,13 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   public filterData = this.emailService.filterData;
   public isDropdownVisible = false;
   public dataSets: any;
-  @Output() emailLoad = new EventEmitter<string[]>();
+  public selectField = '';
+  @Output() emailLoad = new EventEmitter<{
+    emails: string[];
+    emailFilter: any;
+  }>();
   @Input() emailBackLoad: string[] | undefined;
+  @Input() emailFilter: FormGroup | undefined;
 
   /**
    * Composite filter group.
@@ -53,9 +59,31 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder, public emailService: EmailService) {}
 
   ngOnInit(): void {
+    this.selectedDataset = this.emailService.getSelectedDataSet();
+    if (this.selectedDataset?.cacheData) {
+      const { dataList, resource, dataSetFields, dataSetResponse } =
+        this.selectedDataset.cacheData;
+      this.dataList = dataList;
+      this.resource = resource;
+      this.dataSetFields = dataSetFields;
+      this.dataSet = dataSetResponse;
+      this.dataSetEmails = dataSetResponse?.records
+        ?.map((record: { email: string }) => record.email)
+        ?.filter(Boolean)
+        ?.flat();
+      this.emails = [...this.dataSetEmails];
+    }
     this.selectedEmails = this.emailBackLoad;
     this.dataSets = this.datasetsForm.value.dataSets;
     this.prepareDatasetFilters();
+    if (this.emailFilter) {
+      this.filterQuery = this.emailFilter;
+      this.filterFields = this.filterQuery.get('filters') as FormArray;
+      this.emailFilter.value?.filters.forEach((obj: any) => {
+        this.setField(obj?.field);
+      });
+    }
+    this.filterFields = this.filterQuery.get('filters') as FormArray;
     this.filterQuery.valueChanges
       .pipe(debounceTime(1500))
       .subscribe((res: any) => {
@@ -129,7 +157,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
         ?.flat();
       this.emails = [...this.dataSetEmails];
     }
-    console.log(dataSet.cacheData);
+    this.emailService.setSelectedDataSet(dataSet);
   }
 
   /**
@@ -138,7 +166,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
    * @param event field name
    */
   public setField(event: any) {
-    const name = event.target.value.replace(/^_+/, '');
+    const name = event?.target?.value.replace(/^_+/, '') ?? event;
     const fields = clone(this.resource?.metadata);
     const field = fields.find(
       (x: { name: any }) => x.name === name.split('-')[0]
@@ -188,7 +216,10 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Preparing dataset filters dynamically
+   * fetching data from object
+   * @param data
+   * @param field
+   * @returns data
    */
   fetchValue(data: any, field: string) {
     const keys = field.split('.');
@@ -312,6 +343,9 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.emailLoad.emit(this.selectedEmails);
+    this.emailLoad.emit({
+      emails: this.selectedEmails,
+      emailFilter: this.filterQuery,
+    });
   }
 }

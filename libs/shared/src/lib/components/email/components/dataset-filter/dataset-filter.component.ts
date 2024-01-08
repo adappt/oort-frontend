@@ -155,7 +155,7 @@ export class DatasetFilterComponent implements OnDestroy {
     this.selectedFields = [];
     this.filterFields = [];
     this.query.get('fields').reset();
-    console.log(this.query.value.fields);
+    // console.log(this.query.value.fields);
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
       this.query.controls.resource.setValue(
         this.emailService.resourcesNameId.find(
@@ -392,8 +392,8 @@ export class DatasetFilterComponent implements OnDestroy {
       this.query.controls.fields.setValue(existFields);
       this.selectedFields = existFields;
     }
-    // Print the field type to the console
-    console.log(`Field type of ${field.name}: ${field.type}`);
+
+    // console.log(`Field type of ${field.name}: ${field.type}`); // Print the field type to the console
     // Removes the selected field from the available fields list
     this.availableFields = this.availableFields
       .filter((f: { name: string }) => f.name !== field.name)

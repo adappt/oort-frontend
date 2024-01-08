@@ -1,11 +1,11 @@
 <div class="example">
-    <kendo-stepper #stepper 
-    [steps]="steps" 
-    stepType="full" 
-    [(currentStep)]="currentStep" 
+    <kendo-stepper #stepper
+    [steps]="steps"
+    stepType="full"
+    [(currentStep)]="currentStep"
     orientation="horizontal"
     > </kendo-stepper>
-  <!-- 
+  <!--
      <div>
       <ol class="flex items-center w-full mb-1 ml-1 sm:mb-2">
         <li
@@ -63,7 +63,7 @@
           </div>
         </li>
         <li
-         
+
         >
           <div
             class="flex items-center  text-gray-300 justify-center w-5 h-5 bg-gray-100 rounded-full lg:h-5 lg:w-5 dark:bg-gray-200 shrink-0"
@@ -111,9 +111,9 @@
     <app-schedule-alert *ngIf="currentStep === 3"></app-schedule-alert>
     <app-layout *ngIf="currentStep === 4"></app-layout>
     <app-preview *ngIf="currentStep === 5"></app-preview>
-  
+
     <!-- <span class="k-form-separator"></span> -->
-  
+
     <div class="flex gap-4 mt-4">
       <button
         type="button"
@@ -159,7 +159,7 @@
     Send email
   </button>
     </div>
-  
+
     <!-- <div class="flex gap-4 mt-4">
       <button
         type="button"
@@ -186,7 +186,7 @@
         Skip
       </button>
     </div> -->
-  
+
     <!-- <div class="k-form-buttons k-buttons-end">
             <span class="page">Step {{ currentStep }} of 7</span>
             <div>
@@ -197,4 +197,3 @@
         </div> -->
     <!-- </form> -->
   </div>
-  

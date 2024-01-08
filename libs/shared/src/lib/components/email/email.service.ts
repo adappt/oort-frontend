@@ -44,6 +44,8 @@ export class EmailService {
     headerHtml: '',
     bodyHtml: '',
     footerHtml: '',
+    headerLogo: null,
+    footerLogo: null,
   };
   isExisting = true;
 
@@ -210,9 +212,20 @@ export class EmailService {
     });
   }
 
-  /**
-   *
-   */
+  // Method to handle header logo selection
+  onHeaderLogoSelected(file: File | null): void {
+    this.allLayoutdata.headerLogo = file;
+  }
+
+  onBannerSelected(file: File | null): void {
+    this.allLayoutdata.bannerImage = file;
+  }
+
+  // Method to handle footer logo selection
+  onFooterLogoSelected(file: File | null): void {
+    this.allLayoutdata.footerLogo = file;
+  }
+
   getEmailNotifications() {
     return this.apollo.query<any>({
       query: GET_EMAIL_NOTIFICATIONS,

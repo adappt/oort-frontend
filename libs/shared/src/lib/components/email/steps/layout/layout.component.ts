@@ -62,7 +62,7 @@ export class LayoutComponent {
       const reader = new FileReader();
       reader.onload = () => (this.headerLogo = reader.result);
       reader.readAsDataURL(file);
-      this.emailService.allLayoutdata.headerLogo = file;
+      this.emailService.onHeaderLogoSelected(file);
     }
   }
 
@@ -77,6 +77,7 @@ export class LayoutComponent {
       const reader = new FileReader();
       reader.onload = () => (this.bannerImage = reader.result);
       reader.readAsDataURL(file);
+      this.emailService.onBannerSelected(file);
     }
   }
 
@@ -91,7 +92,7 @@ export class LayoutComponent {
       const reader = new FileReader();
       reader.onload = () => (this.footerLogo = reader.result);
       reader.readAsDataURL(file);
-      this.emailService.allLayoutdata.footerLogo = file;
+      this.emailService.onFooterLogoSelected(file);
     }
   }
 

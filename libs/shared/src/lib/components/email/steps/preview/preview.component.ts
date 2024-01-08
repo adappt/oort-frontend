@@ -1,31 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { GET_DATA_SET } from '../../graphql/queries';
 import { ResourceQueryResponse } from '../../../../models/resource.model';
 import { EmailService } from '../../email.service';
-import { DOCUMENT } from '@angular/common';
-// import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-// import { Layout } from '../../../../models/layout.model';
-// import {
-//   createDisplayForm,
-//   createQueryForm,
-// } from '../../../query-builder/query-builder-forms';
-// import { CommonModule } from '@angular/common';
-//  import { QueryBuilderModule } from '../../../query-builder/query-builder.module';
-// import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-//  import { CoreGridModule } from '../../../ui/core-grid/core-grid.module';
-// import { flattenDeep } from 'lodash';
-// import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-// import { DialogModule, FormWrapperModule } from '@oort-front/ui';
-// import { ButtonModule } from '@oort-front/ui';
-
-/**
- * Interface describing the structure of the data displayed in the dialog
- */
-// interface DialogData {
-//   layout?: Layout;
-//   queryName?: string;
-// }
 
 /**
  * Component used to display modals regarding layouts
@@ -35,24 +12,21 @@ import { DOCUMENT } from '@angular/common';
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.scss'],
 })
-export class PreviewComponent {
+export class PreviewComponent implements OnInit {
   public selectedResourceId: string | undefined = '653642baa37293bb1706506e';
   public dataList!: { [key: string]: string }[];
   public dataListKey!: { [key: string]: string }[];
-  whoLogo = '../../images/WHO.png';
-  emsLogo = '../../images/EMS_logo.jpg';
+  headerLogo: string | ArrayBuffer | null = null;
+  bannerImage: string | ArrayBuffer | null = null;
+  footerLogo: string | ArrayBuffer | null = null;
 
   /**
+   * Creates an instance of PreviewComponent.
    *
-   * @param apollo
-   * @param emailService
-   * @param document
+   * @param apollo - The Apollo client for making GraphQL queries.
+   * @param emailService - The service for email-related operations.
    */
-  constructor(
-    private apollo: Apollo,
-    public emailService: EmailService,
-    @Inject(DOCUMENT) private document: Document
-  ) {}
+  constructor(private apollo: Apollo, public emailService: EmailService) {}
 
   ngOnInit(): void {
     (document.getElementById('headerHtml') as HTMLInputElement).innerHTML =
@@ -61,13 +35,21 @@ export class PreviewComponent {
       this.emailService.allLayoutdata.bodyHtml;
 
     if (this.emailService.allLayoutdata.headerLogo) {
-      (document.getElementById('headerLogo') as HTMLInputElement).src =
-        URL.createObjectURL(this.emailService.allLayoutdata.headerLogo);
+      this.headerLogo = URL.createObjectURL(
+        this.emailService.allLayoutdata.headerLogo
+      );
     }
 
     if (this.emailService.allLayoutdata.footerLogo) {
-      (document.getElementById('footerImg') as HTMLInputElement).src =
-        URL.createObjectURL(this.emailService.allLayoutdata.footerLogo);
+      this.footerLogo = URL.createObjectURL(
+        this.emailService.allLayoutdata.footerLogo
+      );
+    }
+
+    if (this.emailService.allLayoutdata.bannerImage) {
+      this.bannerImage = URL.createObjectURL(
+        this.emailService.allLayoutdata.bannerImage
+      );
     }
 
     (document.getElementById('footerHtml') as HTMLInputElement).innerHTML =
@@ -76,7 +58,7 @@ export class PreviewComponent {
   }
 
   /**
-   *
+   * Retrieves and processes the email notifications dataset.
    */
   getDataSet(): void {
     this.apollo
@@ -136,8 +118,8 @@ export class PreviewComponent {
   /**
    * To replace all special characters with space
    *
-   * @param value string
-   * @returns string
+   * @param value The string to process and replace special characters with spaces.
+   * @returns The processed string with special characters replaced by spaces.
    */
   replaceUnderscores(value: string): string {
     return value ? value.replace(/[^a-zA-Z0-9-]/g, ' ') : '';

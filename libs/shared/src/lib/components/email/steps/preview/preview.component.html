@@ -1,65 +1,17 @@
 <div class="border-blue-800 border-2 w-full h-full border-solid border-solid">
-  <div class="p-3 bg-whitem inline flex container">
-    <img id="whoLogo" src="{{whoLogo}}" class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="WHO logo"
-    style="width: 15% !important;">
-    <img id="headerLogo" src="path/to/your/image.jpg" alt="Description of the image"
-    style=" width: 69% !important;">
-    <img id="emsLogo" src=".../../../../images/EMS_logo.jpg" class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="EMS logo"
-    style="width: 15% !important;">
+  <div class="p-3 bg-white flex justify-around items-center">
+    <img id="whoLogo" src="./../../../../../../../../assets/WHO.png" alt="WHO logo" class="w-1/3 h-auto object-contain">
+    <img id="headerLogo" [src]="headerLogo" alt="Header Logo" class="w-1/3 h-auto object-contain">
+    <img id="emsLogo" [src]="bannerImage" alt="Banner Image" class="w-1/3 h-auto object-contain">
   </div>
 
   <div class="">
     <div class="text-center " id="headerHtml"></div>
-    <!-- <div class="text-white font-bold text-center " id="headerHtml"></div> -->
-    <!-- <div class="text-center text-white">From 28 November 2023 15:00 as of 29 November 2023 15:00 This product is for the
-      WHO internal use only.</div> -->
   </div>
 
   <div class="">
     <div class="text-center " id="bodyHtml"></div>
   </div>
-  <!-- <div class="m-1 bg-blue-800 text-white text-left font-bold ">
-    New signals in the past 24h as of 29 Nov 2023
-  </div>
-  <div class="m-1 flex">
-    <div class="w-96 text-sky-500 text-sm font-bold font-source-sans-pro  text-left">
-      Avian Influenza a (H5N6)
-    </div>
-    <div class=" text-right">
-      China, WPRO
-    </div>
-  </div>
-  <div class="text-sm">
-    On 16 October 2021, the National Health Commission of the People’s Republic of China notified WHO of one
-    laboratory-confirmed case of human infection with avian influenza A(H5N6) virus. The case is a 60-year-old male
-    farmer from Changde City, Hunan Province with the onset of illness on 3 October 2021. She was hospitalized on 13
-    September and is currently in critical condition. The case had exposure to dead and/or sick poultry before the
-    onset of illness. No family members have developed symptoms at the time of reporting. Following the reporting of
-
-  </div>
-  <div class="m-1 bg-blue-800 text-white text-left font-bold ">
-    New signals in the past 24h as of 29 Nov 2023
-  </div>
-  <div class="m-2 flex">
-    <div class="w-96 text-sky-500 text-sm font-bold font-source-sans-pro  text-left">
-      Avian Influenza a (H5N6)
-    </div>
-    <div class=" text-right">
-      France, EURO
-    </div>
-  </div>
-  <div class="text-sm">
-    On 16 October 2021, the National Health Commission of the People’s Republic of China notified WHO of one
-    laboratory-confirmed case of human infection with avian influenza A(H5N6) virus. The case is a 60-year-old male
-    farmer from Changde City, Hunan Province with the onset of illness on 3 October 2021. She was hospitalized on 13
-    September and is currently in critical condition. The case had exposure to dead and/or sick poultry before the
-    onset of illness. No family members have developed symptoms at the time of reporting. Following the reporting of
-
-  </div>
-
-  <div class="m-2 bg-blue-800 text-white text-left font-bold ">
-    New signals in the past 24h as of 29 Nov 2023
-  </div> -->
   <div class="relative mt-2 m-2 overflow-x-auto">
     <table *ngIf="dataList?.length"
       class="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-blue-400"
@@ -82,94 +34,11 @@
           </ng-container>
         </tr>
       </tbody>
-      <!-- <tbody>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-sky-500 w-full whitespace-nowrap dark:text-white"
-          >
-            2023-E065
-          </th>
-          <td class="px-6 py-4">Silver</td>
-          <td class="px-6 py-4">Laptop</td>
-        </tr>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white"
-          >
-            2023-E065
-          </th>
-          <td class="px-6 py-4">White</td>
-          <td class="px-6 py-4">Laptop PC</td>
-        </tr>
-        <tr class="bg-white dark:bg-gray-800">
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white"
-          >
-            2023-E065
-          </th>
-          <td class="px-6 py-4">Black</td>
-          <td class="px-6 py-4">Accessories</td>
-        </tr>
-      </tbody> -->
     </table>
   </div>
-
-  <!-- <div class="m-2 bg-blue-800 text-white text-left font-bold ">
-    New signals in the past 24h as of 29 Nov 2023
-  </div>
-  <div class="relative mt-2 m-2 overflow-x-auto">
-    <table
-      class="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-blue-400"
-    >
-      <thead
-        class="text-xs text-white uppercase  m-2 bg-blue-800 dark:bg-blue-700"
-      >
-        <tr>
-          <th scope="col" class="px-6 py-3">Event ID</th>
-          <th scope="col" class="px-6 py-3">Disease/Condition</th>
-          <th scope="col" class="px-6 py-3">Country/Area</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-sky-500 w-full whitespace-nowrap dark:text-white"
-          >
-            2023-E065
-          </th>
-          <td class="px-6 py-4">Silver</td>
-          <td class="px-6 py-4">Laptop</td>
-        </tr>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white"
-          >
-            2023-E065
-          </th>
-          <td class="px-6 py-4">White</td>
-          <td class="px-6 py-4">Laptop PC</td>
-        </tr>
-        <tr class="bg-white dark:bg-gray-800">
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-sky-500 whitespace-nowrap dark:text-white"
-          >
-            2023-E065
-          </th>
-          <td class="px-6 py-4">Black</td>
-          <td class="px-6 py-4">Accessories</td>
-        </tr>
-      </tbody>
-    </table>
-  </div> -->
   <div  class="m-2 inline flex">
     <div class="text-left">
-      <img id="footerImg" src="path/to/your/image.jpg"  class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="Description of the image"
+      <img id="footerImg" [src]="footerLogo"  class="mt-1 text-sm text-left block flex-grow py-1 px-2 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" alt="Description of the image"
       style="max-width: 9.5rem !important;">
     </div>
     <div class="text-center text-xs m-2  bg-white h-14 " id="footerHtml"></div>
@@ -178,5 +47,4 @@
   <div class="m-2 bg-blue-800 text-white text-left font-bold ">
     Copyright © World Health Organization 2023.
   </div>
-  
 </div>

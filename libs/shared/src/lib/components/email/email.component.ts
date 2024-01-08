@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 export class EmailComponent {
   isExisting = true;
   templateData: any = [];
-  public getEmailNotifications: any = this.emailService.getEmailNotifications;
 
   /**
    *
@@ -38,9 +37,9 @@ export class EmailComponent {
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   getExistingTemplate() {
-    // this.getEmailNotifications().subscribe((res: any) => {
-    //   console.log(res);
-    // });
+    this.emailService.getEmailNotifications().subscribe((res: any) => {
+      console.log('getEmailNotifications :', res);
+    });
   }
 
   /**

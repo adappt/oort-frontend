@@ -74,3 +74,17 @@ export const GET_DATA_SET = gql`
     }
   }
 `;
+
+/** Graphql query for getting data set by filter layout */
+export const GET_EMAIL_NOTIFICATIONS = gql`
+  query EmailNotifications {
+    emailNotifications {
+      edges {
+        node {
+          recipientsType
+          name
+        }
+      }
+    }
+  }
+`;

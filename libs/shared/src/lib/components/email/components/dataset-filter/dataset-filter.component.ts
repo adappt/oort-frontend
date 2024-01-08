@@ -501,6 +501,7 @@ export class DatasetFilterComponent implements OnDestroy {
                   );
                   this.loading = false;
                   this.navigateToPreview.emit(allPreviewData);
+                  this.emailService.setAllPreviewData(allPreviewData);
                 }
               }
             }

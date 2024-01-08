@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { EMAIL_LAYOUT_CONFIG } from '../../../../const/tinymce.const';
 import { EditorService } from '../../../../services/editor/editor.service';
 import { EmailService } from '../../email.service';
+import { EditorComponent } from '@tinymce/tinymce-angular';
+import { ViewChild } from '@angular/core';
 /**
  * layout page component.
  */
@@ -11,15 +13,19 @@ import { EmailService } from '../../email.service';
   styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements OnInit {
-  headerLogo: string | ArrayBuffer | null = null;
-  bannerImage: string | ArrayBuffer | null = null;
-  footerLogo: string | ArrayBuffer | null = null;
+  @ViewChild('bodyEditor', { static: false })
+  bodyEditor: EditorComponent | null = null;
   /** Tinymce editor configuration */
   public editor: any = EMAIL_LAYOUT_CONFIG;
   bodyHtml: any = '';
   headerHtml: any = '';
   footerHtml: any = '';
   txtSubject: any = '';
+  /** Layout Logos */
+  headerLogo: string | ArrayBuffer | null = null;
+  bannerImage: string | ArrayBuffer | null = null;
+  footerLogo: string | ArrayBuffer | null = null;
+  showDropdown = false;
 
   /**
    * Component used for the selection of fields to display the fields in tabs.
@@ -97,31 +103,51 @@ export class LayoutComponent implements OnInit {
   }
 
   /**
+   * Inserts a dataset token into the body HTML based on the provided tab name.
+   *
+   * @param tabName The name of the tab to insert the dataset token for.
+   */
+  insertDataSetToBodyHtmlByTabName(tabName: string): void {
+    const token = `{{dataset.${tabName}}}}`;
+
+    if (this.bodyEditor && this.bodyEditor.editor) {
+      this.bodyEditor.editor.insertContent(token);
+    } else {
+      console.error('Body TinyMCE editor is not initialized');
+    }
+  }
+
+  /**
+   * Handles changes to the editor content and updates the layout data accordingly.
+   *
+   * @param event The event object containing the updated content.
+   */
+  onEditorContentChange(event: any): void {
+    this.emailService.allLayoutdata.bodyHtml = event.content;
+  }
+
+  /**
    * This method retrieves the color values from the form.
    *
    * @returns An object containing color values.
    */
   getColors() {
     const colors = {
-      titleBackgroundColor: (
-        document.getElementById('titleBackgroundColor') as HTMLInputElement
+      headerBackground: (
+        document.getElementById('headerBackgroundColor') as HTMLInputElement
       ).value,
       headerColor: (document.getElementById('headerColor') as HTMLInputElement)
         .value,
-      titleColor: (document.getElementById('titleColor') as HTMLInputElement)
-        .value,
-      containerColor: (
-        document.getElementById('containerColor') as HTMLInputElement
+      bodyBackground: (
+        document.getElementById('bodyBackgroundColor') as HTMLInputElement
       ).value,
-      anchorColor: (document.getElementById('anchorColor') as HTMLInputElement)
+      bodyColor: (document.getElementById('bodyColor') as HTMLInputElement)
         .value,
+      footerBackground: (
+        document.getElementById('footerBackgroundColor') as HTMLInputElement
+      ).value,
       footerColor: (document.getElementById('footerColor') as HTMLInputElement)
         .value,
-      textColor: (document.getElementById('textColor') as HTMLInputElement)
-        .value,
-      dividerColor: (
-        document.getElementById('dividerColor') as HTMLInputElement
-      ).value,
     };
     return colors;
   }

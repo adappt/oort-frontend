@@ -23,6 +23,7 @@ export class EmailService {
   public toEmailFilter!: FormGroup | any;
   public ccEmailFilter!: FormGroup | any;
   public bccEmailFilter!: FormGroup | any;
+  public allPreviewData: any[] = [];
   public notificationTypes: string[] = ['email', 'alert', 'push notification'];
   public recipients: {
     distributionListName: string;
@@ -90,9 +91,9 @@ export class EmailService {
   }
 
   /**
-   * set selected data set
+   * Sets the selected data set.
    *
-   * @param dataSet
+   * @param dataSet The data set to be selected.
    */
   setSelectedDataSet(dataSet: any): void {
     this.selectedDataSet = dataSet;
@@ -105,6 +106,37 @@ export class EmailService {
    */
   getSelectedDataSet(): any {
     return this.selectedDataSet;
+  }
+
+  /**
+   * Sets the preview data for all tabs.
+   *
+   * @param previewData An array of preview data objects for each tab.
+   */
+  setAllPreviewData(previewData: any[]): void {
+    for (let i = 0; i < previewData.length; i++) {
+      console.log(previewData[i].tabName);
+    }
+    this.allPreviewData = previewData;
+  }
+
+  /**
+   * Retrieves all preview data objects.
+   *
+   * @returns An array of all preview data objects.
+   */
+  getAllPreviewData(): any[] {
+    return this.allPreviewData;
+  }
+
+  /**
+   * Retrieves preview data for a specific tab by name.
+   *
+   * @param tabName The name of the tab to retrieve preview data for.
+   * @returns The preview data object for the specified tab, if found.
+   */
+  getAllPreviewDataByTabName(tabName: string): any {
+    return this.allPreviewData.find((preview) => preview.tabName === tabName);
   }
 
   /**
@@ -258,7 +290,10 @@ export class EmailService {
   }
 
   /**
+   * Adds an email notification with the provided data.
    *
+   * @param data The notification data to be added.
+   * @returns A query result after adding the email notification.
    */
   addEmailNotification(data: any) {
     return this.apollo.query<any>({

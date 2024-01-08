@@ -19,6 +19,7 @@ export class PreviewComponent implements OnInit {
   headerLogo: string | ArrayBuffer | null = null;
   bannerImage: string | ArrayBuffer | null = null;
   footerLogo: string | ArrayBuffer | null = null;
+  bodyString: any;
 
   /**
    * Creates an instance of PreviewComponent.
@@ -29,10 +30,11 @@ export class PreviewComponent implements OnInit {
   constructor(private apollo: Apollo, public emailService: EmailService) {}
 
   ngOnInit(): void {
+    this.parseAndReplaceTokensWithTables();
     (document.getElementById('headerHtml') as HTMLInputElement).innerHTML =
       this.emailService.allLayoutdata.headerHtml;
     (document.getElementById('bodyHtml') as HTMLInputElement).innerHTML =
-      this.emailService.allLayoutdata.bodyHtml;
+      this.bodyString;
 
     if (this.emailService.allLayoutdata.headerLogo) {
       this.headerLogo = URL.createObjectURL(
@@ -55,6 +57,62 @@ export class PreviewComponent implements OnInit {
     (document.getElementById('footerHtml') as HTMLInputElement).innerHTML =
       this.emailService.allLayoutdata.footerHtml;
     this.getDataSet();
+  }
+
+  /**
+   * Parses the email body string and replaces dataset tokens with corresponding HTML tables.
+   */
+  parseAndReplaceTokensWithTables(): void {
+    this.bodyString = this.emailService.allLayoutdata.bodyHtml;
+    const tokenRegex = /{{dataset\.([^}]+)}}}/g;
+    let match;
+    while ((match = tokenRegex.exec(this.bodyString)) !== null) {
+      const tabName = match[1]; // Extract the tab name from the token
+      const previewData = this.emailService.allPreviewData.find(
+        (data) => data.tabName === tabName
+      );
+
+      if (previewData) {
+        const tableHtml = this.convertPreviewDataToHtml(previewData);
+        this.bodyString = this.bodyString.replace(match[0], tableHtml);
+      }
+    }
+  }
+
+  /**
+   * Converts the given preview data into an HTML table representation.
+   *
+   * @param previewData The data to be converted into an HTML table.
+   * @returns An HTML string representing the data as a table.
+   */
+  convertPreviewDataToHtml(previewData: any): string {
+    if (!previewData?.dataList?.length) {
+      return '<label class="block text-gray-700 text-sm">no data found</label>';
+    }
+
+    let tableHtml =
+      '<table id="tblPreview" style="width: 95%; margin: auto;" class="dataset-preview border border-blue-600 shadow-xs m-1">';
+    tableHtml +=
+      '<thead class="bg-blue-600 border-blue-600 shadow-xs text-white">';
+    tableHtml +=
+      '<tr class="bg-blue-600 border-blue-600 shadow-xs text-white">';
+    previewData.dataSetFields.forEach((fieldKeyString: any) => {
+      tableHtml += `<th class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center">${this.emailService.replaceUnderscores(
+        fieldKeyString
+      )}</th>`;
+    });
+    tableHtml += '</tr></thead><tbody>';
+
+    previewData.dataList.forEach((data: any) => {
+      tableHtml += '<tr class="bg-white-600 border-blue-600 text-blue-600">';
+      previewData.dataSetFields.forEach((fieldKeyString: any) => {
+        tableHtml += `<td class="p-2 border border-blue-600 shadow-xs m-1 text-center">${data[fieldKeyString]}</td>`;
+      });
+      tableHtml += '</tr>';
+    });
+
+    tableHtml += '</tbody></table>';
+    return tableHtml;
   }
 
   /**

@@ -89,3 +89,28 @@ export const GET_EMAIL_NOTIFICATIONS = gql`
     }
   }
 `;
+
+/** Graphql query for getting data set by filter layout */
+export const ADD_EMAIL_NOTIFICATION = gql`
+  mutation sample($notification: EmailNotificationInputType!) {
+    addEmailNotification(notification: $notification) {
+      id
+      dataSets {
+        name
+        pageSize
+        filter
+        fields
+      }
+      name
+      createdBy
+      lastExecution
+      status
+      recipients {
+        To
+        Cc
+        Bcc
+        distributionListName
+      }
+    }
+  }
+`;

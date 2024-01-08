@@ -14,6 +14,7 @@ import { EmailService } from '../../email.service';
 export class EmsTemplateComponent {
   @ViewChild('stepper', { static: true })
   public stepper: StepperComponent | undefined;
+  public addEmailnotification = this.emailService.addEmailNotification;
 
   public currentStep = 0;
 
@@ -155,16 +156,16 @@ export class EmsTemplateComponent {
   /**
    * Dynamic form submission.
    */
-  public submit(): void {
-    this.submitted = true;
+  // public submit(): void {
+  //   this.submitted = true;
 
-    // if (!this.form.valid) {
-    //     this.form.markAllAsTouched();
-    //     //this.stepper.validateSteps();
-    // }
+  //   // if (!this.form.valid) {
+  //   //     this.form.markAllAsTouched();
+  //   //     //this.stepper.validateSteps();
+  //   // }
 
-    // console.log('Submitted data', this.form.value);
-  }
+  //   // console.log('Submitted data', this.form.value);
+  // }
 
   /**
    * This function returns the form group at the specified index.
@@ -178,5 +179,23 @@ export class EmsTemplateComponent {
     ) as FormGroup[];
 
     return groups[index];
+  }
+
+  /**
+   *
+   * submission
+   */
+  submit() {
+    if (Object.keys(this.emailService.datasetsForm.value).length) {
+      this.emailService.datasetsForm?.value?.dataSets.forEach((data: any) => {
+        delete data.cacheData;
+      });
+      this.emailService
+        .addEmailNotification(this.emailService.datasetsForm.value)
+        .subscribe((res) => {
+          console.log('db response:', res);
+        });
+      console.log('add notification: ', this.emailService.datasetsForm.value);
+    }
   }
 }

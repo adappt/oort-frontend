@@ -3,7 +3,6 @@ import { EmailService } from './email.service';
 import { ApplicationService } from '../../services/application/application.service';
 import { UnsubscribeComponent } from '../utils/unsubscribe/unsubscribe.component';
 import { takeUntil } from 'rxjs';
-import { Application } from '../../models/application.model';
 import { DistributionList } from '../../models/distribution-list.model';
 
 /**

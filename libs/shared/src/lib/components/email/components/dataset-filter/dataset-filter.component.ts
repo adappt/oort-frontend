@@ -55,6 +55,7 @@ export class DatasetFilterComponent implements OnDestroy {
   @ViewChild('datasetPreview') datasetPreview: any;
   @Output() changeMainTab: EventEmitter<any> = new EventEmitter();
   @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
+  public loading = false;
 
   /**
    * To use helper functions, Apollo serve
@@ -450,6 +451,9 @@ export class DatasetFilterComponent implements OnDestroy {
       if (tabName == 'preview') {
         let count = 0;
         for (const query of this.queryValue) {
+          if (count == 0) {
+            this.loading = true;
+          }
           query.tabIndex = count;
           count++;
           this.fetchDataSet(query).subscribe(
@@ -495,6 +499,7 @@ export class DatasetFilterComponent implements OnDestroy {
                   allPreviewData = allPreviewData.sort(
                     (a: any, b: any) => a.tabIndex - b.tabIndex
                   );
+                  this.loading = false;
                   this.navigateToPreview.emit(allPreviewData);
                 }
               }

@@ -83,6 +83,7 @@ export const GET_EMAIL_NOTIFICATIONS = gql`
         node {
           recipientsType
           name
+          createdBy
         }
       }
     }

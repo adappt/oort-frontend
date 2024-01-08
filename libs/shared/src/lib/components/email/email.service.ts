@@ -39,6 +39,13 @@ export class EmailService {
       index: 0,
     },
   ];
+  allLayoutdata: any = {
+    txtSubject: '',
+    headerHtml: '',
+    bodyHtml: '',
+    footerHtml: '',
+  };
+  isExisting = true;
 
   /**
    * To replace all special characters with space
@@ -85,6 +92,7 @@ export class EmailService {
 
   /**
    * get selected data set
+   *
    *@returns dataset
    */
   getSelectedDataSet(): any {
@@ -202,6 +210,9 @@ export class EmailService {
     });
   }
 
+  /**
+   *
+   */
   getEmailNotifications() {
     return this.apollo.query<any>({
       query: GET_EMAIL_NOTIFICATIONS,

@@ -11,7 +11,6 @@ import { EmailService } from '../../email.service';
   styleUrls: ['./create-notification.component.scss'],
 })
 export class CreateNotificationComponent {
-  isExisting = false;
   public dataSetFormGroup: FormGroup | any = this.emailService.datasetsForm;
   public notificationTypes: string[] = this.emailService.notificationTypes;
 
@@ -26,6 +25,6 @@ export class CreateNotificationComponent {
    *
    */
   toggle() {
-    this.isExisting = !this.isExisting;
+    this.emailService.isExisting = !this.emailService.isExisting;
   }
 }

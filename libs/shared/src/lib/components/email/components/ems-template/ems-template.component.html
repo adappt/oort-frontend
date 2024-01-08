@@ -127,18 +127,10 @@
         type="submit"
         class="bg-sky-500 text-white ml-3 px-4 py-2 rounded-md"
         (click)="next()"
-        *ngIf="currentStep !== 6"
+        *ngIf="currentStep !== 7"
       >
         Save and Proceed
       </button>
-      <button
-      type="submit"
-      class="bg-sky-500 text-white ml-3 px-4 py-2 rounded-md"
-      (click)="submit()"
-      *ngIf="currentStep === 6"
-    >
-      Save
-    </button>
     </div>
   
     <!-- <div class="flex gap-4 mt-4">

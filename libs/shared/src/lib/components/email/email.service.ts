@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ADD_EMAIL_NOTIFICATION, GET_DATA_SET, GET_EMAIL_NOTIFICATIONS } from './graphql/queries';
+import { GET_DATA_SET, GET_EMAIL_NOTIFICATIONS } from './graphql/queries';
 import { Apollo } from 'apollo-angular';
 
 /**
@@ -80,8 +80,6 @@ export class EmailService {
       notificationType: [null, Validators.required],
       dataSets: new FormArray([this.createNewDataSetGroup()]),
       recipients: this.recipients,
-      emailLayout: this.allLayoutdata,
-      schedule: [''],
     });
   }
 
@@ -250,18 +248,6 @@ export class EmailService {
     return this.apollo.query<any>({
       query: GET_EMAIL_NOTIFICATIONS,
       variables: {},
-    });
-  }
-
-  /**
-   *
-   */
-  addEmailNotification(data: any) {
-    return this.apollo.query<any>({
-      query: ADD_EMAIL_NOTIFICATION,
-      variables: {
-        notification: data,
-      },
     });
   }
 }

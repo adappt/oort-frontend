@@ -93,11 +93,11 @@ export class EmsTemplateComponent {
         isValid: this.isStepValid,
         validate: this.shouldValidate,
       },
-      {
-        label: 'Send',
-        isValid: this.isStepValid,
-        validate: this.shouldValidate,
-      },
+      // {
+      //   label: 'Send',
+      //   isValid: this.isStepValid,
+      //   validate: this.shouldValidate,
+      // },
     ];
   }
 
@@ -194,6 +194,7 @@ export class EmsTemplateComponent {
         .addEmailNotification(this.emailService.datasetsForm.value)
         .subscribe((res: any) => {
           console.log(res);
+          window.location.reload();
         });
     }
   }

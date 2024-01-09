@@ -19,7 +19,7 @@ export class EmailComponent extends UnsubscribeComponent {
   filterTemplateData: any = [];
   templateActualData: any = [];
   public loading = true;
-  public distributionLists: DistributionList[] = [];
+  public distributionLists: any[] = [];
   public emailNotifications = [];
   public pageInfo = {
     pageIndex: 0,
@@ -45,7 +45,6 @@ export class EmailComponent extends UnsubscribeComponent {
 
   ngOnInit(): void {
     this.getExistingTemplate();
-    this.getDistribuionList();
   }
 
   /**
@@ -64,6 +63,7 @@ export class EmailComponent extends UnsubscribeComponent {
       res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
         this.templateActualData.push(ele.node);
         this.loading = false;
+        this.distributionLists.push(ele.node.recipients);
       });
       this.filterTemplateData = this.templateActualData;
       // this.emailNotifications = this.filterTemplateData.slice(

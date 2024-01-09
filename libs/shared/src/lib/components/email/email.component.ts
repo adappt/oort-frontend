@@ -61,7 +61,8 @@ export class EmailComponent extends UnsubscribeComponent {
       res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
         this.templateActualData.push(ele.node);
         this.loading = false;
-        ele.node.recipients.distributionListName !== null
+        ele.node.recipients.distributionListName !== null &&
+        ele.node.recipients.distributionListName !== ''
           ? this.distributionLists.push(ele.node.recipients)
           : '';
       });

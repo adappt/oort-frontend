@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { EmailService } from './email.service';
 import { ApplicationService } from '../../services/application/application.service';
 import { UnsubscribeComponent } from '../utils/unsubscribe/unsubscribe.component';
-import { takeUntil } from 'rxjs';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;

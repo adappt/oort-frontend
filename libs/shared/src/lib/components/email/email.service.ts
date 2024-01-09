@@ -290,6 +290,20 @@ export class EmailService {
   }
 
   /**
+   * Retrieves email notificationIds.
+   *
+   */
+  getEmailNotificationIds() {
+    const Ids: string[] = [];
+    this.getEmailNotifications().subscribe((res: any) => {
+      res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
+        Ids.push(ele.node.id);
+      });
+      return Ids;
+    });
+  }
+
+  /**
    * Adds an email notification with the provided data.
    *
    * @param data The notification data to be added.

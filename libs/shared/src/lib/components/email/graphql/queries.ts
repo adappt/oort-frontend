@@ -84,6 +84,7 @@ export const GET_EMAIL_NOTIFICATIONS = gql`
           recipientsType
           name
           createdBy
+          id
         }
       }
     }

@@ -192,10 +192,9 @@ export class EmsTemplateComponent {
       });
       this.emailService
         .addEmailNotification(this.emailService.datasetsForm.value)
-        .subscribe((res) => {
-          console.log('db response:', res);
+        .subscribe((res: any) => {
+          console.log(res);
         });
-      console.log('add notification: ', this.emailService.datasetsForm.value);
     }
   }
 }

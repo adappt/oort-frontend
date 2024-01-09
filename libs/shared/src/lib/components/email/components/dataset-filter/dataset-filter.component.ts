@@ -397,7 +397,7 @@ export class DatasetFilterComponent implements OnDestroy {
       this.selectedFields = existFields;
     }
 
-    // console.log(`Field type of ${field.name}: ${field.type}`); // Print the field type to the console
+    console.log(`Field type of ${field.name}: ${field.type}`); // Print the field type to the console
     // Removes the selected field from the available fields list
     this.availableFields = this.availableFields
       .filter((f: { name: string }) => f.name !== field.name)

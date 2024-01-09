@@ -129,6 +129,9 @@ export class EmsTemplateComponent {
    * Increments the current step by one.
    */
   public next(): void {
+    // if (this.currentStep === 2) {
+    //   this.emailService.datasetsForm.controls['recipients'].markAsTouched();
+    // }
     if (this.currentStep === 0) {
       if (
         this.emailService.datasetsForm.controls['name'].valid &&

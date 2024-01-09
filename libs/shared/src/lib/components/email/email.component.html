@@ -163,24 +163,12 @@
         </td>
         <td>{{data?.createdBy?.name}}</td>
         <td class="px-6 py-4 flex gap-2">
-          <!-- <a
-            href="#"
-            class="font-medium text-gray-600 whitespace-nowrap dark:text-black"
-          >
-            Clone
-          </a> -->
-          <a
-            href="#"
-            class="font-medium text-gray-600 whitespace-nowrap dark:text-black"
-          >
-            Delete
-          </a>
-          <a
-            href="#"
-            class="font-medium text-blue-600 dark:text-blue-700 hover:underline"
-          >
-            Edit</a
-          >
+          <button uiMenuItem (click)="editEmailNotification(data)">
+            <ui-icon icon="edit" variant="grey"></ui-icon>
+          </button>
+          <button uiMenuItem (click)="deleteEmailNotification(data)">
+            <ui-icon icon="delete" variant="danger"></ui-icon>
+          </button>
         </td>
         </tr>
       </tbody>

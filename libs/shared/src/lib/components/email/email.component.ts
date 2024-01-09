@@ -62,7 +62,9 @@ export class EmailComponent extends UnsubscribeComponent {
       res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
         this.templateActualData.push(ele.node);
         this.loading = false;
-        this.distributionLists.push(ele.node.recipients);
+        ele.node.recipients.distributionListName !== null
+          ? this.distributionLists.push(ele.node.recipients)
+          : '';
       });
       this.filterTemplateData = this.templateActualData;
       // this.emailNotifications = this.filterTemplateData.slice(
@@ -89,12 +91,17 @@ export class EmailComponent extends UnsubscribeComponent {
 
   /**
    *
+   * @param data
    */
-  getDistribuionList() {
-    this.applicationService.application$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.distributionLists = value?.distributionLists || [];
-      });
+  public editEmailNotification(data: any) {
+    console.log(data);
+  }
+
+  /**
+   *
+   * @param data
+   */
+  public deleteEmailNotification(data: any) {
+    console.log(data);
   }
 }

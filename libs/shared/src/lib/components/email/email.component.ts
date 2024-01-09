@@ -3,7 +3,6 @@ import { EmailService } from './email.service';
 import { ApplicationService } from '../../services/application/application.service';
 import { UnsubscribeComponent } from '../utils/unsubscribe/unsubscribe.component';
 import { takeUntil } from 'rxjs';
-import { DistributionList } from '../../models/distribution-list.model';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;

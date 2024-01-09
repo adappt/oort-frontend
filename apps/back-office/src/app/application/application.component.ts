@@ -147,8 +147,8 @@ export class ApplicationComponent
                 icon: 'add_to_queue',
               },
               {
-                name: this.translate.instant('New EMS'),
-                path: './settings/newems',
+                name: this.translate.instant('common.email.notification.few'),
+                path: './settings/email-notifications',
                 icon: 'mail',
               },
             ];

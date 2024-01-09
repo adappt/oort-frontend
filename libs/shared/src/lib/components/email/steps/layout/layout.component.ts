@@ -108,7 +108,7 @@ export class LayoutComponent implements OnInit {
    * @param tabName The name of the tab to insert the dataset token for.
    */
   insertDataSetToBodyHtmlByTabName(tabName: string): void {
-    const token = `{{dataset.${tabName}}}}`;
+    const token = `{{${tabName}}}`;
 
     if (this.bodyEditor && this.bodyEditor.editor) {
       this.bodyEditor.editor.insertContent(token);

@@ -169,6 +169,10 @@
 		"email": {
 			"few": "Emails",
 			"none": "No email",
+			"notification": {
+				"few": "Email Notifications",
+				"one": "Email Notification"
+			},
 			"one": "Email"
 		},
 		"errors": {

@@ -64,7 +64,7 @@ export class PreviewComponent implements OnInit {
    */
   parseAndReplaceTokensWithTables(): void {
     this.bodyString = this.emailService.allLayoutdata.bodyHtml;
-    const tokenRegex = /{{dataset\.([^}]+)}}}/g;
+    const tokenRegex = /{{([^}]+)}}/g;
     let match;
     while ((match = tokenRegex.exec(this.bodyString)) !== null) {
       const tabName = match[1]; // Extract the tab name from the token

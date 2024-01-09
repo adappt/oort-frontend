@@ -191,7 +191,7 @@ export class EmsTemplateComponent {
       .subscribe(
         (response) => {
           console.log('Email sent successfully:', response);
-          this.router.navigate(['./settings/newems']);
+          this.router.navigate(['/settings/email-notifications']);
         },
         (error) => {
           console.error('Error sending email:', error);

@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   ADD_EMAIL_NOTIFICATION,
   GET_DATA_SET,
+  GET_EMAIL_NOTIFICATION,
   GET_EMAIL_NOTIFICATIONS,
 } from './graphql/queries';
 import { Apollo } from 'apollo-angular';
@@ -314,6 +315,16 @@ export class EmailService {
       query: ADD_EMAIL_NOTIFICATION,
       variables: {
         notification: data,
+      },
+    });
+  }
+
+  getEmailNotification(id: string) {
+    return this.apollo.query<any>({
+      query: GET_EMAIL_NOTIFICATION,
+      variables: {
+        notification: null,
+        editEmailNotificationId: id,
       },
     });
   }

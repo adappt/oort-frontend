@@ -118,3 +118,50 @@ export const ADD_EMAIL_NOTIFICATION = gql`
     }
   }
 `;
+
+/** Graphql query for getting  EMAIL_NOTIFICATION */
+export const GET_EMAIL_NOTIFICATION = gql`
+  mutation EditEmailNotification(
+    $editEmailNotificationId: ID!
+    $notification: EmailNotificationInputType
+  ) {
+    editAndGetEmailNotification(
+      id: $editEmailNotificationId
+      notification: $notification
+    ) {
+      createdAt
+      createdBy
+      dataSets {
+        fields
+        filter
+        name
+        pageSize
+        resource {
+          id
+          name
+        }
+      }
+      id
+      name
+      notificationType
+      recipients {
+        distributionListName
+        To
+        Cc
+        Bcc
+      }
+      status
+      schedule
+      modifiedAt
+      emailLayout {
+        banner
+        body
+        footer
+        header
+        subject
+      }
+      lastExecution
+      recipientsType
+    }
+  }
+`;

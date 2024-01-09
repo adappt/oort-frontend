@@ -42,6 +42,7 @@ export class EmailComponent extends UnsubscribeComponent {
   }
 
   ngOnInit(): void {
+    this.getEmailNotification('659cdd770abeb3689b522d46');
     this.getExistingTemplate();
   }
 
@@ -87,6 +88,12 @@ export class EmailComponent extends UnsubscribeComponent {
     this.filterTemplateData = this.templateActualData.filter((x: any) =>
       x.name.toLowerCase().includes(searchText.toLowerCase())
     );
+  }
+
+  getEmailNotification(id: string) {
+    this.emailService.getEmailNotification(id).subscribe((res) => {
+      console.log('getEmailNotification: ', res);
+    });
   }
 
   /**

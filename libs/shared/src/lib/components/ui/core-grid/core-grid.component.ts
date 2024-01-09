@@ -1322,8 +1322,23 @@ export class CoreGridComponent
         })),
       ]);
     };
+
+    const mapField = (x: any) => {
+      return {
+        name: x.field,
+        title: x.title,
+        subFields: getSubFields(x),
+        parent:
+          this.settings.query.fields.find(
+            (field: any) => field.name === x.field
+          )?.kind === 'LIST' &&
+          this.settings.query.fields.find(
+            (field: any) => field.name === x.field
+          ).type,
+      };
+    };
+
     // Builds the request body with all the useful data
-    const currentLayout = this.layout;
     const body = {
       filter:
         e.records === 'selected'
@@ -1343,24 +1358,16 @@ export class CoreGridComponent
       resource: this.settings.resource,
       // we only export visible fields ( not hidden )
       ...(e.fields === 'visible' && {
-        fields: Object.values(currentLayout.fields)
+        fields: Object.values(this.layout.fields)
           .filter((x: any) => !x.hidden)
           .sort((a: any, b: any) => a.order - b.order)
-          .map((x: any) => ({
-            name: x.field,
-            title: x.title,
-            subFields: getSubFields(x),
-          })),
+          .map((x: any) => mapField(x)),
       }),
       // we export ALL fields of the grid ( including hidden columns )
       ...(e.fields === 'all' && {
-        fields: Object.values(currentLayout.fields)
+        fields: Object.values(this.layout.fields)
           .sort((a: any, b: any) => a.order - b.order)
-          .map((x: any) => ({
-            name: x.field,
-            title: x.title,
-            subFields: getSubFields(x),
-          })),
+          .map((x: any) => mapField(x)),
       }),
     };
 

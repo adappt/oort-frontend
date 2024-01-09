@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StepperComponent } from '@progress/kendo-angular-layout';
 import { EmailService } from '../../email.service';
@@ -18,6 +18,8 @@ export class EmsTemplateComponent {
   public addEmailnotification = this.emailService.addEmailNotification;
 
   public currentStep = 0;
+
+  @Output() navigateToEms: EventEmitter<any> = new EventEmitter();
 
   private submitted = false;
 
@@ -99,11 +101,6 @@ export class EmsTemplateComponent {
       //   isValid: this.isStepValid,
       //   validate: this.shouldValidate,
       // },
-      // {
-      //   label: 'Send',
-      //   isValid: this.isStepValid,
-      //   validate: this.shouldValidate,
-      // },
     ];
   }
 
@@ -180,8 +177,6 @@ export class EmsTemplateComponent {
    * Sending emails
    */
   public send(): void {
-    console.log('meow here');
-
     const emailData = {
       // Your email data here
     };
@@ -191,7 +186,7 @@ export class EmsTemplateComponent {
       .subscribe(
         (response) => {
           console.log('Email sent successfully:', response);
-          this.router.navigate(['/settings/email-notifications']);
+          this.navigateToEms.emit();
         },
         (error) => {
           console.error('Error sending email:', error);

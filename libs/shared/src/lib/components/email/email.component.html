@@ -215,5 +215,5 @@
     
   </div>
 <ng-container *ngIf="!emailService.isExisting">
-  <ems-template></ems-template>
+  <ems-template (navigateToEms)="toggle();getExistingTemplate();"></ems-template>
 </ng-container>

@@ -7,6 +7,8 @@ import {
   GET_EMAIL_NOTIFICATIONS,
 } from './graphql/queries';
 import { Apollo } from 'apollo-angular';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 /**
  * Helper functions for emails template
@@ -55,6 +57,10 @@ export class EmailService {
   };
   isExisting = true;
 
+  public configId: string | undefined;
+
+  private apiUrl = 'http://localhost:3000/notification/send-email/';
+
   /**
    * To replace all special characters with space
    *
@@ -79,8 +85,13 @@ export class EmailService {
    *
    * @param formBuilder - The FormBuilder instance used to create form groups and controls
    * @param apollo - The Apollo server instance used for GraphQL queries
+   * @param http
    */
-  constructor(private formBuilder: FormBuilder, private apollo: Apollo) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private apollo: Apollo,
+    private http: HttpClient
+  ) {
     this.datasetsForm = this.formBuilder.group({
       name: ['', Validators.required],
       notificationType: [null, Validators.required],
@@ -327,5 +338,17 @@ export class EmailService {
         editEmailNotificationId: id,
       },
     });
+  }
+
+  /**
+   * sending emails to endpoint
+   * @param emailData data to be send
+   * @returns rest post to end point
+   */
+  sendEmail(configId: string | undefined, emailData: any): Observable<any> {
+    console.log(this.apiUrl);
+    //return this.http.post<any>(this.apiUrl, emailData);
+    const urlWithConfigId = `${this.apiUrl}${configId}`;
+    return this.http.post<any>(urlWithConfigId, emailData);
   }
 }

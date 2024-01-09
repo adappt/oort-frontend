@@ -12,3 +12,25 @@ export const ADD_LAYOUT = gql`
     }
   }
 `;
+
+/**
+ *
+ */
+export const ADD_CONFIGURATION = gql`
+  mutation addConfiguration($resource: ID) {
+    addConfiguration(resource: $resource) {
+      id
+      name
+      schedule
+      notificationType
+      datasets
+      emailLayout
+      recipients
+      lastExecution
+      createdAt
+      modifiedAt
+      status
+      recipientsType
+    }
+  }
+`;

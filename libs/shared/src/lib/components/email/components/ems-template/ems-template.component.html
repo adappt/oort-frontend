@@ -132,14 +132,14 @@
         Save and Proceed
       </button>
 
-      <button
+      <!-- <button
         type="submit"
         class="bg-sky-500 text-white ml-3 px-4 py-2 rounded-md"
         (click)="submit()"
         *ngIf="currentStep === 5"
       >
         Save
-      </button>
+      </button> -->
 
       <button
       type="submit"
@@ -147,8 +147,17 @@
       (click)="submit()"
       *ngIf="currentStep === 5"
     >
-      Save and Send
+      Save
     </button>
+
+    <button
+    type="button"
+    class="bg-blue-200 text-white ml-3 px-4 py-2 rounded-md"
+    (click)="send()"
+    *ngIf="currentStep === 5"
+    >
+    Send email
+  </button>
     </div>
   
     <!-- <div class="flex gap-4 mt-4">

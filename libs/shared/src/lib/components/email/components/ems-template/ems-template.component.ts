@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StepperComponent } from '@progress/kendo-angular-layout';
 import { EmailService } from '../../email.service';
+import { Router } from '@angular/router';
 
 /**
  * Email template to create distribution list
@@ -61,7 +62,7 @@ export class EmsTemplateComponent {
    *
    * @param emailService helper functions
    */
-  constructor(public emailService: EmailService) {
+  constructor(public emailService: EmailService, private router: Router) {
     this.steps = [
       {
         label: 'Notification/Alert',
@@ -93,6 +94,11 @@ export class EmsTemplateComponent {
         isValid: this.isStepValid,
         validate: this.shouldValidate,
       },
+      // {
+      //   label: 'Send',
+      //   isValid: this.isStepValid,
+      //   validate: this.shouldValidate,
+      // },
       // {
       //   label: 'Send',
       //   isValid: this.isStepValid,
@@ -171,6 +177,29 @@ export class EmsTemplateComponent {
   // }
 
   /**
+   * Sending emails
+   */
+  public send(): void {
+    console.log('meow here');
+
+    const emailData = {
+      // Your email data here
+    };
+
+    this.emailService
+      .sendEmail(this.emailService.configId, emailData)
+      .subscribe(
+        (response) => {
+          console.log('Email sent successfully:', response);
+          this.router.navigate(['./settings/newems']);
+        },
+        (error) => {
+          console.error('Error sending email:', error);
+        }
+      );
+  }
+
+  /**
    * This function returns the form group at the specified index.
    *
    * @param index The index of the form group.
@@ -190,14 +219,16 @@ export class EmsTemplateComponent {
    */
   submit() {
     if (Object.keys(this.emailService.datasetsForm.value).length) {
-      this.emailService.datasetsForm?.value?.dataSets.forEach((data: any) => {
+      this.emailService.datasetsForm?.value?.datasets?.forEach((data: any) => {
         delete data.cacheData;
       });
       this.emailService
         .addEmailNotification(this.emailService.datasetsForm.value)
         .subscribe((res: any) => {
           console.log(res);
-          window.location.reload();
+          this.emailService.configId = res.data.addEmailNotification.id;
+          console.log(this.emailService.configId);
+          //window.location.reload();
         });
     }
   }

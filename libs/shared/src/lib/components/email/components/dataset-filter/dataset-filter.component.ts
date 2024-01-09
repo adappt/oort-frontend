@@ -134,7 +134,9 @@ export class DatasetFilterComponent implements OnDestroy {
         },
       });
       if (this.resourcesQuery && ITEMS_PER_PAGE > -1) {
+        this.loading = true;
         this.resourcesQuery.valueChanges.subscribe(({ data }) => {
+          this.loading = false;
           ITEMS_PER_PAGE =
             ITEMS_PER_PAGE > data?.resources?.totalCount ? -1 : ITEMS_PER_PAGE;
           const resources =
@@ -163,6 +165,7 @@ export class DatasetFilterComponent implements OnDestroy {
         )
       );
       this.resource = {};
+      this.loading = true;
       this.apollo
         .query<ResourceQueryResponse>({
           query: GET_RESOURCE,
@@ -171,6 +174,7 @@ export class DatasetFilterComponent implements OnDestroy {
           },
         })
         .subscribe((res) => {
+          this.loading = false;
           this.resource = res.data.resource;
           this.metaData = res.data?.resource?.metadata;
           if (this.metaData?.length) {

@@ -25,6 +25,11 @@
   }
 }
 
+.divScroll {
+  height: 250px !important;
+  overflow: scroll !important;
+}
+
 :host button > * {
   pointer-events: none;
 }

@@ -5,6 +5,8 @@ import { UnsubscribeComponent } from '../utils/unsubscribe/unsubscribe.component
 import { takeUntil } from 'rxjs';
 import { DistributionList } from '../../models/distribution-list.model';
 
+/** Default number of items per request for pagination */
+const DEFAULT_PAGE_SIZE = 5;
 /**
  * Email Notification setup component.
  */
@@ -18,6 +20,15 @@ export class EmailComponent extends UnsubscribeComponent {
   templateActualData: any = [];
   public loading = true;
   public distributionLists: DistributionList[] = [];
+  public emailNotifications = [];
+  public pageInfo = {
+    pageIndex: 0,
+    pageSize: DEFAULT_PAGE_SIZE,
+    length: 0,
+    endCursor: '',
+  };
+  // === DISPLAYED COLUMNS ===
+  public displayedColumns = ['name', 'alerttype', 'createdby', 'actions'];
 
   /**
    *
@@ -54,8 +65,15 @@ export class EmailComponent extends UnsubscribeComponent {
         this.templateActualData.push(ele.node);
         this.loading = false;
       });
+      this.filterTemplateData = this.templateActualData;
+      // this.emailNotifications = this.filterTemplateData.slice(
+      //   this.pageInfo.pageSize * this.pageInfo.pageIndex,
+      //   this.pageInfo.pageSize * (this.pageInfo.pageIndex + 1)
+      // );
+      // this.pageInfo.length = res?.data?.emailNotifications?.edges.length;
+      // // this.pageInfo.endCursor =
+      // //   res.data.application.customNotifications.pageInfo.endCursor;
     });
-    this.filterTemplateData = this.templateActualData;
   }
 
   /**
@@ -70,6 +88,9 @@ export class EmailComponent extends UnsubscribeComponent {
     );
   }
 
+  /**
+   *
+   */
   getDistribuionList() {
     this.applicationService.application$
       .pipe(takeUntil(this.destroy$))

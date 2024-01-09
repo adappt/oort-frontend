@@ -8,6 +8,8 @@ import {
   IconModule,
   ButtonModule,
   SpinnerModule,
+  TableModule,
+  PaginatorModule,
 } from '@oort-front/ui';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
@@ -75,6 +77,8 @@ import { EmsTemplateComponent } from './components/ems-template/ems-template.com
     EditorModule,
     ButtonModule,
     SpinnerModule,
+    TableModule,
+    PaginatorModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

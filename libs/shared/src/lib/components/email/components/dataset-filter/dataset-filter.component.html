@@ -271,19 +271,19 @@
               >
                 {{ 'components.queryBuilder.fields.available' | translate }}
               </label>
+              <div class="mt-4">
+                <input
+                  id="searchBar"
+                  type="text"
+                  [(ngModel)]="searchAvailableField"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="Search"
+                  class="mt-1 block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
               <div
-                class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 divScroll"
               >
-                <div class="mt-4">
-                  <input
-                    id="searchBar"
-                    type="text"
-                    [(ngModel)]="searchAvailableField"
-                    [ngModelOptions]="{ standalone: true }"
-                    placeholder="Search"
-                    class="mt-1 block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
                 <ng-container *ngFor="let fieldDetails of availableFields">
                   <div
                     *ngIf="fieldDetails?.name?.includes(searchAvailableField)"
@@ -307,19 +307,19 @@
               >
                 {{ 'components.queryBuilder.fields.selected' | translate }}
               </label>
+              <div class="mt-4">
+                <input
+                  id="searchBarSelected"
+                  type="text"
+                  [(ngModel)]="searchSelectedField"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="Search"
+                  class="mt-1 block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
               <div
-                class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                <div class="mt-4">
-                  <input
-                    id="searchBarSelected"
-                    type="text"
-                    [(ngModel)]="searchSelectedField"
-                    [ngModelOptions]="{ standalone: true }"
-                    placeholder="Search"
-                    class="mt-1 block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
+                class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 divScroll"
+              >                
                 <ng-container *ngFor="let fields of selectedFields">
                   <div
                     *ngIf="fields?.name?.includes(searchSelectedField)"

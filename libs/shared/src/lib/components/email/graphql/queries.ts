@@ -96,25 +96,36 @@ export const GET_EMAIL_NOTIFICATIONS = gql`
 
 /** Graphql query for getting data set by filter layout */
 export const ADD_EMAIL_NOTIFICATION = gql`
-  mutation sample($notification: EmailNotificationInputType!) {
+  mutation Mutation($notification: EmailNotificationInputType!) {
     addEmailNotification(notification: $notification) {
-      id
       dataSets {
-        name
         pageSize
         filter
         fields
       }
-      name
+      modifiedAt
+      schedule
       createdBy
+      emailLayout {
+        subject
+        header
+        footer
+        body
+        banner
+      }
+      id
+      isDeleted
       lastExecution
-      status
+      name
+      notificationType
       recipients {
+        distributionListName
         To
         Cc
         Bcc
-        distributionListName
       }
+      recipientsType
+      status
     }
   }
 `;

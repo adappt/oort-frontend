@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EMAIL_LAYOUT_CONFIG } from '../../../../const/tinymce.const';
 import { EditorService } from '../../../../services/editor/editor.service';
 import { EmailService } from '../../email.service';
@@ -12,7 +12,7 @@ import { ViewChild } from '@angular/core';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit, OnDestroy {
   @ViewChild('bodyEditor', { static: false })
   bodyEditor: EditorComponent | null = null;
   /** Tinymce editor configuration */
@@ -150,5 +150,13 @@ export class LayoutComponent implements OnInit {
         .value,
     };
     return colors;
+  }
+
+  /**
+   * patch the data in service file.
+   *
+   */
+  ngOnDestroy(): void {
+    this.emailService.patchEmailLayout();
   }
 }

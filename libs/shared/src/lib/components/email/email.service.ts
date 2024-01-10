@@ -28,6 +28,7 @@ export class EmailService {
   public bccEmailFilter!: FormGroup | any;
   public allPreviewData: any[] = [];
   public notificationTypes: string[] = ['email', 'alert', 'push notification'];
+  public emailLayout!: any;
   public recipients: {
     distributionListName: string;
     To: string[];
@@ -47,11 +48,12 @@ export class EmailService {
       index: 0,
     },
   ];
-  allLayoutdata: any = {
+  public allLayoutdata: any = {
     txtSubject: '',
     headerHtml: '',
     bodyHtml: '',
     footerHtml: '',
+    bannerImage: null,
     headerLogo: null,
     footerLogo: null,
   };
@@ -97,7 +99,7 @@ export class EmailService {
       notificationType: [null, Validators.required],
       dataSets: new FormArray([this.createNewDataSetGroup()]),
       recipients: this.recipients,
-      emailLayout: this.allLayoutdata,
+      emailLayout: this.emailLayout,
       schedule: [''],
     });
   }
@@ -139,6 +141,27 @@ export class EmailService {
    */
   getAllPreviewData(): any[] {
     return this.allPreviewData;
+  }
+
+  /**
+   * Retrieves all preview data objects.
+   *
+   */
+  patchEmailLayout(): void {
+    this.emailLayout = {
+      subject: this.allLayoutdata?.txtSubject,
+      header: {
+        headerHtml: this.allLayoutdata?.headerHtml,
+        headerLogo: this.allLayoutdata?.headerLogo,
+      },
+      body: this.allLayoutdata?.bodyHtml,
+      banner: this.allLayoutdata?.bannerImage,
+      footer: {
+        footerHtml: this.allLayoutdata?.footerHtml,
+        footerLogo: this.allLayoutdata?.footerLogo,
+      },
+    };
+    this.datasetsForm.get('emailLayout')?.setValue(this.emailLayout);
   }
 
   /**

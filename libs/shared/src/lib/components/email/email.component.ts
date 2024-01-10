@@ -121,7 +121,7 @@ export class EmailComponent extends UnsubscribeComponent {
         ele.active = false;
       });
       this.emailService.tabs[this.emailService.tabs.length - 1].active = true;
-      
+
       //Creating DatasetForm
       this.emailService.datasetsForm = this.formBuilder.group({
         name: emailData.name,
@@ -139,7 +139,7 @@ export class EmailComponent extends UnsubscribeComponent {
 
       //Setting up edit screen
       this.emailService.isExisting = !this.emailService.isExisting;
-      
+
       //Setting up Recipients data
       this.emailService.recipients =
         this.emailService.datasetsForm.controls['recipients'].value;

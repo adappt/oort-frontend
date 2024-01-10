@@ -76,7 +76,11 @@ export class DatasetFilterComponent implements OnDestroy {
       const name = 'Block ' + (this.activeTab.index + 1);
       this.query.controls['name'].setValue(name);
     }
-    if (!this.emailService?.resourcesNameId?.length) {
+    if (
+      !this.emailService?.resourcesNameId?.length ||
+      (this.query?.value?.cacheData?.resource === undefined &&
+        this.query?.value?.resource?.id)
+    ) {
       this.getResourceDataOnScroll();
     }
     this.filteredFields = this.resource?.fields;
@@ -144,6 +148,13 @@ export class DatasetFilterComponent implements OnDestroy {
           this.emailService.resourcesNameId = resources.map((element) => {
             return { id: element?.id?.toString(), name: element?.name };
           });
+
+          //Edit Mode data
+          if (this.query?.value?.resource?.id) {
+            this.selectedResourceId = this.query?.value?.resource?.id;
+            this.getResourceData();
+            console.log(this.datasetFilterInfo);
+          }
         });
       }
     }
@@ -156,7 +167,7 @@ export class DatasetFilterComponent implements OnDestroy {
     this.availableFields = [];
     this.selectedFields = [];
     this.filterFields = [];
-    this.query.get('fields').reset();
+    // this.query.get('fields').reset();
     // console.log(this.query.value.fields);
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
       this.query.controls.resource.setValue(
@@ -223,12 +234,43 @@ export class DatasetFilterComponent implements OnDestroy {
                       this.filterFields.push(obj);
                     });
                   } else {
+                    this.availableFields =
+                      this.availableFields == undefined
+                        ? []
+                        : this.availableFields;
+                    this.filterFields =
+                      this.filterFields == undefined ? [] : this.filterFields;
                     this.availableFields.push(clone(field));
                     this.filterFields.push(clone(field));
                   }
                 }
               }
             });
+
+            //Checking Edit mode data
+            if (
+              this.query?.controls?.fields?.value &&
+              (this.selectedFields === undefined ||
+                this.selectedFields.length === 0)
+            ) {
+              this.selectedFields =
+                this.selectedFields === undefined ? [] : this.selectedFields;
+              this.selectedFields =
+                this.query?.controls?.fields?.value?.length > 0
+                  ? this.query?.controls?.fields?.value
+                  : this.selectedFields;
+              this.query?.controls?.fields?.value?.forEach((fieldEle: any) => {
+                this.addSelectiveFields(fieldEle);
+              });
+            }
+
+            if (this.query?.controls?.filter?.value) {
+              this.query?.controls?.filter?.value?.filters?.forEach(
+                (fValue: any, fIndex: number) => {
+                  this.setField(fValue.field, fIndex);
+                }
+              );
+            }
           }
         });
     }
@@ -352,7 +394,7 @@ export class DatasetFilterComponent implements OnDestroy {
    * @param fieldIndex filter row index
    */
   public setField(event: any, fieldIndex: number) {
-    const name = event.target.value;
+    const name = event?.target?.value || event;
     const fields = clone(this.metaData);
     const field = fields.find(
       (x: { name: any }) => x.name === name.split('.')[0]

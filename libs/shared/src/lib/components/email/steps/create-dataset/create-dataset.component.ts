@@ -57,6 +57,7 @@ export class CreateDatasetComponent implements OnInit {
 
   ngOnInit(): void {
     this.filteredFields = this.resource?.fields;
+    this.tabIndex = this.activeTab.index;
   }
 
   /**

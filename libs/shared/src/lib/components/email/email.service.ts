@@ -29,6 +29,12 @@ export class EmailService {
   public allPreviewData: any[] = [];
   public notificationTypes: string[] = ['email', 'alert', 'push notification'];
   public emailLayout!: any;
+  public headerBackgroundColor = '#00205C';
+  public headerTextColor = '#FFFFFF';
+  public bodyBackgroundColor = '#FFFFFF';
+  public bodyTextColor = '#000000';
+  public footerBackgroundColor = '#FFFFFF';
+  public footerTextColor = '#000000';
   public recipients: {
     distributionListName: string;
     To: string[];
@@ -56,6 +62,12 @@ export class EmailService {
     bannerImage: null,
     headerLogo: null,
     footerLogo: null,
+    headerBackgroundColor: this.headerBackgroundColor,
+    headerTextColor: this.headerTextColor,
+    bodyBackgroundColor: this.bodyBackgroundColor,
+    bodyTextColor: this.bodyTextColor,
+    footerBackgroundColor: this.footerBackgroundColor,
+    footerTextColor: this.footerTextColor,
   };
   isExisting = true;
 
@@ -153,12 +165,20 @@ export class EmailService {
       header: {
         headerHtml: this.allLayoutdata?.headerHtml,
         headerLogo: this.allLayoutdata?.headerLogo,
+        headerBackgroundColor: this.allLayoutdata.headerBackgroundColor,
+        headerTextColor: this.allLayoutdata.headerTextColor,
       },
-      body: this.allLayoutdata?.bodyHtml,
+      body: {
+        bodyHtml: this.allLayoutdata?.bodyHtml,
+        bodyBackgroundColor: this.allLayoutdata.bodyBackgroundColor,
+        bodyTextColor: this.allLayoutdata.bodyTextColor,
+      },
       banner: this.allLayoutdata?.bannerImage,
       footer: {
         footerHtml: this.allLayoutdata?.footerHtml,
         footerLogo: this.allLayoutdata?.footerLogo,
+        footerBackgroundColor: this.allLayoutdata.footerBackgroundColor,
+        footerTextColor: this.allLayoutdata.footerTextColor,
       },
     };
     this.datasetsForm.get('emailLayout')?.setValue(this.emailLayout);

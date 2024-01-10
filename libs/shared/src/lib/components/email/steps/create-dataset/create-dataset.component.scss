@@ -19,7 +19,6 @@
   &:hover,
   &:focus,
   .k-item.k-state-default.k-state-active{
-    // TODO: On active/ selected/ current tab, make underline 2E90FA and background F5FAFF
     border-bottom: 2px solid #717171 !important;
     background-color: #F5FAFF !important;
   }
@@ -41,7 +40,7 @@
       .k-item.k-active {
         margin-bottom: 0px !important;
         border-bottom-width: 2px !important;
-        border-bottom-color: #2E90FA !important; // stylelint-disable-line declaration-no-important
+        border-bottom-color: #2E90FA !important;
       }
   }
 }

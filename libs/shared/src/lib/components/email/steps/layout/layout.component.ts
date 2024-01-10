@@ -118,6 +118,47 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Checks that theres only 1 dataset row and returns the fields in that row if so.
+   *
+   * @returns The fields in the dataset, else null.
+   */
+  checkSingleDatasetRow(): string[] | null {
+    if (
+      this.emailService.allPreviewData.length === 1 &&
+      this.emailService.allPreviewData[0].dataList &&
+      this.emailService.allPreviewData[0].dataList.length === 1 &&
+      Object.keys(this.emailService.allPreviewData[0].dataList[0]).length === 1
+    ) {
+      // Return the fields from the single row of data
+      return Object.keys(this.emailService.allPreviewData[0].dataList[0]);
+    }
+    return null;
+  }
+
+  /**
+   * Inserts a dataset token into the subject field based on the selected field.
+   *
+   * @param event The event object containing the selected field.
+   */
+  insertSubjectFieldToken(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const field = selectElement.value;
+    if (field) {
+      const subjectInput = document.getElementById(
+        'subjectInput'
+      ) as HTMLInputElement;
+      if (subjectInput) {
+        const cursorPos = subjectInput.selectionStart || 0;
+        const textBefore = subjectInput.value.substring(0, cursorPos);
+        const textAfter = subjectInput.value.substring(cursorPos);
+        subjectInput.value = textBefore + `{{${field}}}` + textAfter;
+        // Update the subject value
+        this.emailService.allLayoutdata.txtSubject = subjectInput.value;
+      }
+    }
+  }
+
+  /**
    * Handles changes to the editor content and updates the layout data accordingly.
    *
    * @param event The event object containing the updated content.
@@ -149,12 +190,18 @@ export class LayoutComponent implements OnInit, OnDestroy {
       footerColor: (document.getElementById('footerColor') as HTMLInputElement)
         .value,
     };
+
+    this.emailService.headerBackgroundColor = colors.headerBackground;
+    this.emailService.headerTextColor = colors.headerColor;
+    this.emailService.bodyBackgroundColor = colors.bodyBackground;
+    this.emailService.bodyTextColor = colors.bodyColor;
+    this.emailService.footerBackgroundColor = colors.footerBackground;
+    this.emailService.footerTextColor = colors.footerColor;
     return colors;
   }
 
   /**
    * patch the data in service file.
-   *
    */
   ngOnDestroy(): void {
     this.emailService.patchEmailLayout();

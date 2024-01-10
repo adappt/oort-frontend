@@ -77,6 +77,9 @@
 		},
 		"comma": "virgule",
 		"copy": "Copier",
+		"copyright": {
+			"who": "Copyright © World Health Organization 2023."
+		},
 		"create": "Créer",
 		"createdOn": "Date de création",
 		"cronEditor": {

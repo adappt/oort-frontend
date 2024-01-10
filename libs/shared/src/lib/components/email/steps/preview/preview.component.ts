@@ -90,28 +90,39 @@ export class PreviewComponent implements OnInit {
       return '<label class="block text-gray-700 text-sm">no data found</label>';
     }
 
-    let tableHtml =
-      '<table id="tblPreview" style="width: 95%; margin: auto;" class="dataset-preview border border-blue-600 shadow-xs m-1">';
-    tableHtml +=
-      '<thead class="bg-blue-600 border-blue-600 shadow-xs text-white">';
-    tableHtml +=
-      '<tr class="bg-blue-600 border-blue-600 shadow-xs text-white">';
-    previewData.dataSetFields.forEach((fieldKeyString: any) => {
-      tableHtml += `<th class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center">${this.emailService.replaceUnderscores(
-        fieldKeyString
-      )}</th>`;
-    });
-    tableHtml += '</tr></thead><tbody>';
+    const theadHtml = previewData.dataSetFields
+      .map(
+        (fieldKeyString: any) =>
+          `<th class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center">${this.emailService.replaceUnderscores(
+            fieldKeyString
+          )}</th>`
+      )
+      .join('');
 
-    previewData.dataList.forEach((data: any) => {
-      tableHtml += '<tr class="bg-white-600 border-blue-600 text-blue-600">';
-      previewData.dataSetFields.forEach((fieldKeyString: any) => {
-        tableHtml += `<td class="p-2 border border-blue-600 shadow-xs m-1 text-center">${data[fieldKeyString]}</td>`;
-      });
-      tableHtml += '</tr>';
-    });
+    const tbodyHtml = previewData.dataList
+      .map(
+        (data: any) =>
+          `<tr class="bg-white-600 border-blue-600 text-blue-600">${previewData.dataSetFields
+            .map(
+              (fieldKeyString: any) =>
+                `<td class="p-2 border border-blue-600 shadow-xs m-1 text-center">${data[fieldKeyString]}</td>`
+            )
+            .join('')}</tr>`
+      )
+      .join('');
 
-    tableHtml += '</tbody></table>';
+    const tableHtml = `
+      <table id="tblPreview" style="width: 95%; margin: auto;" class="dataset-preview border border-blue-600 shadow-xs m-1">
+        <thead class="bg-blue-600 border-blue-600 shadow-xs text-white">
+          <tr class="bg-blue-600 border-blue-600 shadow-xs text-white">
+            ${theadHtml}
+          </tr>
+        </thead>
+        <tbody>
+          ${tbodyHtml}
+        </tbody>
+      </table>
+    `;
     return tableHtml;
   }
 

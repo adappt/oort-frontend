@@ -123,7 +123,6 @@ export class DatasetFilterComponent implements OnDestroy {
   }
 
   /**
-   *
    * To fetch Resource Data On Scroll
    */
   getResourceDataOnScroll() {

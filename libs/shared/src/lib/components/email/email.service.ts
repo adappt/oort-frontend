@@ -106,6 +106,13 @@ export class EmailService {
     private apollo: Apollo,
     private http: HttpClient
   ) {
+    this.setDatasetForm();
+  }
+
+  /**
+   *
+   */
+  setDatasetForm() {
     this.datasetsForm = this.formBuilder.group({
       name: ['', Validators.required],
       notificationType: [null, Validators.required],
@@ -373,6 +380,10 @@ export class EmailService {
     });
   }
 
+  /**
+   *
+   * @param id
+   */
   getEmailNotification(id: string) {
     return this.apollo.query<any>({
       query: GET_EMAIL_NOTIFICATION,
@@ -385,6 +396,8 @@ export class EmailService {
 
   /**
    * sending emails to endpoint
+   *
+   * @param configId
    * @param emailData data to be send
    * @returns rest post to end point
    */

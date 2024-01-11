@@ -25,6 +25,7 @@ export class CreateNotificationComponent {
    * Toggles the state of `isExisting` property in the `EmailService`.
    */
   toggle() {
+    this.emailService.setDatasetForm();
     this.emailService.isExisting = !this.emailService.isExisting;
   }
 }

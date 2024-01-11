@@ -104,54 +104,56 @@ export class EmailComponent extends UnsubscribeComponent {
    *
    * @param id
    */
-  getEmailNotificationById(id: string) {
+  getEmailNotificationById(id: string, applicationId: string) {
     this.loading = true;
-    this.emailService.getEmailNotification(id).subscribe((res) => {
-      this.loading = false;
-      const emailData = res.data.editAndGetEmailNotification;
-      const dataArray: FormArray | any = new FormArray([]);
-      for (let index = 0; index < emailData.dataSets.length; index++) {
-        //Adding Tabs detail
-        dataArray.push(this.createNewDataSetGroup(emailData.dataSets[index]));
-        if (index === 0) {
-          this.emailService.tabs[0].title = emailData.dataSets[index].name;
-          this.emailService.tabs[0].content = emailData.dataSets[index].name;
-        } else {
-          this.emailService.tabs.push({
-            title: emailData.dataSets[index].name,
-            content: emailData.dataSets[index].name,
-            active: false,
-            index: index,
-          });
+    this.emailService
+      .getEmailNotification(id, applicationId)
+      .subscribe((res) => {
+        this.loading = false;
+        const emailData = res.data.editAndGetEmailNotification;
+        const dataArray: FormArray | any = new FormArray([]);
+        for (let index = 0; index < emailData.dataSets.length; index++) {
+          //Adding Tabs detail
+          dataArray.push(this.createNewDataSetGroup(emailData.dataSets[index]));
+          if (index === 0) {
+            this.emailService.tabs[0].title = emailData.dataSets[index].name;
+            this.emailService.tabs[0].content = emailData.dataSets[index].name;
+          } else {
+            this.emailService.tabs.push({
+              title: emailData.dataSets[index].name,
+              content: emailData.dataSets[index].name,
+              active: false,
+              index: index,
+            });
+          }
         }
-      }
-      this.emailService.tabs.forEach((ele: any) => {
-        ele.active = false;
+        this.emailService.tabs.forEach((ele: any) => {
+          ele.active = false;
+        });
+        this.emailService.tabs[this.emailService.tabs.length - 1].active = true;
+
+        //Creating DatasetForm
+        this.emailService.datasetsForm = this.formBuilder.group({
+          name: emailData.name,
+          notificationType: emailData.notificationType,
+          dataSets: dataArray,
+          recipients: {
+            distributionListName: emailData.recipients.distributionListName,
+            To: emailData.recipients.To,
+            Cc: emailData.recipients.Cc,
+            Bcc: emailData.recipients.Bcc,
+          },
+          emailLayout: emailData.emailLayout,
+          schedule: emailData.schedule,
+        });
+
+        //Setting up edit screen
+        this.emailService.isExisting = !this.emailService.isExisting;
+
+        //Setting up Recipients data
+        this.emailService.recipients =
+          this.emailService.datasetsForm.controls['recipients'].value;
       });
-      this.emailService.tabs[this.emailService.tabs.length - 1].active = true;
-
-      //Creating DatasetForm
-      this.emailService.datasetsForm = this.formBuilder.group({
-        name: emailData.name,
-        notificationType: emailData.notificationType,
-        dataSets: dataArray,
-        recipients: {
-          distributionListName: emailData.recipients.distributionListName,
-          To: emailData.recipients.To,
-          Cc: emailData.recipients.Cc,
-          Bcc: emailData.recipients.Bcc,
-        },
-        emailLayout: emailData.emailLayout,
-        schedule: emailData.schedule,
-      });
-
-      //Setting up edit screen
-      this.emailService.isExisting = !this.emailService.isExisting;
-
-      //Setting up Recipients data
-      this.emailService.recipients =
-        this.emailService.datasetsForm.controls['recipients'].value;
-    });
   }
 
   /**
@@ -204,7 +206,7 @@ export class EmailComponent extends UnsubscribeComponent {
    * @param data
    */
   public editEmailNotification(data: any) {
-    this.getEmailNotificationById(data.id);
+    this.getEmailNotificationById(data.id, data.applicationId);
   }
 
   // eslint-disable-next-line jsdoc/require-description
@@ -218,9 +220,11 @@ export class EmailComponent extends UnsubscribeComponent {
     this.templateActualData = [];
     this.filterTemplateData = [];
 
-    this.emailService.deleteEmailNotification(data.id).subscribe((res) => {
-      this.getExistingTemplate();
-      console.log(res);
-    });
+    this.emailService
+      .deleteEmailNotification(data.id, data.applicationId)
+      .subscribe((res) => {
+        this.getExistingTemplate();
+        console.log(res);
+      });
   }
 }

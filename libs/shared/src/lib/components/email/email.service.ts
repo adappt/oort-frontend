@@ -390,12 +390,13 @@ export class EmailService {
    * @param id The notification data id.
    * @returns A query result .
    */
-  getEmailNotification(id: string) {
+  getEmailNotification(id: string, applicationId: string) {
     return this.apollo.query<any>({
       query: GET_AND_UPDATE_EMAIL_NOTIFICATION,
       variables: {
         notification: null,
         editEmailNotificationId: id,
+        applicationId: applicationId,
       },
     });
   }
@@ -406,12 +407,13 @@ export class EmailService {
    * @param id The notification data id.
    * @returns A query result .
    */
-  deleteEmailNotification(id: string) {
+  deleteEmailNotification(id: string, applicationId: string) {
     return this.apollo.query<any>({
       query: GET_AND_UPDATE_EMAIL_NOTIFICATION,
       variables: {
         notification: {
           isDeleted: 1,
+          applicationId: applicationId,
         },
         editEmailNotificationId: id,
       },

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   ADD_EMAIL_NOTIFICATION,
+  GET_AND_UPDATE_EMAIL_NOTIFICATION,
   GET_DATA_SET,
-  GET_EMAIL_NOTIFICATION,
   GET_EMAIL_NOTIFICATIONS,
 } from './graphql/queries';
 import { Apollo } from 'apollo-angular';
@@ -381,14 +381,34 @@ export class EmailService {
   }
 
   /**
+   * Get an email notification with the provided id.
    *
-   * @param id
+   * @param id The notification data id.
+   * @returns A query result .
    */
   getEmailNotification(id: string) {
     return this.apollo.query<any>({
-      query: GET_EMAIL_NOTIFICATION,
+      query: GET_AND_UPDATE_EMAIL_NOTIFICATION,
       variables: {
         notification: null,
+        editEmailNotificationId: id,
+      },
+    });
+  }
+
+  /**
+   * Delete an email notification with the provided id.
+   *
+   * @param id The notification data id.
+   * @returns A query result .
+   */
+  deleteEmailNotification(id: string) {
+    return this.apollo.query<any>({
+      query: GET_AND_UPDATE_EMAIL_NOTIFICATION,
+      variables: {
+        notification: {
+          isDeleted: 1,
+        },
         editEmailNotificationId: id,
       },
     });

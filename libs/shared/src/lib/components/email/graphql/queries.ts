@@ -131,7 +131,7 @@ export const ADD_EMAIL_NOTIFICATION = gql`
 `;
 
 /** Graphql query for getting  EMAIL_NOTIFICATION */
-export const GET_EMAIL_NOTIFICATION = gql`
+export const GET_AND_UPDATE_EMAIL_NOTIFICATION = gql`
   mutation EditEmailNotification(
     $editEmailNotificationId: ID!
     $notification: EmailNotificationInputType
@@ -173,6 +173,7 @@ export const GET_EMAIL_NOTIFICATION = gql`
       }
       lastExecution
       recipientsType
+      isDeleted
     }
   }
 `;

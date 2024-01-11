@@ -205,6 +205,14 @@ export class EmailComponent extends UnsubscribeComponent {
    * @param data
    */
   public deleteEmailNotification(data: any) {
-    console.log(data);
+    this.distributionLists = [];
+    this.emailNotifications = [];
+    this.templateActualData = [];
+    this.filterTemplateData = [];
+
+    this.emailService.deleteEmailNotification(data.id).subscribe((res) => {
+      this.getExistingTemplate();
+      console.log(res);
+    });
   }
 }

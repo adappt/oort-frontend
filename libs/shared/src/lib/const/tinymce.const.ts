@@ -211,11 +211,15 @@ export const INLINE_EDITOR_CONFIG: RawEditorSettings = {
   content_style: 'p { margin: 0 !important; }',
 };
 
+/**
+ * Configuration for the email layout editor with predefined settings.
+ * This configuration sets up the TinyMCE editor with various plugins,
+ * toolbar options, and other settings tailored for editing email layouts.
+ */
 export const EMAIL_LAYOUT_CONFIG: RawEditorSettings = {
   suffix: '.min',
   plugins:
     'preview paste importcss searchreplace autolink code visualblocks visualchars fullscreen image link media table charmap hr nonbreaking insertdatetime advlist lists wordcount imagetools textpattern help charmap quickbars emoticons',
-  // imagetools_cors_hosts: ['picsum.photos'],
   menubar: 'edit view insert format tools table help',
   toolbar:
     'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap emoticons | fullscreen  preview save | insertfile image media link',

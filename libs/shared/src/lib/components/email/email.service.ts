@@ -54,20 +54,50 @@ export class EmailService {
       index: 0,
     },
   ];
+
+  /** EMAIL LAYOUT DATA */
   public allLayoutdata: any = {
-    txtSubject: '',
-    headerHtml: '',
-    bodyHtml: '',
-    footerHtml: '',
+    /** IMAGES AND STYLES */
     bannerImage: null,
+    bannerImageStyle: '',
+    whoLogo: null,
+    whoLogoStyle: '',
+    /** CONTAINER STYLE */
+    containerStyle: '',
+    /** FOOTER COPYRIGHT STYLE */
+    copyrightStyle: '',
+    /** EMAIL SUBJECT */
+    txtSubject: '',
+    /** EMAIL HEADER */
+    headerHtml: '',
     headerLogo: null,
-    footerLogo: null,
+    headerLogoStyle: '',
     headerBackgroundColor: this.headerBackgroundColor,
     headerTextColor: this.headerTextColor,
+    headerStyle: '',
+    /** EMAIL BODY */
+    bodyHtml: '',
     bodyBackgroundColor: this.bodyBackgroundColor,
     bodyTextColor: this.bodyTextColor,
+    bodyStyle: '',
+    /** EMAIL FOOTER */
+    footerHtml: '',
+    footerLogo: null,
     footerBackgroundColor: this.footerBackgroundColor,
     footerTextColor: this.footerTextColor,
+    footerStyle: '',
+    footerImgStyle: '',
+    footerHtmlStyle: '',
+  };
+
+  /** DEFAULT BLOCK DATASET TABLE STYLE */
+  public defaultTableStyle: any = {
+    tableStyle: '',
+    theadStyle: '',
+    tbodyStyle: '',
+    thStyle: '',
+    trStyle: '',
+    tdStyle: '',
   };
   isExisting = true;
 
@@ -97,9 +127,9 @@ export class EmailService {
   /**
    * Constructs the EmailService instance.
    *
-   * @param formBuilder - The FormBuilder instance used to create form groups and controls
-   * @param apollo - The Apollo server instance used for GraphQL queries
-   * @param http
+   * @param formBuilder The FormBuilder instance used to create form groups and controls
+   * @param apollo The Apollo server instance used for GraphQL queries
+   * @param http The HttpClient instance used for making HTTP requests
    */
   constructor(
     private formBuilder: FormBuilder,
@@ -110,7 +140,7 @@ export class EmailService {
   }
 
   /**
-   *
+   * Initialises the `datasetsForm` with a default structure and validators.
    */
   setDatasetForm() {
     this.datasetsForm = this.formBuilder.group({
@@ -122,6 +152,69 @@ export class EmailService {
       emailLayout: this.emailLayout,
       schedule: [''],
     });
+  }
+
+  /**
+   * Sets the email layout styles.
+   */
+  setEmailStyles(styles: { [key: string]: string }) {
+    if (styles.headerStyle !== undefined) {
+      this.allLayoutdata.headerStyle = styles.headerStyle;
+    }
+    if (styles.bodyStyle !== undefined) {
+      this.allLayoutdata.bodyStyle = styles.bodyStyle;
+    }
+    if (styles.footerStyle !== undefined) {
+      this.allLayoutdata.footerStyle = styles.footerStyle;
+    }
+    if (styles.footerImgStyle !== undefined) {
+      this.allLayoutdata.footerImgStyle = styles.footerImgStyle;
+    }
+    if (styles.footerHtmlStyle !== undefined) {
+      this.allLayoutdata.footerHtmlStyle = styles.footerHtmlStyle;
+    }
+    if (styles.bannerStyle !== undefined) {
+      this.allLayoutdata.bannerStyle = styles.bannerStyle;
+    }
+    if (styles.whoLogoStyle !== undefined) {
+      this.allLayoutdata.whoLogoStyle = styles.whoLogoStyle;
+    }
+    if (styles.headerLogoStyle !== undefined) {
+      this.allLayoutdata.headerLogoStyle = styles.headerLogoStyle;
+    }
+    if (styles.bannerImageStyle !== undefined) {
+      this.allLayoutdata.bannerImageStyle = styles.bannerImageStyle;
+    }
+    if (styles.copyrightStyle !== undefined) {
+      this.allLayoutdata.copyrightStyle = styles.copyrightStyle;
+    }
+    if (styles.containerStyle !== undefined) {
+      this.allLayoutdata.containerStyle = styles.containerStyle;
+    }
+  }
+
+  /**
+   * Sets the Table Styles.
+   */
+  setTableStyles(styles: { [key: string]: string }) {
+    if (styles.tableStyle !== undefined) {
+      this.defaultTableStyle.tableStyle = styles.tableStyle;
+    }
+    if (styles.theadStyle !== undefined) {
+      this.defaultTableStyle.theadStyle = styles.theadStyle;
+    }
+    if (styles.tbodyStyle !== undefined) {
+      this.defaultTableStyle.tbodyStyle = styles.tbodyStyle;
+    }
+    if (styles.thStyle !== undefined) {
+      this.defaultTableStyle.thStyle = styles.thStyle;
+    }
+    if (styles.trStyle !== undefined) {
+      this.defaultTableStyle.trStyle = styles.trStyle;
+    }
+    if (styles.tdStyle !== undefined) {
+      this.defaultTableStyle.tdStyle = styles.tdStyle;
+    }
   }
 
   /**
@@ -165,7 +258,6 @@ export class EmailService {
 
   /**
    * Retrieves all preview data objects.
-   *
    */
   patchEmailLayout(): void {
     this.emailLayout = {
@@ -175,21 +267,51 @@ export class EmailService {
         headerLogo: this.allLayoutdata?.headerLogo,
         headerBackgroundColor: this.allLayoutdata.headerBackgroundColor,
         headerTextColor: this.allLayoutdata.headerTextColor,
+        headerStyle: this.allLayoutdata?.headerStyle,
       },
       body: {
         bodyHtml: this.allLayoutdata?.bodyHtml,
         bodyBackgroundColor: this.allLayoutdata.bodyBackgroundColor,
         bodyTextColor: this.allLayoutdata.bodyTextColor,
+        bodyStyle: this.allLayoutdata?.bodyStyle,
       },
-      banner: this.allLayoutdata?.bannerImage,
+      banner: {
+        bannerImage: this.allLayoutdata?.bannerImage,
+        bannerImageStyle: this.allLayoutdata?.bannerImageStyle,
+        whoLogo: this.allLayoutdata?.whoLogo,
+        whoLogoStyle: this.allLayoutdata?.whoLogoStyle,
+        containerStyle: this.allLayoutdata?.containerStyle,
+        copyrightStyle: this.allLayoutdata?.copyrightStyle,
+      },
       footer: {
         footerHtml: this.allLayoutdata?.footerHtml,
         footerLogo: this.allLayoutdata?.footerLogo,
         footerBackgroundColor: this.allLayoutdata.footerBackgroundColor,
         footerTextColor: this.allLayoutdata.footerTextColor,
+        footerStyle: this.allLayoutdata?.footerStyle,
+        footerImgStyle: this.allLayoutdata?.footerImgStyle,
+        footerHtmlStyle: this.allLayoutdata?.footerHtmlStyle,
       },
     };
     this.datasetsForm.get('emailLayout')?.setValue(this.emailLayout);
+  }
+
+  /**
+   * Patches the table styles with the default values.
+   */
+  patchTableStyles(): void {
+    const tableStyles = {
+      tableStyle: this.defaultTableStyle?.tableStyle,
+      theadStyle: this.defaultTableStyle?.theadStyle,
+      tbodyStyle: this.defaultTableStyle?.tbodyStyle,
+      thStyle: this.defaultTableStyle?.thStyle,
+      trStyle: this.defaultTableStyle?.trStyle,
+      tdStyle: this.defaultTableStyle?.tdStyle,
+    };
+
+    console.log(tableStyles);
+
+    // this.datasetsForm.get('tableStyles')?.setValue(this.defaultTableStyle);
   }
 
   /**
@@ -343,7 +465,7 @@ export class EmailService {
   /**
    * Retrieves email notifications.
    *
-   * @param id
+   * @param id The application ids of the email notifications.
    * @returns Email notifications query result.
    */
   getEmailNotifications(id: string) {
@@ -354,20 +476,6 @@ export class EmailService {
       },
     });
   }
-
-  /**
-   * Retrieves email notificationIds.
-   *
-   */
-  // getEmailNotificationIds() {
-  //   const Ids: string[] = [];
-  //   this.getEmailNotifications().subscribe((res: any) => {
-  //     res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
-  //       Ids.push(ele.node.id);
-  //     });
-  //     return Ids;
-  //   });
-  // }
 
   /**
    * Adds an email notification with the provided data.
@@ -388,7 +496,8 @@ export class EmailService {
    * Get an email notification with the provided id.
    *
    * @param id The notification data id.
-   * @returns A query result .
+   * @param applicationId The application id of the email notification.
+   * @returns Email notification.
    */
   getEmailNotification(id: string, applicationId: string) {
     return this.apollo.query<any>({
@@ -405,7 +514,8 @@ export class EmailService {
    * Delete an email notification with the provided id.
    *
    * @param id The notification data id.
-   * @returns A query result .
+   * @param applicationId The application id of the email notification.
+   * @returns Email Notification.
    */
   deleteEmailNotification(id: string, applicationId: string) {
     return this.apollo.query<any>({

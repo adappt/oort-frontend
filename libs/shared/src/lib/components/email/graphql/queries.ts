@@ -77,17 +77,19 @@ export const GET_DATA_SET = gql`
 
 /** Graphql query for getting data set by filter layout */
 export const GET_EMAIL_NOTIFICATIONS = gql`
-  query EmailNotifications {
-    emailNotifications {
+  query EmailNotifications($applicationId: ID!) {
+    emailNotifications(applicationId: $applicationId) {
       edges {
         node {
-          recipientsType
-          name
-          createdBy
-          id
+          applicationId
+          createdAt
           recipients {
             distributionListName
           }
+          name
+          id
+          notificationType
+          createdBy
         }
       }
     }

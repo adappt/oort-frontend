@@ -116,7 +116,7 @@
     </select> -->
   </div>
 
-  <div class="relative w-full overflow-x-auto shadow-md mt-5 sm:rounded-lg">
+  <div *ngIf="templateActualData.length" class="relative w-full overflow-x-auto shadow-md mt-5 sm:rounded-lg">
     <table
       class="w-full text-sm border rounded text-left rtl:text-right text-gray-500 dark:text-gray-400 border"
     >
@@ -158,7 +158,7 @@
                 d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"
               />
             </svg>
-            {{ data.recipientsType }}
+            {{ data.notificationType }}
           </button>
         </td>
         <td>{{data?.createdBy?.name}}</td>
@@ -185,7 +185,7 @@
   </button> -->
 </div>
 
-<div *ngIf="emailService.isExisting" class="mt-4">
+<div *ngIf="emailService.isExisting && templateActualData.length" class="mt-4">
   <h2>Distribution List</h2>
   <div class="relative w-full overflow-x-auto shadow-md mt-5 sm:rounded-lg">
     <table

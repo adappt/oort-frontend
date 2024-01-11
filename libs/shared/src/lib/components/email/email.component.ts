@@ -18,6 +18,7 @@ export class EmailComponent extends UnsubscribeComponent {
   filterTemplateData: any = [];
   templateActualData: any = [];
   public loading = true;
+  public applicationId = '';
   public distributionLists: any[] = [];
   public emailNotifications = [];
   public pageInfo = {
@@ -45,7 +46,12 @@ export class EmailComponent extends UnsubscribeComponent {
   }
 
   ngOnInit(): void {
+    this.applicationService.application$.subscribe((res: any) => {
+      this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
+      this.applicationId = res?.id;
+    });
     this.getExistingTemplate();
+    console.log(this.emailService.datasetsForm);
   }
 
   /**
@@ -60,24 +66,26 @@ export class EmailComponent extends UnsubscribeComponent {
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   getExistingTemplate() {
-    this.emailService.getEmailNotifications().subscribe((res: any) => {
-      res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
-        this.templateActualData.push(ele.node);
-        this.loading = false;
-        ele.node.recipients.distributionListName !== null &&
-        ele.node.recipients.distributionListName !== ''
-          ? this.distributionLists.push(ele.node.recipients)
-          : '';
+    this.emailService
+      .getEmailNotifications(this.applicationId)
+      .subscribe((res: any) => {
+        res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
+          this.templateActualData.push(ele.node);
+          this.loading = false;
+          ele.node.recipients.distributionListName !== null &&
+          ele.node.recipients.distributionListName !== ''
+            ? this.distributionLists.push(ele.node.recipients)
+            : '';
+        });
+        this.filterTemplateData = this.templateActualData;
+        // this.emailNotifications = this.filterTemplateData.slice(
+        //   this.pageInfo.pageSize * this.pageInfo.pageIndex,
+        //   this.pageInfo.pageSize * (this.pageInfo.pageIndex + 1)
+        // );
+        // this.pageInfo.length = res?.data?.emailNotifications?.edges.length;
+        // // this.pageInfo.endCursor =
+        // //   res.data.application.customNotifications.pageInfo.endCursor;
       });
-      this.filterTemplateData = this.templateActualData;
-      // this.emailNotifications = this.filterTemplateData.slice(
-      //   this.pageInfo.pageSize * this.pageInfo.pageIndex,
-      //   this.pageInfo.pageSize * (this.pageInfo.pageIndex + 1)
-      // );
-      // this.pageInfo.length = res?.data?.emailNotifications?.edges.length;
-      // // this.pageInfo.endCursor =
-      // //   res.data.application.customNotifications.pageInfo.endCursor;
-    });
   }
 
   /**

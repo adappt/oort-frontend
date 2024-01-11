@@ -116,6 +116,7 @@ export class EmailService {
     this.datasetsForm = this.formBuilder.group({
       name: ['', Validators.required],
       notificationType: [null, Validators.required],
+      applicationId: [''],
       dataSets: new FormArray([this.createNewDataSetGroup()]),
       recipients: this.recipients,
       emailLayout: this.emailLayout,
@@ -342,12 +343,15 @@ export class EmailService {
   /**
    * Retrieves email notifications.
    *
+   * @param id
    * @returns Email notifications query result.
    */
-  getEmailNotifications() {
+  getEmailNotifications(id: string) {
     return this.apollo.query<any>({
       query: GET_EMAIL_NOTIFICATIONS,
-      variables: {},
+      variables: {
+        applicationId: id,
+      },
     });
   }
 
@@ -355,15 +359,15 @@ export class EmailService {
    * Retrieves email notificationIds.
    *
    */
-  getEmailNotificationIds() {
-    const Ids: string[] = [];
-    this.getEmailNotifications().subscribe((res: any) => {
-      res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
-        Ids.push(ele.node.id);
-      });
-      return Ids;
-    });
-  }
+  // getEmailNotificationIds() {
+  //   const Ids: string[] = [];
+  //   this.getEmailNotifications().subscribe((res: any) => {
+  //     res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
+  //       Ids.push(ele.node.id);
+  //     });
+  //     return Ids;
+  //   });
+  // }
 
   /**
    * Adds an email notification with the provided data.

@@ -105,7 +105,7 @@
         <personal-details *ngIf="currentStep === 1" [personalDetails]="currentGroup"> </personal-details>
         <payment-details *ngIf="currentStep === 2" [paymentDetails]="currentGroup"> </payment-details> -->
         <!-- <span class="k-form-separator"></span> -->
-    <app-create-notification *ngIf="currentStep === 0"></app-create-notification>
+    <app-create-notification *ngIf="currentStep === 0" (navigateToListScreen)="navigateToListScreen()"></app-create-notification>
     <app-create-dataset *ngIf="currentStep === 1"></app-create-dataset>
     <app-select-distribution *ngIf="currentStep === 2"></app-select-distribution>
     <app-schedule-alert *ngIf="currentStep === 3"></app-schedule-alert>

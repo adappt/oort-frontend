@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { EmailService } from '../../email.service';
 
@@ -13,6 +13,7 @@ import { EmailService } from '../../email.service';
 export class CreateNotificationComponent {
   public dataSetFormGroup: FormGroup | any = this.emailService.datasetsForm;
   public notificationTypes: string[] = this.emailService.notificationTypes;
+  @Output() navigateToListScreen: EventEmitter<any> = new EventEmitter();
 
   /**
    * initializing Email Service
@@ -27,5 +28,6 @@ export class CreateNotificationComponent {
   toggle() {
     this.emailService.setDatasetForm();
     this.emailService.isExisting = !this.emailService.isExisting;
+    this.navigateToListScreen.emit();
   }
 }

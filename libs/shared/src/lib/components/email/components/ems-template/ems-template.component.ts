@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StepperComponent } from '@progress/kendo-angular-layout';
 import { EmailService } from '../../email.service';
 import { Router } from '@angular/router';
+import { ApplicationService } from 'libs/shared/src/lib/services/application/application.service';
 
 /**
  * Email template to create distribution list
@@ -63,8 +64,14 @@ export class EmsTemplateComponent {
    * initializing Email Service
    *
    * @param emailService helper functions
+   * @param router
+   * @param applicationService
    */
-  constructor(public emailService: EmailService, private router: Router) {
+  constructor(
+    public emailService: EmailService,
+    private router: Router,
+    public applicationService: ApplicationService
+  ) {
     this.steps = [
       {
         label: 'Notification/Alert',
@@ -217,6 +224,9 @@ export class EmsTemplateComponent {
       this.emailService.datasetsForm?.value?.datasets?.forEach((data: any) => {
         delete data.cacheData;
       });
+      this.applicationService.application$.subscribe((res: any) => {
+        this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
+      });
       this.emailService
         .addEmailNotification(this.emailService.datasetsForm.value)
         .subscribe((res: any) => {
@@ -226,5 +236,9 @@ export class EmsTemplateComponent {
           //window.location.reload();
         });
     }
+  }
+
+  navigateToListScreen() {
+    this.navigateToEms.emit();
   }
 }

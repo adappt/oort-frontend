@@ -3,6 +3,10 @@ import { EmailService } from './email.service';
 import { ApplicationService } from '../../services/application/application.service';
 import { UnsubscribeComponent } from '../utils/unsubscribe/unsubscribe.component';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { ConfirmService } from '../../services/confirm/confirm.service';
+import { TranslateService } from '@ngx-translate/core';
+import { takeUntil } from 'rxjs';
+import { AuthService } from '../../services/auth/auth.service';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;
@@ -36,11 +40,17 @@ export class EmailComponent extends UnsubscribeComponent {
    * @param router
    * @param applicationService
    * @param formBuilder
+   * @param confirmService
+   * @param translate
+   * @param authService
    */
   constructor(
     public emailService: EmailService,
     public applicationService: ApplicationService,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private confirmService: ConfirmService,
+    private translate: TranslateService,
+    private authService: AuthService
   ) {
     super();
   }
@@ -66,6 +76,11 @@ export class EmailComponent extends UnsubscribeComponent {
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   getExistingTemplate() {
+    this.emailService.isExisting = true;
+    this.applicationService.application$.subscribe((res: any) => {
+      this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
+      this.applicationId = res?.id;
+    });
     this.emailService
       .getEmailNotifications(this.applicationId)
       .subscribe((res: any) => {
@@ -103,57 +118,101 @@ export class EmailComponent extends UnsubscribeComponent {
   /**
    *
    * @param id
+   * @param isClone
    */
-  getEmailNotificationById(id: string, applicationId: string) {
+  getEmailNotificationById(id: string, isClone?: boolean) {
     this.loading = true;
     this.emailService
-      .getEmailNotification(id, applicationId)
+      .getEmailNotification(id, this.applicationId)
       .subscribe((res) => {
         this.loading = false;
         const emailData = res.data.editAndGetEmailNotification;
-        const dataArray: FormArray | any = new FormArray([]);
-        for (let index = 0; index < emailData.dataSets.length; index++) {
-          //Adding Tabs detail
-          dataArray.push(this.createNewDataSetGroup(emailData.dataSets[index]));
-          if (index === 0) {
-            this.emailService.tabs[0].title = emailData.dataSets[index].name;
-            this.emailService.tabs[0].content = emailData.dataSets[index].name;
-          } else {
-            this.emailService.tabs.push({
-              title: emailData.dataSets[index].name,
-              content: emailData.dataSets[index].name,
-              active: false,
-              index: index,
+        if (isClone) {
+          delete emailData.createdAt;
+          delete emailData.id;
+          delete emailData.createdBy;
+          delete emailData.modifiedAt;
+          emailData.name = emailData.name + '_Clone';
+          emailData.applicationId = this.applicationId;
+          emailData?.dataSets?.forEach((element: any) => {
+            delete element.__typename;
+            delete element.resource.__typename;
+            element?.fields.forEach((ele: any) => {
+              delete ele.__typename;
             });
-          }
+          });
+          delete emailData?.emailLayout?.__typename;
+          delete emailData.__typename;
+          delete emailData?.recipients?.__typename;
+          delete emailData.isDeleted;
+          delete emailData.lastExecution;
+          delete emailData.status;
+          this.emailService
+            .addEmailNotification(emailData)
+            .subscribe((res: any) => {
+              this.emailService.configId = res.data.addEmailNotification.id;
+              this.getEmailNotificationById(
+                res.data.addEmailNotification.id,
+                false
+              );
+            });
+        } else {
+          this.prepareEditData(emailData);
         }
-        this.emailService.tabs.forEach((ele: any) => {
-          ele.active = false;
-        });
-        this.emailService.tabs[this.emailService.tabs.length - 1].active = true;
-
-        //Creating DatasetForm
-        this.emailService.datasetsForm = this.formBuilder.group({
-          name: emailData.name,
-          notificationType: emailData.notificationType,
-          dataSets: dataArray,
-          recipients: {
-            distributionListName: emailData.recipients.distributionListName,
-            To: emailData.recipients.To,
-            Cc: emailData.recipients.Cc,
-            Bcc: emailData.recipients.Bcc,
-          },
-          emailLayout: emailData.emailLayout,
-          schedule: emailData.schedule,
-        });
-
-        //Setting up edit screen
-        this.emailService.isExisting = !this.emailService.isExisting;
-
-        //Setting up Recipients data
-        this.emailService.recipients =
-          this.emailService.datasetsForm.controls['recipients'].value;
       });
+  }
+
+  /**
+   *
+   * @param emailData
+   */
+  prepareEditData(emailData: any) {
+    const dataArray: FormArray | any = new FormArray([]);
+    for (let index = 0; index < emailData.dataSets.length; index++) {
+      //Adding Tabs detail
+      dataArray.push(this.createNewDataSetGroup(emailData.dataSets[index]));
+      if (index === 0) {
+        this.emailService.tabs[0].title = emailData.dataSets[index].name;
+        this.emailService.tabs[0].content = emailData.dataSets[index].name;
+      } else {
+        this.emailService.tabs.push({
+          title: emailData.dataSets[index].name,
+          content: emailData.dataSets[index].name,
+          active: false,
+          index: index,
+        });
+      }
+    }
+    this.emailService.tabs.forEach((ele: any) => {
+      ele.active = false;
+    });
+    this.emailService.tabs[this.emailService.tabs.length - 1].active = true;
+
+    //Creating DatasetForm
+    this.emailService.datasetsForm = this.formBuilder.group({
+      name: emailData.name,
+      notificationType: emailData.notificationType,
+      dataSets: dataArray,
+      recipients: {
+        distributionListName: emailData.recipients.distributionListName,
+        To: emailData.recipients.To,
+        Cc: emailData.recipients.Cc,
+        Bcc: emailData.recipients.Bcc,
+      },
+      emailLayout: emailData.emailLayout,
+      schedule: emailData.schedule,
+    });
+
+    //Setting up edit screen
+    this.emailService.isExisting = !this.emailService.isExisting;
+
+    //Setting up Recipients data
+    this.emailService.recipients =
+      this.emailService.datasetsForm.controls['recipients'].value;
+
+    this.emailService.datasetsForm
+      .get('applicationId')
+      ?.setValue(this.applicationId);
   }
 
   /**
@@ -201,30 +260,45 @@ export class EmailComponent extends UnsubscribeComponent {
     });
   }
 
-  /**
-   *
-   * @param data
-   */
-  public editEmailNotification(data: any) {
-    this.getEmailNotificationById(data.id, data.applicationId);
-  }
-
   // eslint-disable-next-line jsdoc/require-description
   /**
    *
    * @param data
    */
   public deleteEmailNotification(data: any) {
-    this.distributionLists = [];
-    this.emailNotifications = [];
-    this.templateActualData = [];
-    this.filterTemplateData = [];
+    const dialogRef = this.confirmService.openConfirmModal({
+      title: this.translate.instant('common.deleteObject', {
+        name: this.translate.instant('common.page.one'),
+      }),
+      content: 'Do you confirm the deletion of ' + data.name,
+      // this.translate.instant(
+      //   'components.application.pages.delete.confirmationMessage',
+      //   { name: data.name }
+      // ),
+      confirmText: this.translate.instant('components.confirmModal.delete'),
+      confirmVariant: 'danger',
+    });
+    dialogRef.closed.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      if (value) {
+        this.distributionLists = [];
+        this.emailNotifications = [];
+        this.templateActualData = [];
+        this.filterTemplateData = [];
+        this.loading = true;
+        this.emailService
+          .deleteEmailNotification(data.id, this.applicationId)
+          .subscribe(() => {
+            this.getExistingTemplate();
+          });
+      }
+    });
+  }
 
-    this.emailService
-      .deleteEmailNotification(data.id, data.applicationId)
-      .subscribe((res) => {
-        this.getExistingTemplate();
-        console.log(res);
-      });
+  /**
+   *
+   * @param data
+   */
+  public cloneEmailNotification(data: any) {
+    this.getEmailNotificationById(data.id, true);
   }
 }

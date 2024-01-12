@@ -163,8 +163,11 @@
         </td>
         <td>{{data?.createdBy?.name}}</td>
         <td class="px-6 py-4 flex gap-2">
-          <button uiMenuItem (click)="editEmailNotification(data)">
+          <button uiMenuItem (click)="getEmailNotificationById(data.id)">
             <ui-icon icon="edit" variant="grey"></ui-icon>
+          </button>
+          <button uiMenuItem (click)="cloneEmailNotification(data)">
+            <ui-icon icon="content_copy" variant="grey"></ui-icon>
           </button>
           <button uiMenuItem (click)="deleteEmailNotification(data)">
             <ui-icon icon="delete" variant="danger"></ui-icon>

@@ -5,106 +5,9 @@
     [(currentStep)]="currentStep"
     orientation="horizontal"
     > </kendo-stepper>
-  <!--
-     <div>
-      <ol class="flex items-center w-full mb-1 ml-1 sm:mb-2">
-        <li
-        class="flex w-full items-center text-white  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
-      >
-        <div
-          class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
-        >
-          1
-        </div>
-      </li>
-        <li
-          class="flex w-full items-center text-white  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
-        >
-          <div
-            class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
-          >
-            2
-          </div>
-        </li>
-        <li
-        class="flex w-full items-center text-white  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
-      >
-        <div
-          class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
-        >
-          3
-        </div>
-      </li>
-      <li
-          class="flex w-full items-center text-white  after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800"
-        >
-          <div
-            class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
-          >
-            4
-          </div>
-        </li>
-        <li
-        class="flex w-full items-center text-white after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block dark:after:border-blue-800"
-      >
-        <div
-        class="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full lg:h-5 lg:w-5 dark:bg-blue-800 shrink-0"
-        >
-          5
-        </div>
-      </li>
-        <li
-          class="flex w-full items-center text-gray-300 after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block dark:after:border-blue-800"
-        >
-          <div
-            class="flex items-center justify-center w-5 h-5 bg-gray-100 rounded-full lg:h-5 lg:w-5 dark:bg-gray-200 shrink-0"
-          >
-            6
-          </div>
-        </li>
-        <li
-
-        >
-          <div
-            class="flex items-center  text-gray-300 justify-center w-5 h-5 bg-gray-100 rounded-full lg:h-5 lg:w-5 dark:bg-gray-200 shrink-0"
-          >
-            7
-          </div>
-        </li>
-      </ol>
-      <div class="flex items-center w-full mb-4  ">
-        <div class="mr-2">
-          <div class="text-blue-600 text-xs">Notification</div>
-          <div class="text-blue-600 text-xs"> /Alert</div>
-        </div>
-        <div class="mr-2">
-          <div class="text-blue-600 text-xs">Select Dataset</div>
-        </div>
-        <div class=" ml-12">
-          <div class="text-blue-600  text-xs">Select Distribution</div>
-        </div>
-      <div class="ml-6">
-          <div class="text-blue-600 text-xs">Schedule Alert</div>
-        </div>
-        <div class="ml-11">
-          <div class="text-blue-600 text-xs">Layout</div>
-        </div>
-        <div class="ml-11">
-          <div class="text-blue-600 text-xs">Preview</div>
-        </div>
-        <div class="ml-12">
-          <div class="text-blue-600 text-xs">send</div>
-        </div>
-      </div>
-    </div> -->
     <div>
       <span class="k-form-separator"></span>
     </div>
-    <!-- <form class="k-form"> -->
-    <!-- <account-details *ngIf="currentStep === 0" [accountDetails]="currentGroup"> </account-details>
-        <personal-details *ngIf="currentStep === 1" [personalDetails]="currentGroup"> </personal-details>
-        <payment-details *ngIf="currentStep === 2" [paymentDetails]="currentGroup"> </payment-details> -->
-        <!-- <span class="k-form-separator"></span> -->
     <app-create-notification *ngIf="currentStep === 0" (navigateToListScreen)="navigateToListScreen()"></app-create-notification>
     <app-create-dataset *ngIf="currentStep === 1"></app-create-dataset>
     <app-select-distribution *ngIf="currentStep === 2"></app-select-distribution>
@@ -112,12 +15,10 @@
     <app-layout *ngIf="currentStep === 4"></app-layout>
     <app-preview *ngIf="currentStep === 5"></app-preview>
 
-    <!-- <span class="k-form-separator"></span> -->
-
     <div class="flex gap-4 mt-4">
       <button
         type="button"
-        class="bg-blue-200 text-white px-4 py-2 rounded-md"
+        class="bg-sky-500 hover:bg-sky-400 text-white px-4 py-2 rounded-md transition-colors duration-150 ease-in-out"
         *ngIf="currentStep !== 0"
         (click)="prev()"
       >
@@ -125,22 +26,14 @@
       </button>
       <button
         type="submit"
-        class="bg-sky-500 text-white ml-3 px-4 py-2 rounded-md"
+        class="bg-sky-500 hover:bg-sky-400 text-white ml-3 px-4 py-2 rounded-md transition-colors duration-150 ease-in-out"
         (click)="next()"
         *ngIf="currentStep !== 5"
       >
         Save and Proceed
       </button>
 
-      <!-- <button
-        type="submit"
-        class="bg-sky-500 text-white ml-3 px-4 py-2 rounded-md"
-        (click)="submit()"
-        *ngIf="currentStep === 5"
-      >
-        Save
-      </button> -->
-
+      <!-- EMAIL NOTIFICATION SAVE -->
       <button
       type="submit"
       class="bg-sky-500 text-white ml-3 px-4 py-2 rounded-md"
@@ -149,51 +42,14 @@
     >
       Save
     </button>
-
-    <button
-    type="button"
-    class="bg-sky-500 text-white ml-3 px-4 py-2 rounded-md"
-    (click)="send()"
-    *ngIf="currentStep === 5"
-    >
-    Send email
-  </button>
+      <!-- EMAIL NOTIFICATION SAVE AND SEND -->
+      <button
+      type="button"
+      class="bg-sky-500 text-white ml-3 px-4 py-2 rounded-md"
+      (click)="send()"
+      *ngIf="currentStep === 5"
+      >
+      Send email
+    </button>
     </div>
-
-    <!-- <div class="flex gap-4 mt-4">
-      <button
-        type="button"
-        class="bg-blue-500 text-white px-4 py-2 rounded-md"
-        *ngIf="currentStep !== 0"
-        (click)="prev()"
-      >
-        Back
-      </button>
-      <button
-        type="button"
-        class="bg-blue-500 text-white ml-3 px-4 py-2 rounded-md"
-        (click)="next()"
-        *ngIf="currentStep !== 7"
-      >
-        Save and Proceed
-      </button>
-      <button
-        type="button"
-        class="bg-blue-500 text-white ml-3 px-4 py-2 rounded-md"
-        (click)="next()"
-        *ngIf="currentStep !== 7"
-      >
-        Skip
-      </button>
-    </div> -->
-
-    <!-- <div class="k-form-buttons k-buttons-end">
-            <span class="page">Step {{ currentStep }} of 7</span>
-            <div>
-                <button class="k-button prev" *ngIf="currentStep !== 0" (click)="prev()">Previous</button>
-                <button class="k-button k-primary" (click)="next()" *ngIf="currentStep !== 7">Next</button>
-                <button class="k-button k-primary" (click)="submit()" *ngIf="currentStep === 7">Submit</button>
-            </div>
-        </div> -->
-    <!-- </form> -->
   </div>

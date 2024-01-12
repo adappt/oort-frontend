@@ -72,6 +72,11 @@ export class LayoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeHeaderLogo() {
+    this.headerLogo = null;
+    this.emailService.allLayoutdata.headerLogo = null;
+  }
+
   /**
    * This method handles the selection of the Banner Image.
    *
@@ -100,6 +105,11 @@ export class LayoutComponent implements OnInit, OnDestroy {
       reader.readAsDataURL(file);
       this.emailService.onFooterLogoSelected(file);
     }
+  }
+
+  removeFooterLogo() {
+    this.footerLogo = null;
+    this.emailService.allLayoutdata.footerLogo = null;
   }
 
   /**

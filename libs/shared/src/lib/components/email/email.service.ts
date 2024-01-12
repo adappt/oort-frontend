@@ -60,8 +60,6 @@ export class EmailService {
     /** IMAGES AND STYLES */
     bannerImage: null,
     bannerImageStyle: '',
-    whoLogo: null,
-    whoLogoStyle: '',
     /** CONTAINER STYLE */
     containerStyle: '',
     /** FOOTER COPYRIGHT STYLE */
@@ -176,9 +174,6 @@ export class EmailService {
     if (styles.bannerStyle !== undefined) {
       this.allLayoutdata.bannerStyle = styles.bannerStyle;
     }
-    if (styles.whoLogoStyle !== undefined) {
-      this.allLayoutdata.whoLogoStyle = styles.whoLogoStyle;
-    }
     if (styles.headerLogoStyle !== undefined) {
       this.allLayoutdata.headerLogoStyle = styles.headerLogoStyle;
     }
@@ -278,8 +273,6 @@ export class EmailService {
       banner: {
         bannerImage: this.allLayoutdata?.bannerImage,
         bannerImageStyle: this.allLayoutdata?.bannerImageStyle,
-        whoLogo: this.allLayoutdata?.whoLogo,
-        whoLogoStyle: this.allLayoutdata?.whoLogoStyle,
         containerStyle: this.allLayoutdata?.containerStyle,
         copyrightStyle: this.allLayoutdata?.copyrightStyle,
       },

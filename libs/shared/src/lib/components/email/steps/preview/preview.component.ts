@@ -69,10 +69,25 @@ export class PreviewComponent implements OnInit {
   getEmailStyle(item: string): string {
     const styles: { [key: string]: string } = {}; // Define the type of the styles object
     switch (item) {
+      case 'bannerImage':
+        styles[
+          'bannerImageStyle'
+        ] = `max-width: 100%; height: auto; object-fit: contain;`;
+        break;
       case 'header':
         styles[
           'headerStyle'
-        ] = `text-align: center; margin: 0.5rem auto; padding: 0.5rem; width: 100%; background-color: ${this.emailService.headerBackgroundColor}; color: ${this.emailService.headerTextColor}; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif;`;
+        ] = `margin: 0.5rem auto; display: flex; width: 100%; background-color: ${this.emailService.headerBackgroundColor};`;
+        break;
+      case 'headerLogo':
+        styles[
+          'headerLogoStyle'
+        ] = `margin: 0.5rem; display: block; width: 20%; padding: 0.25rem 0.5rem; border-radius: 0.375rem; background-color: ${this.emailService.headerBackgroundColor};`;
+        break;
+      case 'headerHtml':
+        styles[
+          'headerHtmlStyle'
+        ] = `text-align: center; margin: 0.5rem auto; padding: 0.5rem; width: 80%; background-color: white; overflow: hidden; background-color: ${this.emailService.headerBackgroundColor}; color: ${this.emailService.headerTextColor}; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif;`;
         break;
       case 'body':
         styles[
@@ -87,32 +102,12 @@ export class PreviewComponent implements OnInit {
       case 'footerImg':
         styles[
           'footerImgStyle'
-        ] = `margin: 0.5rem; display: block; width: 20%; padding: 0.25rem 0.5rem; border-radius: 0.375rem; max-width: 100%; background-color: ${this.emailService.footerBackgroundColor};`;
+        ] = `margin: 0.5rem; display: block; width: 20%; padding: 0.25rem 0.5rem; border-radius: 0.375rem; background-color: ${this.emailService.footerBackgroundColor};`;
         break;
       case 'footerHtml':
         styles[
           'footerHtmlStyle'
-        ] = `flex-grow: 1; width: 80%; background-color: white; overflow: hidden; background-color: ${this.emailService.footerBackgroundColor}; color: ${this.emailService.footerTextColor}; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif;`;
-        break;
-      case 'banner':
-        styles[
-          'bannerStyle'
-        ] = `display: flex; justify-content: space-between; align-items: center; width: 90%; margin: auto; background-color: white;`;
-        break;
-      case 'whoLogo':
-        styles[
-          'whoLogoStyle'
-        ] = `width: 25%; height: auto; object-fit: contain;`;
-        break;
-      case 'headerLogo':
-        styles[
-          'headerLogoStyle'
-        ] = `width: 25%; height: auto; object-fit: contain;`;
-        break;
-      case 'bannerImage':
-        styles[
-          'bannerImageStyle'
-        ] = `width: 25%; height: auto; object-fit: contain;`;
+        ] = `width: 80%; background-color: white; overflow: hidden; background-color: ${this.emailService.footerBackgroundColor}; color: ${this.emailService.footerTextColor}; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif;`;
         break;
       case 'copyright':
         styles[

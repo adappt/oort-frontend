@@ -16,92 +16,107 @@
     <input
       id="subjectInput"
       type="text"
-      class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+      class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm"
       placeholder="Enter Value"
       [(ngModel)]="emailService.allLayoutdata.txtSubject" [ngModelOptions]="{ standalone: true }"
     />
   </div>
-
-  <!-- Header Logo -->
-  <div class="mt-8 bg-[#F5FAFF] flex items-center p-5">
-    <div class="inline-block px-5">
-      <label for="headerLogoInput" class="block text-gray-700 text-sm">
-        Header Logo*
-      </label>
-    </div>
-    <img id="headerLogo" *ngIf="headerLogo" [src]="headerLogo" class="w-20 h-20 object-cover mb-2">
-    <input
-      id="headerLogoInput"
-      type="file"
-      accept="image/*"
-      (change)="onHeaderLogoSelected($event)"
-      class="mt-1 text-sm text-left block flex-grow py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-    />
-  </div>
 <br>
   <!-- Header -->
-  <div>
-    <div class="block text-gray-700 text-sm">Header Style</div>
-    <div class="flex mb-4">
-      <!-- Color Picker for Header Background Color -->
-      <div class="mr-4">
-        <label for="headerBackgroundColor" class="block tracking-wide text-gray-700 text-xs font-bold mb-2">Header Background Color</label>
-        <input type="color" id="headerBackgroundColor" name="headerBackgroundColor" value="#00205C"
-          class="cursor-pointer h-10 block w-full border-gray-300 rounded-md focus:outline-none focus:border-gray-500" style="border-radius: 8px;">
+  <div class="bg-[#F5FAFF] p-5">
+    <div class="text-md font-semibold text-left text-[#1D2939]">Header Style</div>
+    <div class="flex flex-wrap mb-4">
+      <!-- Header Logo Image -->
+      <div class="w-1/6" *ngIf="headerLogo">
+        <img id="headerLogo" [src]="headerLogo" class="w-full h-auto object-cover">
       </div>
-
+      <!-- Header Logo Input -->
+      <div class="w-2/6">
+        <label for="headerLogoInput" class="block text-gray-700 text-sm">
+          Header Logo
+        </label>
+        <div class="flex items-center space-x-2">
+          <input
+            id="headerLogoInput"
+            type="file"
+            accept="image/*"
+            (change)="onHeaderLogoSelected($event)"
+            class="text-sm py-1 px-2 border border-gray-300 bg-white rounded-lg shadow-sm"
+          />
+          <button *ngIf="headerLogo" (click)="removeHeaderLogo()" class="bg-red-500 text-white py-1 px-2 border border-transparent rounded-md shadow-sm hover:bg-red-600">
+            Remove
+          </button>
+        </div>
+      </div>
+      <!-- Color Picker for Header Background Color -->
+      <div class="w-1/4">
+        <label for="headerBackgroundColor" class="block text-gray-700 text-sm">Background Color</label>
+        <input type="color" id="headerBackgroundColor" name="headerBackgroundColor" value="#00205C"
+          class="h-10 w-full rounded-md"
+          style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
+        >
+      </div>
       <!-- Color Picker for Header Text Color -->
-      <div class="mr-4">
-        <label for="headerColor" class="block tracking-wide text-gray-700 text-xs font-bold mb-2">Header Text Color</label>
+      <div class="w-1/4">
+        <label for="headerColor" class="block text-gray-700 text-sm">Text Color</label>
         <input type="color" id="headerColor" name="headerColor" value="#FFFFFF"
-          class="cursor-pointer h-10 block w-full border-gray-300 rounded-md focus:outline-none focus:border-gray-500" style="border-radius: 8px;">
+          class="h-10 w-full rounded-md"
+          style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
+        >
       </div>
     </div>
     <editor [(ngModel)]="emailService.allLayoutdata.headerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
   </div>
 <br>
   <!-- Body -->
-  <div>
-    <div class="block text-gray-700 text-sm">Body</div>
-    <div class="flex flex-wrap -mx-3 mb-6">
+  <div class="bg-[#F5FAFF] p-5">
+    <div class="text-md font-semibold text-left text-[#1D2939]">Body</div>
+    <div class="flex flex-wrap mb-4">
       <!-- Color Picker for Background Color -->
-      <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-      <label for="bodyBackgroundColor" class="block tracking-wide text-gray-700 text-xs font-bold mb-2">Background Color</label>
-      <input type="color" id="bodyBackgroundColor" name="bodyBackgroundColor" value="#FFFFFF"
-        class="cursor-pointer h-10 block w-full border-gray-300 rounded-md"
-        style="border-radius: 8px;">
+      <div class="w-1/4">
+        <label for="bodyBackgroundColor" class="block text-gray-700 text-sm">Background Color</label>
+        <input type="color" id="bodyBackgroundColor" name="bodyBackgroundColor" value="#FFFFFF"
+          class="h-10 w-full rounded-md"
+          style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
+        >
       </div>
       <!-- Color Picker for Text Color -->
-      <div class="w-full md:w-1/3 px-3">
-      <label for="bodyColor" class="block tracking-wide text-gray-700 text-xs font-bold mb-2">Text Color</label>
-      <input type="color" id="bodyColor" name="bodyColor" value="#000000"
-        class="cursor-pointer h-10 block w-full border-gray-300 rounded-md"
-        style="border-radius: 8px;">
+      <div class="w-1/4">
+        <label for="bodyColor" class="block text-gray-700 text-sm">Text Color</label>
+        <input type="color" id="bodyColor" name="bodyColor" value="#000000"
+          class="h-10 w-full rounded-md"
+          style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
+        >
+      </div>
     </div>
-  </div>
-  <div class="flex">
-    <!-- Body Text Editor -->
-    <editor #bodyEditor [(ngModel)]="emailService.allLayoutdata.bodyHtml" [init]="editor" (onContentChange)="onEditorContentChange($event)"></editor>
+    <div class="flex">
+      <!-- Body Text Editor -->
+      <editor #bodyEditor [(ngModel)]="emailService.allLayoutdata.bodyHtml" [init]="editor" (onContentChange)="onEditorContentChange($event)"></editor>
 
-    <!-- Add Block Scrollable List -->
-    <div class="ml-4" style="height: 300px; overflow-y: auto;">
-      <div class="block tracking-wide text-gray-700 text-xs font-bold mb-2">Block Select</div>
-      <div *ngFor="let previewData of emailService.getAllPreviewData(); let i = index">
-        <button type="button" (click)="insertDataSetToBodyHtmlByTabName(previewData.tabName)"
-          class="cursor-pointer block w-full text-left bg-white text-gray-700 border border-gray-300 rounded-md py-2 px-4 leading-tight focus:outline-none focus:border-gray-500">
-          {{ previewData.tabName }}
-        </button>
+      <!-- Add Block Scrollable List -->
+      <div class="ml-4" style="height: 300px; overflow-y: auto;">
+        <div class="text-sm font-medium text-left text-[#344054]">Block Select</div>
+        <ng-container *ngIf="emailService.getAllPreviewData().length; else noBlocks">
+          <div *ngFor="let previewData of emailService.getAllPreviewData(); let i = index">
+            <button type="button" (click)="insertDataSetToBodyHtmlByTabName(previewData.tabName)"
+              class="cursor-pointer block w-full text-left bg-white text-gray-700 border border-gray-300 rounded-md py-2 px-4 leading-tight focus:outline-none focus:border-gray-500">
+              {{ previewData.tabName }}
+            </button>
+          </div>
+        </ng-container>
+        <ng-template #noBlocks>
+          <div class="text-gray-700">No blocks configured</div>
+        </ng-template>
       </div>
     </div>
   </div>
-</div>
   <br>
 
   <!-- Banner Image -->
   <div class="mt-8 bg-[#F5FAFF] flex items-center p-5">
     <div class="inline-block px-5">
       <label for="banner_input" class="block text-gray-700 text-sm">
-        Banner Image*
+        Banner Image
       </label>
     </div>
     <img *ngIf="bannerImage" [src]="bannerImage" class="w-20 h-20 object-cover mb-2">
@@ -110,43 +125,52 @@
       type="file"
       accept="image/*"
       (change)="onBannerSelected($event)"
-      class="mt-1 text-sm text-left block flex-grow py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+      class="mt-1 text-sm text-left block flex-grow py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm"
     />
   </div>
 <br>
-  <!-- Footer Logo -->
-  <div class="mt-8 bg-[#F5FAFF] flex items-center p-5">
-    <div class="inline-block px-5">
-      <label for="footerLogoInput" class="block text-gray-700 text-sm">
-        Footer Logo*
-      </label>
+  <div class="bg-[#F5FAFF] p-5">
+    <div class="text-md font-semibold text-left text-[#1D2939]">Footer Style</div>
+    <div class="flex flex-wrap mb-4">
+      <!-- Footer Logo Image -->
+      <div class="w-1/6" *ngIf="footerLogo">
+        <img id="footerLogo" [src]="footerLogo" class="w-full h-auto object-cover">
+      </div>
+      <!-- Footer Logo Input -->
+      <div class="w-2/6">
+        <label for="footerLogoInput" class="block text-gray-700 text-sm">
+          Footer Logo
+        </label>
+        <div class="flex items-center space-x-2">
+          <input
+            id="footerLogoInput"
+            type="file"
+            accept="image/*"
+            (change)="onFooterLogoSelected($event)"
+            class="text-sm py-1 px-2 border border-gray-300 bg-white rounded-lg shadow-sm"
+          />
+          <button *ngIf="footerLogo" (click)="removeFooterLogo()" class="bg-red-500 text-white py-1 px-2 border border-transparent rounded-md shadow-sm hover:bg-red-600">
+            Remove
+          </button>
+        </div>
+      </div>
+      <!-- Color Picker for Footer Background Color -->
+      <div class="w-1/4">
+        <label for="footerBackgroundColor" class="block text-gray-700 text-sm">Background Color</label>
+        <input type="color" id="footerBackgroundColor" name="footerBackgroundColor" value="#FFFFFF"
+          class="h-10 w-full rounded-md"
+          style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
+        >
+      </div>
+      <!-- Color Picker for Footer Text Color -->
+      <div class="w-1/4">
+        <label for="footerColor" class="block text-gray-700 text-sm">Text Color</label>
+        <input type="color" id="footerColor" name="footerColor" value="#000000"
+          class="h-10 w-full rounded-md"
+          style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
+        >
+      </div>
     </div>
-    <img *ngIf="footerLogo" [src]="footerLogo" class="w-20 h-20 object-cover mb-2">
-    <input
-      id="footerLogoInput"
-      type="file"
-      accept="image/*"
-      (change)="onFooterLogoSelected($event)"
-      class="mt-1 text-sm text-left block flex-grow py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-    />
+    <editor [(ngModel)]="emailService.allLayoutdata.footerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
   </div>
-
-
-  <div class="bold mt-3 text-gray-800">Footer</div>
-  <div class="flex mb-4">
-    <!-- Color Picker for Footer Background Color -->
-    <div class="mr-4">
-      <label for="footerBackgroundColor" class="block tracking-wide text-gray-700 text-xs font-bold mb-2">Background Color</label>
-      <input type="color" id="footerBackgroundColor" name="footerBackgroundColor" value="#FFFFFF"
-        class="cursor-pointer h-10 block w-full border-gray-300 rounded-md focus:outline-none focus:border-gray-500" style="background-color: transparent; border-radius: 8px;">
-    </div>
-
-    <!-- Color Picker for Footer Text Color -->
-    <div class="mr-4">
-      <label for="footerColor" class="block tracking-wide text-gray-700 text-xs font-bold mb-2">Text Color</label>
-      <input type="color" id="footerColor" name="footerColor" value="#00000"
-        class="cursor-pointer h-10 block w-full border-gray-300 rounded-md focus:outline-none focus:border-gray-500" style="background-color: transparent; border-radius: 8px;">
-    </div>
-  </div>
-  <editor [(ngModel)]="emailService.allLayoutdata.footerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
 </div>

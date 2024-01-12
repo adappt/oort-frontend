@@ -6,10 +6,12 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ConfirmService } from '../../services/confirm/confirm.service';
 import { TranslateService } from '@ngx-translate/core';
 import { takeUntil } from 'rxjs';
-import { AuthService } from '../../services/auth/auth.service';
+import { UIPageChangeEvent, handleTablePageEvent } from '@oort-front/ui';
+import { ApiConfiguration } from '../../models/api-configuration.model';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;
+const DISTRIBUTION_PAGE_SIZE = 5;
 /**
  * Email Notification setup component.
  */
@@ -24,7 +26,7 @@ export class EmailComponent extends UnsubscribeComponent {
   public loading = true;
   public applicationId = '';
   public distributionLists: any[] = [];
-  public emailNotifications = [];
+  public emailNotifications: any = [];
   public pageInfo = {
     pageIndex: 0,
     pageSize: DEFAULT_PAGE_SIZE,
@@ -33,6 +35,15 @@ export class EmailComponent extends UnsubscribeComponent {
   };
   // === DISPLAYED COLUMNS ===
   public displayedColumns = ['name', 'alerttype', 'createdby', 'actions'];
+  public distributionColumn = ['name'];
+  public cachedApiConfigurations: ApiConfiguration[] = [];
+  public distributionPageInfo = {
+    pageIndex: 0,
+    pageSize: DISTRIBUTION_PAGE_SIZE,
+    length: 0,
+    endCursor: '',
+  };
+  cacheDistributionList: any = [];
 
   /**
    *
@@ -49,8 +60,7 @@ export class EmailComponent extends UnsubscribeComponent {
     public applicationService: ApplicationService,
     public formBuilder: FormBuilder,
     private confirmService: ConfirmService,
-    private translate: TranslateService,
-    private authService: AuthService
+    private translate: TranslateService
   ) {
     super();
   }
@@ -76,6 +86,7 @@ export class EmailComponent extends UnsubscribeComponent {
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   getExistingTemplate() {
+    this.loading = true;
     this.emailService.isExisting = true;
     this.applicationService.application$.subscribe((res: any) => {
       this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
@@ -93,13 +104,20 @@ export class EmailComponent extends UnsubscribeComponent {
             : '';
         });
         this.filterTemplateData = this.templateActualData;
-        // this.emailNotifications = this.filterTemplateData.slice(
-        //   this.pageInfo.pageSize * this.pageInfo.pageIndex,
-        //   this.pageInfo.pageSize * (this.pageInfo.pageIndex + 1)
-        // );
-        // this.pageInfo.length = res?.data?.emailNotifications?.edges.length;
-        // // this.pageInfo.endCursor =
-        // //   res.data.application.customNotifications.pageInfo.endCursor;
+        this.emailNotifications = this.filterTemplateData.slice(
+          this.pageInfo.pageSize * this.pageInfo.pageIndex,
+          this.pageInfo.pageSize * (this.pageInfo.pageIndex + 1)
+        );
+        this.pageInfo.length = res?.data?.emailNotifications?.edges.length;
+
+        this.cacheDistributionList = this.distributionLists;
+        this.distributionLists = this.cacheDistributionList.slice(
+          this.distributionPageInfo.pageSize *
+            this.distributionPageInfo.pageIndex,
+          this.distributionPageInfo.pageSize *
+            (this.distributionPageInfo.pageIndex + 1)
+        );
+        this.distributionPageInfo.length = this.cacheDistributionList.length;
       });
   }
 
@@ -113,6 +131,11 @@ export class EmailComponent extends UnsubscribeComponent {
     this.filterTemplateData = this.templateActualData.filter((x: any) =>
       x.name.toLowerCase().includes(searchText.toLowerCase())
     );
+    this.emailNotifications = this.filterTemplateData.slice(
+      this.pageInfo.pageSize * this.pageInfo.pageIndex,
+      this.pageInfo.pageSize * (this.pageInfo.pageIndex + 1)
+    );
+    this.pageInfo.length = this.filterTemplateData.length;
   }
 
   /**
@@ -280,14 +303,14 @@ export class EmailComponent extends UnsubscribeComponent {
     });
     dialogRef.closed.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       if (value) {
-        this.distributionLists = [];
-        this.emailNotifications = [];
-        this.templateActualData = [];
-        this.filterTemplateData = [];
         this.loading = true;
         this.emailService
           .deleteEmailNotification(data.id, this.applicationId)
           .subscribe(() => {
+            this.distributionLists = [];
+            this.emailNotifications = [];
+            this.templateActualData = [];
+            this.filterTemplateData = [];
             this.getExistingTemplate();
           });
       }
@@ -300,5 +323,40 @@ export class EmailComponent extends UnsubscribeComponent {
    */
   public cloneEmailNotification(data: any) {
     this.getEmailNotificationById(data.id, true);
+  }
+
+  /**
+   *
+   * @param e
+   */
+  onPage(e: UIPageChangeEvent): void {
+    const cachedData = handleTablePageEvent(
+      e,
+      this.pageInfo,
+      this.filterTemplateData
+    );
+    if (cachedData && cachedData.length === this.pageInfo.pageSize) {
+      this.emailNotifications = cachedData;
+      // this.filterTemplateData = this.emailNotifications;
+    }
+  }
+
+  /**
+   *
+   * @param e
+   */
+  onDistributionPage(e: UIPageChangeEvent): void {
+    const cachedData = handleTablePageEvent(
+      e,
+      this.pageInfo,
+      this.cacheDistributionList
+    );
+    if (
+      cachedData &&
+      cachedData.length === this.distributionPageInfo.pageSize
+    ) {
+      this.distributionLists = cachedData;
+      // this.filterTemplateData = this.emailNotifications;
+    }
   }
 }

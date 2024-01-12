@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StepperComponent } from '@progress/kendo-angular-layout';
 import { EmailService } from '../../email.service';
 import { Router } from '@angular/router';
-import { ApplicationService } from 'libs/shared/src/lib/services/application/application.service';
+import { ApplicationService } from '../../../../services/application/application.service';
 
 /**
  * Email template to create distribution list

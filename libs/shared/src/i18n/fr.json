@@ -2003,6 +2003,7 @@
 			"filterIsNotNullOperator": "Est non-nul",
 			"filterIsNullOperator": "Est nul",
 			"filterIsTrue": "est vrai",
+			"filterIsWithinTheLast": "Est dans le dernier",
 			"filterLtOperator": "Est plus petit que",
 			"filterLteOperator": "Est plus petit que ou égal à",
 			"filterMenuLogicDropDownLabel": "'Logique de filtre sur {columnName}'",

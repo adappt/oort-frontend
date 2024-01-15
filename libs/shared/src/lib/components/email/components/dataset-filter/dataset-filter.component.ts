@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   OnDestroy,
   Output,
   ViewChild,
@@ -27,7 +28,7 @@ let ITEMS_PER_PAGE = 0;
   templateUrl: './dataset-filter.component.html',
   styleUrls: ['./dataset-filter.component.scss'],
 })
-export class DatasetFilterComponent implements OnDestroy {
+export class DatasetFilterComponent implements OnInit, OnDestroy {
   @Input() activeTab: any;
   @Input() tabs: any;
   @Input() query: FormGroup | any;
@@ -70,7 +71,6 @@ export class DatasetFilterComponent implements OnDestroy {
     private formGroup: FormBuilder
   ) {}
 
-  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnInit(): void {
     if (this.query.value.name == null) {
       const name = 'Block ' + (this.activeTab.index + 1);
@@ -123,6 +123,49 @@ export class DatasetFilterComponent implements OnDestroy {
   }
 
   /**
+   *
+   * @param value
+   * @param unit
+   */
+  convertToDays(value: number, unit: string): number {
+    const currentDate = new Date();
+    let days;
+
+    switch (unit) {
+      case 'months':
+        // Get the date of the same day 'value' months ago
+        const monthsAgo = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth() - value,
+          currentDate.getDate()
+        );
+        // Calculate the difference in days
+        days = Math.floor(
+          (currentDate.getTime() - monthsAgo.getTime()) / (1000 * 60 * 60 * 24)
+        );
+        break;
+      case 'years':
+        // Get the date of the same day 'value' years ago
+        const yearsAgo = new Date(
+          currentDate.getFullYear() - value,
+          currentDate.getMonth(),
+          currentDate.getDate()
+        );
+        // Calculate the difference in days
+        days = Math.floor(
+          (currentDate.getTime() - yearsAgo.getTime()) / (1000 * 60 * 60 * 24)
+        );
+        break;
+      case 'days':
+      default:
+        days = value;
+        break;
+    }
+
+    return days;
+  }
+
+  /**
    * To fetch Resource Data On Scroll
    */
   getResourceDataOnScroll() {
@@ -148,7 +191,7 @@ export class DatasetFilterComponent implements OnDestroy {
             return { id: element?.id?.toString(), name: element?.name };
           });
 
-          //Edit Mode data
+          // Edit Mode data
           if (this.query?.value?.resource?.id) {
             this.selectedResourceId = this.query?.value?.resource?.id;
             this.getResourceData();
@@ -297,7 +340,7 @@ export class DatasetFilterComponent implements OnDestroy {
    * @returns true if the field is date or datetime
    */
   isDateOrDatetimeOperator(fieldIndex: number): boolean {
-    const operators = ['eq', 'neq', 'gte', 'gt', 'lte', 'lt'];
+    const operators = ['eq', 'neq', 'gte', 'gt', 'lte', 'lt', 'inthelast'];
     const fieldType = this.getFieldType(fieldIndex);
     const operatorControl = this.datasetFilterInfo
       .at(fieldIndex)
@@ -312,6 +355,16 @@ export class DatasetFilterComponent implements OnDestroy {
   }
 
   /**
+   * Returns an array of numbers from 1 to 90
+   * for the "In the last" dropdown.
+   *
+   * @returns an array of numbers from 1 to 90.
+   */
+  getNumbersArray(): number[] {
+    return Array.from({ length: 90 }, (_, i) => i + 1);
+  }
+
+  /**
    * Grabs filter row values.
    *
    *  @returns FormGroup
@@ -321,6 +374,10 @@ export class DatasetFilterComponent implements OnDestroy {
       field: [],
       operator: ['eq'],
       value: [],
+      inTheLast: this.formGroup.group({
+        number: [1],
+        unit: ['days'],
+      }),
       hideEditor: false,
     });
   }
@@ -382,7 +439,14 @@ export class DatasetFilterComponent implements OnDestroy {
     if (operator?.disableValue) {
       filterData.get('hideEditor').setValue(true);
     } else {
-      filterData.get('hideEditor').setValue(false);
+      if (selectedOperator === 'inthelast') {
+        filterData.get('hideEditor').setValue(true);
+        const inTheLastNumber = filterData.get('inTheLast.number').value;
+        const inTheLastUnit = filterData.get('inTheLast.unit').value;
+        // Convert the Days, Months, Years to days
+        const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
+        filterData.get('value').setValue(days);
+      }
     }
   }
 

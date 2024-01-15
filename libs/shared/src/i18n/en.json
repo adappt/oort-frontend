@@ -1990,6 +1990,7 @@
 			"filterIsNotNullOperator": "Is not null",
 			"filterIsNullOperator": "Is null",
 			"filterIsTrue": "is true",
+			"filterIsWithinTheLast": "Is within the last",
 			"filterLtOperator": "Is less than",
 			"filterLteOperator": "Is less than or equal to",
 			"filterMenuLogicDropDownLabel": "'{columnName} Filter Logic'",

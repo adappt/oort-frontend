@@ -103,19 +103,8 @@ export class EmsTemplateComponent {
         isValid: this.isStepValid,
         validate: this.shouldValidate,
       },
-      // {
-      //   label: 'Send',
-      //   isValid: this.isStepValid,
-      //   validate: this.shouldValidate,
-      // },
     ];
   }
-
-  // public steps = [
-  //     { label: "First step" },
-  //     { label: "Second step", optional: true },
-  //     { label: "Third step" },
-  //   ];
 
   /**
    * Getter for the current form group.
@@ -139,9 +128,6 @@ export class EmsTemplateComponent {
    * Increments the current step by one.
    */
   public next(): void {
-    // if (this.currentStep === 2) {
-    //   this.emailService.datasetsForm.controls['recipients'].markAsTouched();
-    // }
     if (this.currentStep === 0) {
       if (
         this.emailService.datasetsForm.controls['name'].valid &&
@@ -238,6 +224,9 @@ export class EmsTemplateComponent {
     }
   }
 
+  /**
+   *
+   */
   navigateToListScreen() {
     this.navigateToEms.emit();
   }

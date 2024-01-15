@@ -97,61 +97,6 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   /**
-   * Filters the available fields based on the search query.
-   *
-   * @param searchQuery search Query string
-   */
-  filterAvailableFields(searchQuery: string): void {
-    this.filteredFields = this.resource?.fields.filter((field: any) =>
-      field.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }
-
-  /**
-   * To add the selective fields in the layout
-   *
-   * @param fieldName name of the field.
-   */
-  addSelectiveFields(fieldName: string): void {
-    const existFields = this.dataSetFormGroup.get('query').value.fields || [];
-    if (!JSON.stringify(existFields).includes(fieldName)) {
-      existFields.push({ name: fieldName, type: typeof fieldName });
-      this.dataSetFormGroup.controls.query.controls.fields.setValue(
-        existFields
-      );
-      this.selectedFields = existFields;
-    }
-    // Removes the selected field from the available fields list
-    this.resource.fields = this.resource.fields.filter(
-      (field: { name: string }) => field.name !== fieldName
-    );
-    this.onSubmit();
-  }
-
-  /**
-   * This function removes selected fields from the block table.
-   *
-   * @param fieldName The name of the field to remove.
-   */
-  removeSelectiveFields(fieldName: string): void {
-    const existFields =
-      this.dataSetFormGroup.controls.query.controls.fields.value || [];
-    const index = existFields.findIndex(
-      (field: { name: string }) => field.name === fieldName
-    );
-    if (index !== -1) {
-      existFields.splice(index, 1);
-      this.dataSetFormGroup.controls.query.controls.fields.setValue(
-        existFields
-      );
-      this.selectedFields = existFields;
-    }
-    // Adds the deselected field back to the available fields list
-    this.resource.fields.push({ name: fieldName, type: typeof fieldName });
-    this.onSubmit();
-  }
-
-  /**
    * Grabs filter row values.
    *
    *  @returns FormGroup

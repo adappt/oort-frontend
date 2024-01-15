@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { GET_DATA_SET } from '../../graphql/queries';
 import { ResourceQueryResponse } from '../../../../models/resource.model';
 import { EmailService } from '../../email.service';
+import { Subscription } from 'rxjs';
 
 /**
  * Component used to display modals regarding layouts
@@ -12,14 +13,15 @@ import { EmailService } from '../../email.service';
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.scss'],
 })
-export class PreviewComponent implements OnInit {
+export class PreviewComponent implements OnInit, OnDestroy {
   public selectedResourceId: string | undefined = '653642baa37293bb1706506e';
   public dataList!: { [key: string]: string }[];
   public dataListKey!: { [key: string]: string }[];
-  headerLogo: string | ArrayBuffer | null = null;
-  bannerImage: string | ArrayBuffer | null = null;
-  footerLogo: string | ArrayBuffer | null = null;
-  bodyString: any;
+  public headerLogo: string | ArrayBuffer | null = null;
+  public bannerImage: string | ArrayBuffer | null = null;
+  public footerLogo: string | ArrayBuffer | null = null;
+  public bodyString: any;
+  private querySubscription: Subscription | null = null;
 
   /**
    * Creates an instance of PreviewComponent.
@@ -38,21 +40,15 @@ export class PreviewComponent implements OnInit {
       this.bodyString;
 
     if (this.emailService.allLayoutdata.headerLogo) {
-      this.headerLogo = URL.createObjectURL(
-        this.emailService.allLayoutdata.headerLogo
-      );
+      URL.createObjectURL(this.emailService.allLayoutdata.headerLogo);
     }
 
     if (this.emailService.allLayoutdata.footerLogo) {
-      this.footerLogo = URL.createObjectURL(
-        this.emailService.allLayoutdata.footerLogo
-      );
+      URL.createObjectURL(this.emailService.allLayoutdata.footerLogo);
     }
 
     if (this.emailService.allLayoutdata.bannerImage) {
-      this.bannerImage = URL.createObjectURL(
-        this.emailService.allLayoutdata.bannerImage
-      );
+      URL.createObjectURL(this.emailService.allLayoutdata.bannerImage);
     }
 
     (document.getElementById('footerHtml') as HTMLInputElement).innerHTML =
@@ -138,7 +134,7 @@ export class PreviewComponent implements OnInit {
     switch (item) {
       case 'table':
         styles['tableStyle'] =
-          'border-width: 1px; border-color: rgb(228, 228, 228); width: 95%; margin: auto; box-shadow: 0 0 #0000; margin: 0.25rem';
+          'border-width: 1px; border-color: rgb(228, 228, 228); width: auto; max-width: 95%; margin: 1rem auto; box-shadow: 0 0 #0000; margin: 0.25rem; overflow:auto;';
         break;
       case 'thead':
         styles['theadStyle'] =
@@ -239,7 +235,7 @@ export class PreviewComponent implements OnInit {
    * Retrieves and processes the email notifications dataset.
    */
   getDataSet(): void {
-    this.apollo
+    this.querySubscription = this.apollo
       .query<ResourceQueryResponse>({
         query: GET_DATA_SET,
         variables: {
@@ -301,5 +297,11 @@ export class PreviewComponent implements OnInit {
    */
   replaceUnderscores(value: string): string {
     return value ? value.replace(/[^a-zA-Z0-9-]/g, ' ') : '';
+  }
+
+  ngOnDestroy(): void {
+    if (this.querySubscription) {
+      this.querySubscription.unsubscribe();
+    }
   }
 }

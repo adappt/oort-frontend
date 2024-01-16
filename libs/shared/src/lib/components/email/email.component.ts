@@ -236,6 +236,47 @@ export class EmailComponent extends UnsubscribeComponent {
     this.emailService.recipients =
       this.emailService.datasetsForm.controls['recipients'].value;
 
+    //Setting up Layout Data
+    this.emailService.emailLayout = {
+      subject: emailData.emailLayout.subject,
+      header: emailData.emailLayout.header,
+      body: emailData.emailLayout.body,
+      banner: emailData.emailLayout.banner,
+      footer: emailData.emailLayout.footer,
+    };
+
+    this.emailService.allLayoutdata = {
+      /** IMAGES AND STYLES */
+      bannerImage: emailData.emailLayout.banner.bannerImage,
+      bannerImageStyle: emailData.emailLayout.banner.bannerImageStyle,
+      /** CONTAINER STYLE */
+      containerStyle: emailData.emailLayout.banner.containerStyle,
+      /** FOOTER COPYRIGHT STYLE */
+      copyrightStyle: emailData.emailLayout.banner.copyrightStyle,
+      /** EMAIL SUBJECT */
+      txtSubject: emailData.emailLayout.subject,
+      /** EMAIL HEADER */
+      headerHtml: emailData.emailLayout.header.headerHtml,
+      headerLogo: emailData.emailLayout.header.headerLogo,
+      headerLogoStyle: emailData.emailLayout.header.headerStyle,
+      headerBackgroundColor: emailData.emailLayout.header.headerBackgroundColor,
+      headerTextColor: emailData.emailLayout.header.headerTextColor,
+      headerStyle: '',
+      /** EMAIL BODY */
+      bodyHtml: emailData.emailLayout.body.bodyHtml,
+      bodyBackgroundColor: emailData.emailLayout.body.bodyBackgroundColor,
+      bodyTextColor: emailData.emailLayout.body.bodyTextColor,
+      bodyStyle: emailData.emailLayout.body.bodyStyle,
+      /** EMAIL FOOTER */
+      footerHtml: emailData.emailLayout.footer.footerHtml,
+      footerLogo: emailData.emailLayout.footer.footerLogo,
+      footerBackgroundColor: emailData.emailLayout.footer.footerBackgroundColor,
+      footerTextColor: emailData.emailLayout.footer.footerTextColor,
+      footerStyle: emailData.emailLayout.footer.footerStyle,
+      footerImgStyle: emailData.emailLayout.footer.footerImgStyle,
+      footerHtmlStyle: emailData.emailLayout.footer.footerHtmlStyle,
+    };
+
     this.emailService.datasetsForm
       .get('applicationId')
       ?.setValue(this.applicationId);

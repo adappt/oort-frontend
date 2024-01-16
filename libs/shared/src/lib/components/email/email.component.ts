@@ -11,6 +11,9 @@ import { ApiConfiguration } from '../../models/api-configuration.model';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;
+/**
+ *
+ */
 const DISTRIBUTION_PAGE_SIZE = 5;
 /**
  * Email Notification setup component.
@@ -25,7 +28,7 @@ export class EmailComponent extends UnsubscribeComponent {
   templateActualData: any = [];
   public loading = true;
   public applicationId = '';
-  public distributionLists: any[] = [];
+  public distributionLists: any = [];
   public emailNotifications: any = [];
   public pageInfo = {
     pageIndex: 0,
@@ -335,10 +338,10 @@ export class EmailComponent extends UnsubscribeComponent {
       this.pageInfo,
       this.filterTemplateData
     );
-    if (cachedData && cachedData.length === this.pageInfo.pageSize) {
-      this.emailNotifications = cachedData;
-      // this.filterTemplateData = this.emailNotifications;
-    }
+    // if (cachedData && cachedData.length === this.pageInfo.pageSize) {
+    this.emailNotifications = cachedData;
+    // this.filterTemplateData = this.emailNotifications;
+    // }
   }
 
   /**
@@ -351,12 +354,12 @@ export class EmailComponent extends UnsubscribeComponent {
       this.pageInfo,
       this.cacheDistributionList
     );
-    if (
-      cachedData &&
-      cachedData.length === this.distributionPageInfo.pageSize
-    ) {
-      this.distributionLists = cachedData;
-      // this.filterTemplateData = this.emailNotifications;
-    }
+    // if (
+    //   cachedData &&
+    //   cachedData.length === this.distributionPageInfo.pageSize
+    // ) {
+    this.distributionLists = cachedData;
+    // this.filterTemplateData = this.emailNotifications;
+    // }
   }
 }

@@ -283,7 +283,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
           (rec: any) => rec?.data
         );
 
-        const tempdata: any = this.dataList.map((x) => Object.keys(x).length);
+        const tempdata: any = this.dataList?.map((x) => Object.keys(x).length);
         const maxlength = Math.max(...tempdata);
         this.dataListKey = [this.dataList[tempdata.indexOf(maxlength)]];
       });

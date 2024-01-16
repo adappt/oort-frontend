@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { StepperComponent } from '@progress/kendo-angular-layout';
+import {
+  StepperActivateEvent,
+  StepperComponent,
+} from '@progress/kendo-angular-layout';
 import { EmailService } from '../../email.service';
 import { Router } from '@angular/router';
 import { ApplicationService } from '../../../../services/application/application.service';
@@ -19,7 +22,7 @@ export class EmsTemplateComponent {
   public addEmailnotification = this.emailService.addEmailNotification;
 
   public currentStep = 0;
-
+  public isLinear = true;
   @Output() navigateToEms: EventEmitter<any> = new EventEmitter();
 
   private submitted = false;
@@ -229,5 +232,17 @@ export class EmsTemplateComponent {
    */
   navigateToListScreen() {
     this.navigateToEms.emit();
+  }
+
+  /**
+   *
+   * @param ev
+   */
+  public onStepActivate(ev: StepperActivateEvent): void {
+    if (ev.index === 4 || ev.index === 5) {
+      this.isLinear = false;
+    } else {
+      this.isLinear = true;
+    }
   }
 }

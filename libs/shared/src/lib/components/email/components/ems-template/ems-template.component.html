@@ -4,6 +4,8 @@
     stepType="full"
     [(currentStep)]="currentStep"
     orientation="horizontal"
+    [linear]="isLinear"
+    (activate)="onStepActivate($event)"
     > </kendo-stepper>
     <div>
       <span class="k-form-separator"></span>

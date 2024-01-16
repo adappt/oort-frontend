@@ -9,6 +9,7 @@ import {
 import { Apollo } from 'apollo-angular';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { RestService } from '../../services/rest/rest.service';
 
 /**
  * Helper functions for emails template
@@ -101,7 +102,9 @@ export class EmailService {
 
   public configId: string | undefined;
 
-  private apiUrl = 'http://localhost:3000/notification/send-email/';
+  //private apiUrl = 'http://localhost:3000/notification/send-email/';
+
+  //private apiUrl = 'https://emspocdev.adapptlabs.com/api/notification/send-email/';
 
   /**
    * To replace all special characters with space
@@ -128,11 +131,13 @@ export class EmailService {
    * @param formBuilder The FormBuilder instance used to create form groups and controls
    * @param apollo The Apollo server instance used for GraphQL queries
    * @param http The HttpClient instance used for making HTTP requests
+   * @param restService mapping of the url
    */
   constructor(
     private formBuilder: FormBuilder,
     private apollo: Apollo,
-    private http: HttpClient
+    private http: HttpClient,
+    private restService: RestService
   ) {
     this.setDatasetForm();
   }
@@ -531,9 +536,8 @@ export class EmailService {
    * @returns rest post to end point
    */
   sendEmail(configId: string | undefined, emailData: any): Observable<any> {
-    console.log(this.apiUrl);
-    //return this.http.post<any>(this.apiUrl, emailData);
-    const urlWithConfigId = `${this.apiUrl}${configId}`;
+    console.log(this.restService.apiUrl);
+    const urlWithConfigId = `${this.restService.apiUrl}/notification/send-email/${configId}`;
     return this.http.post<any>(urlWithConfigId, emailData);
   }
 }

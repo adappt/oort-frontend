@@ -18,6 +18,7 @@ import {
 import { EmailService } from '../../email.service';
 import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
 import { GET_RESOURCE, GET_RESOURCES } from '../../graphql/queries';
+import { Subscription } from 'rxjs';
 /** Default items per query, for pagination */
 let ITEMS_PER_PAGE = 0;
 /**
@@ -34,6 +35,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   @Input() query: FormGroup | any;
   @Input() queryValue: FormGroup | any;
   showPreview = false;
+  private datasetSaveSubscription?: Subscription;
   public searchSelectedField = '';
   public searchAvailableField = '';
   public filteredFields: any[] = [];
@@ -105,6 +107,14 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       this.availableFields = availableFields;
       this.selectedResourceId = selectedResourceId;
     }
+
+    this.datasetSaveSubscription = this.emailService.datasetSave.subscribe(
+      (save) => {
+        if (save) {
+          this.getDataSet('preview');
+        }
+      }
+    );
   }
 
   ngOnDestroy() {
@@ -120,6 +130,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       selectedResourceId: this.selectedResourceId,
     };
     this.query.controls.cacheData.setValue(cacheData);
+
+    if (this.datasetSaveSubscription) {
+      this.datasetSaveSubscription.unsubscribe();
+    }
   }
 
   /**

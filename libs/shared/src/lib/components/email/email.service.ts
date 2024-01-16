@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   ADD_EMAIL_NOTIFICATION,
@@ -36,6 +36,7 @@ export class EmailService {
   public bodyTextColor = '#000000';
   public footerBackgroundColor = '#FFFFFF';
   public footerTextColor = '#000000';
+  public datasetSave: EventEmitter<boolean> = new EventEmitter();
   public recipients: {
     distributionListName: string;
     To: string[];
@@ -488,6 +489,22 @@ export class EmailService {
         notification: data,
       },
     });
+  }
+
+  /**
+   *
+   */
+  getFirstBlockFirstRow(): any {
+    const allPreviewData = this.getAllPreviewData();
+    if (
+      allPreviewData.length > 0 &&
+      allPreviewData[0].dataList &&
+      allPreviewData[0].dataList.length > 0
+    ) {
+      // Return the first row of the first block
+      return allPreviewData[0].dataList[0];
+    }
+    return null;
   }
 
   /**

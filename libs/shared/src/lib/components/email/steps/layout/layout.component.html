@@ -1,29 +1,54 @@
 <!-- 5th step Layout -->
 <div>
-  <!-- Subject -->
-  <div class="mt-8 bg-[#F5FAFF] flex items-center p-5">
-    <div class="inline-block px-5">
-      <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+  <!-- Dropdowns and Subject Input -->
+  <div class="flex flex-col mb-4 bg-[#F5FAFF] p-5" >
+    <!-- Subject Input Label -->
+    <div class="px-2 mb-2">
+      <label htmlFor="subjectInput" class="block font-bold text-gray-700 text-sm">
         Subject*
       </label>
     </div>
-    <!-- Dynamic Subject Input -->
-    <!-- <div *ngIf="checkSingleDatasetRow()">
-      <select (change)="insertSubjectFieldToken($event)">
-        <option *ngFor="let field of checkSingleDatasetRow()" [value]="field">{{ field }}</option>
-      </select>
-    </div> -->
-    <input
-      id="subjectInput"
-      type="text"
-      class="mt-1 text-sm text-left block w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm"
-      placeholder="Enter Value"
-      [(ngModel)]="emailService.allLayoutdata.txtSubject" [ngModelOptions]="{ standalone: true }"
-    />
+    <!-- Dropdowns -->
+    <div class="flex mb-2">
+      <div class="w-1/5 px-2">
+        <label for="fieldSelect" class="block text-gray-700 text-sm">
+          Field Select
+        </label>
+        <select id="fieldSelect" (change)="insertSubjectFieldToken($event)" placeholder="Field Select" class="block w-full mt-1 text-sm py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm">
+          <option value="" disabled selected>Select a field</option>
+          <option *ngFor="let field of firstBlockFields" [value]="'{{' + field + '}}'">{{ replaceUnderscores(field) | titlecase }}</option>
+        </select>
+      </div>
+      <div class="w-1/5 px-2">
+        <label for="timeInput" class="block text-gray-700 text-sm">
+          Timestamp
+        </label>
+        <select id="timeInput" (change)="insertSubjectFieldToken($event)" placeholder="Timestamp" class="block w-full mt-1 text-sm py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm">
+          <option value="" disabled selected>Select a timestamp</option>
+          <option *ngFor="let option of timeOptions" [value]="option.value">{{ option.label }}</option>
+        </select>
+      </div>
+    </div>
+    <!-- Subject Input -->
+    <div class="flex-grow px-2">
+      <label for="fieldSelect" class="block text-gray-700 text-sm">
+        Subject Text
+      </label>
+      <input
+        #subjectInputRef="ngModel"
+        id="subjectInput"
+        name="subjectInput"
+        type="text"
+        class="mt-1 text-sm text-left block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm"
+        placeholder="Enter Value"
+        [(ngModel)]="emailService.allLayoutdata.txtSubject"
+        required
+        [ngClass]="{'form-error': (!subjectInputRef.valid && subjectInputRef.touched)}"
+      />
+    </div>
   </div>
-<br>
   <!-- Header -->
-  <div class="bg-[#F5FAFF] p-5">
+  <div class="bg-[#F5FAFF]  mb-4 p-5">
     <div class="text-md font-semibold text-left text-[#1D2939]">Header Style</div>
     <div class="flex flex-wrap mb-4">
       <!-- Header Logo Image -->
@@ -67,9 +92,8 @@
     </div>
     <editor [(ngModel)]="emailService.allLayoutdata.headerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
   </div>
-<br>
   <!-- Body -->
-  <div class="bg-[#F5FAFF] p-5">
+  <div class="bg-[#F5FAFF]  mb-4 p-5">
     <div class="text-md font-semibold text-left text-[#1D2939]">Body</div>
     <div class="flex flex-wrap mb-4">
       <!-- Color Picker for Background Color -->
@@ -110,10 +134,8 @@
       </div>
     </div>
   </div>
-  <br>
-
   <!-- Banner Image -->
-  <div class="mt-8 bg-[#F5FAFF] flex items-center p-5">
+  <div class="mb-4 bg-[#F5FAFF] flex items-center p-5">
     <div class="inline-block px-5">
       <label for="banner_input" class="block text-gray-700 text-sm">
         Banner Image
@@ -128,8 +150,8 @@
       class="mt-1 text-sm text-left block flex-grow py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm"
     />
   </div>
-<br>
-  <div class="bg-[#F5FAFF] p-5">
+  <!-- Footer -->
+  <div class="bg-[#F5FAFF]  mb-4 p-5">
     <div class="text-md font-semibold text-left text-[#1D2939]">Footer Style</div>
     <div class="flex flex-wrap mb-4">
       <!-- Footer Logo Image -->

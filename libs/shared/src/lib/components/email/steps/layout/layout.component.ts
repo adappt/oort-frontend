@@ -17,6 +17,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   bodyEditor: EditorComponent | null = null;
   /** Tinymce editor configuration */
   public editor: any = EMAIL_LAYOUT_CONFIG;
+  public replaceUnderscores = this.emailService.replaceUnderscores;
   bodyHtml: any = '';
   headerHtml: any = '';
   footerHtml: any = '';
@@ -26,6 +27,13 @@ export class LayoutComponent implements OnInit, OnDestroy {
   bannerImage: string | ArrayBuffer | null = null;
   footerLogo: string | ArrayBuffer | null = null;
   showDropdown = false;
+  /** First block fields */
+  firstBlockFields: string[] = [];
+  timeOptions = [
+    { value: '{{today.date}}', label: "Today's Date" },
+    { value: '{{now.time}}', label: 'Current Time' },
+    { value: '{{now.datetime}}', label: 'Date and Time' },
+  ];
 
   /**
    * Component used for the selection of fields to display the fields in tabs.
@@ -55,6 +63,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
         this.emailService.allLayoutdata.footerLogo
       );
     }
+    this.initialiseFieldSelectDropdown();
+  }
+
+  /**
+   *
+   */
+  initialiseFieldSelectDropdown(): void {
+    const firstBlock = this.emailService.getAllPreviewData()[0];
+    if (firstBlock && firstBlock.dataList && firstBlock.dataList.length > 0) {
+      this.firstBlockFields = Object.keys(firstBlock.dataList[0]);
+    }
   }
 
   /**
@@ -72,6 +91,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   *
+   */
   removeHeaderLogo() {
     this.headerLogo = null;
     this.emailService.allLayoutdata.headerLogo = null;
@@ -107,6 +129,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   *
+   */
   removeFooterLogo() {
     this.footerLogo = null;
     this.emailService.allLayoutdata.footerLogo = null;
@@ -152,20 +177,35 @@ export class LayoutComponent implements OnInit, OnDestroy {
    */
   insertSubjectFieldToken(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
-    const field = selectElement.value;
-    if (field) {
+    const value = selectElement.value;
+    if (value) {
       const subjectInput = document.getElementById(
         'subjectInput'
       ) as HTMLInputElement;
       if (subjectInput) {
-        const cursorPos = subjectInput.selectionStart || 0;
+        const cursorPos =
+          subjectInput.selectionStart ?? subjectInput.value.length;
         const textBefore = subjectInput.value.substring(0, cursorPos);
         const textAfter = subjectInput.value.substring(cursorPos);
-        subjectInput.value = textBefore + `{{${field}}}` + textAfter;
-        // Update the subject value
-        this.emailService.allLayoutdata.txtSubject = subjectInput.value;
+        subjectInput.value = textBefore + value + textAfter;
+
+        // Trigger the input event to ensure ngModel updates
+        const inputEvent = new Event('input', { bubbles: true });
+        subjectInput.dispatchEvent(inputEvent);
+
+        // Reset the select element to its default state if needed
+        selectElement.value = '';
       }
     }
+  }
+
+  /**
+   *
+   * @param event
+   */
+  updateEmailServiceSubject(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    this.emailService.allLayoutdata.txtSubject = inputElement.value;
   }
 
   /**

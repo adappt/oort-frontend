@@ -144,6 +144,9 @@ export class EmsTemplateComponent {
         ].markAsTouched();
       }
     } else {
+      if (this.currentStep === 1) {
+        this.emailService.datasetSave.emit(true);
+      }
       this.currentStep += 1;
     }
   }

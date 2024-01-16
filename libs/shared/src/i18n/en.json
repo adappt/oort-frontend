@@ -2360,7 +2360,9 @@
 				"title": "Attributes"
 			},
 			"settings": {
-				"actions": "Actions"
+				"actions": "Actions",
+				"emailCreated": "New Email Notification Created",
+				"emailSent": "Email Notification has Successfully been Saved and Sent"
 			}
 		},
 		"applications": {

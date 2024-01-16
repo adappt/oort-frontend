@@ -7,6 +7,8 @@ import {
 import { EmailService } from '../../email.service';
 import { Router } from '@angular/router';
 import { ApplicationService } from '../../../../services/application/application.service';
+import { SnackbarService } from '@oort-front/ui';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Email template to create distribution list
@@ -73,7 +75,9 @@ export class EmsTemplateComponent {
   constructor(
     public emailService: EmailService,
     private router: Router,
-    public applicationService: ApplicationService
+    public applicationService: ApplicationService,
+    private snackBar: SnackbarService,
+    private translate: TranslateService
   ) {
     this.steps = [
       {
@@ -151,6 +155,12 @@ export class EmsTemplateComponent {
     }
   }
 
+  // public preview(): void {
+  //   if (this.currentStep === 1) {
+  //     this.emailService.datasetSave.emit(true);
+  //   }
+  // }
+
   /**
    * Decrements the current step by one.
    */
@@ -185,6 +195,9 @@ export class EmsTemplateComponent {
       .subscribe(
         (response) => {
           console.log('Email sent successfully:', response);
+          this.snackBar.openSnackBar(
+            this.translate.instant('pages.application.settings.emailSent')
+          );
           this.navigateToEms.emit();
         },
         (error) => {
@@ -226,6 +239,10 @@ export class EmsTemplateComponent {
           this.emailService.configId = res.data.addEmailNotification.id;
           console.log(this.emailService.configId);
           //window.location.reload();
+          this.snackBar.openSnackBar(
+            this.translate.instant('pages.application.settings.emailCreated')
+          );
+          this.navigateToEms.emit();
         });
     }
   }

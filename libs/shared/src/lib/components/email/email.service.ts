@@ -30,6 +30,7 @@ export class EmailService {
   public allPreviewData: any[] = [];
   public notificationTypes: string[] = ['email', 'alert', 'push notification'];
   public emailLayout!: any;
+  /** EMAIL STYLES DATA */
   public headerBackgroundColor = '#00205C';
   public headerTextColor = '#FFFFFF';
   public bodyBackgroundColor = '#FFFFFF';
@@ -492,7 +493,9 @@ export class EmailService {
   }
 
   /**
+   * Gets the first block and first row from the all preview dataset.
    *
+   * @returns The first block and first row from the all preview dataset and null if there is no data.
    */
   getFirstBlockFirstRow(): any {
     const allPreviewData = this.getAllPreviewData();
@@ -530,7 +533,7 @@ export class EmailService {
    *
    * @param id The notification data id.
    * @param applicationId The application id of the email notification.
-   * @returns Email Notification.
+   * @returns Email Notification that has been deleted.
    */
   deleteEmailNotification(id: string, applicationId: string) {
     return this.apollo.query<any>({
@@ -548,9 +551,9 @@ export class EmailService {
   /**
    * sending emails to endpoint
    *
-   * @param configId
-   * @param emailData data to be send
-   * @returns rest post to end point
+   * @param configId id of the config.
+   * @param emailData data to be send.
+   * @returns rest post to end point.
    */
   sendEmail(configId: string | undefined, emailData: any): Observable<any> {
     console.log(this.restService.apiUrl);

@@ -2374,7 +2374,9 @@
 				"title": "Attributs"
 			},
 			"settings": {
-				"actions": "Actions"
+				"actions": "Actions",
+				"emailCreated": "Nouvelle notification par e-mail créée",
+				"emailSent": "La notification par e-mail a été enregistrée et envoyée avec succès"
 			}
 		},
 		"applications": {

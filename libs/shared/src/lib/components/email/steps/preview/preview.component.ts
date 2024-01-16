@@ -20,7 +20,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   public headerLogo: string | ArrayBuffer | null = null;
   public bannerImage: string | ArrayBuffer | null = null;
   public footerLogo: string | ArrayBuffer | null = null;
-  public bodyString: any;
+  public bodyString: string | any;
   private querySubscription: Subscription | null = null;
 
   /**
@@ -32,7 +32,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   constructor(private apollo: Apollo, public emailService: EmailService) {}
 
   ngOnInit(): void {
-    this.parseAndReplaceTokensWithTables();
+    this.replaceTokensWithTables();
     (document.getElementById('headerHtml') as HTMLInputElement).innerHTML =
       this.emailService.allLayoutdata.headerHtml;
 
@@ -163,7 +163,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   /**
    * Parses the email body string and replaces dataset tokens with corresponding HTML tables.
    */
-  parseAndReplaceTokensWithTables(): void {
+  replaceTokensWithTables(): void {
     this.bodyString = this.emailService.allLayoutdata.bodyHtml;
     const tokenRegex = /{{([^}]+)}}/g;
     let match;

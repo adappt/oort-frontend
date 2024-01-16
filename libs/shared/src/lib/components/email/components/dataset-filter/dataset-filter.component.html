@@ -198,46 +198,58 @@
                   </div>
                   <!-- Filter Value -->
                   <div
-                    class="mt-4 w-1/3"
-                    *ngIf="operators?.[fieldIndex] && !data.get('hideEditor')?.value"
+                  class="mt-4 w-1/3"
+                  *ngIf="operators?.[fieldIndex] && !data.get('hideEditor')?.value"
+
                   >
+                  <!-- Text Input for non-date/datetime fields -->
+                  <ng-container *ngIf="!isDateOrDatetimeOperator(fieldIndex)">
                     <label
                       htmlFor="exampleSelect"
                       class="block text-gray-700 text-sm"
                     >
                       {{ 'components.queryBuilder.filter.value' | translate }}
                     </label>
-                    <!-- Text Input -->
-                    <ng-container *ngIf="!isDateOrDatetimeOperator(fieldIndex)">
-                      <input
-                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Enter the value"
-                        formControlName="value"
-                      />
-                    </ng-container>
-                    <!-- Date / DateTime picker -->
-                    <ng-container *ngIf="isDateOrDatetimeOperator(fieldIndex) && data.get('operator')?.value !== 'inTheLast'">
-                      <!-- Date Picker -->
-                      <input
-                        *ngIf="getFieldType(fieldIndex) === 'date'"
-                        type="date"
-                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Enter the value"
-                        formControlName="value"
-                      />
-                      <!-- Date Time Picker -->
-                      <input
-                        *ngIf="getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local'"
-                        type="datetime-local"
-                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Enter the value"
-                        formControlName="value"
-                      />
-                    </ng-container>
-                  </div>
-                  <ng-container *ngIf="isDateOrDatetimeOperator(fieldIndex) && data.get('operator')?.value === 'inthelast'">
+                    <input
+                      class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Enter the value"
+                      formControlName="value"
+                    />
+                  </ng-container>
+                  <!-- Date / DateTime picker or within the Last... picker -->
+                  <ng-container *ngIf="isDateOrDatetimeOperator(fieldIndex)">
+                    <!-- Date Picker -->
+                    <label
+                      htmlFor="exampleSelect"
+                      class="block text-gray-700 text-sm"
+                      *ngIf="getFieldType(fieldIndex) === 'date' && data.get('operator')?.value !== 'inthelast'"
+                    >
+                      {{ 'components.queryBuilder.filter.value' | translate }}
+                    </label>
+                    <input
+                      *ngIf="getFieldType(fieldIndex) === 'date' && data.get('operator')?.value !== 'inthelast'"
+                      type="date"
+                      class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Enter the value"
+                      formControlName="value"
+                    />
+                    <!-- Date Time Picker -->
+                    <label
+                      htmlFor="exampleSelect"
+                      class="block text-gray-700 text-sm"
+                      *ngIf="(getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local') && data.get('operator')?.value !== 'inthelast'"
+                    >
+                      {{ 'components.queryBuilder.filter.value' | translate }}
+                    </label>
+                    <input
+                      *ngIf="(getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local') && data.get('operator')?.value !== 'inthelast'"
+                      type="datetime-local"
+                      class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Enter the value"
+                      formControlName="value"
+                    />
                     <!-- within the Last... picker -->
-                    <div formGroupName="inTheLast" class="mt-4 w-1/3 flex">
+                    <div *ngIf="data.get('operator')?.value === 'inthelast'" formGroupName="inTheLast" class="flex">
                       <div class="mr-2">
                         <label class="block text-gray-700 text-sm">Number</label>
                         <select formControlName="number" class="block w-full mt-1 py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -253,7 +265,14 @@
                         </select>
                       </div>
                     </div>
+                    <div *ngIf="data.get('operator')?.value === 'inthelast'" [hidden]="true">
+                      <input
+                        formControlName="value"
+                        type="text"
+                      />
+                    </div>
                   </ng-container>
+                  </div>
                   <button
                     class="ui-button-icon primary medium button-danger mt-8"
                     (click)="deleteDatasetFilter(fieldIndex)"

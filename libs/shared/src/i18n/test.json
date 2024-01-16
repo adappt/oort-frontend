@@ -2360,7 +2360,9 @@
 				"title": "******"
 			},
 			"settings": {
-				"actions": "******"
+				"actions": "******",
+				"emailCreated": "******",
+				"emailSent": "******"
 			}
 		},
 		"applications": {

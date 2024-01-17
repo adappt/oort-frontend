@@ -7,7 +7,12 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { clone } from 'lodash';
 import {
@@ -456,25 +461,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       filterData.get('hideEditor').setValue(true);
     } else {
       filterData.get('hideEditor').setValue(false);
-      // Cant do set "hideEditor" to true as I believe this would set the value to default or null.
-      if (selectedOperator === 'inthelast') {
-        const inTheLastFormGroup = filterData.get('inTheLast') as FormGroup;
-        const inTheLastNumber = inTheLastFormGroup.get('number')?.value;
-        const inTheLastUnit = inTheLastFormGroup.get('unit')?.value;
-        if (inTheLastNumber && inTheLastUnit) {
-          // Convert the Days, Months, Years to days and set the value
-          const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
-          filterData.get('value')?.setValue(days);
-        }
-      }
-      const field = filterData.get('field')?.value;
-      const operatorValue = filterData.get('operator')?.value;
-      const value = filterData.get('value')?.value;
-      console.log(
-        `Field: ${field}, Operator: ${operatorValue}, Value: ${value}`
-      );
     }
-    console.log(filterData);
   }
 
   /**
@@ -569,6 +556,36 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       this.query.controls['name'].value !== null &&
       this.query.controls['name'].value !== ''
     ) {
+      if (this.query.get('filter') && this.query.get('filter').get('filters')) {
+        const filtersArray = this.query
+          .get('filter')
+          .get('filters') as FormArray;
+
+        // Iterate over the filters and update the value for 'inthelast' operators
+        filtersArray.controls.forEach((filterControl: AbstractControl) => {
+          const filterFormGroup = filterControl as FormGroup;
+          const operatorControl = filterFormGroup.get('operator');
+
+          if (operatorControl && operatorControl.value === 'inthelast') {
+            const inTheLastGroup = filterFormGroup.get(
+              'inTheLast'
+            ) as FormGroup;
+            if (inTheLastGroup) {
+              const inTheLastNumberControl = inTheLastGroup.get('number');
+              const inTheLastUnitControl = inTheLastGroup.get('unit');
+
+              if (inTheLastNumberControl && inTheLastUnitControl) {
+                const days = this.convertToDays(
+                  inTheLastNumberControl.value,
+                  inTheLastUnitControl.value
+                );
+                filterFormGroup.get('value')?.setValue(days);
+              }
+            }
+          }
+        });
+      }
+
       if (tabName == 'filter') {
         this.datasetPreview.selectTab(1);
       }
@@ -627,6 +644,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   dataList: this.dataList,
                   dataSetFields: this.dataSetFields,
                   tabIndex: res?.data?.dataSet?.tabIndex,
+                  // tabName:
+                  //   res?.data?.dataSet?.tabIndex < this.queryValue.length
+                  //     ? this.queryValue[res.data.dataSet.tabIndex].name
+                  //     : '',
                   tabName:
                     res?.data?.dataSet?.tabIndex < this.tabs.length
                       ? this.tabs[res.data.dataSet.tabIndex].title

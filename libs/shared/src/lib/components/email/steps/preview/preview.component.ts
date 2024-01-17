@@ -71,12 +71,12 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'bannerImage':
         styles[
           'bannerImageStyle'
-        ] = `max-width: 100%; height: auto; object-fit: contain;`;
+        ] = `max-width: 100%; height: auto; object-fit: contain; padding-bottom: 0.5rem;`;
         break;
       case 'header':
         styles[
           'headerStyle'
-        ] = `margin: 0.5rem auto; display: flex; width: 100%; background-color: ${this.emailService.headerBackgroundColor};`;
+        ] = `margin: 0 auto; display: flex; width: 100%; background-color: ${this.emailService.headerBackgroundColor};`;
         break;
       case 'headerLogo':
         styles[
@@ -116,7 +116,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'container':
         styles[
           'containerStyle'
-        ] = `border: 2px solid #2b6cb0; width: 100%; height: 100%; box-sizing: border-box;`;
+        ] = `border: 2px solid #00205C; width: 100%; height: 100%; box-sizing: border-box;`;
         break;
       default:
         return '';

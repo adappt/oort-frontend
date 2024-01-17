@@ -40,15 +40,21 @@ export class PreviewComponent implements OnInit, OnDestroy {
       this.bodyString;
 
     if (this.emailService.allLayoutdata.headerLogo) {
-      URL.createObjectURL(this.emailService.allLayoutdata.headerLogo);
+      this.headerLogo = URL.createObjectURL(
+        this.emailService.allLayoutdata.headerLogo
+      );
     }
 
     if (this.emailService.allLayoutdata.footerLogo) {
-      URL.createObjectURL(this.emailService.allLayoutdata.footerLogo);
+      this.footerLogo = URL.createObjectURL(
+        this.emailService.allLayoutdata.footerLogo
+      );
     }
 
     if (this.emailService.allLayoutdata.bannerImage) {
-      URL.createObjectURL(this.emailService.allLayoutdata.bannerImage);
+      this.bannerImage = URL.createObjectURL(
+        this.emailService.allLayoutdata.bannerImage
+      );
     }
 
     (document.getElementById('footerHtml') as HTMLInputElement).innerHTML =
@@ -134,11 +140,11 @@ export class PreviewComponent implements OnInit, OnDestroy {
     switch (item) {
       case 'table':
         styles['tableStyle'] =
-          'border-width: 1px; border-color: rgb(228, 228, 228); width: auto; max-width: 95%; margin: 1rem auto; box-shadow: 0 0 #0000; margin: 0.25rem; overflow:auto;';
+          'width: auto; max-width: 95%; margin: 0.25rem auto; box-shadow: 0 0 #0000; overflow:auto; border: none;';
         break;
       case 'thead':
         styles['theadStyle'] =
-          'font-family: inherit; font-size: 14px; background-color: #00205C; color: #FFFFFF; border-color: #00205C; box-shadow: 0 0 #0000;';
+          'font-family: inherit; font-size: 14px; background-color: #00205C; color: #FFFFFF; border-color: #00205C; box-shadow: 0 0 #0000; text-transform: capitalize;';
         break;
       case 'tbody':
         styles['tbodyStyle'] = 'font-family: inherit; font-size: 14px;';
@@ -148,12 +154,11 @@ export class PreviewComponent implements OnInit, OnDestroy {
           'text-align: left; padding-left: 20px; background-color: #00205C; color: #FFFFFF; padding: 0.5rem; text-align: center';
         break;
       case 'tr':
-        styles['trStyle'] =
-          'background-color: #FFFFFF; border-color: #00205C; color: #00205C;';
+        styles['trStyle'] = 'background-color: #FFFFFF;';
         break;
       case 'td':
         styles['tdStyle'] =
-          'text-align: left; padding-left: 20px; border-color: rgb(228, 228, 228); padding: 0.5rem; border: 1px solid #00205C; box-shadow: 0 0 #0000; margin: 0.25rem; text-align: center;';
+          'text-align: left; padding-left: 20px; padding: 0.5rem; box-shadow: 0 0 #0000; margin: 0.25rem; text-align: center;';
         break;
     }
     this.emailService.setTableStyles(styles); // Update the styles in the EmailService

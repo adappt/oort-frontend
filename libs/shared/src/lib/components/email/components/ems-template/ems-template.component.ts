@@ -71,6 +71,8 @@ export class EmsTemplateComponent {
    * @param emailService helper functions
    * @param router
    * @param applicationService
+   * @param snackBar
+   * @param translate
    */
   constructor(
     public emailService: EmailService,
@@ -185,26 +187,30 @@ export class EmsTemplateComponent {
   /**
    * Sending emails
    */
-  public send(): void {
-    this.saveAndSend();
-    const emailData = {
-      // Your email data here
-    };
+  public async send(): Promise<void> {
+    try {
+      await this.saveAndSend();
+      const emailData = {
+        // Your email data here
+      };
 
-    this.emailService
-      .sendEmail(this.emailService.configId, emailData)
-      .subscribe(
-        (response) => {
-          console.log('Email sent successfully:', response);
-          this.snackBar.openSnackBar(
-            this.translate.instant('pages.application.settings.emailSent')
-          );
-          this.navigateToEms.emit();
-        },
-        (error) => {
-          console.error('Error sending email:', error);
-        }
-      );
+      this.emailService
+        .sendEmail(this.emailService.configId, emailData)
+        .subscribe(
+          (response) => {
+            console.log('Email sent successfully:', response);
+            this.snackBar.openSnackBar(
+              this.translate.instant('pages.application.settings.emailSent')
+            );
+            this.navigateToEms.emit();
+          },
+          (error) => {
+            console.error('Error sending email:', error);
+          }
+        );
+    } catch (error) {
+      console.error('Error in saveAndSend:', error);
+    }
   }
 
   /**
@@ -225,23 +231,32 @@ export class EmsTemplateComponent {
    *
    * submission
    */
-  saveAndSend() {
-    if (Object.keys(this.emailService.datasetsForm.value).length) {
-      this.emailService.datasetsForm?.value?.datasets?.forEach((data: any) => {
-        delete data.cacheData;
-      });
-      this.applicationService.application$.subscribe((res: any) => {
-        this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
-      });
-      this.emailService
-        .addEmailNotification(this.emailService.datasetsForm.value)
-        .subscribe((res: any) => {
-          console.log(res);
-          this.emailService.configId = res.data.addEmailNotification.id;
-          console.log(this.emailService.configId);
-          //window.location.reload();
-        });
-    }
+  saveAndSend(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (Object.keys(this.emailService.datasetsForm.value).length) {
+        this.emailService.datasetsForm?.value?.datasets?.forEach(
+          (data: any) => {
+            delete data.cacheData;
+          }
+        );
+        this.applicationService.application$.subscribe((res: any) => {
+          this.emailService.datasetsForm
+            .get('applicationId')
+            ?.setValue(res?.id);
+          this.emailService
+            .addEmailNotification(this.emailService.datasetsForm.value)
+            .subscribe((res: any) => {
+              console.log(res);
+              this.emailService.configId = res.data.addEmailNotification.id;
+              console.log(this.emailService.configId);
+              //window.location.reload();
+              resolve();
+            }, reject);
+        }, reject);
+      } else {
+        resolve();
+      }
+    });
   }
 
   /**

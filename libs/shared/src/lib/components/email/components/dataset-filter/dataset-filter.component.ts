@@ -391,10 +391,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       operator: ['eq'],
       value: [],
       hideEditor: false,
-      inTheLast: this.formGroup.group({
-        number: [1],
-        unit: ['days'],
-      }),
+      // inTheLast: this.formGroup.group({
+      //   number: [1],
+      //   unit: ['days'],
+      // }),
     });
   }
 
@@ -457,16 +457,16 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     } else {
       filterData.get('hideEditor').setValue(false);
       // Cant do set "hideEditor" to true as I believe this would set the value to default or null.
-      if (selectedOperator === 'inthelast') {
-        const inTheLastFormGroup = filterData.get('inTheLast') as FormGroup;
-        const inTheLastNumber = inTheLastFormGroup.get('number')?.value;
-        const inTheLastUnit = inTheLastFormGroup.get('unit')?.value;
-        if (inTheLastNumber && inTheLastUnit) {
-          // Convert the Days, Months, Years to days and set the value
-          // const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
-          // filterData.get('value')?.setValue(days);
-        }
-      }
+      // if (selectedOperator === 'inthelast') {
+      //   const inTheLastFormGroup = filterData.get('inTheLast') as FormGroup;
+      //   const inTheLastNumber = inTheLastFormGroup.get('number')?.value;
+      //   const inTheLastUnit = inTheLastFormGroup.get('unit')?.value;
+      //   if (inTheLastNumber && inTheLastUnit) {
+      //     // Convert the Days, Months, Years to days and set the value
+      //     // const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
+      //     // filterData.get('value')?.setValue(days);
+      //   }
+      // }
       const field = filterData.get('field')?.value;
       const operatorValue = filterData.get('operator')?.value;
       const value = filterData.get('value')?.value;

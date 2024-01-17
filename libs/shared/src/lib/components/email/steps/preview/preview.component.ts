@@ -1,7 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { GET_DATA_SET } from '../../graphql/queries';
-import { ResourceQueryResponse } from '../../../../models/resource.model';
 import { EmailService } from '../../email.service';
 import { Subscription } from 'rxjs';
 

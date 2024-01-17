@@ -186,6 +186,7 @@ export class EmsTemplateComponent {
    * Sending emails
    */
   public send(): void {
+    this.saveAndSend();
     const emailData = {
       // Your email data here
     };
@@ -218,6 +219,29 @@ export class EmsTemplateComponent {
     ) as FormGroup[];
 
     return groups[index];
+  }
+
+  /**
+   *
+   * submission
+   */
+  saveAndSend() {
+    if (Object.keys(this.emailService.datasetsForm.value).length) {
+      this.emailService.datasetsForm?.value?.datasets?.forEach((data: any) => {
+        delete data.cacheData;
+      });
+      this.applicationService.application$.subscribe((res: any) => {
+        this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
+      });
+      this.emailService
+        .addEmailNotification(this.emailService.datasetsForm.value)
+        .subscribe((res: any) => {
+          console.log(res);
+          this.emailService.configId = res.data.addEmailNotification.id;
+          console.log(this.emailService.configId);
+          //window.location.reload();
+        });
+    }
   }
 
   /**

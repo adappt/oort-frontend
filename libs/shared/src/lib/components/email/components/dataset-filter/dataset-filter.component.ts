@@ -137,9 +137,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Converts days, months, years to days.
    *
-   * @param value
-   * @param unit
+   * @param value number value
+   * @param unit days, months, years
+   * @returns days in days, months or years.
    */
   convertToDays(value: number, unit: string): number {
     const currentDate = new Date();
@@ -388,11 +390,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       field: [],
       operator: ['eq'],
       value: [],
+      hideEditor: false,
       inTheLast: this.formGroup.group({
         number: [1],
         unit: ['days'],
       }),
-      hideEditor: false,
     });
   }
 
@@ -453,14 +455,24 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     if (operator?.disableValue) {
       filterData.get('hideEditor').setValue(true);
     } else {
+      filterData.get('hideEditor').setValue(false);
+      // Cant do set "hideEditor" to true as I believe this would set the value to default or null.
       if (selectedOperator === 'inthelast') {
-        filterData.get('hideEditor').setValue(true);
-        const inTheLastNumber = filterData.get('inTheLast.number').value;
-        const inTheLastUnit = filterData.get('inTheLast.unit').value;
-        // Convert the Days, Months, Years to days
-        const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
-        filterData.get('value').setValue(days);
+        const inTheLastFormGroup = filterData.get('inTheLast') as FormGroup;
+        const inTheLastNumber = inTheLastFormGroup.get('number')?.value;
+        const inTheLastUnit = inTheLastFormGroup.get('unit')?.value;
+        if (inTheLastNumber && inTheLastUnit) {
+          // Convert the Days, Months, Years to days and set the value
+          // const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
+          // filterData.get('value')?.setValue(days);
+        }
       }
+      const field = filterData.get('field')?.value;
+      const operatorValue = filterData.get('operator')?.value;
+      const value = filterData.get('value')?.value;
+      console.log(
+        `Field: ${field}, Operator: ${operatorValue}, Value: ${value}`
+      );
     }
   }
 

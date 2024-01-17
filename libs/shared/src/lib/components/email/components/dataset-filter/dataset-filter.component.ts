@@ -19,6 +19,7 @@ import { EmailService } from '../../email.service';
 import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
 import { GET_RESOURCE, GET_RESOURCES } from '../../graphql/queries';
 import { Subscription } from 'rxjs';
+import { parse } from 'path';
 /** Default items per query, for pagination */
 let ITEMS_PER_PAGE = 0;
 /**
@@ -391,10 +392,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       operator: ['eq'],
       value: [],
       hideEditor: false,
-      // inTheLast: this.formGroup.group({
-      //   number: [1],
-      //   unit: ['days'],
-      // }),
+      inTheLast: this.formGroup.group({
+        number: [1],
+        unit: ['days'],
+      }),
     });
   }
 
@@ -457,16 +458,16 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     } else {
       filterData.get('hideEditor').setValue(false);
       // Cant do set "hideEditor" to true as I believe this would set the value to default or null.
-      // if (selectedOperator === 'inthelast') {
-      //   const inTheLastFormGroup = filterData.get('inTheLast') as FormGroup;
-      //   const inTheLastNumber = inTheLastFormGroup.get('number')?.value;
-      //   const inTheLastUnit = inTheLastFormGroup.get('unit')?.value;
-      //   if (inTheLastNumber && inTheLastUnit) {
-      //     // Convert the Days, Months, Years to days and set the value
-      //     // const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
-      //     // filterData.get('value')?.setValue(days);
-      //   }
-      // }
+      if (selectedOperator === 'inthelast') {
+        const inTheLastFormGroup = filterData.get('inTheLast') as FormGroup;
+        const inTheLastNumber = inTheLastFormGroup.get('number')?.value;
+        const inTheLastUnit = inTheLastFormGroup.get('unit')?.value;
+        if (inTheLastNumber && inTheLastUnit) {
+          // Convert the Days, Months, Years to days and set the value
+          // const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
+          // filterData.get('value')?.setValue(days);
+        }
+      }
       const field = filterData.get('field')?.value;
       const operatorValue = filterData.get('operator')?.value;
       const value = filterData.get('value')?.value;
@@ -591,6 +592,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
           }
           query.tabIndex = count;
           count++;
+          query.pageSize = Number(query.pageSize);
           this.fetchDataSet(query).subscribe(
             (res: { data: { dataSet: any } }) => {
               if (res?.data?.dataSet) {

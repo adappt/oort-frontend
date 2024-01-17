@@ -22,7 +22,7 @@
         </ng-select>
       </div>
     </div>
-    <div class="tab-container">
+    <div class="tab-container" style="width: 100%;">
       <!-- Block Tabs -->
       <kendo-tabstrip #kendoStrip formArrayName="dataSets" (tabSelect)="changeTab($event.index)">
         <ng-container *ngIf="showPreview === false" >
@@ -49,52 +49,54 @@
         </ng-container>
 
         <!-- Preview Tab -->
-      <kendo-tabstrip-tab *ngIf="showPreview === true" [selected]="showPreview === true">
+      <kendo-tabstrip-tab *ngIf="showPreview === true" [selected]="showPreview === true" id="previewTab">
         <ng-template kendoTabTitle>
           {{ 'common.preview' | translate }}
         </ng-template>
 
       <ng-template kendoTabContent>
-        <ng-container *ngFor="let previewData of allPreviewData; let preIndex = index">
-          <label class="block text-gray-700 text-sm font-bold">
-            {{ previewData?.tabName }}
+        <div style="width: 75%; overflow-x: auto;">
+          <ng-container *ngFor="let previewData of allPreviewData; let preIndex = index">
+            <label class="block text-gray-700 text-sm font-bold">
+              {{ previewData?.tabName }}
+            </label>
+            <table
+            id="tblPreview" style="width: 90% !important;"
+            *ngIf="previewData?.dataList?.length"
+            class="dataset-preview w-full border border-blue-600 shadow-xs m-1"
+          >
+            <thead class="bg-blue-600 border-blue-600 shadow-xs text-white">
+              <tr class="bg-blue-600 border-blue-600 shadow-xs text-white">
+                <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
+                  <th
+                    class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center"
+                  >
+                    {{ replaceUnderscores(fieldKeyString) | titlecase }}
+                  </th>
+                </ng-container>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let data of previewData?.dataList"
+                class="bg-white-600 border-blue-600 text-blue-600"
+              >
+                <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
+                  <td
+                    class="p-2 border border-blue-600 shadow-xs m-1 text-center"
+                  >
+                    {{ data[fieldKeyString] }}
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+          <label class="block text-gray-700 text-sm" *ngIf="previewData?.dataList?.length === 0">
+            no data found
           </label>
-          <table
-          id="tblPreview"
-          *ngIf="previewData?.dataList?.length"
-          class="dataset-preview w-full border border-blue-600 shadow-xs m-1"
-        >
-          <thead class="bg-blue-600 border-blue-600 shadow-xs text-white">
-            <tr class="bg-blue-600 border-blue-600 shadow-xs text-white">
-              <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
-                <th
-                  class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center"
-                >
-                  {{ replaceUnderscores(fieldKeyString) | titlecase }}
-                </th>
-              </ng-container>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let data of previewData?.dataList"
-              class="bg-white-600 border-blue-600 text-blue-600"
-            >
-              <ng-container *ngFor="let fieldKeyString of previewData?.dataSetFields">
-                <td
-                  class="p-2 border border-blue-600 shadow-xs m-1 text-center"
-                >
-                  {{ data[fieldKeyString] }}
-                </td>
-              </ng-container>
-            </tr>
-          </tbody>
-        </table>
-        <label class="block text-gray-700 text-sm" *ngIf="previewData?.dataList?.length === 0">
-          no data found
-        </label>
-        <br>
-        </ng-container>
+          <br>
+          </ng-container>
+        </div>
 
         <button
         type="button"

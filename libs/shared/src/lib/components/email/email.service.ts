@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   ADD_EMAIL_NOTIFICATION,
@@ -103,7 +103,10 @@ export class EmailService {
   isExisting = true;
 
   public configId: string | undefined;
-
+  public dataList!: { [key: string]: any }[];
+  public dataSetFields!: string[];
+  @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
+  stepperStep = 0;
   //private apiUrl = 'http://localhost:3000/notification/send-email/';
 
   //private apiUrl = 'https://emspocdev.adapptlabs.com/api/notification/send-email/';
@@ -559,5 +562,91 @@ export class EmailService {
     console.log(this.restService.apiUrl);
     const urlWithConfigId = `${this.restService.apiUrl}/notification/send-email/${configId}`;
     return this.http.post<any>(urlWithConfigId, emailData);
+  }
+
+  /**
+   *
+   * @param emailData
+   */
+  getDataSet(emailData: any) {
+    let count = 0;
+    let allPreviewData: any = [];
+    for (const query of emailData.dataSets) {
+      query.tabIndex = count;
+      count++;
+      query.pageSize = Number(query.pageSize);
+      this.fetchDataSet(query).subscribe((res: { data: { dataSet: any } }) => {
+        if (res?.data?.dataSet) {
+          console.log(res);
+          // this.dataSetResponse = res?.data?.dataSet;
+          this.dataList = res?.data?.dataSet.records?.map((record: any) => {
+            const flattenedObject = this.flattenRecord(record);
+
+            delete flattenedObject.data;
+
+            const flatData = Object.fromEntries(
+              Object.entries(flattenedObject).filter(
+                ([, value]) => value !== null && value !== undefined
+              )
+            );
+
+            return flatData;
+          });
+          if (this.dataList?.length) {
+            this.dataSetFields = [
+              ...new Set(
+                this.dataList
+                  .map((data: { [key: string]: any }) => Object.keys(data))
+                  .flat()
+              ),
+            ];
+          }
+          allPreviewData.push({
+            dataList: this.dataList,
+            dataSetFields: this.dataSetFields,
+            tabIndex: res?.data?.dataSet?.tabIndex,
+            tabName:
+              res?.data?.dataSet?.tabIndex < this.tabs.length
+                ? this.tabs[res.data.dataSet.tabIndex].title
+                : '',
+          });
+          if (this.tabs.length == allPreviewData.length) {
+            allPreviewData = allPreviewData.sort(
+              (a: any, b: any) => a.tabIndex - b.tabIndex
+            );
+            // this.loading = false;
+            this.navigateToPreview.emit(allPreviewData);
+            this.setAllPreviewData(allPreviewData);
+            this.stepperStep = 5;
+          }
+        }
+      });
+    }
+  }
+
+  flattenRecord(record: any): any {
+    const result: any = {};
+
+    for (const key in record) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (record.hasOwnProperty(key)) {
+        const value = record[key];
+
+        if (typeof value === 'object' && value !== null) {
+          const flattenedValue = this.flattenRecord(value);
+
+          for (const subKey in flattenedValue) {
+            // eslint-disable-next-line no-prototype-builtins
+            if (flattenedValue.hasOwnProperty(subKey)) {
+              result[`${key}-${subKey}`] = flattenedValue[subKey];
+            }
+          }
+        } else {
+          result[key] = value;
+        }
+      }
+    }
+
+    return result;
   }
 }

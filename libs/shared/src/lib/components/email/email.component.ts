@@ -145,37 +145,42 @@ export class EmailComponent extends UnsubscribeComponent {
    *
    * @param id
    * @param isClone
+   * @param isSendEmail
    */
-  getEmailNotificationById(id: string, isClone?: boolean) {
+  getEmailNotificationById(
+    id: string,
+    isClone?: boolean,
+    isSendEmail?: boolean
+  ) {
     this.loading = true;
     this.emailService
       .getEmailNotification(id, this.applicationId)
       .subscribe((res) => {
-        this.loading = false;
         const emailData = res.data.editAndGetEmailNotification;
-        if (isClone) {
-          delete emailData.createdAt;
-          delete emailData.id;
-          delete emailData.createdBy;
-          delete emailData.modifiedAt;
-          emailData.name = emailData.name + '_Clone';
-          emailData.applicationId = this.applicationId;
-          emailData?.dataSets?.forEach((element: any) => {
-            delete element.__typename;
-            delete element.resource.__typename;
-            element?.fields.forEach((ele: any) => {
-              delete ele.__typename;
-            });
+        delete emailData.createdAt;
+        delete emailData.id;
+        delete emailData.createdBy;
+        delete emailData.modifiedAt;
+        emailData.name = emailData.name + '_Clone';
+        emailData.applicationId = this.applicationId;
+        emailData?.dataSets?.forEach((element: any) => {
+          delete element.__typename;
+          delete element.resource.__typename;
+          element?.fields.forEach((ele: any) => {
+            delete ele.__typename;
           });
-          delete emailData?.emailLayout?.__typename;
-          delete emailData.__typename;
-          delete emailData?.recipients?.__typename;
-          delete emailData.isDeleted;
-          delete emailData.lastExecution;
-          delete emailData.status;
+        });
+        delete emailData?.emailLayout?.__typename;
+        delete emailData.__typename;
+        delete emailData?.recipients?.__typename;
+        delete emailData.isDeleted;
+        delete emailData.lastExecution;
+        delete emailData.status;
+        if (isClone) {
           this.emailService
             .addEmailNotification(emailData)
             .subscribe((res: any) => {
+              this.loading = false;
               this.emailService.configId = res.data.addEmailNotification.id;
               this.getEmailNotificationById(
                 res.data.addEmailNotification.id,
@@ -183,7 +188,7 @@ export class EmailComponent extends UnsubscribeComponent {
               );
             });
         } else {
-          this.prepareEditData(emailData);
+          this.prepareEditData(emailData, isSendEmail);
         }
       });
   }
@@ -191,8 +196,9 @@ export class EmailComponent extends UnsubscribeComponent {
   /**
    *
    * @param emailData
+   * @param isSendEmail
    */
-  prepareEditData(emailData: any) {
+  prepareEditData(emailData: any, isSendEmail?: boolean) {
     const dataArray: FormArray | any = new FormArray([]);
     for (let index = 0; index < emailData.dataSets.length; index++) {
       //Adding Tabs detail
@@ -280,6 +286,18 @@ export class EmailComponent extends UnsubscribeComponent {
     this.emailService.datasetsForm
       .get('applicationId')
       ?.setValue(this.applicationId);
+
+    // this.emailService.datasetSave.emit(true);
+    if (isSendEmail) {
+      this.emailService.stepperStep = -1;
+      this.emailService.getDataSet(emailData);
+      setTimeout(() => {
+        this.loading = false;
+      }, 1500);
+    } else {
+      this.emailService.stepperStep = 0;
+      this.loading = false;
+    }
   }
 
   /**
@@ -367,6 +385,14 @@ export class EmailComponent extends UnsubscribeComponent {
    */
   public cloneEmailNotification(data: any) {
     this.getEmailNotificationById(data.id, true);
+  }
+
+  /**
+   *
+   * @param data
+   */
+  public sendEmailList(data: any) {
+    this.getEmailNotificationById(data.id, false, true);
   }
 
   /**

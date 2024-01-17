@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   StepperActivateEvent,
@@ -23,7 +23,7 @@ export class EmsTemplateComponent {
   public stepper: StepperComponent | undefined;
   public addEmailnotification = this.emailService.addEmailNotification;
 
-  public currentStep = 0;
+  @Input() currentStep = 0;
   public isLinear = true;
   @Output() navigateToEms: EventEmitter<any> = new EventEmitter();
 

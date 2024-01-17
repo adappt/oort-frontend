@@ -59,7 +59,6 @@ export class PreviewComponent implements OnInit, OnDestroy {
 
     (document.getElementById('footerHtml') as HTMLInputElement).innerHTML =
       this.emailService.allLayoutdata.footerHtml;
-    this.getDataSet();
   }
 
   /**
@@ -234,64 +233,6 @@ export class PreviewComponent implements OnInit, OnDestroy {
   </table>
 `;
     return tableHtml;
-  }
-
-  /**
-   * Retrieves and processes the email notifications dataset.
-   */
-  getDataSet(): void {
-    this.querySubscription = this.apollo
-      .query<ResourceQueryResponse>({
-        query: GET_DATA_SET,
-        variables: {
-          resourceId: this.selectedResourceId,
-          layout: {
-            name: 'Test Query',
-            query: {
-              name: 'Alerts',
-              filter: {
-                logic: 'and',
-                filters: [
-                  {
-                    field: 'status',
-                    operator: 'neq',
-                    value: 'pending',
-                    hideEditor: false,
-                  },
-                ],
-              },
-              pageSize: 10,
-              fields: [
-                {
-                  name: 'point_of_contact',
-                  type: 'string',
-                },
-                {
-                  name: 'description',
-                  type: 'string',
-                },
-                {
-                  name: 'region',
-                  type: 'string',
-                },
-                {
-                  name: 'status',
-                  type: 'string',
-                },
-              ],
-            },
-          },
-        },
-      })
-      .subscribe((res: any) => {
-        this.dataList = res?.data?.dataSet?.records?.records?.map(
-          (rec: any) => rec?.data
-        );
-
-        const tempdata: any = this.dataList?.map((x) => Object.keys(x).length);
-        const maxlength = Math.max(...tempdata);
-        this.dataListKey = [this.dataList[tempdata.indexOf(maxlength)]];
-      });
   }
 
   /**

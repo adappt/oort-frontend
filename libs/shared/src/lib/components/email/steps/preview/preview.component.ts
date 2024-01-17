@@ -19,6 +19,8 @@ export class PreviewComponent implements OnInit, OnDestroy {
   public bannerImage: string | ArrayBuffer | null = null;
   public footerLogo: string | ArrayBuffer | null = null;
   public bodyString: string | any;
+  public headerString: string | any;
+  public footerString: string | any;
   private querySubscription: Subscription | null = null;
 
   /**
@@ -31,8 +33,9 @@ export class PreviewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.replaceTokensWithTables();
+    this.replaceDateTimeTokens();
     (document.getElementById('headerHtml') as HTMLInputElement).innerHTML =
-      this.emailService.allLayoutdata.headerHtml;
+      this.headerString;
 
     (document.getElementById('bodyHtml') as HTMLInputElement).innerHTML =
       this.bodyString;
@@ -56,13 +59,13 @@ export class PreviewComponent implements OnInit, OnDestroy {
     }
 
     (document.getElementById('footerHtml') as HTMLInputElement).innerHTML =
-      this.emailService.allLayoutdata.footerHtml;
+      this.footerString;
   }
 
   /**
    * Retrieves the style based on the item name.
    *
-   * @param item The item you are retriving the inline styling of.
+   * @param item The item you are retrieving the inline styling of.
    * @returns The inline styling of the item.
    */
   getEmailStyle(item: string): string {
@@ -180,6 +183,38 @@ export class PreviewComponent implements OnInit, OnDestroy {
         this.bodyString = this.bodyString.replace(match[0], tableHtml);
       }
     }
+  }
+
+  /**
+   * Replaces time tokens with string value for both header and footer.
+   */
+  replaceDateTimeTokens(): void {
+    const currentDate = new Date();
+    const dateString = currentDate.toLocaleDateString();
+    const timeString = currentDate.toLocaleTimeString();
+    const dateTimeString = currentDate.toLocaleString();
+
+    const tokens = {
+      '{{today.date}}': dateString,
+      '{{now.datetime}}': dateTimeString,
+      '{{now.time}}': timeString,
+    };
+
+    this.headerString = this.emailService.allLayoutdata.headerHtml;
+    Object.entries(tokens).forEach(([token, value]) => {
+      this.headerString = this.headerString.replace(
+        new RegExp(token, 'g'),
+        value
+      );
+    });
+
+    this.footerString = this.emailService.allLayoutdata.footerHtml;
+    Object.entries(tokens).forEach(([token, value]) => {
+      this.footerString = this.footerString.replace(
+        new RegExp(token, 'g'),
+        value
+      );
+    });
   }
 
   /**

@@ -463,8 +463,8 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
         const inTheLastUnit = inTheLastFormGroup.get('unit')?.value;
         if (inTheLastNumber && inTheLastUnit) {
           // Convert the Days, Months, Years to days and set the value
-          // const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
-          // filterData.get('value')?.setValue(days);
+          const days = this.convertToDays(inTheLastNumber, inTheLastUnit);
+          filterData.get('value')?.setValue(days);
         }
       }
       const field = filterData.get('field')?.value;
@@ -474,6 +474,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
         `Field: ${field}, Operator: ${operatorValue}, Value: ${value}`
       );
     }
+    console.log(filterData);
   }
 
   /**

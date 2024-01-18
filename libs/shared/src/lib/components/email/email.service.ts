@@ -38,6 +38,7 @@ export class EmailService {
   public footerBackgroundColor = '#FFFFFF';
   public footerTextColor = '#000000';
   public datasetSave: EventEmitter<boolean> = new EventEmitter();
+  public showExistingDistributionList = false;
   public recipients: {
     distributionListName: string;
     To: string[];

@@ -81,6 +81,7 @@
 			"who": "Copyright © World Health Organization 2023."
 		},
 		"create": "Create",
+		"createdBy": "Created By",
 		"createdOn": "Created on",
 		"cronEditor": {
 			"advanced": "Advanced",

@@ -58,83 +58,56 @@
       </ng-template>
       <ng-template kendoTabContent>
         <ng-container *ngIf="resource?.fields?.length">
-          <div class="flex-row gap-4 mt-6">
-            <div class="flex gap-4">
-              <!-- Table Row Limit -->
-              <div class="mt-2">
-                <label
-                  htmlFor="data_set_limit"
-                  class="block text-gray-700 text-sm"
-                >
-                  Table Row
-                  {{
-                    'components.queryBuilder.sort.limit' | translate | titlecase
-                  }}
-                </label>
-                <input
-                  id="data_set_limit"
-                  class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  type="number"
-                  min="0"
-                  [placeholder]="
-                    'components.queryBuilder.sort.limit' | translate
-                  "
-                  formControlName="pageSize"
-                />
-              </div>
-              <!-- Filter Logic -->
-              <div formGroupName="filter" class="mt-2">
-                <label
-                  htmlFor="exampleSelect"
-                  class="block text-gray-700 text-sm"
-                >
-                  {{ 'components.queryBuilder.filter.logic' | translate }}
-                </label>
-                <select
-                  id="exampleSelect"
-                  name="exampleSelect"
-                  formControlName="logic"
-                  class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="and">
-                    {{ 'components.queryBuilder.filter.and' | translate }}
-                  </option>
-                  <option value="or">
-                    {{ 'components.queryBuilder.filter.or' | translate }}
-                  </option>
-                </select>
-              </div>
-              <div class="mt-2">
-                <!-- Filter Row -->
-                <label
-                  htmlFor="exampleSelect"
-                  class="block text-gray-700 text-sm" style="color: white;"
-                >a
-                </label>
-                <button
-                type="button"
-                class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm btnDataSet"
-                (click)="addNewDatasetFilter()"
-                >
-                {{ 'components.queryBuilder.filter.new' | translate }}
-                </button>
+          <div class="flex gap-4 mt-2">
+            <!-- Table Row Limit -->
+            <div class="mt-2">
+              <label htmlFor="data_set_limit" class="block text-gray-700 text-sm">
+                Table Row
+                {{
+                  'components.queryBuilder.sort.limit' | translate | titlecase
+                }}
+              </label>
+              <input
+                id="data_set_limit"
+                class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                type="number"
+                min="0"
+                [placeholder]="
+                  'components.queryBuilder.sort.limit' | translate
+                "
+                formControlName="pageSize"
+              />
+            </div>
+
+            <div class="mt-2">
+              <!-- Label for Filter Logic -->
+              <div>
+                <label>{{ 'components.queryBuilder.filter.logic' | translate }}</label>
               </div>
 
-              <div class="mt-2">
-                <!-- Filter Group -->
-                <label
-                  htmlFor="exampleSelect"
-                  class="block text-gray-700 text-sm" style="color: white;"
-                >a
-                </label>
-                <button
-                  type="button"
-                  class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm btnDataSet"
-                >
+              <div class="flex items-center gap-2">
+                <!-- Filter Logic -->
+                <div formGroupName="filter" uiFormFieldDirective [defaultMargin]="false" class="w-28">
+                  <ui-select-menu formControlName="logic">
+                    <ui-select-option value="or">
+                      {{ 'components.queryBuilder.filter.or' | translate }}
+                    </ui-select-option>
+                    <ui-select-option value="and">
+                      {{ 'components.queryBuilder.filter.and' | translate }}
+                    </ui-select-option>
+                  </ui-select-menu>
+                </div>
+
+                <!-- Filter Row Button -->
+                <ui-button category="tertiary" (click)="addNewDatasetFilter()">
+                  {{ 'components.queryBuilder.filter.new' | translate }}
+                </ui-button>
+
+                <!-- Filter Group Button -->
+                <ui-button category="tertiary">
                   {{ 'components.queryBuilder.filter.newGroup' | translate }}
-                </button>
+                </ui-button>
               </div>
-
             </div>
           </div>
           <div formGroupName="filter">
@@ -172,29 +145,33 @@
                       </ng-container>
                     </select>
                   </div>
+                <!--
+                  <div uiFormFieldDirective [defaultMargin]="false" class="w-60 mt-4">
+                    <label>{{ 'components.queryBuilder.filter.field' | translate }}</label>
+                    <ui-select-menu formControlName="field" [filterable]="true" (change)="setField($event, fieldIndex)">
+                      <ng-container *ngFor="let fieldDetails of filterFields">
+                        <ui-select-option [value]="fieldDetails?.name">
+                          {{ replaceUnderscores(fieldDetails?.name) | titlecase }}
+                        </ui-select-option>
+                      </ng-container>
+                    </ui-select-menu>
+                  </div> -->
+
                   <!-- Filter Operator -->
-                  <div class="mt-4 w-1/3" *ngIf="operators?.[fieldIndex]">
-                    <label
-                      htmlFor="operator__dropdown"
-                      class="block text-gray-700 text-sm"
-                    >
-                      {{
-                        'components.queryBuilder.filter.operator' | translate
-                      }}
-                    </label>
-                    <select
-                      id="operator__dropdown"
-                      class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      formControlName="operator"
-                      (ngModelChange)="onOperatorChange($event, data)"
-                    >
-                      <option
-                        [value]="operatorDetail?.value"
+                  <div
+                    uiFormFieldDirective
+                    [defaultMargin]="false"
+                    class="mt-4 w-1/3"
+                    *ngIf="operators?.[fieldIndex]">
+                    <label>{{ 'components.queryBuilder.filter.operator' | translate }}</label>
+                    <ui-select-menu formControlName="operator" (ngModelChange)="onOperatorChange($event, data)">
+                      <ui-select-option
                         *ngFor="let operatorDetail of operators[fieldIndex]"
+                        [value]="operatorDetail.value"
                       >
                         {{ operatorDetail.label | translate | titlecase }}
-                      </option>
-                    </select>
+                      </ui-select-option>
+                    </ui-select-menu>
                   </div>
                   <!-- Filter Value -->
                   <div
@@ -204,50 +181,43 @@
                   >
                   <!-- Text Input for non-date/datetime fields -->
                   <ng-container *ngIf="!isDateOrDatetimeOperator(fieldIndex)">
-                    <label
-                      htmlFor="exampleSelect"
-                      class="block text-gray-700 text-sm"
-                    >
-                      {{ 'components.queryBuilder.filter.value' | translate }}
-                    </label>
-                    <input
-                      class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      placeholder="Enter the value"
-                      formControlName="value"
-                    />
+                    <div uiFormFieldDirective [defaultMargin]="false">
+                      <label>{{ 'common.value.one' | translate }}</label>
+                      <input formControlName="value" type="text"placeholder="Enter the value" />
+                    </div>
                   </ng-container>
                   <!-- Date / DateTime picker or within the Last... picker -->
                   <ng-container *ngIf="isDateOrDatetimeOperator(fieldIndex)">
                     <!-- Date Picker -->
-                    <label
-                      htmlFor="exampleSelect"
-                      class="block text-gray-700 text-sm"
-                      *ngIf="getFieldType(fieldIndex) === 'date' && data.get('operator')?.value !== 'inthelast'"
-                    >
-                      {{ 'components.queryBuilder.filter.value' | translate }}
-                    </label>
-                    <input
-                      *ngIf="getFieldType(fieldIndex) === 'date' && data.get('operator')?.value !== 'inthelast'"
-                      type="date"
-                      class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      placeholder="Enter the value"
-                      formControlName="value"
-                    />
+                    <div uiFormFieldDirective [defaultMargin]="false" *ngIf="getFieldType(fieldIndex) === 'date' && data.get('operator')?.value !== 'inthelast'">
+                      <label
+                        class="block text-gray-700 text-sm"
+                        >{{ 'components.queryBuilder.filter.value' | translate }}</label>
+                      <div [uiDateWrapper]="calendar" *ngIf="getFieldType(fieldIndex) === 'date' && data.get('operator')?.value !== 'inthelast'">
+                        <input
+                          [uiDatePicker]
+                          formControlName="value"
+                          [label]="'kendo.datepicker.dateLabel' | translate"
+                        />
+                        <ui-date-picker #calendar></ui-date-picker>
+                      </div>
+                    </div>
                     <!-- Date Time Picker -->
-                    <label
-                      htmlFor="exampleSelect"
-                      class="block text-gray-700 text-sm"
-                      *ngIf="(getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local') && data.get('operator')?.value !== 'inthelast'"
-                    >
-                      {{ 'components.queryBuilder.filter.value' | translate }}
-                    </label>
-                    <input
-                      *ngIf="(getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local') && data.get('operator')?.value !== 'inthelast'"
-                      type="datetime-local"
-                      class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      placeholder="Enter the value"
-                      formControlName="value"
-                    />
+                    <div uiFormFieldDirective
+                      [defaultMargin]="false"
+                      *ngIf="(getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local') && data.get('operator')?.value !== 'inthelast'">
+                      <label
+                        class="block text-gray-700 text-sm"
+                        >{{ 'components.queryBuilder.filter.value' | translate }}</label>
+                      <div [uiDateWrapper]="calendar" *ngIf="(getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local') && data.get('operator')?.value !== 'inthelast'">
+                        <input
+                          [uiDatePicker]
+                          formControlName="value"
+                          [label]="'kendo.datepicker.dateLabel' | translate"
+                        />
+                        <ui-date-picker #calendar></ui-date-picker>
+                      </div>
+                    </div>
                     <!-- within the Last... picker -->
                     <div *ngIf="data.get('operator')?.value === 'inthelast'" formGroupName="inTheLast" class="flex">
                       <div class="mr-2">
@@ -259,9 +229,9 @@
                       <div>
                         <label class="block text-gray-700 text-sm">Unit</label>
                         <select formControlName="unit" class="block w-full mt-1 py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                          <option value="days">Days</option>
-                          <option value="months">Months</option>
-                          <option value="years">Years</option>
+                          <ng-container *ngFor="let timeUnit of timeUnits">
+                            <option [value]="timeUnit.value">{{ timeUnit.label }}</option>
+                          </ng-container>
                         </select>
                       </div>
                     </div>
@@ -288,7 +258,7 @@
             *ngIf="datasetFilterInfo.controls"
             type="button"
             (click)="getDataSet('filter')"
-            class="text-white float-right block mt-2 w-24 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+            class="bg-sky-600 float-right hover:bg-sky-800 text-white ml-3 px-4 py-2 rounded-md transition-colors duration-150 ease-in-out"
           >
             {{ 'components.queryBuilder.filter.apply' | translate }}
           </button>
@@ -380,7 +350,7 @@
         *ngIf="tabs?.length > 1 && datasetFilterInfo.controls && activeTab.index !== tabs.length-1"
         type="button"
         (click)="getDataSet('fields')"
-        class="text-white float-right block mt-2 w-24 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+        class="text-white text-sm float-right block mt-2 w-24 rounded-md bg-sky-600 hover:bg-sky-700 px-4 py-2 transition-colors duration-150 ease-in-out"
       >
         {{ 'components.queryBuilder.filter.apply' | translate }}
       </button>
@@ -388,7 +358,7 @@
         *ngIf="tabs?.length === 1 || activeTab?.index === tabs?.length-1"
         type="button"
         (click)="getDataSet('preview');showPreview=true"
-        class="text-white float-right block mt-2 w-24 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
+        class="text-white text-sm float-right block mt-2 w-24 rounded-md bg-sky-600 hover:bg-sky-700 px-4 py-2 transition-colors duration-150 ease-in-out"
       >
         {{ 'common.preview' | translate }}
       </button>
@@ -695,53 +665,6 @@
         </ng-container>
       </ng-template>
     </kendo-tabstrip-tab>
-    <!-- Preview Tab -->
-    <!-- <kendo-tabstrip-tab>
-      <ng-template kendoTabTitle>
-        {{ 'common.preview' | translate }}
-      </ng-template>
-      <ng-template kendoTabContent>
-        <table
-          id="tblPreview"
-          *ngIf="dataList?.length"
-          class="dataset-preview w-full border border-blue-600 shadow-xs m-1"
-        >
-          <thead class="bg-blue-600 border-blue-600 shadow-xs text-white">
-            <tr class="bg-blue-600 border-blue-600 shadow-xs text-white">
-              <ng-container *ngFor="let fieldKeyString of dataSetFields">
-                <th
-                  class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center"
-                >
-                  {{ replaceUnderscores(fieldKeyString) | titlecase }}
-                </th>
-              </ng-container>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let data of dataList"
-              class="bg-white-600 border-blue-600 text-blue-600"
-            >
-              <ng-container *ngFor="let fieldKeyString of dataSetFields">
-                <td
-                  class="p-2 border border-blue-600 shadow-xs m-1 text-center"
-                >
-                  {{ data[fieldKeyString] }}
-                </td>
-              </ng-container>
-            </tr>
-          </tbody>
-        </table>
-
-        <button
-        type="button"
-        (click)="showPreview=false"
-        class="text-white float-right block mt-2 w-32 rounded-md border border-blue-600 bg-blue-600 shadow-xs m-1"
-      >
-        {{ 'common.back' | translate }}
-      </button>
-      </ng-template>
-    </kendo-tabstrip-tab> -->
   </kendo-tabstrip>
 
 </form>

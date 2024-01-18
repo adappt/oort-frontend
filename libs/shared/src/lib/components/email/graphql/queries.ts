@@ -107,6 +107,7 @@ export const ADD_EMAIL_NOTIFICATION = gql`
         pageSize
         filter
         fields
+        tableStyle
       }
       modifiedAt
       schedule
@@ -156,6 +157,7 @@ export const GET_AND_UPDATE_EMAIL_NOTIFICATION = gql`
           id
           name
         }
+        tableStyle
       }
       id
       name

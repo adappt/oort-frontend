@@ -58,6 +58,13 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public filterFields!: { name: string; type: string }[];
   public availableFields!: { name: string; type: string }[];
   public operators: { [key: number]: { value: string; label: string }[] } = {};
+  public timeUnits = [
+    { value: 'hours', label: 'Hours' },
+    { value: 'days', label: 'Days' },
+    { value: 'weeks', label: 'Weeks' },
+    { value: 'months', label: 'Months' },
+    { value: 'years', label: 'Years' },
+  ];
 
   filterOperators = FILTER_OPERATORS;
   @ViewChild('datasetPreview') datasetPreview: any;
@@ -153,42 +160,45 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
    * @param unit days, months, years
    * @returns days in days, months or years.
    */
-  convertToDays(value: number, unit: string): number {
+  convertToMinutes(value: number, unit: string): number {
     const currentDate = new Date();
-    let days;
+    let minutes;
 
     switch (unit) {
+      case 'hours':
+        minutes = value * 60;
+        break;
+      case 'days':
+        minutes = value * 24 * 60;
+        break;
+      case 'weeks':
+        minutes = value * 7 * 24 * 60;
+        break;
       case 'months':
-        // Get the date of the same day 'value' months ago
         const monthsAgo = new Date(
           currentDate.getFullYear(),
           currentDate.getMonth() - value,
           currentDate.getDate()
         );
-        // Calculate the difference in days
-        days = Math.floor(
-          (currentDate.getTime() - monthsAgo.getTime()) / (1000 * 60 * 60 * 24)
+        minutes = Math.floor(
+          (currentDate.getTime() - monthsAgo.getTime()) / (1000 * 60)
         );
         break;
       case 'years':
-        // Get the date of the same day 'value' years ago
         const yearsAgo = new Date(
           currentDate.getFullYear() - value,
           currentDate.getMonth(),
           currentDate.getDate()
         );
-        // Calculate the difference in days
-        days = Math.floor(
-          (currentDate.getTime() - yearsAgo.getTime()) / (1000 * 60 * 60 * 24)
+        minutes = Math.floor(
+          (currentDate.getTime() - yearsAgo.getTime()) / (1000 * 60)
         );
         break;
-      case 'days':
       default:
-        days = value;
-        break;
+        throw new Error(`Unsupported unit: ${unit}`);
     }
 
-    return days;
+    return minutes;
   }
 
   /**
@@ -580,7 +590,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
               const inTheLastUnitControl = inTheLastGroup.get('unit');
 
               if (inTheLastNumberControl && inTheLastUnitControl) {
-                const days = this.convertToDays(
+                const days = this.convertToMinutes(
                   inTheLastNumberControl.value,
                   inTheLastUnitControl.value
                 );

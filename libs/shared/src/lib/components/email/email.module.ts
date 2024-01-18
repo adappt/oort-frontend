@@ -11,6 +11,9 @@ import {
   TableModule,
   PaginatorModule,
   TooltipModule,
+  SelectMenuModule,
+  FormWrapperModule,
+  DateModule,
 } from '@oort-front/ui';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
@@ -81,6 +84,9 @@ import { EmsTemplateComponent } from './components/ems-template/ems-template.com
     TableModule,
     PaginatorModule,
     TooltipModule,
+    FormWrapperModule,
+    DateModule,
+    SelectMenuModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

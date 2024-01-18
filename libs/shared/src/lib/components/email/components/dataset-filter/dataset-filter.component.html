@@ -327,7 +327,7 @@
                 <ng-container *ngFor="let fieldDetails of availableFields">
                   <div
                     *ngIf="fieldDetails?.name?.includes(searchAvailableField)"
-                    (click)="addSelectiveFields(fieldDetails)"
+                    (click)="addSelectedFields(fieldDetails)"
                     class="group mt-1 text-sm text-left w-full py-1 px-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-200 cursor-pointer flex justify-between items-center"
                   >
                     {{ replaceUnderscores(removeUserString(fieldDetails?.name)) | titlecase }}

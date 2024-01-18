@@ -328,7 +328,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   ? this.query?.controls?.fields?.value
                   : this.selectedFields;
               this.query?.controls?.fields?.value?.forEach((fieldEle: any) => {
-                this.addSelectiveFields(fieldEle);
+                this.addSelectedFields(fieldEle);
               });
             }
 
@@ -470,7 +470,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Set field.
+   * Sets field input box values.
    *
    * @param event field name
    * @param fieldIndex filter row index
@@ -513,12 +513,12 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
    *
    * @param field string
    */
-  addSelectiveFields(field: any): void {
-    const existFields = clone(this.query.value.fields) || [];
-    if (!JSON.stringify(existFields).includes(field.name)) {
-      existFields.push(field);
-      this.query.controls.fields.setValue(existFields);
-      this.selectedFields = existFields;
+  addSelectedFields(field: any): void {
+    const fieldExists = clone(this.query.value.fields) || [];
+    if (!JSON.stringify(fieldExists).includes(field.name)) {
+      fieldExists.push(field);
+      this.query.controls.fields.setValue(fieldExists);
+      this.selectedFields = fieldExists;
     }
 
     console.log(`Field type of ${field.name}: ${field.type}`); // Print the field type to the console
@@ -534,14 +534,14 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
    * @param field The name of the field to remove.
    */
   removeSelectiveFields(field: any): void {
-    const existFields = this.query.controls.fields.value || [];
-    const index = existFields.findIndex(
+    const fieldExists = this.query.controls.fields.value || [];
+    const index = fieldExists.findIndex(
       (f: { name: string }) => f.name === field.name
     );
     if (index !== -1) {
-      existFields.splice(index, 1);
-      this.query.controls.fields.setValue(existFields);
-      this.selectedFields = existFields;
+      fieldExists.splice(index, 1);
+      this.query.controls.fields.setValue(fieldExists);
+      this.selectedFields = fieldExists;
     }
     // Adds the deselected field back to the available fields list
     this.availableFields.push(field);
@@ -649,13 +649,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   dataList: this.dataList,
                   dataSetFields: this.dataSetFields,
                   tabIndex: res?.data?.dataSet?.tabIndex,
-                  // tabName:
-                  //   res?.data?.dataSet?.tabIndex < this.queryValue.length
-                  //     ? this.queryValue[res.data.dataSet.tabIndex].name
-                  //     : '',
                   tabName:
-                    res?.data?.dataSet?.tabIndex < this.tabs.length
-                      ? this.tabs[res.data.dataSet.tabIndex].title
+                    res?.data?.dataSet?.tabIndex < this.queryValue.length
+                      ? this.queryValue[res.data.dataSet.tabIndex].name
                       : '',
                 });
                 if (this.tabs.length == allPreviewData.length) {

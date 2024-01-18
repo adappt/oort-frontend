@@ -315,7 +315,7 @@ export class EmailService {
 
     console.log(tableStyles);
 
-    // this.datasetsForm.get('tableStyles')?.setValue(this.defaultTableStyle);
+    this.datasetsForm.get('dataSets')?.get('tableStyle')?.setValue(tableStyles);
   }
 
   /**

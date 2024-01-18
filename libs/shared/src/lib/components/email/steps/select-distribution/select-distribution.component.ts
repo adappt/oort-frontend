@@ -1,7 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmailService } from '../../email.service';
 import { FormGroup } from '@angular/forms';
+import { ApplicationService } from '../../../../services/application/application.service';
 
+/** Default number of items per request for pagination */
+const DEFAULT_PAGE_SIZE = 5;
+/**
+ *
+ */
+const DISTRIBUTION_PAGE_SIZE = 5;
 /**
  * Select Distribution component.
  */
@@ -15,14 +22,43 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * Composite email distribution.
    *
    * @param emailService helper functions
+   * @param applicationService helper functions
    */
-  constructor(public emailService: EmailService) {}
+  constructor(
+    public emailService: EmailService,
+    public applicationService: ApplicationService
+  ) {
+    this.getExistingTemplate();
+    this.showExistingDistributionList =
+      this.emailService.showExistingDistributionList;
+  }
 
   public showEmailTemplate = false;
   public templateFor = '';
   public toEmailFilter!: FormGroup | any;
   public ccEmailFilter!: FormGroup | any;
   public bccEmailFilter!: FormGroup | any;
+  public showExistingDistributionList = false;
+  cacheDistributionList: any = [];
+  public distributionLists: any = [];
+  public distributionColumn = ['name', 'createdBy', 'email'];
+  public distributionPageInfo = {
+    pageIndex: 0,
+    pageSize: DISTRIBUTION_PAGE_SIZE,
+    length: 0,
+    endCursor: '',
+  };
+  filterTemplateData: any = [];
+  templateActualData: any = [];
+  public loading = true;
+  public applicationId = '';
+  public emailNotifications: any = [];
+  public pageInfo = {
+    pageIndex: 0,
+    pageSize: DEFAULT_PAGE_SIZE,
+    length: 0,
+    endCursor: '',
+  };
   public recipients: {
     distributionListName: string;
     To: string[];
@@ -41,6 +77,16 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
     this.ccEmailFilter = this.emailService.ccEmailFilter;
     this.bccEmailFilter = this.emailService.bccEmailFilter;
     console.log('SelectDistributionComponent');
+  }
+
+  /**
+   *
+   */
+  toggleDistributionListVisibility(): void {
+    this.emailService.showExistingDistributionList =
+      !this.emailService.showExistingDistributionList;
+    this.showExistingDistributionList =
+      this.emailService.showExistingDistributionList;
   }
 
   /**
@@ -96,5 +142,30 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
     this.emailService.toEmailFilter = this.toEmailFilter;
     this.emailService.ccEmailFilter = this.ccEmailFilter;
     this.emailService.bccEmailFilter = this.bccEmailFilter;
+  }
+
+  /**
+   *
+   */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  getExistingTemplate() {
+    this.loading = true;
+    this.applicationService.application$.subscribe((res: any) => {
+      this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
+      this.applicationId = res?.id;
+    });
+    this.emailService
+      .getEmailNotifications(this.applicationId)
+      .subscribe((res: any) => {
+        this.distributionLists = res?.data?.emailNotifications?.edges ?? [];
+      });
+  }
+
+  /**
+   * @param index table row index
+   */
+  selectDistributionListRow(index: number): void {
+    this.recipients = this.distributionLists[index].node.recipients;
+    this.showExistingDistributionList = !this.showExistingDistributionList;
   }
 }

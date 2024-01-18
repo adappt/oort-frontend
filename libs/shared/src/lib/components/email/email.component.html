@@ -81,22 +81,50 @@
 
         <ng-container cdkColumnDef="actions" [stickyEnd]="true">
           <th uiCellHeader *cdkHeaderCellDef scope="col" class="w-16"></th>
-          <td uiCell *cdkCellDef="let element">
-            <ui-menu #menu>
-              <button uiMenuItem (click)="sendEmailList(element)">
-                <ui-icon icon="forward_to_inbox" variant="grey"></ui-icon>
-              </button>
-              <button uiMenuItem (click)="getEmailNotificationById(element.id)">
-                <ui-icon icon="edit" variant="grey"></ui-icon>
-              </button>
-              <button uiMenuItem (click)="cloneEmailNotification(element)">
-                <ui-icon icon="content_copy" variant="grey"></ui-icon>
-              </button>
-              <button uiMenuItem (click)="deleteEmailNotification(element)">
-                <ui-icon icon="delete" variant="danger"></ui-icon>
-              </button>
-              
-            </ui-menu>
+          <td uiCell *cdkCellDef="let element" class="flex items-center">
+            <ui-button
+                [variant]="'grey'"
+                class="hide-icons hover:text-primary-600"
+                [isIcon]="true"
+                size="large"
+                (click)="sendEmailList(element)"
+                [icon]="'forward_to_inbox'"
+                [uiTooltip]="'Send Email'"
+              >
+            </ui-button>
+
+            <ui-button
+                [variant]="'grey'"
+                class="hide-icons hover:text-primary-600"
+                [isIcon]="true"
+                size="large"
+                (click)="getEmailNotificationById(element.id)"
+                [icon]="'edit'"
+                [uiTooltip]="'Edit'"
+              >
+            </ui-button>
+
+            <ui-button
+                [variant]="'grey'"
+                class="hide-icons hover:text-primary-600"
+                [isIcon]="true"
+                size="large"
+                (click)="cloneEmailNotification(element)"
+                [icon]="'content_copy'"
+                [uiTooltip]="'Clone'"
+              >
+            </ui-button>
+
+            <ui-button
+                [variant]="'danger'"
+                class="hide-icons hover:text-primary-600"
+                [isIcon]="true"
+                size="large"
+                (click)="deleteEmailNotification(element)"
+                [icon]="'delete'"
+                [uiTooltip]="'Delete'"
+              >
+            </ui-button>
           </td>
         </ng-container>
 

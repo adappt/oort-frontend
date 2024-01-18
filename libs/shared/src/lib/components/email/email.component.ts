@@ -157,26 +157,27 @@ export class EmailComponent extends UnsubscribeComponent {
       .getEmailNotification(id, this.applicationId)
       .subscribe((res) => {
         const emailData = res.data.editAndGetEmailNotification;
-        delete emailData.createdAt;
-        delete emailData.id;
-        delete emailData.createdBy;
-        delete emailData.modifiedAt;
-        emailData.name = emailData.name + '_Clone';
-        emailData.applicationId = this.applicationId;
-        emailData?.dataSets?.forEach((element: any) => {
-          delete element.__typename;
-          delete element.resource.__typename;
-          element?.fields.forEach((ele: any) => {
-            delete ele.__typename;
-          });
-        });
-        delete emailData?.emailLayout?.__typename;
-        delete emailData.__typename;
-        delete emailData?.recipients?.__typename;
-        delete emailData.isDeleted;
-        delete emailData.lastExecution;
-        delete emailData.status;
+
         if (isClone) {
+          delete emailData.createdAt;
+          delete emailData.id;
+          delete emailData.createdBy;
+          delete emailData.modifiedAt;
+          emailData.name = emailData.name + '_Clone';
+          emailData.applicationId = this.applicationId;
+          emailData?.dataSets?.forEach((element: any) => {
+            delete element.__typename;
+            delete element.resource.__typename;
+            element?.fields.forEach((ele: any) => {
+              delete ele.__typename;
+            });
+          });
+          delete emailData?.emailLayout?.__typename;
+          delete emailData.__typename;
+          delete emailData?.recipients?.__typename;
+          delete emailData.isDeleted;
+          delete emailData.lastExecution;
+          delete emailData.status;
           this.emailService
             .addEmailNotification(emailData)
             .subscribe((res: any) => {

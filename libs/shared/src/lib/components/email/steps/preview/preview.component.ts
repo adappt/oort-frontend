@@ -94,7 +94,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'body':
         styles[
           'bodyStyle'
-        ] = `text-align: center; margin: 0.5rem auto; padding: 0.5rem; width: 90%; background-color: ${this.emailService.bodyBackgroundColor}; color: ${this.emailService.bodyTextColor};`;
+        ] = `text-align: center; margin: 0.5rem auto; padding: 0.5rem; width: 90%;overflow-x: auto; background-color: ${this.emailService.bodyBackgroundColor}; color: ${this.emailService.bodyTextColor};`;
         break;
       case 'footer':
         styles[

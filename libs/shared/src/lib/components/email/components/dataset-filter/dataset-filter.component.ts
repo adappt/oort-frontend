@@ -89,6 +89,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
         this.query?.value?.resource?.id)
     ) {
       this.getResourceDataOnScroll();
+    } else {
+      if (this.query?.value?.resource?.id && this.metaData == undefined) {
+        this.selectedResourceId = this.query?.value?.resource?.id;
+        this.getResourceData();
+      }
     }
     this.filteredFields = this.resource?.fields;
     if (this.query?.controls?.cacheData?.value) {

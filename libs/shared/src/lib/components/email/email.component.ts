@@ -98,6 +98,9 @@ export class EmailComponent extends UnsubscribeComponent {
     this.emailService
       .getEmailNotifications(this.applicationId)
       .subscribe((res: any) => {
+        if (res?.data?.emailNotifications?.edges?.length === 0) {
+          this.loading = false;
+        }
         res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
           this.templateActualData.push(ele.node);
           this.loading = false;

@@ -274,11 +274,13 @@ export class EmsTemplateComponent {
       this.emailService.datasetsForm?.value?.datasets?.forEach((data: any) => {
         delete data.cacheData;
       });
+      const queryData = this.emailService.datasetsForm.value;
       this.applicationService.application$.subscribe((res: any) => {
         this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
+        queryData.applicationId = res?.id;
       });
       this.emailService
-        .addEmailNotification(this.emailService.datasetsForm.value)
+        .addEmailNotification(queryData)
         .subscribe((res: any) => {
           console.log(res);
           this.emailService.configId = res.data.addEmailNotification.id;

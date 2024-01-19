@@ -8,4 +8,6 @@ import { Component } from '@angular/core';
   templateUrl: './schedule-alert.component.html',
   styleUrls: ['./schedule-alert.component.scss'],
 })
-export class ScheduleAlertComponent {}
+export class ScheduleAlertComponent {
+  schedule_alert = true;
+}

@@ -282,5 +282,6 @@ export class PreviewComponent implements OnInit, OnDestroy {
     if (this.querySubscription) {
       this.querySubscription.unsubscribe();
     }
+    this.emailService.patchTableStyles();
   }
 }

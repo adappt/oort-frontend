@@ -360,11 +360,13 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
    * @param fieldIndex - Index of the field in graphql.
    * @returns field type
    */
-  getFieldType(fieldIndex: number): string {
-    const fieldControl = this.datasetFilterInfo.at(fieldIndex).get('field');
+  getFieldType(fieldIndex: number): string | undefined {
+    const fieldControl = this.datasetFilterInfo.at(fieldIndex);
     const fieldName = fieldControl ? fieldControl.value : null;
     const field = fieldName
-      ? this.resource.fields.find((field: any) => field.name === fieldName)
+      ? this.resource?.metadata?.find(
+          (data: any) => data.name === fieldName.field
+        )
       : null;
     return field ? field.type : '';
   }

@@ -58,6 +58,14 @@ export class CreateDatasetComponent implements OnInit {
   ngOnInit(): void {
     this.filteredFields = this.resource?.fields;
     this.tabIndex = this.activeTab.index;
+    if (this.emailService.notificationTypes.length > 0) {
+      this.dataSetFormGroup.controls['notificationType'].setValue(
+        this.emailService.notificationTypes[0]
+      );
+      this.emailService.datasetsForm.controls['notificationType'].setValue(
+        this.emailService.notificationTypes[0]
+      );
+    }
   }
 
   /**

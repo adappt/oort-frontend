@@ -12,7 +12,7 @@
         <label htmlFor="notification__type" class="block text-gray-700 text-sm mb-1">
           {{ 'models.customNotification.type' | translate }} </label>
         <ng-select id="notification__type" name="notification__type" formControlName="notificationType"
-          [items]="notificationTypes" placeholder="{{ 'models.customNotification.select' | translate }}">
+          [items]="notificationTypes" placeholder="{{ 'models.customNotification.select' | translate }}" [readonly]="true">
           <ng-template disabled selected>
             <span></span>
           </ng-template>

@@ -27,6 +27,7 @@
         formControlName="notificationType"
         [ngClass]="{'form-error': (!dataSetFormGroup.controls['notificationType'].valid && dataSetFormGroup.controls['notificationType'].touched)}"
         [items]="notificationTypes"
+        [readonly]="true"
         placeholder="{{ 'models.customNotification.select' | translate }}"
       >
         <ng-template disabled selected>

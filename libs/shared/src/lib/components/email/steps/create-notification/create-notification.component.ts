@@ -22,6 +22,17 @@ export class CreateNotificationComponent {
    */
   constructor(public emailService: EmailService) {}
 
+  ngOnInit(): void {
+    if (this.emailService.notificationTypes.length > 0) {
+      this.dataSetFormGroup.controls['notificationType'].setValue(
+        this.emailService.notificationTypes[0]
+      );
+      this.emailService.datasetsForm.controls['notificationType'].setValue(
+        this.emailService.notificationTypes[0]
+      );
+    }
+  }
+
   /**
    * Toggles the state of `isExisting` property in the `EmailService`.
    */

@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { takeUntil } from 'rxjs';
 import { UIPageChangeEvent, handleTablePageEvent } from '@oort-front/ui';
 import { ApiConfiguration } from '../../models/api-configuration.model';
+import { AuthService } from '../../services/auth/auth.service';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;
@@ -63,7 +64,8 @@ export class EmailComponent extends UnsubscribeComponent {
     public applicationService: ApplicationService,
     public formBuilder: FormBuilder,
     private confirmService: ConfirmService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public authService: AuthService
   ) {
     super();
   }

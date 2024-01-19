@@ -81,49 +81,51 @@
           <ng-container cdkColumnDef="actions" [stickyEnd]="true">
             <th uiCellHeader *cdkHeaderCellDef scope="col" class="w-16"></th>
             <td uiCell *cdkCellDef="let element" class="flex items-center">
-              <ui-button
-                  [variant]="'grey'"
-                  class="hide-icons hover:text-primary-600"
-                  [isIcon]="true"
-                  size="large"
-                  (click)="sendEmailList(element)"
-                  [icon]="'forward_to_inbox'"
-                  [uiTooltip]="'Send Email'"
-                >
-              </ui-button>
-  
-              <ui-button
-                  [variant]="'grey'"
-                  class="hide-icons hover:text-primary-600"
-                  [isIcon]="true"
-                  size="large"
-                  (click)="getEmailNotificationById(element.id)"
-                  [icon]="'edit'"
-                  [uiTooltip]="'Edit'"
-                >
-              </ui-button>
-  
-              <ui-button
-                  [variant]="'grey'"
-                  class="hide-icons hover:text-primary-600"
-                  [isIcon]="true"
-                  size="large"
-                  (click)="cloneEmailNotification(element)"
-                  [icon]="'content_copy'"
-                  [uiTooltip]="'Clone'"
-                >
-              </ui-button>
-  
-              <ui-button
-                  [variant]="'danger'"
-                  class="hide-icons hover:text-primary-600"
-                  [isIcon]="true"
-                  size="large"
-                  (click)="deleteEmailNotification(element)"
-                  [icon]="'delete'"
-                  [uiTooltip]="'Delete'"
-                >
-              </ui-button>
+              <ng-container *ngIf="element?.createdBy?.email === authService?.account?.username">
+                  <ui-button
+                    [variant]="'grey'"
+                    class="hide-icons hover:text-primary-600"
+                    [isIcon]="true"
+                    size="large"
+                    (click)="sendEmailList(element)"
+                    [icon]="'forward_to_inbox'"
+                    [uiTooltip]="'Send Email'"
+                  >
+                </ui-button>
+    
+                <ui-button
+                    [variant]="'grey'"
+                    class="hide-icons hover:text-primary-600"
+                    [isIcon]="true"
+                    size="large"
+                    (click)="getEmailNotificationById(element.id)"
+                    [icon]="'edit'"
+                    [uiTooltip]="'Edit'"
+                  >
+                </ui-button>
+    
+                <ui-button
+                    [variant]="'grey'"
+                    class="hide-icons hover:text-primary-600"
+                    [isIcon]="true"
+                    size="large"
+                    (click)="cloneEmailNotification(element)"
+                    [icon]="'content_copy'"
+                    [uiTooltip]="'Clone'"
+                  >
+                </ui-button>
+    
+                <ui-button
+                    [variant]="'danger'"
+                    class="hide-icons hover:text-primary-600"
+                    [isIcon]="true"
+                    size="large"
+                    (click)="deleteEmailNotification(element)"
+                    [icon]="'delete'"
+                    [uiTooltip]="'Delete'"
+                  >
+                </ui-button>
+              </ng-container>
             </td>
           </ng-container>
   

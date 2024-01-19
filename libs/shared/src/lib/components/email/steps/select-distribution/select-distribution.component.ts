@@ -58,6 +58,8 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
     pageSize: DEFAULT_PAGE_SIZE,
     length: 0,
     endCursor: '',
+    skip: 0,
+    limit: DEFAULT_PAGE_SIZE,
   };
   public recipients: {
     distributionListName: string;
@@ -155,7 +157,11 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
       this.applicationId = res?.id;
     });
     this.emailService
-      .getEmailNotifications(this.applicationId)
+      .getEmailNotifications(
+        this.applicationId,
+        this.pageInfo.limit,
+        this.pageInfo.skip
+      )
       .subscribe((res: any) => {
         this.distributionLists = res?.data?.emailNotifications?.edges ?? [];
       });

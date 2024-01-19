@@ -36,6 +36,8 @@ export class EmailComponent extends UnsubscribeComponent {
     pageSize: DEFAULT_PAGE_SIZE,
     length: 0,
     endCursor: '',
+    skip: 0,
+    limit: DEFAULT_PAGE_SIZE,
   };
   // === DISPLAYED COLUMNS ===
   public displayedColumns = ['name', 'alerttype', 'createdby', 'actions'];
@@ -98,7 +100,11 @@ export class EmailComponent extends UnsubscribeComponent {
       this.applicationId = res?.id;
     });
     this.emailService
-      .getEmailNotifications(this.applicationId)
+      .getEmailNotifications(
+        this.applicationId,
+        this.pageInfo.skip,
+        this.pageInfo.limit
+      )
       .subscribe((res: any) => {
         if (res?.data?.emailNotifications?.edges?.length === 0) {
           this.loading = false;

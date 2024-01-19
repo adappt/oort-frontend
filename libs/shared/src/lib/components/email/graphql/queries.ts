@@ -77,8 +77,12 @@ export const GET_DATA_SET = gql`
 
 /** Graphql query for getting data set by filter layout */
 export const GET_EMAIL_NOTIFICATIONS = gql`
-  query EmailNotifications($applicationId: ID!) {
-    emailNotifications(applicationId: $applicationId) {
+  query EmailNotifications($applicationId: ID!, $limit: Int, $skip: Int) {
+    emailNotifications(
+      applicationId: $applicationId
+      limit: $limit
+      skip: $skip
+    ) {
       edges {
         node {
           applicationId

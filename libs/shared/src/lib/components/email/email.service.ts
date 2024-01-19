@@ -472,11 +472,13 @@ export class EmailService {
    * @param id The application ids of the email notifications.
    * @returns Email notifications query result.
    */
-  getEmailNotifications(id: string) {
+  getEmailNotifications(id: string, limit: number, skip: number) {
     return this.apollo.query<any>({
       query: GET_EMAIL_NOTIFICATIONS,
       variables: {
         applicationId: id,
+        limit: limit,
+        skip: skip,
       },
     });
   }

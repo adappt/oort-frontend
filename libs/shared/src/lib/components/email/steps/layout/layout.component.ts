@@ -92,7 +92,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   * Removes the header logo from users selection.
    */
   removeHeaderLogo() {
     this.headerLogo = null;
@@ -130,7 +130,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   * Removes the footer logo from users selection.
    */
   removeFooterLogo() {
     this.footerLogo = null;
@@ -148,7 +148,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     if (this.bodyEditor && this.bodyEditor.editor) {
       this.bodyEditor.editor.insertContent(token);
     } else {
-      console.error('Body TinyMCE editor is not initialized');
+      console.error('Body TinyMCE editor is not initialised');
     }
   }
 
@@ -192,16 +192,15 @@ export class LayoutComponent implements OnInit, OnDestroy {
         // Trigger the input event to ensure ngModel updates
         const inputEvent = new Event('input', { bubbles: true });
         subjectInput.dispatchEvent(inputEvent);
-
-        // Reset the select element to its default state if needed
         selectElement.value = '';
       }
     }
   }
 
   /**
+   * Replaces the email service subject with the provided value by the user.
    *
-   * @param event
+   * @param event The txtSubject html input element.
    */
   updateEmailServiceSubject(event: Event): void {
     const inputElement = event.target as HTMLInputElement;

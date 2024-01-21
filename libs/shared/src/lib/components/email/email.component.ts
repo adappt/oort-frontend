@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EmailService } from './email.service';
 import { ApplicationService } from '../../services/application/application.service';
 import { UnsubscribeComponent } from '../utils/unsubscribe/unsubscribe.component';
@@ -24,7 +24,7 @@ const DISTRIBUTION_PAGE_SIZE = 5;
   templateUrl: './email.component.html',
   styleUrls: ['./email.component.scss'],
 })
-export class EmailComponent extends UnsubscribeComponent {
+export class EmailComponent extends UnsubscribeComponent implements OnInit {
   filterTemplateData: any = [];
   templateActualData: any = [];
   public loading = true;
@@ -39,7 +39,7 @@ export class EmailComponent extends UnsubscribeComponent {
     skip: 0,
     limit: DEFAULT_PAGE_SIZE,
   };
-  // === DISPLAYED COLUMNS ===
+  /** DISPLAYED COLUMNS */
   public displayedColumns = ['name', 'alerttype', 'createdby', 'actions'];
   public distributionColumn = ['name'];
   public cachedApiConfigurations: ApiConfiguration[] = [];
@@ -91,7 +91,6 @@ export class EmailComponent extends UnsubscribeComponent {
   /**
    *
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   getExistingTemplate() {
     this.loading = true;
     this.emailService.isExisting = true;
@@ -345,8 +344,10 @@ export class EmailComponent extends UnsubscribeComponent {
   }
 
   /**
+   * Returns Filter Fields Form.
    *
-   * @param filter
+   * @param filter filter data.
+   * @returns filter fields form.
    */
   getNewFilterFields(filter: any): FormGroup {
     return this.formBuilder.group({
@@ -357,10 +358,10 @@ export class EmailComponent extends UnsubscribeComponent {
     });
   }
 
-  // eslint-disable-next-line jsdoc/require-description
   /**
+   * Deletes the specified email notification.
    *
-   * @param data
+   * @param data The email notification to be deleted.
    */
   public deleteEmailNotification(data: any) {
     const dialogRef = this.confirmService.openConfirmModal({
@@ -368,10 +369,6 @@ export class EmailComponent extends UnsubscribeComponent {
         name: this.translate.instant('common.page.one'),
       }),
       content: 'Do you confirm the deletion of ' + data.name,
-      // this.translate.instant(
-      //   'components.application.pages.delete.confirmationMessage',
-      //   { name: data.name }
-      // ),
       confirmText: this.translate.instant('components.confirmModal.delete'),
       confirmVariant: 'danger',
     });
@@ -392,8 +389,9 @@ export class EmailComponent extends UnsubscribeComponent {
   }
 
   /**
+   * Creates a clone of an email notification.
    *
-   * @param data
+   * @param data The specified email notification.
    */
   public cloneEmailNotification(data: any) {
     this.getEmailNotificationById(data.id, true);
@@ -408,8 +406,9 @@ export class EmailComponent extends UnsubscribeComponent {
   }
 
   /**
+   * Handles the page change event.
    *
-   * @param e
+   * @param e The page change event.
    */
   onPage(e: UIPageChangeEvent): void {
     const cachedData = handleTablePageEvent(

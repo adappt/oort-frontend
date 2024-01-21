@@ -41,23 +41,26 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   @Input() queryValue: FormGroup | any;
   showPreview = false;
   private datasetSaveSubscription?: Subscription;
-  public searchSelectedField = '';
-  public searchAvailableField = '';
-  public filteredFields: any[] = [];
   public resourcesQuery!: QueryRef<ResourcesQueryResponse>;
   public replaceUnderscores: any = this.emailService.replaceUnderscores;
   public fetchDataSet: any = this.emailService.fetchDataSet;
-
+  /** FIELD VARIABLES */
   public resource!: Resource;
   public metaData!: any;
   public dataSetResponse: any;
   public dataSetFields!: string[];
   public selectedResourceId!: string;
   public dataList!: { [key: string]: any }[];
+  /** FILTER VARIABLES */
+  public searchSelectedField = '';
+  public searchAvailableField = '';
+  public filteredFields: any[] = [];
   public selectedFields!: { name: string; type: string }[];
   public filterFields!: { name: string; type: string }[];
   public availableFields!: { name: string; type: string }[];
   public operators: { [key: number]: { value: string; label: string }[] } = {};
+  filterOperators = FILTER_OPERATORS;
+  /** IN THE LAST TIME UNITS */
   public timeUnits = [
     { value: 'hours', label: 'Hours' },
     { value: 'days', label: 'Days' },
@@ -66,7 +69,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     { value: 'years', label: 'Years' },
   ];
 
-  filterOperators = FILTER_OPERATORS;
   @ViewChild('datasetPreview') datasetPreview: any;
   @Output() changeMainTab: EventEmitter<any> = new EventEmitter();
   @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
@@ -154,7 +156,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Converts days, months, years to days.
+   * Converts days, months, years to minutes.
    *
    * @param value number value
    * @param unit days, months, years

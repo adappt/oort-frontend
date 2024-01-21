@@ -128,6 +128,7 @@ export class EmailService {
       }),
       fields: [],
       cacheData: {},
+      tableStyle: this.defaultTableStyle,
     });
   }
 

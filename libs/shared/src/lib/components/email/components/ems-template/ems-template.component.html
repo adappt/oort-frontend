@@ -14,7 +14,7 @@
     <app-create-dataset *ngIf="currentStep === 1"></app-create-dataset>
     <app-select-distribution *ngIf="currentStep === 2"></app-select-distribution>
     <app-schedule-alert *ngIf="currentStep === 3"></app-schedule-alert>
-    <app-layout *ngIf="currentStep === 4"></app-layout>
+    <app-layout [setLayoutValidation]="setLayoutValidation" *ngIf="currentStep === 4"></app-layout>
     <app-preview *ngIf="currentStep === 5"></app-preview>
 
     <div class="flex gap-4 mt-4">

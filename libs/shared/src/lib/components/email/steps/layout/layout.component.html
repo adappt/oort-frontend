@@ -43,7 +43,7 @@
         placeholder="Enter Value"
         [(ngModel)]="emailService.allLayoutdata.txtSubject"
         required
-        [ngClass]="{'form-error': (!subjectInputRef.valid && subjectInputRef.touched)}"
+        [ngClass]="{'form-error': (setLayoutValidation)}"
       />
     </div>
   </div>

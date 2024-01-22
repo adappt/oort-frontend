@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { EMAIL_LAYOUT_CONFIG } from '../../../../const/tinymce.const';
 import { EditorService } from '../../../../services/editor/editor.service';
 import { EmailService } from '../../email.service';
@@ -34,6 +34,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     { value: '{{now.time}}', label: 'Current Time' },
     { value: '{{now.datetime}}', label: 'Date and Time' },
   ];
+  @Input() setLayoutValidation = false;
 
   /**
    * Component used for the selection of fields to display the fields in tabs.

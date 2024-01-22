@@ -36,6 +36,7 @@ export class EmsTemplateComponent {
   private submitted = false;
 
   public steps: any[];
+  setLayoutValidation = false;
 
   public form = new FormGroup({
     accountDetails: new FormGroup({
@@ -143,6 +144,7 @@ export class EmsTemplateComponent {
    * Increments the current step by one.
    */
   public next(): void {
+    this.setLayoutValidation = false;
     if (this.currentStep === 0) {
       if (
         this.emailService.datasetsForm.controls['name'].valid &&
@@ -158,6 +160,14 @@ export class EmsTemplateComponent {
     } else {
       if (this.currentStep === 1) {
         this.emailService.datasetSave.emit(true);
+      }
+      if (this.currentStep === 4) {
+        if (this.emailService.allLayoutdata.txtSubject === '') {
+          this.setLayoutValidation = true;
+          const eleScrollUp = document.querySelector('#fieldSelect');
+          eleScrollUp !== null ? eleScrollUp.scrollIntoView() : '';
+          return;
+        }
       }
       this.currentStep += 1;
     }

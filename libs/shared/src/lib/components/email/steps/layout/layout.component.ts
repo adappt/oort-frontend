@@ -4,6 +4,7 @@ import { EditorService } from '../../../../services/editor/editor.service';
 import { EmailService } from '../../email.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 /**
  * layout page component.
  */
@@ -15,6 +16,8 @@ import { ViewChild } from '@angular/core';
 export class LayoutComponent implements OnInit, OnDestroy {
   @ViewChild('bodyEditor', { static: false })
   bodyEditor: EditorComponent | null = null;
+  @ViewChild('headerEditor', { static: false })
+  headerEditor: EditorComponent | null = null;
   /** Tinymce editor configuration */
   public editor: any = EMAIL_LAYOUT_CONFIG;
   public replaceUnderscores = this.emailService.replaceUnderscores;
@@ -34,14 +37,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
     { value: '{{now.time}}', label: 'Current Time' },
     { value: '{{now.datetime}}', label: 'Date and Time' },
   ];
+  public inTheLastDropdown = new FormArray<FormControl>([]);
 
   /**
    * Component used for the selection of fields to display the fields in tabs.
    *
+   * @param fb
    * @param editorService Editor service used to get main URL and current language
    * @param emailService Service used for email-related operations and state management
    */
   constructor(
+    private fb: FormBuilder,
     private editorService: EditorService,
     public emailService: EmailService
   ) {
@@ -52,6 +58,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initInTheLastDropdown();
     if (this.emailService.allLayoutdata?.headerLogo) {
       this.headerLogo = URL.createObjectURL(
         this.emailService.allLayoutdata.headerLogo
@@ -64,6 +71,70 @@ export class LayoutComponent implements OnInit, OnDestroy {
       );
     }
     this.initialiseFieldSelectDropdown();
+    console.log(this.emailService.datasetsForm.get('filter'));
+  }
+
+  /**
+   *
+   */
+  replaceInLastToken(): void {
+    const inTheLastValue = this.emailService.datasetsForm
+      .get('filter')
+      ?.value?.filters.find(
+        (filter: any) => filter.operator === 'inthelast'
+      )?.value;
+    if (inTheLastValue) {
+      const token = '{{dataset.filter.field.value}}';
+      this.headerHtml = this.headerHtml.replace(token, inTheLastValue);
+    }
+  }
+
+  /**
+   *
+   */
+  private initInTheLastDropdown(): void {
+    const blocks = this.emailService.datasetsForm.get('dataSets') as FormArray;
+    blocks.controls.forEach((blockFormGroup, index) => {
+      const blockName =
+        blockFormGroup.get('name')?.value || `Block ${index + 1}`;
+      const filters = blockFormGroup.get('filter')?.get('filters') as FormArray;
+      filters.controls.forEach((filterControl) => {
+        if (filterControl.get('operator')?.value === 'inthelast') {
+          const field = filterControl.get('field')?.value;
+          const number = filterControl.get('inTheLast.number')?.value;
+          const unit = filterControl.get('inTheLast.unit')?.value;
+          const option = `${blockName}, ${field} - last ${number} ${unit}`;
+          this.inTheLastDropdown.push(new FormControl(option));
+        }
+      });
+    });
+  }
+
+  /**
+   *
+   * @param token
+   * @param event
+   */
+  insertTokenAtCursor(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedOptionText =
+      selectElement.options[selectElement.selectedIndex].text;
+    const [blockName, fieldWithInLast] = selectedOptionText.split(', ');
+    const [field, inTheLastText] = fieldWithInLast.split(' - last ');
+    const [numberString, unit] = inTheLastText.split(' ');
+
+    const unitInMinutes = this.emailService.convertToMinutes(
+      +numberString,
+      unit
+    );
+
+    const token = `{{${blockName}.${field}.${unitInMinutes}}}`;
+
+    if (this.headerEditor && this.headerEditor.editor) {
+      this.headerEditor.editor.insertContent(token);
+    } else {
+      console.error('Header TinyMCE editor is not initialised');
+    }
   }
 
   /**

@@ -4,7 +4,7 @@ import { EmailService } from '../../email.service';
 import { Subscription } from 'rxjs';
 
 /**
- * Component used to display modals regarding layouts
+ * The preview component is used to display the email layout using user input from layout component.
  */
 @Component({
   selector: 'app-preview',
@@ -18,9 +18,13 @@ export class PreviewComponent implements OnInit, OnDestroy {
   public headerLogo: string | ArrayBuffer | null = null;
   public bannerImage: string | ArrayBuffer | null = null;
   public footerLogo: string | ArrayBuffer | null = null;
-  public bodyString: string | any;
-  public headerString: string | any;
-  public footerString: string | any;
+  public subjectString: string | any =
+    this.emailService.allLayoutdata.txtSubject;
+  public bodyString: string | any = this.emailService.allLayoutdata.bodyHtml;
+  public headerString: string | any =
+    this.emailService.allLayoutdata.headerhtml;
+  public footerString: string | any =
+    this.emailService.allLayoutdata.footerHtml;
   private querySubscription: Subscription | null = null;
 
   /**
@@ -34,6 +38,10 @@ export class PreviewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.replaceTokensWithTables();
     this.replaceDateTimeTokens();
+
+    (document.getElementById('subjectHtml') as HTMLInputElement).innerHTML =
+      this.subjectString;
+
     (document.getElementById('headerHtml') as HTMLInputElement).innerHTML =
       this.headerString;
 
@@ -60,6 +68,26 @@ export class PreviewComponent implements OnInit, OnDestroy {
 
     (document.getElementById('footerHtml') as HTMLInputElement).innerHTML =
       this.footerString;
+  }
+
+  /**
+   * Replaces Subject Tokens with data from the first row of data.
+   */
+  replaceSubjectTokens() {
+    const tokenRegex = /{{([^}]+)}}/g;
+    console.log(this.subjectString);
+    let match;
+    const firstRowData = this.emailService.allPreviewData[0]?.dataList[0];
+    while ((match = tokenRegex.exec(this.subjectString)) !== null) {
+      console.log(match[1]);
+      console.log(match);
+      const fieldName = match[1];
+      const fieldValue = firstRowData[fieldName];
+
+      if (fieldValue !== undefined) {
+        this.subjectString = this.subjectString.replace(match[0], fieldValue);
+      }
+    }
   }
 
   /**
@@ -114,7 +142,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'copyright':
         styles[
           'copyrightStyle'
-        ] = `text-align: center; width: 100%; height: 100%; box-sizing: border-box; background-color: #00205C; color: white; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif;`;
+        ] = `text-align: center; width: 100%; height: 100%; box-sizing: border-box; background-color: #00205C; color: white; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif; padding: 10px;`;
         break;
       case 'container':
         styles[
@@ -166,6 +194,66 @@ export class PreviewComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * This function formats the date and time in a readable format
+   * for in the last.
+   *
+   * @param minutes The in the last number and unit converted to minutes
+   * @returns The formatted date and time.
+   */
+  formatInLastString(minutes: number): string {
+    const currentDate = new Date();
+    const pastDate = new Date(currentDate.getTime() - minutes * 60000);
+
+    const formattedPastDate = pastDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+    });
+    const formattedPastTime = pastDate.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    const formattedCurrentDate = currentDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+    });
+    const formattedCurrentTime = currentDate.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    const minutesInAWeek = 7 * 24 * 60;
+    if (minutes > minutesInAWeek) {
+      return `From ${formattedPastDate} ${formattedCurrentTime} as of ${formattedCurrentDate} ${formattedCurrentTime}`;
+    }
+
+    return `From ${formattedPastDate} ${formattedPastTime} as of ${formattedCurrentDate} ${formattedCurrentTime}`;
+  }
+
+  /**
+   * This function replaces certain in the last tokens in the header string.
+   *
+   * @param headerString The current header text value.
+   */
+  replaceInTheLast(headerString: string | any): void {
+    console.log(headerString);
+    const tokenRegex = /{{([^}]+)\.([^}]+)\.(\d+)}}/g;
+    let match;
+    while ((match = tokenRegex.exec(this.headerString)) !== null) {
+      // Extract the unitInMinutes from the token
+      const unitInMinutes = Number(match[3]);
+      console.log(`match 1: ${match[1]}`);
+      console.log(`match 2: ${match[2]}`);
+      console.log(`match : ${match}`);
+      const formattedDateTime = this.formatInLastString(unitInMinutes);
+      // Replace the entire token with the formatted date and time
+      this.headerString = headerString.replace(match[0], formattedDateTime);
+    }
+  }
+
+  /**
    * Parses the email body string and replaces dataset tokens with corresponding HTML tables.
    */
   replaceTokensWithTables(): void {
@@ -200,6 +288,15 @@ export class PreviewComponent implements OnInit, OnDestroy {
       '{{now.time}}': timeString,
     };
 
+    this.subjectString = this.emailService.allLayoutdata.txtSubject;
+    Object.entries(tokens).forEach(([token, value]) => {
+      this.subjectString = this.subjectString.replace(
+        new RegExp(token, 'g'),
+        value
+      );
+    });
+    this.replaceSubjectTokens();
+
     this.headerString = this.emailService.allLayoutdata.headerHtml;
     Object.entries(tokens).forEach(([token, value]) => {
       this.headerString = this.headerString.replace(
@@ -207,6 +304,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
         value
       );
     });
+    this.replaceInTheLast(this.headerString);
 
     this.footerString = this.emailService.allLayoutdata.footerHtml;
     Object.entries(tokens).forEach(([token, value]) => {

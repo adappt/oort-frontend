@@ -84,9 +84,9 @@
                 </ui-button>
 
                 <!-- Filter Group Button -->
-                <ui-button category="tertiary">
+                <!-- <ui-button category="tertiary">
                   {{ 'components.queryBuilder.filter.newGroup' | translate }}
-                </ui-button>
+                </ui-button> -->
               </div>
             </div>
           </div>
@@ -282,7 +282,7 @@
               <div class="field-list overflow-auto max-h-[400px]">
                 <ng-container *ngFor="let fieldDetails of availableFields">
                   <div
-                    *ngIf="fieldDetails?.name?.includes(searchAvailableField)"
+                    *ngIf="fieldDetails?.name?.toLowerCase()?.includes(searchAvailableField.toLowerCase())"
                     class="field-box cursor-pointer hover:bg-blue-500 hover:text-white"
                     (click)="addSelectedFields(fieldDetails)"
                   >
@@ -322,7 +322,7 @@
               <div class="field-list overflow-auto max-h-[400px]">
                 <ng-container *ngFor="let fields of selectedFields; let index = index">
                   <div
-                    *ngIf="fields?.name?.includes(searchSelectedField)"
+                    *ngIf="fields?.name?.toLowerCase()?.includes(searchSelectedField.toLowerCase())"
                     class="field-box cursor-pointer hover:bg-blue-500 hover:text-white"
                     (click)="removeSelectiveFields(fields)"
                   >

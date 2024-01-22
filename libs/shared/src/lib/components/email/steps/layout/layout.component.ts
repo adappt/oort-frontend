@@ -115,6 +115,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Removes the banner image from users selection.
+   */
+  removeBannerImage() {
+    this.bannerImage = null;
+    this.emailService.allLayoutdata.bannerImage = null;
+  }
+
+  /**
    * This method handles the selection of the footer logo.
    *
    * @param event - The event triggered when a footer logo is selected.

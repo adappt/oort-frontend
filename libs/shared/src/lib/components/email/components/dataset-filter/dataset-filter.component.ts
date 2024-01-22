@@ -247,6 +247,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     this.availableFields = [];
     this.selectedFields = [];
     this.filterFields = [];
+    this.query.controls.fields.setValue([]); // Assuming 'fields' is the form control name
     // this.query.get('fields').reset();
     // console.log(this.query.value.fields);
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
@@ -323,6 +324,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                     this.availableFields.push(clone(field));
                     this.filterFields.push(clone(field));
                   }
+                  this.availableFields.sort((a, b) =>
+                    a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
+                  );
                 }
               }
             });

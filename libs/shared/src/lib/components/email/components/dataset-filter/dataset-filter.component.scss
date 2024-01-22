@@ -1,3 +1,33 @@
+.field-list {
+  min-height: 400px;
+  @apply bg-zinc-200 border-zinc-200 border border-solid;
+  @apply overflow-auto max-h-[400px];
+  border-radius: 4px;
+  display: block;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+.field-box {
+  padding: 20px 10px;
+  @apply border-b-zinc-200 bg-white border-b border-solid;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 14px;
+  &:hover {
+    background-color: #007bff;
+    color: white;
+  }
+}
+
+.field-box:last-child {
+  border: none;
+}
+
 .clsFilters {
     align-items: flex-end;
 }

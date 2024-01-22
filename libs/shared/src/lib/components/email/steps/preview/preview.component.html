@@ -4,7 +4,7 @@
 
   <!-- Header -->
   <div id="header" [style]="getEmailStyle('header')">
-    <img id="headerLogo" [src]="headerLogo" [style]="getEmailStyle('headerLogo')">
+    <img id="headerLogo" *ngIf="headerLogo" [src]="headerLogo" [style]="getEmailStyle('headerLogo')">
     <div id="headerHtml" [style]="getEmailStyle('headerHtml')"></div>
   </div>
 

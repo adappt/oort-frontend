@@ -105,6 +105,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
         this.pageInfo.limit
       )
       .subscribe((res: any) => {
+        this.templateActualData = [];
         if (res?.data?.emailNotifications?.edges?.length === 0) {
           this.loading = false;
         }

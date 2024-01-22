@@ -102,7 +102,7 @@
         <ng-container *ngIf="emailService.getAllPreviewData().length; else noBlocks">
           <select id="fieldSelect" (change)="insertDataSetToBodyHtmlByTabName($event)" class="block w-full mt-1 text-sm px-2 border border-gray-300 bg-white rounded-md shadow-sm"
           style="padding: 0.3rem !important;">
-            <option value="" disabled selected>Select a field</option>
+            <option value="" disabled selected>Select a block</option>
             <option *ngFor="let previewData of emailService.getAllPreviewData(); let i = index" [value]="previewData.tabName">{{ previewData.tabName }}</option>
           </select>
         </ng-container>

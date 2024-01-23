@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs';
 import { UIPageChangeEvent, handleTablePageEvent } from '@oort-front/ui';
 import { ApiConfiguration } from '../../models/api-configuration.model';
 import { AuthService } from '../../services/auth/auth.service';
+import { DownloadService } from '../../services/download/download.service';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;
@@ -60,6 +61,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    * @param confirmService
    * @param translate
    * @param authService
+   * @param downloadService
    */
   constructor(
     public emailService: EmailService,
@@ -67,7 +69,8 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     public formBuilder: FormBuilder,
     private confirmService: ConfirmService,
     private translate: TranslateService,
-    public authService: AuthService
+    public authService: AuthService,
+    public downloadService: DownloadService
   ) {
     super();
   }

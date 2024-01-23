@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmailService } from '../../email.service';
 import { FormGroup } from '@angular/forms';
 import { ApplicationService } from '../../../../services/application/application.service';
+import { DownloadService } from '../../../../services/download/download.service';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;
@@ -23,10 +24,12 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    *
    * @param emailService helper functions
    * @param applicationService helper functions
+   * @param downloadService helper functions
    */
   constructor(
     public emailService: EmailService,
-    public applicationService: ApplicationService
+    public applicationService: ApplicationService,
+    public downloadService: DownloadService
   ) {
     this.getExistingTemplate();
     this.showExistingDistributionList =
@@ -178,5 +181,24 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   selectDistributionListRow(index: number): void {
     this.recipients = this.distributionLists[index].node.recipients;
     this.showExistingDistributionList = !this.showExistingDistributionList;
+  }
+
+  /**
+   *
+   */
+  downloadDistributionListTemplate(): void {
+    this.downloadService.downloadDistributionListTemplate();
+  }
+
+  /**
+   * @param event file selection Event
+   */
+  fileSelectionHandler(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.downloadService.importDistributionList(file).subscribe((res) => {
+        this.recipients = res;
+      });
+    }
   }
 }

@@ -37,12 +37,12 @@ let ITEMS_PER_PAGE = 0;
 export class DatasetFilterComponent implements OnInit, OnDestroy {
   @Input() activeTab: any;
   @Input() tabs: any;
+  /** Filter and Fields Form */
   @Input() query: FormGroup | any;
   @Input() queryValue: FormGroup | any;
   showPreview = false;
   private datasetSaveSubscription?: Subscription;
   public resourcesQuery!: QueryRef<ResourcesQueryResponse>;
-  public replaceUnderscores: any = this.emailService.replaceUnderscores;
   public fetchDataSet: any = this.emailService.fetchDataSet;
   /** FIELD VARIABLES */
   public resource!: Resource;
@@ -156,54 +156,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Converts days, months, years to minutes.
-   *
-   * @param value number value
-   * @param unit days, months, years
-   * @returns days in days, months or years.
-   */
-  convertToMinutes(value: number, unit: string): number {
-    const currentDate = new Date();
-    let minutes;
-
-    switch (unit) {
-      case 'hours':
-        minutes = value * 60;
-        break;
-      case 'days':
-        minutes = value * 24 * 60;
-        break;
-      case 'weeks':
-        minutes = value * 7 * 24 * 60;
-        break;
-      case 'months':
-        const monthsAgo = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth() - value,
-          currentDate.getDate()
-        );
-        minutes = Math.floor(
-          (currentDate.getTime() - monthsAgo.getTime()) / (1000 * 60)
-        );
-        break;
-      case 'years':
-        const yearsAgo = new Date(
-          currentDate.getFullYear() - value,
-          currentDate.getMonth(),
-          currentDate.getDate()
-        );
-        minutes = Math.floor(
-          (currentDate.getTime() - yearsAgo.getTime()) / (1000 * 60)
-        );
-        break;
-      default:
-        throw new Error(`Unsupported unit: ${unit}`);
-    }
-
-    return minutes;
-  }
-
-  /**
    * To fetch Resource Data On Scroll
    */
   getResourceDataOnScroll() {
@@ -247,6 +199,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     this.availableFields = [];
     this.selectedFields = [];
     this.filterFields = [];
+    this.query.controls.fields.setValue([]); // Assuming 'fields' is the form control name
     // this.query.get('fields').reset();
     // console.log(this.query.value.fields);
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
@@ -323,6 +276,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                     this.availableFields.push(clone(field));
                     this.filterFields.push(clone(field));
                   }
+                  this.availableFields.sort((a, b) =>
+                    a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
+                  );
                 }
               }
             });
@@ -594,7 +550,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
               const inTheLastUnitControl = inTheLastGroup.get('unit');
 
               if (inTheLastNumberControl && inTheLastUnitControl) {
-                const days = this.convertToMinutes(
+                const days = this.emailService.convertToMinutes(
                   inTheLastNumberControl.value,
                   inTheLastUnitControl.value
                 );
@@ -674,6 +630,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   );
                   this.loading = false;
                   this.navigateToPreview.emit(allPreviewData);
+                  console.log(this.query.value);
                   this.emailService.setAllPreviewData(allPreviewData);
                 }
               }

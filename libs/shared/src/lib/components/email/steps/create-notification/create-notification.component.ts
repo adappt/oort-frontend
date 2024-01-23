@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { EmailService } from '../../email.service';
 
@@ -10,7 +10,7 @@ import { EmailService } from '../../email.service';
   templateUrl: './create-notification.component.html',
   styleUrls: ['./create-notification.component.scss'],
 })
-export class CreateNotificationComponent {
+export class CreateNotificationComponent implements OnInit {
   public dataSetFormGroup: FormGroup | any = this.emailService.datasetsForm;
   public notificationTypes: string[] = this.emailService.notificationTypes;
   @Output() navigateToListScreen: EventEmitter<any> = new EventEmitter();

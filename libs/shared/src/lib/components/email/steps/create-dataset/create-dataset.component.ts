@@ -98,6 +98,7 @@ export class CreateDatasetComponent implements OnInit {
 
   /**
    * Gets the datasets form array from the dataSetFormGroup
+   * (Fields, Filter {Fields, Operators, Values})
    *
    * @returns The datasets form array from the dataSetFormGroup
    */

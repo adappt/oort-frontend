@@ -31,7 +31,7 @@
           let-index="index"
           let-search="searchTerm"
         >
-          <span>{{ replaceUnderscores(item.name || '') | titlecase }}</span>
+          <span>{{ this.emailService.replaceUnderscores(item.name || '') | titlecase }}</span>
         </ng-template>
       </ng-select>
     </div>
@@ -84,9 +84,9 @@
                 </ui-button>
 
                 <!-- Filter Group Button -->
-                <ui-button category="tertiary">
+                <!-- <ui-button category="tertiary">
                   {{ 'components.queryBuilder.filter.newGroup' | translate }}
-                </ui-button>
+                </ui-button> -->
               </div>
             </div>
           </div>
@@ -119,7 +119,7 @@
                       >
                         <option [value]="fieldDetails?.name">
                           {{
-                            replaceUnderscores(fieldDetails?.name) | titlecase
+                            this.emailService.replaceUnderscores(fieldDetails.name) | titlecase
                           }}
                         </option>
                       </ng-container>
@@ -131,7 +131,7 @@
                     <ui-select-menu formControlName="field" [filterable]="true" (change)="setField($event, fieldIndex)">
                       <ng-container *ngFor="let fieldDetails of filterFields">
                         <ui-select-option [value]="fieldDetails?.name">
-                          {{ replaceUnderscores(fieldDetails?.name) | titlecase }}
+                          {{ this.emailService.replaceUnderscores(fieldDetails?.name) | titlecase }}
                         </ui-select-option>
                       </ng-container>
                     </ui-select-menu>
@@ -282,11 +282,11 @@
               <div class="field-list overflow-auto max-h-[400px]">
                 <ng-container *ngFor="let fieldDetails of availableFields">
                   <div
-                    *ngIf="fieldDetails?.name?.includes(searchAvailableField)"
+                    *ngIf="fieldDetails?.name?.toLowerCase()?.includes(searchAvailableField.toLowerCase())"
                     class="field-box cursor-pointer hover:bg-blue-500 hover:text-white"
                     (click)="addSelectedFields(fieldDetails)"
                   >
-                    {{ replaceUnderscores(removeUserString(fieldDetails?.name)) | titlecase }}
+                    {{ this.emailService.replaceUnderscores(removeUserString(fieldDetails?.name)) | titlecase }}
                     <!-- <ui-icon icon="arrow_right" variant="grey" class="text-gray-500 hover:text-white"></ui-icon> -->
                   </div>
                 </ng-container>
@@ -322,12 +322,12 @@
               <div class="field-list overflow-auto max-h-[400px]">
                 <ng-container *ngFor="let fields of selectedFields; let index = index">
                   <div
-                    *ngIf="fields?.name?.includes(searchSelectedField)"
+                    *ngIf="fields?.name?.toLowerCase()?.includes(searchSelectedField.toLowerCase())"
                     class="field-box cursor-pointer hover:bg-blue-500 hover:text-white"
                     (click)="removeSelectiveFields(fields)"
                   >
                     <!-- <ui-icon icon="arrow_left" variant="grey" class="text-gray-500"></ui-icon> -->
-                    {{ replaceUnderscores(removeUserString(fields.name)) | titlecase }}
+                    {{ this.emailService.replaceUnderscores(removeUserString(fields.name)) | titlecase }}
                   </div>
                 </ng-container>
               </div>

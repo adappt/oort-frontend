@@ -1,10 +1,15 @@
+<div class="w-full">
+  <!-- Subject -->
+  <p>Subject:</p>
+  <div id="subjectHtml" class="w-full"></div>
+</div>
 <div [style]="getEmailStyle('container')">
   <!-- Banner Images -->
   <img *ngIf="bannerImage" id="bannerImage" [src]="bannerImage" [style]="getEmailStyle('bannerImage')">
 
   <!-- Header -->
   <div id="header" [style]="getEmailStyle('header')">
-    <img id="headerLogo" [src]="headerLogo" [style]="getEmailStyle('headerLogo')">
+    <img id="headerLogo" *ngIf="headerLogo" [src]="headerLogo" [style]="getEmailStyle('headerLogo')">
     <div id="headerHtml" [style]="getEmailStyle('headerHtml')"></div>
   </div>
 

@@ -220,7 +220,7 @@ export const EMAIL_LAYOUT_CONFIG: RawEditorSettings = {
   suffix: '.min',
   plugins:
     'preview paste importcss searchreplace autolink code visualblocks visualchars fullscreen image link media table charmap hr nonbreaking insertdatetime advlist lists wordcount imagetools textpattern help charmap quickbars emoticons',
-  menubar: 'edit view insert format tools table help',
+  menubar: false,
   toolbar:
     'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap emoticons | fullscreen  preview save | insertfile image media link',
   toolbar_sticky: true,

@@ -6,12 +6,12 @@ import { Environment } from './environment.type';
 /** Authentication configuration of the module. */
 const authConfig: AuthConfig = {
   issuer:
-    'https://login.microsoftonline.com/76d22fc8-2330-45cf-ab36-51074cf8f1e2/v2.0',
+    'https://login.microsoftonline.com/f610c0b7-bd24-4b39-810b-3dc280afb590/v2.0',
   redirectUri: 'https://emspocdev.adapptlabs.com/',
   postLogoutRedirectUri: 'https://emspocdev.adapptlabs.com/auth/',
-  clientId: 'db40357f-374e-476e-9ce8-5c9b3cbe475a',
+  clientId: '021202ac-d23b-4757-83e3-f6ecde12266b',
   scope:
-    'openid profile email offline_access offline_access api://db40357f-374e-476e-9ce8-5c9b3cbe475a/access_as_user',
+    'openid profile email offline_access offline_access api://75deca06-ae07-4765-85c0-23e719062833/access_as_user',
   responseType: 'code',
   showDebugInformation: true,
   strictDiscoveryDocumentValidation: false,

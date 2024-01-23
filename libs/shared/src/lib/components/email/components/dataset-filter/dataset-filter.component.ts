@@ -273,7 +273,12 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                         : this.availableFields;
                     this.filterFields =
                       this.filterFields == undefined ? [] : this.filterFields;
-                    this.availableFields.push(clone(field));
+                    this.availableFields.filter((x) => x.name == field.name)
+                      .length === 0 &&
+                    this.selectedFields.filter((x) => x.name == field.name)
+                      .length === 0
+                      ? this.availableFields.push(clone(field))
+                      : '';
                     this.filterFields.push(clone(field));
                   }
                   this.availableFields.sort((a, b) =>

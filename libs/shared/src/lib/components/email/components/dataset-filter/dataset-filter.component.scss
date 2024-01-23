@@ -22,6 +22,7 @@
     background-color: #007bff;
     color: white;
   }
+  height: 1.25rem;
 }
 
 .field-box:last-child {
@@ -242,4 +243,42 @@ button.ui-button:disabled {
 
 button.ui-button-icon:disabled {
   @apply text-neutral-400 bg-opacity-20;
+}
+::ng-deep .stepper-center {
+    .ng-select.ng-select-single .ng-select-container {
+    height: 37.6px;
+  }
+
+  .tab-container {
+    ul.k-tabstrip-items {
+      margin-top: 1rem;
+      li {
+        padding: 0px;
+        min-height: 40px;
+      
+        .k-link {
+          padding-block: 0px;
+        }
+      }      
+    }    
+  }  
+}
+::ng-deep .loadingSign {
+  .overflow-hidden {
+    position: absolute;
+    top: 50%;
+    margin-left: 1rem;
+  }
+
+  svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
+}
+
+.divFields {
+  div:first-child {
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+  }
 }

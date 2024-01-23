@@ -205,5 +205,5 @@
 
   </div>
 <ng-container *ngIf="!emailService.isExisting">
-  <ems-template (navigateToEms)="toggle();getExistingTemplate();" [currentStep]="emailService.stepperStep"></ems-template>
+  <ems-template (navigateToEms)="toggle();getExistingTemplate();" [currentStep]="emailService.stepperStep" class="stepper-center"></ems-template>
 </ng-container>

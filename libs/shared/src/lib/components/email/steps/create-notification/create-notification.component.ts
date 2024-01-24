@@ -34,6 +34,15 @@ export class CreateNotificationComponent implements OnInit {
   }
 
   /**
+   * Name validation.
+   * @returns boolean
+   */
+  isNameDuplicate(): boolean {
+    const enteredName = this.dataSetFormGroup.controls['name'].value;
+    return this.emailService.emailNotificationNames.includes(enteredName);
+  }
+
+  /**
    * Toggles the state of `isExisting` property in the `EmailService`.
    */
   toggle() {

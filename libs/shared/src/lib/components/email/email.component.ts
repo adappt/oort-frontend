@@ -107,23 +107,28 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       this.applicationId = res?.id;
     });
     this.emailService
-      .getEmailNotifications(
-        this.applicationId,
-        this.pageInfo.skip,
-        this.pageInfo.limit
-      )
+      .getEmailNotifications(this.applicationId)
       .subscribe((res: any) => {
         this.templateActualData = [];
         if (res?.data?.emailNotifications?.edges?.length === 0) {
           this.loading = false;
         }
+        this.distributionLists = [];
+        this.emailService.distributionListNames = [];
+        this.emailService.emailNotificationNames = [];
         res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
           this.templateActualData.push(ele.node);
           this.loading = false;
-          ele.node.recipients.distributionListName !== null &&
-          ele.node.recipients.distributionListName !== ''
-            ? this.distributionLists.push(ele.node.recipients)
-            : '';
+          if (
+            ele.node.recipients.distributionListName !== null &&
+            ele.node.recipients.distributionListName !== ''
+          ) {
+            this.distributionLists.push(ele.node.recipients);
+            this.emailService.distributionListNames.push(
+              ele.node?.recipients?.distributionListName
+            );
+            this.emailService.emailNotificationNames.push(ele.node.name);
+          }
         });
         this.filterTemplateData = this.templateActualData;
         this.emailNotifications = this.filterTemplateData.slice(

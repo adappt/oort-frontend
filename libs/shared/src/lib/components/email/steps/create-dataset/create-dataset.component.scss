@@ -264,3 +264,11 @@ button.ui-button-icon:disabled {
 ::ng-deep .block::placeholder {
   display: block;
 }
+
+.form-error {
+  border: 1px solid red;
+  border-radius: 5px;
+  .ng-select-container {
+      border: transparent !important;
+  }
+}

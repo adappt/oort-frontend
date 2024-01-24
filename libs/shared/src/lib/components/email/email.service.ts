@@ -107,6 +107,8 @@ export class EmailService {
   public configId: string | undefined;
   public dataList!: { [key: string]: any }[];
   public dataSetFields!: string[];
+  public distributionListNames: string[] = [];
+  public emailNotificationNames: string[] = [];
   @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
   stepperStep = 0;
   public isEdit = false;
@@ -567,7 +569,7 @@ export class EmailService {
    * @param skip
    * @returns Email notifications query result.
    */
-  getEmailNotifications(id: string, limit: number, skip: number) {
+  getEmailNotifications(id: string, limit?: number, skip?: number) {
     return this.apollo.query<any>({
       query: GET_EMAIL_NOTIFICATIONS,
       variables: {

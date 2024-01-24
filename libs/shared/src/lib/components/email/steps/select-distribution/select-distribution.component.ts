@@ -104,6 +104,15 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Name validation.
+   * @returns boolean
+   */
+  isNameDuplicate(): boolean {
+    const enteredName = this.recipients.distributionListName;
+    return this.emailService.distributionListNames.includes(enteredName);
+  }
+
+  /**
    * This method is used to set the 'To' field of the email.
    *
    * @param data The data to be set in the 'To' field.
@@ -157,11 +166,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
       this.applicationId = res?.id;
     });
     this.emailService
-      .getEmailNotifications(
-        this.applicationId,
-        this.pageInfo.limit,
-        this.pageInfo.skip
-      )
+      .getEmailNotifications(this.applicationId)
       .subscribe((res: any) => {
         this.distributionLists = res?.data?.emailNotifications?.edges ?? [];
       });

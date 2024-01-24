@@ -187,7 +187,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       .getEmailNotification(id, this.applicationId)
       .subscribe((res) => {
         const emailData = res.data.editAndGetEmailNotification;
-
+        this.emailService.configId = res?.data?.editAndGetEmailNotification?.id;
         if (isClone) {
           delete emailData.createdAt;
           delete emailData.id;
@@ -301,20 +301,21 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
 
     this.emailService.allLayoutdata = {
       /** IMAGES AND STYLES */
-      bannerImage: emailData.emailLayout.banner.bannerImage,
-      bannerImageStyle: emailData.emailLayout.banner.bannerImageStyle,
+      bannerImage: emailData?.emailLayout?.banner?.bannerImage,
+      bannerImageStyle: emailData?.emailLayout?.banner?.bannerImageStyle,
       /** CONTAINER STYLE */
-      containerStyle: emailData.emailLayout.banner.containerStyle,
+      containerStyle: emailData?.emailLayout?.banner?.containerStyle,
       /** FOOTER COPYRIGHT STYLE */
-      copyrightStyle: emailData.emailLayout.banner.copyrightStyle,
+      copyrightStyle: emailData?.emailLayout?.banner?.copyrightStyle,
       /** EMAIL SUBJECT */
       txtSubject: emailData.emailLayout.subject,
       /** EMAIL HEADER */
-      headerHtml: emailData.emailLayout.header.headerHtml,
-      headerLogo: emailData.emailLayout.header.headerLogo,
-      headerLogoStyle: emailData.emailLayout.header.headerStyle,
-      headerBackgroundColor: emailData.emailLayout.header.headerBackgroundColor,
-      headerTextColor: emailData.emailLayout.header.headerTextColor,
+      headerHtml: emailData?.emailLayout?.header?.headerHtml,
+      headerLogo: emailData?.emailLayout?.header?.headerLogo,
+      headerLogoStyle: emailData?.emailLayout?.header?.headerStyle,
+      headerBackgroundColor:
+        emailData?.emailLayout?.header?.headerBackgroundColor,
+      headerTextColor: emailData.emailLayout?.header?.headerTextColor,
       headerStyle: '',
       /** EMAIL BODY */
       bodyHtml: emailData.emailLayout.body.bodyHtml,
@@ -360,6 +361,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       filter: this.getFilterGroup(ele.filter),
       fields: ele.fields,
       cacheData: {},
+      tableStyle: this.emailService.getTableStyles(),
     });
     tempData.controls.fields.setValue(ele.fields);
     return tempData;

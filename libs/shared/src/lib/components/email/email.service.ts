@@ -707,4 +707,8 @@ export class EmailService {
 
     return result;
   }
+
+  getTableStyles(): any {
+    return this.defaultTableStyle;
+  }
 }

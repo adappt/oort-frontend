@@ -230,7 +230,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   if (field.name === 'createdBy' && field.fields?.length) {
                     field.fields.forEach((obj: any) => {
                       obj.name = '_createdBy.user.' + obj.name;
-                      this.availableFields.push(clone(obj));
+                      this.availableFields.filter((x) => x.name == obj.name)
+                        .length === 0
+                        ? this.availableFields.push(clone(obj))
+                        : '';
                       obj.name = 'createdBy.' + obj.name.split('.')[2];
                       this.filterFields.push(obj);
                     });
@@ -240,7 +243,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   ) {
                     field.fields.forEach((obj: any) => {
                       obj.name = '_lastUpdatedBy.user.' + obj.name;
-                      this.availableFields.push(clone(obj));
+                      this.availableFields.filter((x) => x.name == obj.name)
+                        .length === 0
+                        ? this.availableFields.push(clone(obj))
+                        : '';
                       obj.name = 'lastUpdatedBy.' + obj.name.split('.')[2];
                       this.filterFields.push(obj);
                     });
@@ -250,14 +256,20 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   ) {
                     field.fields.forEach((obj: any) => {
                       obj.name = '_lastUpdateForm.' + obj.name;
-                      this.availableFields.push(clone(obj));
+                      this.availableFields.filter((x) => x.name == obj.name)
+                        .length === 0
+                        ? this.availableFields.push(clone(obj))
+                        : '';
                       obj.name = 'lastUpdateForm.' + obj.name.split('.')[1];
                       this.filterFields.push(obj);
                     });
                   } else if (field.name === 'form' && field.fields?.length) {
                     field.fields.forEach((obj: any) => {
                       obj.name = '_form.' + obj.name;
-                      this.availableFields.push(clone(obj));
+                      this.availableFields.filter((x) => x.name == obj.name)
+                        .length === 0
+                        ? this.availableFields.push(clone(obj))
+                        : '';
                       obj.name = 'form.' + obj.name.split('.')[1];
                       this.filterFields.push(obj);
                     });
@@ -265,7 +277,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                     field.fields.forEach((obj: any) => {
                       obj.name = `${field.name}.${obj.name}`;
                       obj.type = 'resource';
-                      this.availableFields.push(clone(obj));
+                      this.availableFields.filter((x) => x.name == obj.name)
+                        .length === 0
+                        ? this.availableFields.push(clone(obj))
+                        : '';
                       this.filterFields.push(obj);
                     });
                   } else {

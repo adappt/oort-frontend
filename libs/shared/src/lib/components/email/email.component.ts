@@ -86,6 +86,25 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    */
   toggle() {
     this.emailService.isExisting = !this.emailService.isExisting;
+    if (!this.emailService.isExisting) {
+      this.emailService.allLayoutdata = {};
+      this.emailService.allPreviewData = [];
+      this.emailService.emailLayout = {};
+      this.emailService.recipients = {
+        distributionListName: '',
+        To: [],
+        Cc: [],
+        Bcc: [],
+      };
+      this.emailService.tabs = [
+        {
+          title: `Block 1`,
+          content: `Block 1 Content`,
+          active: true,
+          index: 0,
+        },
+      ];
+    }
   }
 
   /**
@@ -211,6 +230,23 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    * @param isSendEmail
    */
   prepareEditData(emailData: any, isSendEmail?: boolean) {
+    this.emailService.allLayoutdata = {};
+    this.emailService.allPreviewData = [];
+    this.emailService.emailLayout = {};
+    this.emailService.recipients = {
+      distributionListName: '',
+      To: [],
+      Cc: [],
+      Bcc: [],
+    };
+    this.emailService.tabs = [
+      {
+        title: `Block 1`,
+        content: `Block 1 Content`,
+        active: true,
+        index: 0,
+      },
+    ];
     const dataArray: FormArray | any = new FormArray([]);
     for (let index = 0; index < emailData.dataSets.length; index++) {
       //Adding Tabs detail

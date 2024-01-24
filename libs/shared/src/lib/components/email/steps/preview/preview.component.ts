@@ -299,7 +299,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
 
     this.headerString = this.emailService.allLayoutdata.headerHtml;
     Object.entries(tokens).forEach(([token, value]) => {
-      this.headerString = this.headerString.replace(
+      this.headerString = this.headerString?.replace(
         new RegExp(token, 'g'),
         value
       );

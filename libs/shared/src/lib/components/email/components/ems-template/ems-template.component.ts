@@ -263,7 +263,7 @@ export class EmsTemplateComponent {
             .addEmailNotification(this.emailService.datasetsForm.value)
             .subscribe((res: any) => {
               console.log(res);
-              this.emailService.configId = res.data.addEmailNotification.id;
+              this.emailService.configId = res.data?.addEmailNotification?.id;
               console.log(this.emailService.configId);
               //window.location.reload();
               resolve();

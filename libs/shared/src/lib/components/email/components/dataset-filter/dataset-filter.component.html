@@ -33,7 +33,7 @@
         [virtualScroll]="true"
         appendTo="body"
         (scrollToEnd)="getResourceDataOnScroll()"
-        (change)="getResourceData()"
+        (change)="getResourceData(true)"
         placeholder="{{ 'components.queryBuilder.dataset.select' | translate }}"
       >
         <ng-template disabled selected>

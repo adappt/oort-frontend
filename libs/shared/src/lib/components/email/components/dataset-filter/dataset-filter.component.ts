@@ -101,7 +101,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     } else {
       if (this.query?.value?.resource?.id && this.metaData == undefined) {
         this.selectedResourceId = this.query?.value?.resource?.id;
-        this.getResourceData();
+        this.getResourceData(false);
       }
     }
     this.filteredFields = this.resource?.fields;
@@ -184,7 +184,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
           // Edit Mode data
           if (this.query?.value?.resource?.id) {
             this.selectedResourceId = this.query?.value?.resource?.id;
-            this.getResourceData();
+            this.getResourceData(false);
             console.log(this.datasetFilterInfo);
           }
         });
@@ -194,12 +194,14 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
 
   /**
    * To fetch resource details
+   *
+   * @param fromHtml - If state is in edit mode then false else true if new notification (means Event from UI)
    */
-  getResourceData() {
+  getResourceData(fromHtml: boolean) {
     this.availableFields = [];
     this.selectedFields = [];
     this.filterFields = [];
-    this.query.controls.fields.setValue([]); // Assuming 'fields' is the form control name
+    fromHtml ? this.query.controls.fields.setValue([]) : ''; // Assuming 'fields' is the form control name
     // this.query.get('fields').reset();
     // console.log(this.query.value.fields);
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
@@ -612,11 +614,13 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                 if (this.dataList?.length) {
                   this.dataSetFields = [
                     ...new Set(
-                      this.dataList
-                        .map((data: { [key: string]: any }) =>
-                          Object.keys(data)
-                        )
-                        .flat()
+                      this.selectedFields.map((data: any) => data.name).flat()
+
+                      // this.dataList
+                      //   .map((data: { [key: string]: any }) =>
+                      //     Object.keys(data)
+                      //   )
+                      //   .flat()
                     ),
                   ];
                 }

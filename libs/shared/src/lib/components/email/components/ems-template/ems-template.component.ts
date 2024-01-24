@@ -30,7 +30,6 @@ export class EmsTemplateComponent {
   public addEmailnotification = this.emailService.addEmailNotification;
 
   @Input() currentStep = 0;
-  public isLinear = true;
   @Output() navigateToEms: EventEmitter<any> = new EventEmitter();
 
   private submitted = false;
@@ -322,11 +321,16 @@ export class EmsTemplateComponent {
    *
    * @param ev
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public onStepActivate(ev: StepperActivateEvent): void {
-    if (ev.index === 4 || ev.index === 5) {
-      this.isLinear = false;
-    } else {
-      this.isLinear = true;
-    }
+    this.emailService.isLinear =
+      this.emailService.isEdit || this.emailService.isPreview
+        ? false
+        : this.emailService.isLinear;
+    // if (ev.index === 4 || ev.index === 5) {
+    //   this.isLinear = false;
+    // } else {
+    //   this.isLinear = true;
+    // }
   }
 }

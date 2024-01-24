@@ -4,7 +4,7 @@
     stepType="full"
     [(currentStep)]="currentStep"
     orientation="horizontal"
-    [linear]="isLinear"
+    [linear]="emailService.isLinear"
     (activate)="onStepActivate($event)"
     > </kendo-stepper>
     <div>

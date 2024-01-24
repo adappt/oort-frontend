@@ -85,6 +85,8 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    *
    */
   toggle() {
+    this.emailService.isLinear = true;
+    this.emailService.stepperStep = 0;
     this.emailService.isExisting = !this.emailService.isExisting;
     if (!this.emailService.isExisting) {
       this.emailService.allLayoutdata = {};
@@ -113,6 +115,9 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   getExistingTemplate() {
     this.loading = true;
     this.emailService.isExisting = true;
+    this.emailService.isPreview = false;
+    this.emailService.isEdit = false;
+    this.emailService.isLinear = false;
     this.applicationService.application$.subscribe((res: any) => {
       this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
       this.applicationId = res?.id;
@@ -230,6 +235,8 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    * @param isSendEmail
    */
   prepareEditData(emailData: any, isSendEmail?: boolean) {
+    this.emailService.isEdit = true;
+    this.emailService.isLinear = false;
     this.emailService.allLayoutdata = {};
     this.emailService.allPreviewData = [];
     this.emailService.emailLayout = {};
@@ -339,6 +346,8 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     // this.emailService.datasetSave.emit(true);
     if (isSendEmail) {
       this.emailService.stepperStep = -1;
+      this.emailService.isPreview = true;
+      this.emailService.isLinear = false;
       this.emailService.getDataSet(emailData);
       setTimeout(() => {
         this.loading = false;

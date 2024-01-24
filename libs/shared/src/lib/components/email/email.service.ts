@@ -108,6 +108,9 @@ export class EmailService {
   public dataSetFields!: string[];
   @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
   stepperStep = 0;
+  public isEdit = false;
+  public isPreview = false;
+  public isLinear = true;
   //private apiUrl = 'http://localhost:3000/notification/send-email/';
 
   //private apiUrl = 'https://emspocdev.adapptlabs.com/api/notification/send-email/';

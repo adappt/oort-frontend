@@ -59,6 +59,8 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public filterFields!: { name: string; type: string }[];
   public availableFields!: { name: string; type: string }[];
   public operators: { [key: number]: { value: string; label: string }[] } = {};
+  public showDatasetLimitWarning = false;
+  public totalMatchingRecords = 0;
   filterOperators = FILTER_OPERATORS;
   /** IN THE LAST TIME UNITS */
   public timeUnits = [
@@ -584,7 +586,28 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       }
 
       if (tabName == 'filter') {
-        this.datasetPreview.selectTab(1);
+        // this.datasetPreview.selectTab(1);
+        const query = this.queryValue[this.activeTab.index];
+        query.pageSize = 1;
+        query.tabIndex = this.activeTab.index;
+        this.loading = true;
+        this.fetchDataSet(query).subscribe(
+          (res: any) => {
+            this.loading = false;
+            this.totalMatchingRecords = res?.data?.dataSet?.totalCount;
+            if (res?.data?.dataSet?.totalCount <= 50) {
+              this.datasetPreview.selectTab(1);
+              this.showDatasetLimitWarning = false;
+              this.emailService.disableSaveAndProceed.next(false);
+            } else {
+              this.showDatasetLimitWarning = true;
+              this.emailService.disableSaveAndProceed.next(true);
+            }
+          },
+          () => {
+            this.loading = false;
+          }
+        );
       }
       if (
         tabName == 'fields' &&
@@ -606,7 +629,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
           }
           query.tabIndex = count;
           count++;
-          query.pageSize = Number(query.pageSize);
+          query.pageSize = 50;
           this.fetchDataSet(query).subscribe(
             (res: { data: { dataSet: any } }) => {
               if (res?.data?.dataSet) {

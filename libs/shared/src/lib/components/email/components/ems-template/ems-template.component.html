@@ -28,7 +28,8 @@
       </button>
       <button
         type="submit"
-        class="bg-sky-500 hover:bg-sky-400 text-white px-4 py-2 rounded-md transition-colors duration-150 ease-in-out"
+        class="px-4 py-2 rounded-md transition-colors duration-150 ease-in-out"
+        [ngClass]="disableActionButton ? 'inactive': 'active'"
         (click)="next()"
         *ngIf="currentStep !== 5"
       >

@@ -31,6 +31,7 @@ export class EmsTemplateComponent {
 
   @Input() currentStep = 0;
   @Output() navigateToEms: EventEmitter<any> = new EventEmitter();
+  public disableActionButton = false;
 
   private submitted = false;
 
@@ -119,6 +120,9 @@ export class EmsTemplateComponent {
         validate: this.shouldValidate,
       },
     ];
+    this.emailService.disableSaveAndProceed.subscribe((res: boolean) => {
+      this.disableActionButton = res;
+    });
   }
 
   /**

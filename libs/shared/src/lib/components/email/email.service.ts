@@ -8,7 +8,7 @@ import {
 } from './graphql/queries';
 import { Apollo } from 'apollo-angular';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { RestService } from '../../services/rest/rest.service';
 
 /**
@@ -38,6 +38,7 @@ export class EmailService {
   public footerBackgroundColor = '#FFFFFF';
   public footerTextColor = '#000000';
   public datasetSave: EventEmitter<boolean> = new EventEmitter();
+  public disableSaveAndProceed = new BehaviorSubject<boolean>(false);
   public showExistingDistributionList = false;
   public recipients: {
     distributionListName: string;

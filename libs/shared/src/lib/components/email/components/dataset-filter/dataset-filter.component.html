@@ -659,3 +659,8 @@
   </kendo-tabstrip>
 
 </form>
+<div class="max-limit-note" *ngIf="showDatasetLimitWarning">
+  At this moment, we are limited to fetch only 50 records.
+  Based on the provided filter conditions there are <strong>{{totalMatchingRecords}}</strong> matching records.
+  Kindly add some additional filters to bring the record count less than or equals to 50.
+</div>

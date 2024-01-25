@@ -93,6 +93,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     this.emailService.isExisting = !this.emailService.isExisting;
     if (!this.emailService.isExisting) {
       this.emailService.resetDataSetForm();
+      this.emailService.setDatasetForm();
     }
   }
 

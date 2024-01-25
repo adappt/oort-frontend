@@ -43,6 +43,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   public isDropdownVisible = false;
   public dataSets: any;
   public selectField = '';
+  public emailValidationError = '';
   @Output() emailLoad = new EventEmitter<{
     emails: string[];
     emailFilter: any;
@@ -217,6 +218,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
 
   /**
    * fetching data from object
+   *
    * @param data
    * @param field
    * @returns data
@@ -314,8 +316,23 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
     ) {
       this.selectedEmails.push(element.value);
       element.value = '';
+      this.emailValidationError = '';
     } else if (!emailRegex.test(element.value)) {
-      alert(`not valid mail ${element.value}`);
+      this.emailValidationError = 'Invalid Email Address';
+    }
+  }
+
+  /**
+   *
+   * @param element HTML input element
+   */
+  validateEmail(element: HTMLInputElement): void {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.emailValidationError = emailRegex.test(element.value)
+      ? ''
+      : 'Invalid Email Address';
+    if (element.value === '') {
+      this.emailValidationError = '';
     }
   }
 

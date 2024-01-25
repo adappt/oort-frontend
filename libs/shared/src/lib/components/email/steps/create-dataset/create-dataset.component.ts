@@ -53,7 +53,9 @@ export class CreateDatasetComponent implements OnInit {
    * @param fb Angular form builder
    * @param emailService helper functions
    */
-  constructor(private fb: FormBuilder, public emailService: EmailService) {}
+  constructor(private fb: FormBuilder, public emailService: EmailService) {
+    this.emailService.disableSaveAndProceed.next(false);
+  }
 
   ngOnInit(): void {
     this.filteredFields = this.resource?.fields;

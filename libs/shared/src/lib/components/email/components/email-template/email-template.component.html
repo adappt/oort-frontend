@@ -1,8 +1,10 @@
 <div class="Email_Template">
     <div class="mt-4 w-1/3">
-        <input #filterInput (keyup.enter)="addEmailManually(filterInput)"
+        <input #filterInput (keyup.enter)="addEmailManually(filterInput)" (change)="validateEmail(filterInput)"
         class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        [ngClass]="emailValidationError.length ? 'input-error': ''"
         type="text" [placeholder]="'components.select.distribution.email' | translate" />
+        <p class="hint-text" *ngIf="emailValidationError.length">{{emailValidationError}}</p>
     </div>
     <div
         class="mt-4 p-1 gap-1 w-4/12 text-blue-700 text-base border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">

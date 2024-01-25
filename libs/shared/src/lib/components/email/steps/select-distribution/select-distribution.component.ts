@@ -81,7 +81,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
     this.toEmailFilter = this.emailService.toEmailFilter;
     this.ccEmailFilter = this.emailService.ccEmailFilter;
     this.bccEmailFilter = this.emailService.bccEmailFilter;
-    console.log('SelectDistributionComponent');
+    this.validateDistributionList();
   }
 
   /**
@@ -125,6 +125,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   to(data: { emails: string[]; emailFilter: any }): void {
     this.recipients.To = data.emails;
     this.toEmailFilter = data.emailFilter;
+    this.validateDistributionList();
   }
 
   /**
@@ -181,6 +182,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   selectDistributionListRow(index: number): void {
     this.recipients = this.distributionLists[index].node.recipients;
     this.showExistingDistributionList = !this.showExistingDistributionList;
+    this.validateDistributionList();
   }
 
   /**
@@ -194,11 +196,28 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * @param event file selection Event
    */
   fileSelectionHandler(event: any): void {
+    this.showEmailTemplate = false;
     const file: File = event.target.files[0];
     if (file) {
       this.downloadService.importDistributionList(file).subscribe((res) => {
-        this.recipients = res;
+        this.recipients.To = [...this.recipients.To, ...res.To];
+        this.recipients.Cc = [...this.recipients.Cc, ...res.Cc];
+        this.recipients.Bcc = [...this.recipients.Bcc, ...res.Bcc];
+        this.showEmailTemplate = true;
+        this.templateFor = 'to';
+        this.validateDistributionList();
       });
     }
+  }
+
+  /**
+   * The distribution list should have at least
+   * one To email address and name to proceed with next steps
+   */
+  validateDistributionList(): void {
+    this.emailService.disableSaveAndProceed.next(
+      this.recipients.To.length === 0 ||
+        this.recipients.distributionListName.length === 0
+    );
   }
 }

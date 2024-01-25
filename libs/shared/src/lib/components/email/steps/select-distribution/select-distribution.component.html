@@ -32,6 +32,7 @@
       <input
         [ngClass]="{'form-error': isNameDuplicate()}"
         class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        (change)="validateDistributionList()"
         [(ngModel)]="recipients.distributionListName" [placeholder]="'common.name' | translate" />
         <div *ngIf="isNameDuplicate()" class="text-red-500 text-sm mt-1">
           Name already exists.
@@ -132,5 +133,8 @@
   <div class="use-existing" *ngIf="showExistingDistributionList">
     <p (click)="showExistingDistributionList = !showExistingDistributionList" >Or Create New</p>
   </div>
+</div>
+<div class="validation-note" *ngIf="recipients?.distributionListName?.length === 0 || recipients?.To?.length === 0">
+ Please fill <strong *ngIf="recipients?.distributionListName?.length === 0"> Distribution List name,</strong> <strong *ngIf="recipients?.To?.length === 0">at least one To email address </strong> to proceed
 </div>
 

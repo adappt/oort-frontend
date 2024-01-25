@@ -47,3 +47,12 @@
   tr:nth-child(odd) { background: white }
   .border { border-width: 0px !important ;}
 }
+.hint-text{
+  color: #ff0000;
+    font-size: 14px;
+    padding: 5px 0;
+}
+
+.input-error {
+  border: 1px solid #ff0000;
+}

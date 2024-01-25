@@ -30,6 +30,7 @@
         type="submit"
         class="px-4 py-2 rounded-md transition-colors duration-150 ease-in-out"
         [ngClass]="disableActionButton ? 'inactive': 'active'"
+        [disabled]="disableActionButton"
         (click)="next()"
         *ngIf="currentStep !== 5"
       >

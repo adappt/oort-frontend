@@ -48,7 +48,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public resource!: Resource;
   public metaData!: any;
   public dataSetResponse: any;
-  public dataSetFields!: string[];
+  public dataSetFields!: any[];
   public selectedResourceId!: string;
   public dataList!: { [key: string]: any }[];
   /** FILTER VARIABLES */
@@ -627,9 +627,12 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   }
                 );
                 if (this.dataList?.length) {
+                  const tempIndex = res?.data?.dataSet?.tabIndex;
                   this.dataSetFields = [
                     ...new Set(
-                      this.selectedFields.map((data: any) => data.name).flat()
+                      this.queryValue[tempIndex].fields
+                        .map((data: any) => data.name)
+                        .flat()
 
                       // this.dataList
                       //   .map((data: { [key: string]: any }) =>

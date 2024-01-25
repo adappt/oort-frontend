@@ -340,6 +340,8 @@ export class PreviewComponent implements OnInit, OnDestroy {
         );
       });
       this.replaceSubjectTokens();
+    } else {
+      this.subjectString = '';
     }
 
     this.headerString = this.emailService.allLayoutdata.headerHtml;
@@ -351,6 +353,8 @@ export class PreviewComponent implements OnInit, OnDestroy {
         );
       });
       this.replaceInTheLast(this.headerString);
+    } else {
+      this.headerString = '';
     }
 
     this.footerString = this.emailService.allLayoutdata.footerHtml;
@@ -361,6 +365,8 @@ export class PreviewComponent implements OnInit, OnDestroy {
           value
         );
       });
+    } else {
+      this.footerString = '';
     }
   }
 

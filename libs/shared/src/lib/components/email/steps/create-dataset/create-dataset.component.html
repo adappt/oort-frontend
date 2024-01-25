@@ -63,13 +63,11 @@
         <div style="width: 100%; overflow-x: auto;">
           <ng-container *ngFor="let previewData of allPreviewData; let preIndex = index">
             <div class="flex flex-col items-center w-9/10 mx-auto">
-              <div class="w-full">
                 <label
                   id="previewLabel"
-                  class="block text-left pl-5 p-2 shadow-none text-sm">
+                  class="block text-left pl-5 p-2 shadow-none text-sm w-full">
                   {{ previewData?.tabName }}
                 </label>
-              </div>
               <table
               id="tblPreview"
               *ngIf="previewData?.dataList?.length"

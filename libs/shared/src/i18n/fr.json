@@ -245,6 +245,7 @@
 				"error": "Un problème est survenu lors de l'envoi de l'e-mail",
 				"errors": {
 					"noDistributionList": "Un problème est survenu lors de l'envoi de l'e-mail: aucune liste de distribution détectée",
+					"noSubject": "Veuillez entrer un sujet",
 					"noTemplate": "Un problème est survenu lors de l'envoi de l'e-mail: aucun template détecté"
 				},
 				"processing": "Envoi en cours...",

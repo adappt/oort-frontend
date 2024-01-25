@@ -391,11 +391,16 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    * @returns filter fields form.
    */
   getNewFilterFields(filter: any): FormGroup {
+    console.log(filter);
     return this.formBuilder.group({
       field: filter.field,
       operator: filter.operator,
       value: filter.value,
       hideEditor: filter.hideEditor,
+      inTheLast: this.formBuilder.group({
+        number: filter.inTheLast?.number,
+        unit: filter.inTheLast?.unit,
+      }),
     });
   }
 

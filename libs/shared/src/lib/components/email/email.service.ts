@@ -95,6 +95,8 @@ export class EmailService {
 
   /** DEFAULT BLOCK DATASET TABLE STYLE */
   public defaultTableStyle: any = {
+    tableDivStyle: '',
+    labelStyle: '',
     tableStyle: '',
     theadStyle: '',
     tbodyStyle: '',
@@ -210,6 +212,12 @@ export class EmailService {
    * Sets the Table Styles.
    */
   setTableStyles(styles: { [key: string]: string }) {
+    if (styles.tableDivStyle !== undefined) {
+      this.defaultTableStyle.tableDivStyle = styles.tableDivStyle;
+    }
+    if (styles.labelStyle !== undefined) {
+      this.defaultTableStyle.labelStyle = styles.labelStyle;
+    }
     if (styles.tableStyle !== undefined) {
       this.defaultTableStyle.tableStyle = styles.tableStyle;
     }
@@ -327,38 +335,41 @@ export class EmailService {
    * Retrieves all preview data objects.
    */
   patchEmailLayout(): void {
-    const headerImg = this.allLayoutdata?.headerLogo
-      ? this.convertFileToBase64(this.allLayoutdata?.headerLogo)
-          .then((base64String) => {
-            console.log('Base64 string:', base64String);
-            return base64String;
-          })
-          .catch((error) => {
-            console.error('Error converting file to base64:', error);
-          })
-      : null;
+    const headerImg =
+      this.allLayoutdata?.headerLogo instanceof File
+        ? this.convertFileToBase64(this.allLayoutdata?.headerLogo)
+            .then((base64String) => {
+              console.log('Base64 string:', base64String);
+              return base64String;
+            })
+            .catch((error) => {
+              console.error('Error converting file to base64:', error);
+            })
+        : null;
 
-    const footerImg = this.allLayoutdata?.footerLogo
-      ? this.convertFileToBase64(this.allLayoutdata?.footerLogo)
-          .then((base64String) => {
-            console.log('Base64 string:', base64String);
-            return base64String;
-          })
-          .catch((error) => {
-            console.error('Error converting file to base64:', error);
-          })
-      : null;
+    const footerImg =
+      this.allLayoutdata?.footerLogo instanceof File
+        ? this.convertFileToBase64(this.allLayoutdata?.footerLogo)
+            .then((base64String) => {
+              console.log('Base64 string:', base64String);
+              return base64String;
+            })
+            .catch((error) => {
+              console.error('Error converting file to base64:', error);
+            })
+        : null;
 
-    const bannerLogo = this.allLayoutdata?.bannerImage
-      ? this.convertFileToBase64(this.allLayoutdata?.bannerImage)
-          .then((base64String) => {
-            console.log('Base64 string:', base64String);
-            return base64String;
-          })
-          .catch((error) => {
-            console.error('Error converting file to base64:', error);
-          })
-      : null;
+    const bannerLogo =
+      this.allLayoutdata?.bannerImage instanceof File
+        ? this.convertFileToBase64(this.allLayoutdata?.bannerImage)
+            .then((base64String) => {
+              console.log('Base64 string:', base64String);
+              return base64String;
+            })
+            .catch((error) => {
+              console.error('Error converting file to base64:', error);
+            })
+        : null;
 
     this.emailLayout = {
       subject: this.allLayoutdata?.txtSubject,
@@ -400,6 +411,8 @@ export class EmailService {
    */
   patchTableStyles(): void {
     const tableStyles = {
+      tableDivStyle: this.defaultTableStyle?.tableDivStyle,
+      labelStyle: this.defaultTableStyle?.labelStyle,
       tableStyle: this.defaultTableStyle?.tableStyle,
       theadStyle: this.defaultTableStyle?.theadStyle,
       tbodyStyle: this.defaultTableStyle?.tbodyStyle,

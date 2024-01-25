@@ -199,6 +199,16 @@ export class PreviewComponent implements OnInit, OnDestroy {
   getTableStyle(item: string): string {
     const styles: { [key: string]: string } = {};
     switch (item) {
+      case 'tableDiv':
+        styles[
+          'tableDivStyle'
+        ] = `display: flex; flex-direction: column; align-items: center; width: 90%; margin-left: auto; margin-right: auto;`;
+        break;
+      case 'label':
+        styles[
+          'labelStyle'
+        ] = `display: block; text-align: left !important; padding-left: 1.25rem; padding-top: 0.5rem; padding-bottom: 0.5rem; width: 100%; font-family: 'Source Sans Pro', sans-serif; border: 3px solid #00205C; background-color: #00205C !important; color: #FFFFFF !important; font-style: normal; font-weight: 700; font-size: 0.875rem;`;
+        break;
       case 'table':
         styles['tableStyle'] =
           'width: 100%; border-collapse: collapse; border: 1px solid gray; box-shadow: 0 0 #0000; overflow:auto;';
@@ -322,30 +332,36 @@ export class PreviewComponent implements OnInit, OnDestroy {
     };
 
     this.subjectString = this.emailService.allLayoutdata.txtSubject;
-    Object.entries(tokens).forEach(([token, value]) => {
-      this.subjectString = this.subjectString.replace(
-        new RegExp(token, 'g'),
-        value
-      );
-    });
-    this.replaceSubjectTokens();
+    if (this.subjectString) {
+      Object.entries(tokens).forEach(([token, value]) => {
+        this.subjectString = this.subjectString.replace(
+          new RegExp(token, 'g'),
+          value
+        );
+      });
+      this.replaceSubjectTokens();
+    }
 
     this.headerString = this.emailService.allLayoutdata.headerHtml;
-    Object.entries(tokens).forEach(([token, value]) => {
-      this.headerString = this.headerString?.replace(
-        new RegExp(token, 'g'),
-        value
-      );
-    });
-    this.replaceInTheLast(this.headerString);
+    if (this.headerString) {
+      Object.entries(tokens).forEach(([token, value]) => {
+        this.headerString = this.headerString?.replace(
+          new RegExp(token, 'g'),
+          value
+        );
+      });
+      this.replaceInTheLast(this.headerString);
+    }
 
     this.footerString = this.emailService.allLayoutdata.footerHtml;
-    Object.entries(tokens).forEach(([token, value]) => {
-      this.footerString = this.footerString.replace(
-        new RegExp(token, 'g'),
-        value
-      );
-    });
+    if (this.footerString) {
+      Object.entries(tokens).forEach(([token, value]) => {
+        this.footerString = this.footerString.replace(
+          new RegExp(token, 'g'),
+          value
+        );
+      });
+    }
   }
 
   /**
@@ -383,6 +399,8 @@ export class PreviewComponent implements OnInit, OnDestroy {
       .join('');
 
     const tableHtml = `
+  <div style="${this.getTableStyle('tableDiv')}>
+   <label style="${this.getTableStyle('label')}">${previewData.tabName}</label>
   <table id="tblPreview" style="${this.getTableStyle(
     'table'
   )}" class="dataset-preview">
@@ -391,10 +409,11 @@ export class PreviewComponent implements OnInit, OnDestroy {
         ${theadHtml}
       </tr>
     </thead>
-    <tbody>
+    <tbody style="${this.getTableStyle('tbody')}">
       ${tbodyHtml}
     </tbody>
   </table>
+  </div>
 `;
     return tableHtml;
   }

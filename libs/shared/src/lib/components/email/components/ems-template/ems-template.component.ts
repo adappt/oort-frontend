@@ -271,6 +271,7 @@ export class EmsTemplateComponent {
           this.emailService.datasetsForm
             .get('applicationId')
             ?.setValue(res?.id);
+          // For email notification edit operation.
           if (this.emailService.isEdit) {
             this.emailService
               .editEmailNotification(this.emailService.editId, queryData)
@@ -284,6 +285,7 @@ export class EmsTemplateComponent {
                 resolve();
               }, reject);
           } else {
+            // For email notification create operation.
             this.emailService
               .addEmailNotification(queryData)
               .subscribe((res: any) => {
@@ -316,6 +318,7 @@ export class EmsTemplateComponent {
         queryData.applicationId = res?.id;
         queryData.recipients = this.emailService.recipients;
       });
+      // For email notification edit operation.
       if (this.emailService.isEdit) {
         this.emailService
           .editEmailNotification(this.emailService.editId, queryData)
@@ -333,6 +336,7 @@ export class EmsTemplateComponent {
             this.navigateToEms.emit();
           });
       } else {
+        // For email notification create operation.
         this.emailService
           .addEmailNotification(queryData)
           .subscribe((res: any) => {

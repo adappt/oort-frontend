@@ -81,7 +81,7 @@
           <ng-container cdkColumnDef="actions" [stickyEnd]="true">
             <th uiCellHeader *cdkHeaderCellDef scope="col" class="w-16"></th>
             <td uiCell *cdkCellDef="let element" class="flex items-center">
-              <ng-container *ngIf="element?.createdBy?.email === authService?.account?.username">
+              <ng-container>
                   <ui-button
                     [variant]="'grey'"
                     class="hide-icons hover:text-primary-600"

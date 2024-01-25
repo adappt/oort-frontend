@@ -39,6 +39,9 @@ export class PreviewComponent implements OnInit, OnDestroy {
     this.replaceTokensWithTables();
     this.replaceDateTimeTokens();
 
+    console.log(`Email Data:`);
+    console.log(this.emailService.allLayoutdata);
+
     (document.getElementById('subjectHtml') as HTMLInputElement).innerHTML =
       this.subjectString;
 
@@ -49,21 +52,51 @@ export class PreviewComponent implements OnInit, OnDestroy {
       this.bodyString;
 
     if (this.emailService.allLayoutdata.headerLogo) {
-      this.headerLogo = URL.createObjectURL(
-        this.emailService.allLayoutdata.headerLogo
-      );
+      if (this.emailService.allLayoutdata.headerLogo.__zone_symbol__value) {
+        this.headerLogo = URL.createObjectURL(
+          this.emailService.convertBase64ToFile(
+            this.emailService.allLayoutdata.headerLogo.__zone_symbol__value,
+            'image.png',
+            'image/png'
+          )
+        );
+      } else {
+        this.headerLogo = URL.createObjectURL(
+          this.emailService.allLayoutdata.headerLogo
+        );
+      }
     }
 
     if (this.emailService.allLayoutdata.footerLogo) {
-      this.footerLogo = URL.createObjectURL(
-        this.emailService.allLayoutdata.footerLogo
-      );
+      if (this.emailService.allLayoutdata.footerLogo.__zone_symbol__value) {
+        this.footerLogo = URL.createObjectURL(
+          this.emailService.convertBase64ToFile(
+            this.emailService.allLayoutdata.footerLogo.__zone_symbol__value,
+            'image.png',
+            'image/png'
+          )
+        );
+      } else {
+        this.footerLogo = URL.createObjectURL(
+          this.emailService.allLayoutdata.footerLogo
+        );
+      }
     }
 
     if (this.emailService.allLayoutdata.bannerImage) {
-      this.bannerImage = URL.createObjectURL(
-        this.emailService.allLayoutdata.bannerImage
-      );
+      if (this.emailService.allLayoutdata.bannerImage.__zone_symbol__value) {
+        this.bannerImage = URL.createObjectURL(
+          this.emailService.convertBase64ToFile(
+            this.emailService.allLayoutdata.bannerImage.__zone_symbol__value,
+            'image.png',
+            'image/png'
+          )
+        );
+      } else {
+        this.bannerImage = URL.createObjectURL(
+          this.emailService.allLayoutdata.bannerImage
+        );
+      }
     }
 
     (document.getElementById('footerHtml') as HTMLInputElement).innerHTML =
@@ -127,7 +160,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'footer':
         styles[
           'footerStyle'
-        ] = `margin: 0.5rem auto; display: flex; width: 90%; background-color: ${this.emailService.footerBackgroundColor};`;
+        ] = `margin: 0.25rem 0; display: flex; width: 90%; background-color: ${this.emailService.footerBackgroundColor};`;
         break;
       case 'footerImg':
         styles[
@@ -142,12 +175,13 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'copyright':
         styles[
           'copyrightStyle'
-        ] = `text-align: center; width: 100%; height: 100%; box-sizing: border-box; background-color: #00205C; color: white; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif; padding: 10px;`;
+        ] = `text-align: center; width: 100%; box-sizing: border-box; background-color: #00205C; color: white; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif; margin-top: auto;`;
         break;
+
       case 'container':
         styles[
           'containerStyle'
-        ] = `border: 2px solid #00205C; width: 100%; height: 100%; box-sizing: border-box;`;
+        ] = `border: 2px solid #00205C; width: 100%; height: 100%; box-sizing: border-box; display: flex; flex-direction: column;`;
         break;
       default:
         return '';
@@ -163,33 +197,32 @@ export class PreviewComponent implements OnInit, OnDestroy {
    * @returns The inline style of the item.
    */
   getTableStyle(item: string): string {
-    const styles: { [key: string]: string } =
-      this.emailService.defaultTableStyle; // Use the defaultTableStyle from the EmailService
+    const styles: { [key: string]: string } = {};
     switch (item) {
       case 'table':
         styles['tableStyle'] =
-          'width: auto; max-width: 95%; margin: 0.25rem auto; box-shadow: 0 0 #0000; overflow:auto; border: none;';
+          'width: 100%; border-collapse: collapse; border: 1px solid gray; box-shadow: 0 0 #0000; overflow:auto;';
         break;
       case 'thead':
         styles['theadStyle'] =
-          'font-family: inherit; font-size: 14px; background-color: #00205C; color: #FFFFFF; border-color: #00205C; box-shadow: 0 0 #0000; text-transform: capitalize;';
+          'background-color: #00205C; color: white; text-align: center; padding: 2px;';
         break;
       case 'tbody':
         styles['tbodyStyle'] = 'font-family: inherit; font-size: 14px;';
         break;
       case 'th':
         styles['thStyle'] =
-          'text-align: left; padding-left: 20px; background-color: #00205C; color: #FFFFFF; padding: 0.5rem; text-align: center';
+          'text-align: left; padding: 2px; background-color: #00205C; color: white;';
         break;
       case 'tr':
-        styles['trStyle'] = 'background-color: #FFFFFF;';
+        styles['trStyle'] =
+          'border-top: 1px solid gray; background-color: white;';
         break;
       case 'td':
-        styles['tdStyle'] =
-          'text-align: left; padding-left: 20px; padding: 0.5rem; box-shadow: 0 0 #0000; margin: 0.25rem; text-align: center;';
+        styles['tdStyle'] = 'padding: 2px; text-align: left;';
         break;
     }
-    this.emailService.setTableStyles(styles); // Update the styles in the EmailService
+    this.emailService.setTableStyles(styles);
     return styles[item + 'Style'] || '';
   }
 

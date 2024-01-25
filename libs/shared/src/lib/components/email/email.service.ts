@@ -228,6 +228,13 @@ export class EmailService {
   }
 
   /**
+   *
+   */
+  getTableStyles(): any {
+    return this.defaultTableStyle;
+  }
+
+  /**
    * Sets the selected data set.
    *
    * @param dataSet The data set to be selected.
@@ -267,14 +274,95 @@ export class EmailService {
   }
 
   /**
+   *
+   * @param file
+   */
+  convertFileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // The result attribute contains the data as a base64 encoded string
+        const base64String = reader.result as string;
+        resolve(base64String);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /**
+   *
+   * @param base64String
+   * @param filename
+   * @param mimeType
+   */
+  convertBase64ToFile(
+    base64String: string,
+    filename: string,
+    mimeType: string
+  ): File {
+    // Check if the base64 string contains the data URL prefix and remove it
+    const base64Data = base64String.split(',')[1] || base64String;
+
+    // Decode the base64 string
+    const byteCharacters = atob(base64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+
+    const blob = new Blob([byteArray], { type: mimeType });
+
+    const file = new File([blob], filename, { type: mimeType });
+    return file;
+  }
+
+  /**
    * Retrieves all preview data objects.
    */
   patchEmailLayout(): void {
+    const headerImg = this.allLayoutdata?.headerLogo
+      ? this.convertFileToBase64(this.allLayoutdata?.headerLogo)
+          .then((base64String) => {
+            console.log('Base64 string:', base64String);
+            return base64String;
+          })
+          .catch((error) => {
+            console.error('Error converting file to base64:', error);
+          })
+      : null;
+
+    const footerImg = this.allLayoutdata?.footerLogo
+      ? this.convertFileToBase64(this.allLayoutdata?.footerLogo)
+          .then((base64String) => {
+            console.log('Base64 string:', base64String);
+            return base64String;
+          })
+          .catch((error) => {
+            console.error('Error converting file to base64:', error);
+          })
+      : null;
+
+    const bannerLogo = this.allLayoutdata?.bannerImage
+      ? this.convertFileToBase64(this.allLayoutdata?.bannerImage)
+          .then((base64String) => {
+            console.log('Base64 string:', base64String);
+            return base64String;
+          })
+          .catch((error) => {
+            console.error('Error converting file to base64:', error);
+          })
+      : null;
+
     this.emailLayout = {
       subject: this.allLayoutdata?.txtSubject,
       header: {
         headerHtml: this.allLayoutdata?.headerHtml,
-        headerLogo: this.allLayoutdata?.headerLogo,
+        headerLogo: headerImg,
+        headerLogoStyle: this.allLayoutdata.headerLogoStyle,
         headerBackgroundColor: this.allLayoutdata.headerBackgroundColor,
         headerTextColor: this.allLayoutdata.headerTextColor,
         headerStyle: this.allLayoutdata?.headerStyle,
@@ -286,14 +374,14 @@ export class EmailService {
         bodyStyle: this.allLayoutdata?.bodyStyle,
       },
       banner: {
-        bannerImage: this.allLayoutdata?.bannerImage,
+        bannerImage: bannerLogo,
         bannerImageStyle: this.allLayoutdata?.bannerImageStyle,
         containerStyle: this.allLayoutdata?.containerStyle,
         copyrightStyle: this.allLayoutdata?.copyrightStyle,
       },
       footer: {
         footerHtml: this.allLayoutdata?.footerHtml,
-        footerLogo: this.allLayoutdata?.footerLogo,
+        footerLogo: footerImg,
         footerBackgroundColor: this.allLayoutdata.footerBackgroundColor,
         footerTextColor: this.allLayoutdata.footerTextColor,
         footerStyle: this.allLayoutdata?.footerStyle,
@@ -709,13 +797,6 @@ export class EmailService {
     }
 
     return result;
-  }
-
-  /**
-   *
-   */
-  getTableStyles(): any {
-    return this.defaultTableStyle;
   }
 
   /**

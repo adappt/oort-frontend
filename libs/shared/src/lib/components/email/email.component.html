@@ -46,7 +46,7 @@
             <td uiCell *cdkCellDef="let element">
               <button
               type="button"
-              class="py-0.5 px-2 font-medium text-blue-600 rounded-full flex focus:ring-4 bg-blue-50 dark:border-blue-500"
+              class="cursor-text py-0.5 px-2 font-medium text-blue-600 rounded-full flex focus:ring-4 bg-blue-50 dark:border-blue-500"
             >
               <svg
                 class="w-3 h-3 mt-1 text-blue-500 me-2"
@@ -66,7 +66,7 @@
             </button>
             </td>
           </ng-container>
-  
+
           <ng-container cdkColumnDef="createdby">
             <th uiCellHeader *cdkHeaderCellDef scope="col">
               <span class="headerTitle">
@@ -77,7 +77,7 @@
               {{element?.createdBy?.name}}
             </td>
           </ng-container>
-  
+
           <ng-container cdkColumnDef="actions" [stickyEnd]="true">
             <th uiCellHeader *cdkHeaderCellDef scope="col" class="w-16"></th>
             <td uiCell *cdkCellDef="let element" class="flex items-center">
@@ -92,7 +92,7 @@
                     [uiTooltip]="'Send Email'"
                   >
                 </ui-button>
-    
+
                 <ui-button
                     [variant]="'grey'"
                     class="hide-icons hover:text-primary-600"
@@ -103,7 +103,7 @@
                     [uiTooltip]="'Edit'"
                   >
                 </ui-button>
-    
+
                 <ui-button
                     [variant]="'grey'"
                     class="hide-icons hover:text-primary-600"
@@ -114,7 +114,7 @@
                     [uiTooltip]="'Clone'"
                   >
                 </ui-button>
-    
+
                 <ui-button
                     [variant]="'danger'"
                     class="hide-icons hover:text-primary-600"
@@ -128,7 +128,7 @@
               </ng-container>
             </td>
           </ng-container>
-  
+
           <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
           <tr cdk-row *cdkRowDef="let row; columns: displayedColumns"></tr>
         </table>
@@ -159,7 +159,7 @@
       </h3>
     </div>
     </ng-template>
-  </div>   
+  </div>
 
   <!-- <button
     type="button"

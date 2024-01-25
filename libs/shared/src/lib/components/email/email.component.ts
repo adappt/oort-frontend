@@ -89,23 +89,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     this.emailService.stepperStep = 0;
     this.emailService.isExisting = !this.emailService.isExisting;
     if (!this.emailService.isExisting) {
-      this.emailService.allLayoutdata = {};
-      this.emailService.allPreviewData = [];
-      this.emailService.emailLayout = {};
-      this.emailService.recipients = {
-        distributionListName: '',
-        To: [],
-        Cc: [],
-        Bcc: [],
-      };
-      this.emailService.tabs = [
-        {
-          title: `Block 1`,
-          content: `Block 1 Content`,
-          active: true,
-          index: 0,
-        },
-      ];
+      this.emailService.resetDataSetForm();
     }
   }
 

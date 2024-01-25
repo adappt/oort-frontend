@@ -711,7 +711,34 @@ export class EmailService {
     return result;
   }
 
+  /**
+   *
+   */
   getTableStyles(): any {
     return this.defaultTableStyle;
+  }
+
+  /**
+   *
+   */
+  resetDataSetForm() {
+    this.datasetsForm.reset();
+    this.allLayoutdata = {};
+    this.allPreviewData = [];
+    this.emailLayout = {};
+    this.recipients = {
+      distributionListName: '',
+      To: [],
+      Cc: [],
+      Bcc: [],
+    };
+    this.tabs = [
+      {
+        title: `Block 1`,
+        content: `Block 1 Content`,
+        active: true,
+        index: 0,
+      },
+    ];
   }
 }

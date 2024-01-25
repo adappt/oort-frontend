@@ -204,6 +204,18 @@
   </ui-paginator>
 
   </div>
-<ng-container *ngIf="!emailService.isExisting">
+<ng-container *ngIf="!emailService.isExisting">  
+  <div>
+    <ui-button
+        [variant]="'danger'"
+        class="hide-icons hover:text-primary-600 btnClose"
+        [isIcon]="true"
+        size="large"
+        (click)="toggle()"
+        [icon]="'close'"
+        [uiTooltip]="'Close'"
+      >
+    </ui-button>
+  </div>
   <ems-template (navigateToEms)="toggle();getExistingTemplate();" [currentStep]="emailService.stepperStep" class="stepper-center"></ems-template>
 </ng-container>

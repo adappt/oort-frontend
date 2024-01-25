@@ -221,6 +221,7 @@ export class EmsTemplateComponent {
             this.snackBar.openSnackBar(
               this.translate.instant('pages.application.settings.emailSent')
             );
+            this.emailService.datasetsForm.reset();
             this.navigateToEms.emit();
           },
           (error) => {
@@ -264,20 +265,35 @@ export class EmsTemplateComponent {
             .get('applicationId')
             ?.setValue(res?.id);
           queryData.applicationId = res?.id;
+          queryData.recipients = this.emailService.recipients;
         });
         this.applicationService.application$.subscribe((res: any) => {
           this.emailService.datasetsForm
             .get('applicationId')
             ?.setValue(res?.id);
-          this.emailService
-            .addEmailNotification(queryData)
-            .subscribe((res: any) => {
-              console.log(res);
-              this.emailService.configId = res.data?.addEmailNotification?.id;
-              console.log(this.emailService.configId);
-              //window.location.reload();
-              resolve();
-            }, reject);
+          if (this.emailService.isEdit) {
+            this.emailService
+              .editEmailNotification(this.emailService.editId, queryData)
+              .subscribe((res) => {
+                console.log('Edited data:', res);
+                this.emailService.isEdit = false;
+                this.emailService.editId = '';
+                this.emailService.configId =
+                  res.data?.editAndGetEmailNotification?.id;
+                console.log(this.emailService.configId);
+                resolve();
+              }, reject);
+          } else {
+            this.emailService
+              .addEmailNotification(queryData)
+              .subscribe((res: any) => {
+                console.log(res);
+                this.emailService.configId = res.data?.addEmailNotification?.id;
+                console.log(this.emailService.configId);
+                //window.location.reload();
+                resolve();
+              }, reject);
+          }
         }, reject);
       } else {
         resolve();
@@ -298,19 +314,39 @@ export class EmsTemplateComponent {
       this.applicationService.application$.subscribe((res: any) => {
         this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
         queryData.applicationId = res?.id;
+        queryData.recipients = this.emailService.recipients;
       });
-      this.emailService
-        .addEmailNotification(queryData)
-        .subscribe((res: any) => {
-          console.log(res);
-          this.emailService.configId = res.data.addEmailNotification.id;
-          console.log(this.emailService.configId);
-          //window.location.reload();
-          this.snackBar.openSnackBar(
-            this.translate.instant('pages.application.settings.emailCreated')
-          );
-          this.navigateToEms.emit();
-        });
+      if (this.emailService.isEdit) {
+        this.emailService
+          .editEmailNotification(this.emailService.editId, queryData)
+          .subscribe((res: any) => {
+            console.log('Edited data:', res);
+            this.emailService.isEdit = false;
+            this.emailService.editId = '';
+            this.emailService.configId =
+              res.data.editAndGetEmailNotification.id;
+            console.log(this.emailService.configId);
+            this.snackBar.openSnackBar(
+              this.translate.instant('pages.application.settings.emailEdited')
+            );
+            this.emailService.datasetsForm.reset();
+            this.navigateToEms.emit();
+          });
+      } else {
+        this.emailService
+          .addEmailNotification(queryData)
+          .subscribe((res: any) => {
+            console.log(res);
+            this.emailService.configId = res.data.addEmailNotification.id;
+            console.log(this.emailService.configId);
+            //window.location.reload();
+            this.snackBar.openSnackBar(
+              this.translate.instant('pages.application.settings.emailCreated')
+            );
+            this.emailService.datasetsForm.reset();
+            this.navigateToEms.emit();
+          });
+      }
     }
   }
 

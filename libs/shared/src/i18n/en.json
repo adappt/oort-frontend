@@ -2365,6 +2365,7 @@
 			"settings": {
 				"actions": "Actions",
 				"emailCreated": "New Email Notification Created",
+				"emailEdited": "Email Notification Edited Successfully",
 				"emailSent": "Email Notification has Successfully been Saved and Sent"
 			}
 		},

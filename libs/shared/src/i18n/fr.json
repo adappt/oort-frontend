@@ -2379,6 +2379,7 @@
 			"settings": {
 				"actions": "Actions",
 				"emailCreated": "Nouvelle notification par e-mail créée",
+				"emailEdited": "Notification par e-mail modifiée avec succès.",
 				"emailSent": "La notification par e-mail a été enregistrée et envoyée avec succès"
 			}
 		},

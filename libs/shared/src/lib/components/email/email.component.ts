@@ -129,10 +129,10 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
           ) {
             this.distributionLists.push(ele.node.recipients);
             this.emailService.distributionListNames.push(
-              ele.node?.recipients?.distributionListName
+              ele.node?.recipients?.distributionListName.trim()
             );
-            this.emailService.emailNotificationNames.push(ele.node.name);
           }
+          this.emailService.emailNotificationNames.push(ele.node.name.trim());
         });
         this.filterTemplateData = this.templateActualData;
         this.emailNotifications = this.filterTemplateData.slice(
@@ -218,6 +218,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
             });
         } else {
           this.prepareEditData(emailData, isSendEmail);
+          this.emailService.editId = id;
         }
       });
   }
@@ -318,18 +319,19 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       headerTextColor: emailData.emailLayout?.header?.headerTextColor,
       headerStyle: '',
       /** EMAIL BODY */
-      bodyHtml: emailData.emailLayout.body.bodyHtml,
-      bodyBackgroundColor: emailData.emailLayout.body.bodyBackgroundColor,
-      bodyTextColor: emailData.emailLayout.body.bodyTextColor,
-      bodyStyle: emailData.emailLayout.body.bodyStyle,
+      bodyHtml: emailData?.emailLayout?.body?.bodyHtml,
+      bodyBackgroundColor: emailData?.emailLayout?.body?.bodyBackgroundColor,
+      bodyTextColor: emailData?.emailLayout?.body?.bodyTextColor,
+      bodyStyle: emailData?.emailLayout?.body?.bodyStyle,
       /** EMAIL FOOTER */
-      footerHtml: emailData.emailLayout.footer.footerHtml,
-      footerLogo: emailData.emailLayout.footer.footerLogo,
-      footerBackgroundColor: emailData.emailLayout.footer.footerBackgroundColor,
-      footerTextColor: emailData.emailLayout.footer.footerTextColor,
-      footerStyle: emailData.emailLayout.footer.footerStyle,
-      footerImgStyle: emailData.emailLayout.footer.footerImgStyle,
-      footerHtmlStyle: emailData.emailLayout.footer.footerHtmlStyle,
+      footerHtml: emailData?.emailLayout?.footer?.footerHtml,
+      footerLogo: emailData?.emailLayout?.footer?.footerLogo,
+      footerBackgroundColor:
+        emailData?.emailLayout?.footer?.footerBackgroundColor,
+      footerTextColor: emailData?.emailLayout?.footer?.footerTextColor,
+      footerStyle: emailData?.emailLayout?.footer?.footerStyle,
+      footerImgStyle: emailData?.emailLayout?.footer?.footerImgStyle,
+      footerHtmlStyle: emailData?.emailLayout?.footer?.footerHtmlStyle,
     };
 
     this.emailService.datasetsForm

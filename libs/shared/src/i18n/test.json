@@ -2365,6 +2365,7 @@
 			"settings": {
 				"actions": "******",
 				"emailCreated": "******",
+				"emailEdited": "******",
 				"emailSent": "******"
 			}
 		},

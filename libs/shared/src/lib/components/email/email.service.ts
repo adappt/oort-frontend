@@ -111,6 +111,7 @@ export class EmailService {
   public dataSetFields!: string[];
   public distributionListNames: string[] = [];
   public emailNotificationNames: string[] = [];
+  public editId = '';
   @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
   stepperStep = 0;
   public isEdit = false;
@@ -688,6 +689,23 @@ export class EmailService {
         notification: null,
         editEmailNotificationId: id,
         applicationId: applicationId,
+      },
+    });
+  }
+
+  /**
+   * Edit an email notification with the provided id.
+   *
+   * @param id The notification data id.
+   * @param data
+   * @returns Email notification.
+   */
+  editEmailNotification(id: string, data: any) {
+    return this.apollo.query<any>({
+      query: GET_AND_UPDATE_EMAIL_NOTIFICATION,
+      variables: {
+        notification: data,
+        editEmailNotificationId: id,
       },
     });
   }

@@ -207,29 +207,30 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'label':
         styles[
           'labelStyle'
-        ] = `display: block; text-align: left !important; padding-left: 1.25rem; padding-top: 0.5rem; padding-bottom: 0.5rem; width: 100%; font-family: 'Source Sans Pro', sans-serif; border: 3px solid #00205C; background-color: #00205C !important; color: #FFFFFF !important; font-style: normal; font-weight: 700; font-size: 0.875rem;`;
+        ] = `display: block; text-align: left !important; padding-left: 1.25rem; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-right: 0.5rem; box-shadow: 0 0 #0000; width: 100%; font-size: 0.875rem; line-height: 1.25rem; font-family: 'Source Sans Pro', sans-serif; border: 3px solid #00205C; background-color: #00205C !important; color: #FFFFFF !important; font-style: normal; font-weight: 700;`;
         break;
       case 'table':
         styles['tableStyle'] =
-          'width: 100%; border-collapse: collapse; border: 1px solid gray; box-shadow: 0 0 #0000; overflow:auto;';
+          'width: 100%; border-collapse: collapse; border: 1px solid #d1d5db; overflow:auto;';
         break;
       case 'thead':
-        styles['theadStyle'] =
-          'background-color: #00205C; color: white; text-align: center; padding: 2px;';
+        styles[
+          'theadStyle'
+        ] = `background-color: #00205C; color: white; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif;`;
         break;
       case 'tbody':
-        styles['tbodyStyle'] = 'font-family: inherit; font-size: 14px;';
+        styles['tbodyStyle'] = `font-size: 14px;`;
         break;
       case 'th':
         styles['thStyle'] =
-          'text-align: left; padding: 2px; background-color: #00205C; color: white;';
+          'text-align: left; padding: 0.5rem; background-color: #00205C; color: white;';
         break;
       case 'tr':
         styles['trStyle'] =
-          'border-top: 1px solid gray; background-color: white;';
+          'border-top: 1px solid #d1d5db; background-color: white;';
         break;
       case 'td':
-        styles['tdStyle'] = 'padding: 2px; text-align: left;';
+        styles['tdStyle'] = 'padding: 0.5rem; text-align: center;';
         break;
     }
     this.emailService.setTableStyles(styles);

@@ -176,67 +176,48 @@ export class EmailService {
   /**
    * Sets the email layout styles.
    */
-  setEmailStyles(styles: { [key: string]: string }) {
-    if (styles.headerStyle !== undefined) {
-      this.allLayoutdata.headerStyle = styles.headerStyle;
-    }
-    if (styles.bodyStyle !== undefined) {
-      this.allLayoutdata.bodyStyle = styles.bodyStyle;
-    }
-    if (styles.footerStyle !== undefined) {
-      this.allLayoutdata.footerStyle = styles.footerStyle;
-    }
-    if (styles.footerImgStyle !== undefined) {
-      this.allLayoutdata.footerImgStyle = styles.footerImgStyle;
-    }
-    if (styles.footerHtmlStyle !== undefined) {
-      this.allLayoutdata.footerHtmlStyle = styles.footerHtmlStyle;
-    }
-    if (styles.bannerStyle !== undefined) {
-      this.allLayoutdata.bannerStyle = styles.bannerStyle;
-    }
-    if (styles.headerLogoStyle !== undefined) {
-      this.allLayoutdata.headerLogoStyle = styles.headerLogoStyle;
-    }
-    if (styles.bannerImageStyle !== undefined) {
-      this.allLayoutdata.bannerImageStyle = styles.bannerImageStyle;
-    }
-    if (styles.copyrightStyle !== undefined) {
-      this.allLayoutdata.copyrightStyle = styles.copyrightStyle;
-    }
-    if (styles.containerStyle !== undefined) {
-      this.allLayoutdata.containerStyle = styles.containerStyle;
-    }
+  setEmailStyles(styles: { [key: string]: string } = {}) {
+    const defaultStyles = {
+      headerStyle: `margin: 0 auto; display: flex; width: 100%; background-color: ${this.headerBackgroundColor};`,
+      headerHtmlStyle: `text-align: center; margin: 0.5rem auto; padding: 0.5rem; width: 80%; background-color: white; overflow: hidden; background-color: ${this.headerBackgroundColor}; color: ${this.headerTextColor}; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif;`,
+      headerLogoStyle: `margin: 0.5rem; display: block; width: 20%; padding: 0.25rem 0.5rem; border-radius: 0.375rem; background-color: ${this.headerBackgroundColor};`,
+      bodyStyle: `text-align: center; margin: 0.5rem auto; padding: 0.5rem; width: 90%;overflow-x: auto; background-color: ${this.bodyBackgroundColor}; color: ${this.bodyTextColor};`,
+      footerStyle: `margin: 0.25rem 0; display: flex; width: 90%; background-color: ${this.footerBackgroundColor};`,
+      footerImgStyle: `margin: 0.5rem; display: block; width: 20%; padding: 0.25rem 0.5rem; border-radius: 0.375rem; background-color: ${this.footerBackgroundColor};`,
+      footerHtmlStyle: `width: 80%; background-color: white; overflow: hidden; background-color: ${this.footerBackgroundColor}; color: ${this.footerTextColor}; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif;`,
+      bannerImageStyle: `max-width: 100%; height: auto; object-fit: contain; padding-bottom: 0.5rem;`,
+      copyrightStyle: `text-align: center; width: 100%; box-sizing: border-box; background-color: #00205C; color: white; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif; margin-top: auto;`,
+      containerStyle: `border: 2px solid #00205C; width: 100%; height: 100%; box-sizing: border-box; display: flex; flex-direction: column;`,
+    };
+
+    // Initialize allLayoutdata with default styles if they are not already set
+    Object.keys(defaultStyles).forEach((key: string) => {
+      if (
+        this.allLayoutdata[key as keyof typeof defaultStyles] === undefined ||
+        this.allLayoutdata[key as keyof typeof defaultStyles] === null
+      ) {
+        this.allLayoutdata[key as keyof typeof defaultStyles] =
+          defaultStyles[key as keyof typeof defaultStyles];
+      }
+    });
+
+    // Override with provided styles
+    Object.keys(styles).forEach((key: string) => {
+      if (styles[key] !== undefined && styles[key] !== null) {
+        this.allLayoutdata[key as keyof typeof defaultStyles] = styles[key];
+      }
+    });
   }
 
   /**
    * Sets the Table Styles.
    */
   setTableStyles(styles: { [key: string]: string }) {
-    if (styles.tableDivStyle !== undefined) {
-      this.defaultTableStyle.tableDivStyle = styles.tableDivStyle;
-    }
-    if (styles.labelStyle !== undefined) {
-      this.defaultTableStyle.labelStyle = styles.labelStyle;
-    }
-    if (styles.tableStyle !== undefined) {
-      this.defaultTableStyle.tableStyle = styles.tableStyle;
-    }
-    if (styles.theadStyle !== undefined) {
-      this.defaultTableStyle.theadStyle = styles.theadStyle;
-    }
-    if (styles.tbodyStyle !== undefined) {
-      this.defaultTableStyle.tbodyStyle = styles.tbodyStyle;
-    }
-    if (styles.thStyle !== undefined) {
-      this.defaultTableStyle.thStyle = styles.thStyle;
-    }
-    if (styles.trStyle !== undefined) {
-      this.defaultTableStyle.trStyle = styles.trStyle;
-    }
-    if (styles.tdStyle !== undefined) {
-      this.defaultTableStyle.tdStyle = styles.tdStyle;
-    }
+    Object.keys(styles).forEach((styleKey) => {
+      if (styles[styleKey] !== undefined) {
+        this.defaultTableStyle[styleKey] = styles[styleKey];
+      }
+    });
   }
 
   /**
@@ -336,6 +317,7 @@ export class EmailService {
    * Retrieves all preview data objects.
    */
   patchEmailLayout(): void {
+    this.setEmailStyles();
     const headerImg =
       this.allLayoutdata?.headerLogo instanceof File
         ? this.convertFileToBase64(this.allLayoutdata?.headerLogo)
@@ -380,6 +362,7 @@ export class EmailService {
         headerLogoStyle: this.allLayoutdata.headerLogoStyle,
         headerBackgroundColor: this.allLayoutdata.headerBackgroundColor,
         headerTextColor: this.allLayoutdata.headerTextColor,
+        headerHtmlStyle: this.allLayoutdata?.headerHtmlStyle,
         headerStyle: this.allLayoutdata?.headerStyle,
       },
       body: {

@@ -175,7 +175,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'copyright':
         styles[
           'copyrightStyle'
-        ] = `text-align: center; width: 100%; box-sizing: border-box; background-color: #00205C; color: white; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif; margin-top: auto;`;
+        ] = `text-align: center; width: 100%; padding-top: 0.5rem; padding-bottom: 0.5rem; box-sizing: border-box; background-color: #00205C; color: white; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif; margin-top: auto;`;
         break;
 
       case 'container':
@@ -223,7 +223,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
         break;
       case 'th':
         styles['thStyle'] =
-          'text-align: left; padding: 0.5rem; background-color: #00205C; color: white;';
+          'text-align: center; padding: 0.5rem; background-color: #00205C; color: white;';
         break;
       case 'tr':
         styles['trStyle'] =

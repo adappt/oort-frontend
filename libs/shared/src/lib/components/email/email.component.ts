@@ -86,11 +86,21 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
 
   /**
    * Resets email notification for user to go back to list.
+   *
+   * @param isNew
    */
-  toggle() {
+  toggle(isNew?: boolean) {
     this.emailService.isLinear = true;
     this.emailService.stepperStep = 0;
+    this.emailService.disableSaveAndProceed.next(false);
     this.emailService.isExisting = !this.emailService.isExisting;
+    this.emailService.enableAllSteps.next(false);
+    if (isNew) {
+      this.emailService.disableFormSteps.next({
+        stepperIndex: 0,
+        disableAction: true,
+      });
+    }
     if (!this.emailService.isExisting) {
       this.emailService.resetDataSetForm();
       this.emailService.setDatasetForm();
@@ -207,6 +217,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     isSendEmail?: boolean
   ) {
     this.loading = true;
+    this.emailService.enableAllSteps.next(true);
     this.emailService
       .getEmailNotification(id, this.applicationId)
       .subscribe((res) => {
@@ -387,7 +398,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
 
     // this.emailService.datasetSave.emit(true);
     if (isSendEmail) {
-      this.emailService.stepperStep = -1;
+      this.emailService.stepperStep = 5;
       this.emailService.isPreview = true;
       this.emailService.isLinear = false;
       this.emailService.getDataSet(emailData);

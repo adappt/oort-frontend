@@ -379,6 +379,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
     if (this.bodyEditor && this.bodyEditor.editor) {
       this.bodyEditor.editor.insertContent(token);
+      this.onEditorContentChange();
     } else {
       console.error('Body TinyMCE editor is not initialised');
     }

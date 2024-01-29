@@ -38,7 +38,9 @@ export class CreateNotificationComponent implements OnInit {
    * @returns boolean
    */
   isNameDuplicate(): boolean {
-    const enteredName = this.dataSetFormGroup.controls['name'].value.trim();
+    const enteredName = this.dataSetFormGroup.controls['name'].value
+      .trim()
+      .toLowerCase();
     return this.emailService.emailNotificationNames.includes(enteredName);
   }
 

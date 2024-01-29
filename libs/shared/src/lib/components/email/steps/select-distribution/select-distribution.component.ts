@@ -111,7 +111,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * @returns boolean
    */
   isNameDuplicate(): boolean {
-    const enteredName = this.recipients.distributionListName.trim();
+    const enteredName = this.recipients.distributionListName
+      .trim()
+      .toLowerCase();
     return this.emailService.distributionListNames.includes(enteredName);
   }
 

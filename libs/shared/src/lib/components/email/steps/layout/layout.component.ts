@@ -131,10 +131,19 @@ export class LayoutComponent implements OnInit, OnDestroy {
     } else {
       this.showSubjectValidator = false;
     }
-    this.shouldDisable =
-      !this.emailService.allLayoutdata.txtSubject ||
-      this.emailService.allLayoutdata.txtSubject.trim() === '' ||
-      this.emailService.allLayoutdata.bodyHtml.trim() === '';
+
+    if (
+      this.emailService.allLayoutdata.txtSubject !== undefined &&
+      this.emailService.allLayoutdata.bodyHtml !== undefined
+    ) {
+      this.shouldDisable =
+        !this.emailService.allLayoutdata.txtSubject ||
+        this.emailService.allLayoutdata.txtSubject.trim() === '' ||
+        this.emailService.allLayoutdata.bodyHtml.trim() === '';
+    } else {
+      this.shouldDisable = true;
+    }
+
     if (this.shouldDisable) {
       this.emailService.stepperDisable.next({ id: 4, isValid: false });
     } else {

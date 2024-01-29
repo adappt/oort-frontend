@@ -194,11 +194,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
               (resource) => resource.id === this.selectedResourceId
             );
 
+            // Keeps scrolling until name is found
             if (!found && ITEMS_PER_PAGE !== -1) {
               this.getResourceDataOnScroll();
             }
             this.getResourceData(false);
-            console.log(this.datasetFilterInfo);
           }
         });
       }

@@ -2,6 +2,8 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
+  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -15,6 +17,7 @@ import { Router } from '@angular/router';
 import { ApplicationService } from '../../../../services/application/application.service';
 import { SnackbarService } from '@oort-front/ui';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 /**
  * Email template to create distribution list
@@ -24,7 +27,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './ems-template.component.html',
   styleUrls: ['./ems-template.component.scss'],
 })
-export class EmsTemplateComponent {
+export class EmsTemplateComponent implements OnInit, OnDestroy {
   @ViewChild('stepper', { static: true })
   public stepper: StepperComponent | undefined;
   public addEmailnotification = this.emailService.addEmailNotification;
@@ -32,6 +35,8 @@ export class EmsTemplateComponent {
   @Input() currentStep = 0;
   @Output() navigateToEms: EventEmitter<any> = new EventEmitter();
   public disableActionButton = false;
+  /** Email Subject Subscription */
+  private disableSub!: Subscription;
 
   private submitted = false;
 
@@ -44,23 +49,6 @@ export class EmsTemplateComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
       avatar: new FormControl(null),
-    }),
-    personalDetails: new FormGroup({
-      fullName: new FormControl('', [Validators.required]),
-      country: new FormControl('', [Validators.required]),
-      gender: new FormControl(null, [Validators.required]),
-      about: new FormControl(''),
-    }),
-    paymentDetails: new FormGroup({
-      paymentType: new FormControl(null, Validators.required),
-      cardNumber: new FormControl('', Validators.required),
-      cvc: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(3),
-        Validators.minLength(3),
-      ]),
-      expirationDate: new FormControl('', Validators.required),
-      cardHolder: new FormControl('', Validators.required),
     }),
   });
 
@@ -125,6 +113,14 @@ export class EmsTemplateComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.disableSub = this.emailService.disableSaveAndProceed.subscribe(
+      (disable) => {
+        this.disableActionButton = disable;
+      }
+    );
+  }
+
   /**
    * Getter for the current form group.
    *
@@ -164,23 +160,9 @@ export class EmsTemplateComponent {
       if (this.currentStep === 1) {
         this.emailService.datasetSave.emit(true);
       }
-      if (this.currentStep === 4) {
-        if (this.emailService.allLayoutdata.txtSubject === '') {
-          this.setLayoutValidation = true;
-          const eleScrollUp = document.querySelector('#fieldSelect');
-          eleScrollUp !== null ? eleScrollUp.scrollIntoView() : '';
-          return;
-        }
-      }
       this.currentStep += 1;
     }
   }
-
-  // public preview(): void {
-  //   if (this.currentStep === 1) {
-  //     this.emailService.datasetSave.emit(true);
-  //   }
-  // }
 
   /**
    * Decrements the current step by one.
@@ -188,20 +170,6 @@ export class EmsTemplateComponent {
   public prev(): void {
     this.currentStep -= 1;
   }
-
-  /**
-   * Dynamic form submission.
-   */
-  // public submit(): void {
-  //   this.submitted = true;
-
-  //   // if (!this.form.valid) {
-  //   //     this.form.markAllAsTouched();
-  //   //     //this.stepper.validateSteps();
-  //   // }
-
-  //   // console.log('Submitted data', this.form.value);
-  // }
 
   /**
    * Sending emails
@@ -376,5 +344,9 @@ export class EmsTemplateComponent {
     // } else {
     //   this.isLinear = true;
     // }
+  }
+
+  ngOnDestroy(): void {
+    this.disableSub.unsubscribe();
   }
 }

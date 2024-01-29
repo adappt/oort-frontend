@@ -108,9 +108,26 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         validate: this.shouldValidate,
       },
     ];
+    if (!this.emailService.isEdit) {
+      this.disableAllNextSteps(0);
+    }
     this.emailService.disableSaveAndProceed.subscribe((res: boolean) => {
       this.disableActionButton = res;
     });
+    this.emailService.disableFormSteps.subscribe(
+      (res: { stepperIndex: number; disableAction: boolean }) => {
+        if (res.disableAction) {
+          this.disableAllNextSteps(res?.stepperIndex);
+        }
+      }
+    );
+    this.emailService.datasetsForm.controls['name'].valueChanges.subscribe(
+      (value: string) => {
+        if (value === '') {
+          this.disableAllNextSteps(this.currentStep);
+        }
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -150,16 +167,39 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         this.emailService.datasetsForm.controls['notificationType'].valid
       ) {
         this.currentStep += 1;
+        this.steps[1].disabled = false;
       } else {
         this.emailService.datasetsForm.controls['name'].markAsTouched();
         this.emailService.datasetsForm.controls[
           'notificationType'
         ].markAsTouched();
       }
-    } else {
-      if (this.currentStep === 1) {
-        this.emailService.datasetSave.emit(true);
+    } else if (this.currentStep === 1) {
+      if (
+        this.emailService.datasetsForm.controls['name'].valid &&
+        this.emailService.datasetsForm.controls['notificationType'].valid
+      ) {
+        this.currentStep += 1;
+        this.steps[2].disabled = false;
+      } else {
+        this.emailService.datasetsForm.controls['name'].markAsTouched();
+        this.emailService.datasetsForm.controls[
+          'notificationType'
+        ].markAsTouched();
+        this.disableAllNextSteps(1);
       }
+      this.emailService.datasetSave.emit(true);
+      /* in future we will be modifying all the below else ifs */
+    } else if (this.currentStep === 2) {
+      this.currentStep += 1;
+      this.steps[3].disabled = false;
+    } else if (this.currentStep === 3) {
+      this.currentStep += 1;
+      this.steps[4].disabled = false;
+    } else if (this.currentStep === 4) {
+      this.currentStep += 1;
+      this.steps[5].disabled = false;
+    } else {
       this.currentStep += 1;
     }
   }
@@ -335,10 +375,11 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public onStepActivate(ev: StepperActivateEvent): void {
-    this.emailService.isLinear =
-      this.emailService.isEdit || this.emailService.isPreview
-        ? false
-        : this.emailService.isLinear;
+    this.currentStep = 0;
+    // this.emailService.isLinear =
+    //   this.emailService.isEdit || this.emailService.isPreview
+    //     ? false
+    //     : this.emailService.isLinear;
     // if (ev.index === 4 || ev.index === 5) {
     //   this.isLinear = false;
     // } else {
@@ -348,5 +389,18 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.disableSub.unsubscribe();
+  }
+
+  /**
+   *
+   * @param stepperIndex - current stepper index
+   */
+  disableAllNextSteps(stepperIndex: number): void {
+    this.steps = this.steps.map((step, index) => {
+      if (index > stepperIndex) {
+        step.disabled = true;
+      }
+      return step;
+    });
   }
 }

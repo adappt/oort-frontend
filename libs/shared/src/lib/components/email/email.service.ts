@@ -59,6 +59,10 @@ export class EmailService {
       index: 0,
     },
   ];
+  public disableFormSteps = new BehaviorSubject({
+    stepperIndex: 0,
+    disableAction: false,
+  });
 
   /** EMAIL LAYOUT DATA */
   public allLayoutdata: any = {

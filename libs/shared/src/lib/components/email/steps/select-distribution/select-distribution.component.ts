@@ -108,6 +108,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
 
   /**
    * Name validation.
+   *
    * @returns boolean
    */
   isNameDuplicate(): boolean {
@@ -215,9 +216,15 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * one To email address and name to proceed with next steps
    */
   validateDistributionList(): void {
-    this.emailService.disableSaveAndProceed.next(
+    const isSaveAndProceedNotAllowed =
       this.recipients.To.length === 0 ||
-        this.recipients.distributionListName.length === 0
-    );
+      this.recipients.distributionListName.length === 0;
+    this.emailService.disableSaveAndProceed.next(isSaveAndProceedNotAllowed);
+    if (isSaveAndProceedNotAllowed) {
+      this.emailService.disableFormSteps.next({
+        stepperIndex: 2,
+        disableAction: true,
+      });
+    }
   }
 }

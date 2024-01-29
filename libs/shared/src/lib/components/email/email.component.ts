@@ -90,6 +90,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   toggle() {
     this.emailService.isLinear = true;
     this.emailService.stepperStep = 0;
+    this.emailService.disableSaveAndProceed.next(false);
     this.emailService.isExisting = !this.emailService.isExisting;
     if (!this.emailService.isExisting) {
       this.emailService.resetDataSetForm();

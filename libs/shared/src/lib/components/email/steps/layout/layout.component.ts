@@ -272,8 +272,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       const img = new Image();
       img.onload = () => {
         const aspectRatio = img.width / img.height;
-        // Adjust the aspect ratio range according to your requirements
-        if (aspectRatio >= 1.2 && aspectRatio <= 1.3) {
+        if (aspectRatio >= 3 && aspectRatio <= 16) {
           resolve();
         } else {
           reject(new Error('Invalid image size'));

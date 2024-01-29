@@ -264,7 +264,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       (name) => {
         const distributionListName = emailData.recipients?.distributionListName;
         return (
-          distributionListName !== null && distributionListName.trim() !== name
+          distributionListName !== null && distributionListName.trim().toLowerCase() !== name
         );
       }
     );
@@ -273,7 +273,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
         const emailNotificationName = emailData.name;
         return (
           emailNotificationName !== null &&
-          emailNotificationName.trim() !== name
+          emailNotificationName.trim().toLowerCase() !== name
         );
       }
     );

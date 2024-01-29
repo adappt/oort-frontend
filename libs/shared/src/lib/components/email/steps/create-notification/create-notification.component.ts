@@ -31,6 +31,7 @@ export class CreateNotificationComponent implements OnInit {
         this.emailService.notificationTypes[0]
       );
     }
+    this.triggerDuplicateChecker();
   }
 
   /**

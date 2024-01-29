@@ -135,7 +135,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'bannerImage':
         styles[
           'bannerImageStyle'
-        ] = `max-width: 100%; height: auto; object-fit: contain; padding-bottom: 0.5rem;`;
+        ] = `max-width: 100%; height: auto; object-fit: contain; padding-bottom: 0.5rem; align-items: center;`;
         break;
       case 'header':
         styles[

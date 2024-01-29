@@ -18,6 +18,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   bodyEditor: EditorComponent | null = null;
   @ViewChild('headerEditor', { static: false })
   headerEditor: EditorComponent | null = null;
+  showBodyValidator = false;
+  showSubjectValidator = false;
   /** Tinymce editor configuration */
   public editor: any = EMAIL_LAYOUT_CONFIG;
   public replaceUnderscores = this.emailService.replaceUnderscores;
@@ -121,9 +123,18 @@ export class LayoutComponent implements OnInit, OnDestroy {
    * Disables or enables save and proceed button based on if subject is empty.
    */
   onTxtSubjectChange(): void {
+    if (
+      !this.emailService.allLayoutdata.txtSubject ||
+      this.emailService.allLayoutdata.txtSubject.trim() === ''
+    ) {
+      this.showSubjectValidator = true;
+    } else {
+      this.showSubjectValidator = false;
+    }
     this.shouldDisable =
       !this.emailService.allLayoutdata.txtSubject ||
-      this.emailService.allLayoutdata.txtSubject.trim() === '';
+      this.emailService.allLayoutdata.txtSubject.trim() === '' ||
+      this.emailService.allLayoutdata.bodyHtml.trim() === '';
     if (this.shouldDisable) {
       this.emailService.stepperDisable.next({ id: 4, isValid: false });
     } else {
@@ -424,8 +435,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
    *
    * @param event The event object containing the updated content.
    */
-  onEditorContentChange(event: any): void {
-    this.emailService.allLayoutdata.bodyHtml = event.content;
+  onEditorContentChange(): void {
+    if (this.emailService.allLayoutdata.bodyHtml === '') {
+      this.showBodyValidator = true;
+    } else {
+      this.showBodyValidator = false;
+    }
+
+    this.onTxtSubjectChange();
   }
 
   /**

@@ -44,7 +44,7 @@
         [(ngModel)]="emailService.allLayoutdata.txtSubject"
         (ngModelChange)="onTxtSubjectChange()"
         required
-        [ngClass]="{'form-error': shouldDisable}"
+        [ngClass]="{'form-error': showSubjectValidator}"
       />
     </div>
   </div>
@@ -132,7 +132,7 @@
       </div>
     </div>
     <!-- Body Text Editor -->
-    <editor #bodyEditor [(ngModel)]="emailService.allLayoutdata.bodyHtml" [init]="editor" (onContentChange)="onEditorContentChange($event)"></editor>
+    <editor [ngClass]="{'form-error': showBodyValidator}" #bodyEditor [(ngModel)]="emailService.allLayoutdata.bodyHtml" [init]="editor" (onChange)="onEditorContentChange()"></editor>
   </div>
   <!-- Banner Image -->
   <div class="mb-4 bg-[#F5FAFF] flex items-center p-5">

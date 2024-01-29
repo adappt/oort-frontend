@@ -45,6 +45,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   cacheDistributionList: any = [];
   public distributionLists: any = [];
   public distributionColumn = ['name', 'createdBy', 'email'];
+  public distributionListId = '';
   public distributionPageInfo = {
     pageIndex: 0,
     pageSize: DISTRIBUTION_PAGE_SIZE,
@@ -108,6 +109,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
 
   /**
    * Name validation.
+   *
    * @returns boolean
    */
   isNameDuplicate(): boolean {
@@ -200,6 +202,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    */
   selectDistributionListRow(index: number): void {
     this.recipients = this.distributionLists[index].node.recipients;
+    this.distributionListId = this.distributionLists[index].node.id;
     this.showExistingDistributionList = !this.showExistingDistributionList;
     this.validateDistributionList();
   }
@@ -234,11 +237,24 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * one To email address and name to proceed with next steps
    */
   validateDistributionList(): void {
-    this.emailService.disableSaveAndProceed.next(
-      this.recipients.To.length === 0 ||
-        this.recipients.distributionListName.length === 0 ||
-        this.isNameDuplicate()
-    );
-    this.triggerDuplicateChecker();
+    const hasDistributionListId =
+      this.distributionListId !== null && this.distributionListId !== undefined;
+    const isToEmpty = this.recipients.To.length === 0;
+    const isDistributionListNameEmpty =
+      this.recipients.distributionListName.length === 0;
+    const isNameDuplicate = this.isNameDuplicate();
+
+    let isValid = true;
+
+    if (!hasDistributionListId) {
+      // If distributionListId doesn't exist, check other conditions
+      isValid = isToEmpty || isDistributionListNameEmpty || isNameDuplicate;
+      this.emailService.disableSaveAndProceed.next(isValid);
+      this.triggerDuplicateChecker();
+    } else {
+      // If distributionListId exists, check conditions
+      isValid = isToEmpty || isDistributionListNameEmpty;
+      this.emailService.disableSaveAndProceed.next(isValid);
+    }
   }
 }

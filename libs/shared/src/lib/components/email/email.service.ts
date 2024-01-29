@@ -63,7 +63,7 @@ export class EmailService {
     stepperIndex: 0,
     disableAction: false,
   });
-
+  public enableAllSteps = new BehaviorSubject<boolean>(false);
   /** EMAIL LAYOUT DATA */
   public allLayoutdata: any = {
     /** IMAGES AND STYLES */

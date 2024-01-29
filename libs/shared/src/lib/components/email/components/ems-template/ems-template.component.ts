@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 import { ApplicationService } from '../../../../services/application/application.service';
 import { SnackbarService } from '@oort-front/ui';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { Subscription, first } from 'rxjs';
 
 /**
  * Email template to create distribution list
@@ -81,46 +81,57 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         label: 'Notification/Alert',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
+        disabled: false,
       },
       {
         label: 'Dataset',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
+        disabled: false,
       },
       {
         label: 'Distribution List',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
+        disabled: false,
       },
       {
         label: 'Schedule Alert',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
+        disabled: false,
       },
       {
         label: 'Layout',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
+        disabled: false,
       },
       {
         label: 'Preview',
         isValid: this.isStepValid,
         validate: this.shouldValidate,
+        disabled: false,
       },
     ];
-    if (!this.emailService.isEdit) {
+    if (this.emailService.isEdit) {
+      this.steps = this.steps.map((step: any) => {
+        step.disabled = false;
+        return step;
+      });
+    } else {
       this.disableAllNextSteps(0);
     }
     this.emailService.disableSaveAndProceed.subscribe((res: boolean) => {
       this.disableActionButton = res;
     });
-    this.emailService.disableFormSteps.subscribe(
-      (res: { stepperIndex: number; disableAction: boolean }) => {
+    this.emailService.disableFormSteps
+      .pipe(first())
+      .subscribe((res: { stepperIndex: number; disableAction: boolean }) => {
         if (res.disableAction) {
           this.disableAllNextSteps(res?.stepperIndex);
         }
-      }
-    );
+      });
     this.emailService.datasetsForm.controls['name'].valueChanges.subscribe(
       (value: string) => {
         if (value === '') {
@@ -128,6 +139,14 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         }
       }
     );
+    this.emailService.enableAllSteps.pipe(first()).subscribe((res: boolean) => {
+      if (res) {
+        this.steps = this.steps.map((step: any) => {
+          step.disabled = false;
+          return step;
+        });
+      }
+    });
   }
 
   ngOnInit(): void {

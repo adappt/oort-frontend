@@ -242,15 +242,53 @@
 			"dataNotRecovered": "******",
 			"dataRecovered": "******",
 			"email": {
+				"banner": {
+					"image": "******",
+					"removeTooltip": "******"
+				},
+				"body": {
+					"title": "******"
+				},
+				"dropdown": {
+					"inTheLast": "******",
+					"selectBlock": "******",
+					"timestamp": "******"
+				},
 				"error": "******",
 				"errors": {
 					"noDistributionList": "******",
 					"noSubject": "******",
 					"noTemplate": "******"
 				},
+				"field": {
+					"filtered": "******",
+					"noBlocks": "******",
+					"selectBlock": "******",
+					"selectPlaceholder": "******",
+					"selectTitle": "******"
+				},
+				"footer": {
+					"logo": "******",
+					"removeTooltip": "******",
+					"style": "******"
+				},
+				"header": {
+					"logo": "******",
+					"removeTooltip": "******",
+					"style": "******"
+				},
 				"processing": "******",
 				"ready": "******",
-				"sent": "******"
+				"sent": "******",
+				"style": {
+					"background": "******",
+					"text": "******"
+				},
+				"subject": {
+					"textTitle": "******",
+					"title": "******"
+				},
+				"timestamp": "******"
 			},
 			"fetchingGroups": "******",
 			"file": {

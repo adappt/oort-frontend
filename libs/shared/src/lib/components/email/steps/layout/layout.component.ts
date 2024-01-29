@@ -25,6 +25,11 @@ export class LayoutComponent implements OnInit, OnDestroy {
   headerHtml: any = '';
   footerHtml: any = '';
   txtSubject: any = '';
+  /** Validation */
+  showInvalidBannerSizeMessage = false;
+  showInvalidHeaderSizeMessage = false;
+  showInvalidFooterSizeMessage = false;
+  shouldDisable = false;
   /** Layout Logos */
   headerLogo: string | ArrayBuffer | null = null;
   bannerImage: string | ArrayBuffer | null = null;
@@ -59,6 +64,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.emailService.disableSaveAndProceed.next(true);
     this.initInTheLastDropdown();
     if (this.emailService.allLayoutdata.headerLogo) {
       if (this.emailService.allLayoutdata.headerLogo.__zone_symbol__value) {
@@ -112,7 +118,20 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   * Disables or enables save and proceed button based on if subject is empty.
+   */
+  onTxtSubjectChange(): void {
+    this.shouldDisable =
+      !this.emailService.allLayoutdata.txtSubject ||
+      this.emailService.allLayoutdata.txtSubject.trim() === '';
+    if (this.shouldDisable) {
+      alert('Subject cannot be Empty!');
+    }
+    this.emailService.disableSaveAndProceed.next(this.shouldDisable);
+  }
+
+  /**
+   * Replaces in the last token,
    */
   replaceInLastToken(): void {
     const inTheLastValue = this.emailService.datasetsForm
@@ -189,13 +208,24 @@ export class LayoutComponent implements OnInit, OnDestroy {
    *
    * @param event - The event triggered when a header logo is selected.
    */
-  onHeaderLogoSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
+  onHeaderLogoSelected(event: any): void {
+    const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => (this.headerLogo = reader.result);
-      reader.readAsDataURL(file);
-      this.emailService.onHeaderLogoSelected(file);
+      this.validateSquareImageSize(file)
+        .then(() => {
+          this.showInvalidHeaderSizeMessage = false;
+          const reader = new FileReader();
+          reader.onload = () => (this.headerLogo = reader.result);
+          reader.readAsDataURL(file);
+          this.emailService.onHeaderLogoSelected(file);
+        })
+        .catch((error) => {
+          this.showInvalidHeaderSizeMessage = true;
+          console.error(error.message);
+          alert(
+            'Please upload an image with a more square aspect ratio, or similar to 200x200.'
+          );
+        });
     }
   }
 
@@ -212,14 +242,46 @@ export class LayoutComponent implements OnInit, OnDestroy {
    *
    * @param event - The event triggered when a Banner Image is selected.
    */
-  onBannerSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
+  onBannerSelected(event: any): void {
+    const file = event.target.files[0];
+    // const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => (this.bannerImage = reader.result);
-      reader.readAsDataURL(file);
-      this.emailService.onBannerSelected(file);
+      this.validateBannerImageSize(file)
+        .then(() => {
+          const reader = new FileReader();
+          reader.onload = () => (this.bannerImage = reader.result);
+          reader.readAsDataURL(file);
+          this.emailService.onBannerSelected(file);
+        })
+        .catch((error) => {
+          console.error(error.message);
+          alert(
+            'Please upload an image with a more rectangular aspect ratio, similar to 960x80.'
+          );
+        });
     }
+  }
+
+  /**
+   * Validates banner image size.
+   *
+   * @param file - The image file to be validated.
+   */
+  validateBannerImageSize(file: File): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        // Adjust the aspect ratio range according to your requirements
+        if (aspectRatio >= 1.2 && aspectRatio <= 1.3) {
+          resolve();
+        } else {
+          reject(new Error('Invalid image size'));
+        }
+      };
+      img.onerror = () => reject(new Error('Error loading image'));
+      img.src = URL.createObjectURL(file);
+    });
   }
 
   /**
@@ -235,13 +297,24 @@ export class LayoutComponent implements OnInit, OnDestroy {
    *
    * @param event - The event triggered when a footer logo is selected.
    */
-  onFooterLogoSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
+  onFooterLogoSelected(event: any): void {
+    const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => (this.footerLogo = reader.result);
-      reader.readAsDataURL(file);
-      this.emailService.onFooterLogoSelected(file);
+      this.validateSquareImageSize(file)
+        .then(() => {
+          this.showInvalidFooterSizeMessage = false;
+          const reader = new FileReader();
+          reader.onload = () => (this.footerLogo = reader.result);
+          reader.readAsDataURL(file);
+          this.emailService.onFooterLogoSelected(file);
+        })
+        .catch((error) => {
+          this.showInvalidFooterSizeMessage = true;
+          console.error(error.message);
+          alert(
+            'Please upload an image with a more square aspect ratio, or similar to 200x200.'
+          );
+        });
     }
   }
 
@@ -251,6 +324,28 @@ export class LayoutComponent implements OnInit, OnDestroy {
   removeFooterLogo() {
     this.footerLogo = null;
     this.emailService.allLayoutdata.footerLogo = null;
+  }
+
+  /**
+   * Validates Square images.
+   *
+   * @param file - The image file to be validated.
+   */
+  validateSquareImageSize(file: File): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        if (aspectRatio >= 0.95 && aspectRatio <= 1.05) {
+          // Adjust this range as needed
+          resolve();
+        } else {
+          reject(new Error('Invalid image size'));
+        }
+      };
+      img.onerror = () => reject(new Error('Error loading image'));
+      img.src = URL.createObjectURL(file);
+    });
   }
 
   /**

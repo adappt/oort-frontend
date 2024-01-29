@@ -240,7 +240,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   'matrix',
                   'matrixdynamic',
                   'matrixdropdown',
-                  'dropdown',
                 ].includes(field.type)
               ) {
                 if (field) {

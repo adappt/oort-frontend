@@ -53,15 +53,15 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   cacheDistributionList: any = [];
 
   /**
+   * Constructor for the EmailComponent.
    *
-   * @param emailService
-   * @param router
-   * @param applicationService
-   * @param formBuilder
-   * @param confirmService
-   * @param translate
-   * @param authService
-   * @param downloadService
+   * @param emailService The service for handling emails.
+   * @param applicationService The service for handling applications.
+   * @param formBuilder The builder for creating forms.
+   * @param confirmService The service for confirmation dialogs.
+   * @param translate The service for translation.
+   * @param authService The service for authentication.
+   * @param downloadService The service for downloading files.
    */
   constructor(
     public emailService: EmailService,
@@ -85,7 +85,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   }
 
   /**
-   *
+   * Resets email notification for user to go back to list.
    */
   toggle() {
     this.emailService.isLinear = true;
@@ -98,7 +98,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   }
 
   /**
-   *
+   * Retrieves existing Email Notification.
    */
   getExistingTemplate() {
     this.loading = true;
@@ -153,9 +153,9 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   }
 
   /**
+   * Searches the template based on the input event.
    *
-   * @param searchText
-   * @param event
+   * @param event The event object.
    */
   searchTemplate(event: any) {
     const searchText = event.target.value?.trim()?.toLowerCase();
@@ -170,10 +170,11 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   }
 
   /**
+   * Retrieves an email notification by its ID.
    *
-   * @param id
-   * @param isClone
-   * @param isSendEmail
+   * @param id The ID of the email notification.
+   * @param isClone Whether to it is a clone of another email notification.
+   * @param isSendEmail Whether to send the email notification.
    */
   getEmailNotificationById(
     id: string,
@@ -224,9 +225,10 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   }
 
   /**
+   * Prepares the data for editing an email notification.
    *
-   * @param emailData
-   * @param isSendEmail
+   * @param emailData The data of the email notification to be edited.
+   * @param isSendEmail Whether to send the email notification.
    */
   prepareEditData(emailData: any, isSendEmail?: boolean) {
     this.emailService.isEdit = true;
@@ -354,8 +356,10 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   }
 
   /**
+   * This function creates a new dataset group.
    *
-   * @param ele
+   * @param ele The element to create the dataset group from.
+   * @returns The newly created dataset group.
    */
   createNewDataSetGroup(ele: any): FormGroup {
     const tempData = this.formBuilder.group({
@@ -372,8 +376,10 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   }
 
   /**
+   * This function groups the filters.
    *
-   * @param filterData
+   * @param filterData The data to group.
+   * @returns The grouped filters.
    */
   getFilterGroup(filterData: any) {
     const filterArray: FormArray | any = new FormArray([]);
@@ -446,15 +452,16 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   }
 
   /**
+   * Sends an email list.
    *
-   * @param data
+   * @param data The data for the email list.
    */
   public sendEmailList(data: any) {
     this.getEmailNotificationById(data.id, false, true);
   }
 
   /**
-   * Handles the page change event.
+   * This maintains page data.
    *
    * @param e The page change event.
    */
@@ -464,15 +471,13 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       this.pageInfo,
       this.filterTemplateData
     );
-    // if (cachedData && cachedData.length === this.pageInfo.pageSize) {
     this.emailNotifications = cachedData;
-    // this.filterTemplateData = this.emailNotifications;
-    // }
   }
 
   /**
+   * Maintains distribution page data.
    *
-   * @param e
+   * @param e The page change event.
    */
   onDistributionPage(e: UIPageChangeEvent): void {
     const cachedData = handleTablePageEvent(
@@ -480,12 +485,6 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       this.pageInfo,
       this.cacheDistributionList
     );
-    // if (
-    //   cachedData &&
-    //   cachedData.length === this.distributionPageInfo.pageSize
-    // ) {
     this.distributionLists = cachedData;
-    // this.filterTemplateData = this.emailNotifications;
-    // }
   }
 }

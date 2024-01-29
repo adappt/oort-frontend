@@ -61,6 +61,8 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public operators: { [key: number]: { value: string; label: string }[] } = {};
   public showDatasetLimitWarning = false;
   public totalMatchingRecords = 0;
+  // Changes from date picker to text expression
+  public useExpression = false;
   filterOperators = FILTER_OPERATORS;
   /** IN THE LAST TIME UNITS */
   public timeUnits = [
@@ -75,6 +77,8 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   @Output() changeMainTab: EventEmitter<any> = new EventEmitter();
   @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
   public loading = false;
+  fieldOptions: any;
+  currentFieldName: any;
 
   /**
    * To use helper functions, Apollo serve
@@ -227,7 +231,18 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
           this.metaData = res.data?.resource?.metadata;
           if (this.metaData?.length) {
             this.metaData.forEach((field: any) => {
-              if (field && field.type !== 'resource') {
+              console.log(field);
+              if (
+                field &&
+                ![
+                  'resource',
+                  'resources',
+                  'matrix',
+                  'matrixdynamic',
+                  'matrixdropdown',
+                  'dropdown',
+                ].includes(field.type)
+              ) {
                 if (field) {
                   if (field.name === 'createdBy' && field.fields?.length) {
                     field.fields.forEach((obj: any) => {
@@ -370,6 +385,33 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       (fieldType === 'date' ||
         fieldType === 'datetime' ||
         fieldType === 'datetime-local') &&
+      operators.includes(fieldOperator)
+    );
+  }
+
+  /**
+   * Checks if the selected operator for a field is numeric.
+   *
+   * @param fieldIndex The index of the field in the dataset filter.
+   * @returns Returns true if the operator is numeric, otherwise false.
+   */
+  isNumericOperator(fieldIndex: number): boolean {
+    const operators = [
+      'eq',
+      'neq',
+      'gte',
+      'gt',
+      'lte',
+      'lt',
+      'isnull',
+      'isnotnull',
+    ];
+    const operatorControl = this.datasetFilterInfo
+      .at(fieldIndex)
+      .get('operator');
+    const fieldOperator = operatorControl ? operatorControl.value : null;
+    return (
+      this.getFieldType(fieldIndex) === 'numeric' &&
       operators.includes(fieldOperator)
     );
   }
@@ -691,6 +733,13 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     } else {
       this.query.controls['name'].markAsTouched();
     }
+  }
+
+  /**
+   * Update input type of date editor.
+   */
+  public changeEditor(): void {
+    this.useExpression = !this.useExpression;
   }
 
   /**

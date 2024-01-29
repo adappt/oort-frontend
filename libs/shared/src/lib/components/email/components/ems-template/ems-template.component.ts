@@ -186,6 +186,8 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             console.log('Email sent successfully:', response);
+            this.emailService.isEdit = false;
+            this.emailService.editId = '';
             this.snackBar.openSnackBar(
               this.translate.instant('pages.application.settings.emailSent')
             );
@@ -245,8 +247,6 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
               .editEmailNotification(this.emailService.editId, queryData)
               .subscribe((res) => {
                 console.log('Edited data:', res);
-                this.emailService.isEdit = false;
-                this.emailService.editId = '';
                 this.emailService.configId =
                   res.data?.editAndGetEmailNotification?.id;
                 console.log(this.emailService.configId);

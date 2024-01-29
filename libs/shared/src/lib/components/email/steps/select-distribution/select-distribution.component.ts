@@ -237,24 +237,21 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * one To email address and name to proceed with next steps
    */
   validateDistributionList(): void {
-    const hasDistributionListId =
-      this.distributionListId !== null && this.distributionListId !== undefined;
-    const isToEmpty = this.recipients.To.length === 0;
-    const isDistributionListNameEmpty =
+    const isSaveAndProceedNotAllowed =
+      this.recipients.To.length === 0 ||
       this.recipients.distributionListName.length === 0;
-    const isNameDuplicate = this.isNameDuplicate();
-
-    let isValid = true;
-
-    if (!hasDistributionListId) {
-      // If distributionListId doesn't exist, check other conditions
-      isValid = isToEmpty || isDistributionListNameEmpty || isNameDuplicate;
-      this.emailService.disableSaveAndProceed.next(isValid);
-      this.triggerDuplicateChecker();
-    } else {
-      // If distributionListId exists, check conditions
-      isValid = isToEmpty || isDistributionListNameEmpty;
-      this.emailService.disableSaveAndProceed.next(isValid);
+    this.emailService.disableSaveAndProceed.next(isSaveAndProceedNotAllowed);
+    console.log(
+      '============> distribution list component',
+      isSaveAndProceedNotAllowed,
+      this.recipients
+    );
+    if (isSaveAndProceedNotAllowed) {
+      console.log('behavioursubject is calling');
+      this.emailService.disableFormSteps.next({
+        stepperIndex: 2,
+        disableAction: true,
+      });
     }
   }
 }

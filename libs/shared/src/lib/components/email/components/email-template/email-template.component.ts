@@ -50,7 +50,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   }>();
   @Input() emailBackLoad: string[] | undefined;
   @Input() emailFilter: FormGroup | undefined;
-  @Output() onEmailChange = new EventEmitter<void>();
+  @Output() listChange = new EventEmitter<void>();
 
   /**
    * Composite filter group.
@@ -285,7 +285,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
    */
   removeEmailChip(chipIndex: number): void {
     this.selectedEmails.splice(chipIndex, 1);
-    this.onEmailChange.emit();
+    this.listChange.emit();
     // if (this.dataSetEmails.includes(email) && !this.emails.includes(email)) {
     //   this.emails.push(email);
     // }
@@ -318,7 +318,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
       this.selectedEmails.push(element.value);
       element.value = '';
       this.emailValidationError = '';
-      this.onEmailChange.emit();
+      this.listChange.emit();
     } else if (!emailRegex.test(element.value)) {
       this.emailValidationError = 'Invalid Email Address';
     }

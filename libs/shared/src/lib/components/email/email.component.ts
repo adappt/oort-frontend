@@ -93,6 +93,13 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     this.emailService.isLinear = true;
     this.emailService.stepperStep = 0;
     this.emailService.disableSaveAndProceed.next(false);
+    this.emailService.enableAllSteps.next(false);
+    if (isNew) {
+      this.emailService.disableFormSteps.next({
+        stepperIndex: 0,
+        disableAction: true,
+      });
+    }
     this.emailService.isExisting = !this.emailService.isExisting;
     this.emailService.enableAllSteps.next(false);
     if (isNew) {

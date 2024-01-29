@@ -45,6 +45,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   cacheDistributionList: any = [];
   public distributionLists: any = [];
   public distributionColumn = ['name', 'createdBy', 'email'];
+  public distributionListId = '';
   public distributionPageInfo = {
     pageIndex: 0,
     pageSize: DISTRIBUTION_PAGE_SIZE,
@@ -112,8 +113,27 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * @returns boolean
    */
   isNameDuplicate(): boolean {
-    const enteredName = this.recipients.distributionListName;
+    const enteredName = this.recipients.distributionListName
+      .trim()
+      .toLowerCase();
     return this.emailService.distributionListNames.includes(enteredName);
+  }
+
+  /**
+   * Duplicate Checking.
+   *
+   */
+  triggerDuplicateChecker() {
+    const flag = this.isNameDuplicate();
+    if (
+      this.recipients.To.length === 0 ||
+      this.recipients.distributionListName.length === 0 ||
+      flag
+    ) {
+      this.emailService.stepperDisable.next({ id: 2, isValid: false });
+    } else {
+      this.emailService.stepperDisable.next({ id: 2, isValid: true });
+    }
   }
 
   /**
@@ -182,6 +202,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    */
   selectDistributionListRow(index: number): void {
     this.recipients = this.distributionLists[index].node.recipients;
+    this.distributionListId = this.distributionLists[index].node.id;
     this.showExistingDistributionList = !this.showExistingDistributionList;
     this.validateDistributionList();
   }
@@ -220,7 +241,13 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
       this.recipients.To.length === 0 ||
       this.recipients.distributionListName.length === 0;
     this.emailService.disableSaveAndProceed.next(isSaveAndProceedNotAllowed);
+    console.log(
+      '============> distribution list component',
+      isSaveAndProceedNotAllowed,
+      this.recipients
+    );
     if (isSaveAndProceedNotAllowed) {
+      console.log('behavioursubject is calling');
       this.emailService.disableFormSteps.next({
         stepperIndex: 2,
         disableAction: true,

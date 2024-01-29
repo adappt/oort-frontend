@@ -18,6 +18,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   bodyEditor: EditorComponent | null = null;
   @ViewChild('headerEditor', { static: false })
   headerEditor: EditorComponent | null = null;
+  showBodyValidator = false;
+  showSubjectValidator = false;
   /** Tinymce editor configuration */
   public editor: any = EMAIL_LAYOUT_CONFIG;
   public replaceUnderscores = this.emailService.replaceUnderscores;
@@ -64,7 +66,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.emailService.disableSaveAndProceed.next(true);
+    this.onTxtSubjectChange();
     this.initInTheLastDropdown();
     if (this.emailService.allLayoutdata.headerLogo) {
       if (this.emailService.allLayoutdata.headerLogo.__zone_symbol__value) {
@@ -121,11 +123,31 @@ export class LayoutComponent implements OnInit, OnDestroy {
    * Disables or enables save and proceed button based on if subject is empty.
    */
   onTxtSubjectChange(): void {
-    this.shouldDisable =
+    if (
       !this.emailService.allLayoutdata.txtSubject ||
-      this.emailService.allLayoutdata.txtSubject.trim() === '';
+      this.emailService.allLayoutdata.txtSubject.trim() === ''
+    ) {
+      this.showSubjectValidator = true;
+    } else {
+      this.showSubjectValidator = false;
+    }
+
+    if (
+      this.emailService.allLayoutdata.txtSubject !== undefined &&
+      this.emailService.allLayoutdata.bodyHtml !== undefined
+    ) {
+      this.shouldDisable =
+        !this.emailService.allLayoutdata.txtSubject ||
+        this.emailService.allLayoutdata.txtSubject.trim() === '' ||
+        this.emailService.allLayoutdata.bodyHtml.trim() === '';
+    } else {
+      this.shouldDisable = true;
+    }
+
     if (this.shouldDisable) {
-      alert('Subject cannot be Empty!');
+      this.emailService.stepperDisable.next({ id: 4, isValid: false });
+    } else {
+      this.emailService.stepperDisable.next({ id: 4, isValid: true });
     }
     this.emailService.disableSaveAndProceed.next(this.shouldDisable);
   }
@@ -422,8 +444,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
    *
    * @param event The event object containing the updated content.
    */
-  onEditorContentChange(event: any): void {
-    this.emailService.allLayoutdata.bodyHtml = event.content;
+  onEditorContentChange(): void {
+    if (this.emailService.allLayoutdata.bodyHtml === '') {
+      this.showBodyValidator = true;
+    } else {
+      this.showBodyValidator = false;
+    }
+
+    this.onTxtSubjectChange();
   }
 
   /**

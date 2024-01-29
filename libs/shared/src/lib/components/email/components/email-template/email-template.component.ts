@@ -51,6 +51,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   @Input() emailBackLoad: string[] | undefined;
   @Input() emailFilter: FormGroup | undefined;
   @Output() listChange = new EventEmitter<void>();
+  @Input() existingId = '';
 
   /**
    * Composite filter group.

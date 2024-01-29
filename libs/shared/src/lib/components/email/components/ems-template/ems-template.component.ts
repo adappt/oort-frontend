@@ -126,7 +126,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
       this.disableActionButton = res;
     });
     this.emailService.disableFormSteps
-      .pipe(first())
+      // .pipe(first())
       .subscribe((res: { stepperIndex: number; disableAction: boolean }) => {
         if (res.disableAction) {
           this.disableAllNextSteps(res?.stepperIndex);
@@ -147,6 +147,17 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         });
       }
     });
+    // emailService.stepperDisable.subscribe((res: any) => {
+    //   this.steps.forEach((step: any, index: number) => {
+    //     if (index > res.id && !res.isValid) {
+    //       step['disabled'] = true;
+    //     } else {
+    //       step['disabled'] = false;
+    //     }
+    //   });
+    //   this.disableActionButton = !res.isValid;
+    //   this.currentStep = res.id;
+    // });
   }
 
   ngOnInit(): void {
@@ -305,10 +316,8 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
             this.emailService
               .editEmailNotification(this.emailService.editId, queryData)
               .subscribe((res) => {
-                console.log('Edited data:', res);
                 this.emailService.configId =
                   res.data?.editAndGetEmailNotification?.id;
-                console.log(this.emailService.configId);
                 resolve();
               }, reject);
           } else {
@@ -316,9 +325,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
             this.emailService
               .addEmailNotification(queryData)
               .subscribe((res: any) => {
-                console.log(res);
                 this.emailService.configId = res.data?.addEmailNotification?.id;
-                console.log(this.emailService.configId);
                 //window.location.reload();
                 resolve();
               }, reject);
@@ -350,12 +357,10 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         this.emailService
           .editEmailNotification(this.emailService.editId, queryData)
           .subscribe((res: any) => {
-            console.log('Edited data:', res);
             this.emailService.isEdit = false;
             this.emailService.editId = '';
             this.emailService.configId =
               res.data.editAndGetEmailNotification.id;
-            console.log(this.emailService.configId);
             this.snackBar.openSnackBar(
               this.translate.instant('pages.application.settings.emailEdited')
             );
@@ -367,9 +372,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         this.emailService
           .addEmailNotification(queryData)
           .subscribe((res: any) => {
-            console.log(res);
             this.emailService.configId = res.data.addEmailNotification.id;
-            console.log(this.emailService.configId);
             //window.location.reload();
             this.snackBar.openSnackBar(
               this.translate.instant('pages.application.settings.emailCreated')
@@ -399,6 +402,9 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
     //   this.emailService.isEdit || this.emailService.isPreview
     //     ? false
     //     : this.emailService.isLinear;
+    if (this.disableActionButton) {
+      this.steps[ev.index].disabled = true;
+    }
     // if (ev.index === 4 || ev.index === 5) {
     //   this.isLinear = false;
     // } else {

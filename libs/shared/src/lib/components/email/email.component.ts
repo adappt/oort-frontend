@@ -90,7 +90,6 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    * @param isNew
    */
   toggle(isNew?: boolean) {
-    console.log('Toggle is calling');
     this.emailService.isLinear = true;
     this.emailService.stepperStep = 0;
     this.emailService.disableSaveAndProceed.next(false);
@@ -106,6 +105,29 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       this.emailService.resetDataSetForm();
       this.emailService.setDatasetForm();
     }
+    this.emailService.isEdit ? (this.emailService.isEdit = false) : null;
+    this.loading = true;
+    this.emailService
+      .getEmailNotifications(this.applicationId)
+      .subscribe((res: any) => {
+        this.emailService.distributionListNames = [];
+        this.emailService.emailNotificationNames = [];
+        res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
+          this.loading = false;
+          if (
+            ele.node.recipients.distributionListName !== null &&
+            ele.node.recipients.distributionListName !== ''
+          ) {
+            this.distributionLists.push(ele.node.recipients);
+            this.emailService.distributionListNames.push(
+              ele.node?.recipients?.distributionListName.trim().toLowerCase()
+            );
+          }
+          this.emailService.emailNotificationNames.push(
+            ele.node.name.trim().toLowerCase()
+          );
+        });
+      });
   }
 
   /**
@@ -140,10 +162,12 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
           ) {
             this.distributionLists.push(ele.node.recipients);
             this.emailService.distributionListNames.push(
-              ele.node?.recipients?.distributionListName.trim()
+              ele.node?.recipients?.distributionListName.trim().toLowerCase()
             );
           }
-          this.emailService.emailNotificationNames.push(ele.node.name.trim());
+          this.emailService.emailNotificationNames.push(
+            ele.node.name.trim().toLowerCase()
+          );
         });
         this.filterTemplateData = this.templateActualData;
         this.emailNotifications = this.filterTemplateData.slice(
@@ -245,6 +269,26 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   prepareEditData(emailData: any, isSendEmail?: boolean) {
     this.emailService.isEdit = true;
     this.emailService.isLinear = false;
+    const distributionListNames = this.emailService.distributionListNames;
+    const emailNotificationNames = this.emailService.emailNotificationNames;
+    this.emailService.distributionListNames = distributionListNames.filter(
+      (name) => {
+        const distributionListName = emailData.recipients?.distributionListName;
+        return (
+          distributionListName !== null &&
+          distributionListName.trim().toLowerCase() !== name
+        );
+      }
+    );
+    this.emailService.emailNotificationNames = emailNotificationNames.filter(
+      (name) => {
+        const emailNotificationName = emailData.name;
+        return (
+          emailNotificationName !== null &&
+          emailNotificationName.trim().toLowerCase() !== name
+        );
+      }
+    );
     this.emailService.allLayoutdata = {};
     this.emailService.allPreviewData = [];
     this.emailService.emailLayout = {};
@@ -331,7 +375,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       headerBackgroundColor:
         emailData?.emailLayout?.header?.headerBackgroundColor,
       headerTextColor: emailData.emailLayout?.header?.headerTextColor,
-      headerStyle: '',
+      headerStyle: emailData?.emailLayout?.header?.headerStyle,
       /** EMAIL BODY */
       bodyHtml: emailData?.emailLayout?.body?.bodyHtml,
       bodyBackgroundColor: emailData?.emailLayout?.body?.bodyBackgroundColor,

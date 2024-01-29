@@ -364,7 +364,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       headerBackgroundColor:
         emailData?.emailLayout?.header?.headerBackgroundColor,
       headerTextColor: emailData.emailLayout?.header?.headerTextColor,
-      headerStyle: '',
+      headerStyle: emailData?.emailLayout?.header?.headerStyle,
       /** EMAIL BODY */
       bodyHtml: emailData?.emailLayout?.body?.bodyHtml,
       bodyBackgroundColor: emailData?.emailLayout?.body?.bodyBackgroundColor,

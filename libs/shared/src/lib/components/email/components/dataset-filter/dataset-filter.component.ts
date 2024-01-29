@@ -190,6 +190,13 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
           // Edit Mode data
           if (this.query?.value?.resource?.id) {
             this.selectedResourceId = this.query?.value?.resource?.id;
+            const found = this.emailService.resourcesNameId.some(
+              (resource) => resource.id === this.selectedResourceId
+            );
+
+            if (!found && ITEMS_PER_PAGE !== -1) {
+              this.getResourceDataOnScroll();
+            }
             this.getResourceData(false);
             console.log(this.datasetFilterInfo);
           }
@@ -231,7 +238,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
           this.metaData = res.data?.resource?.metadata;
           if (this.metaData?.length) {
             this.metaData.forEach((field: any) => {
-              console.log(field);
               if (
                 field &&
                 ![

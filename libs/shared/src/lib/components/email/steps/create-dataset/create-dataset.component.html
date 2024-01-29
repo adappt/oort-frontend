@@ -5,11 +5,11 @@
         <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
           {{ 'common.title' | translate }}*
         </label>
-        <input id="block_title" type="text" [placeholder]="'common.title' | translate" formControlName="name"
+        <input id="block_title" (input)="triggerDuplicateChecker()" type="text" [placeholder]="'common.title' | translate" formControlName="name"
            class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-           [ngClass]="{'form-error': (!dataSetFormGroup.controls['name'].valid && dataSetFormGroup.controls['name'].touched || isNameDuplicate() && !emailService.isEdit )}"
+           [ngClass]="{'form-error': (!dataSetFormGroup.controls['name'].valid && dataSetFormGroup.controls['name'].touched || isNameDuplicate() )}"
             />
-           <div *ngIf="isNameDuplicate() && !emailService.isEdit" class="text-red-500 text-sm mt-1">
+           <div *ngIf="isNameDuplicate()" class="text-red-500 text-sm mt-1">
             Title already exists.
           </div>
       </div>

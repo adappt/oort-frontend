@@ -190,7 +190,22 @@ export class CreateDatasetComponent implements OnInit {
    * @returns boolean
    */
   isNameDuplicate(): boolean {
-    const enteredName = this.dataSetFormGroup.controls['name'].value;
+    const enteredName = this.dataSetFormGroup.controls['name']?.value?.trim();
     return this.emailService.emailNotificationNames.includes(enteredName);
+  }
+
+  /**
+   * Duplicate Checking.
+   *
+   */
+  triggerDuplicateChecker() {
+    const flag = this.isNameDuplicate();
+    if (flag) {
+      this.emailService.disableSaveAndProceed.next(true);
+      this.emailService.stepperDisable.next({ id: 0, isValid: false });
+    } else {
+      this.emailService.disableSaveAndProceed.next(false);
+      this.emailService.stepperDisable.next({ id: 0, isValid: true });
+    }
   }
 }

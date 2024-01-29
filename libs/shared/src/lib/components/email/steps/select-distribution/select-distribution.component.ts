@@ -111,8 +111,25 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * @returns boolean
    */
   isNameDuplicate(): boolean {
-    const enteredName = this.recipients.distributionListName;
+    const enteredName = this.recipients.distributionListName.trim();
     return this.emailService.distributionListNames.includes(enteredName);
+  }
+
+  /**
+   * Duplicate Checking.
+   *
+   */
+  triggerDuplicateChecker() {
+    const flag = this.isNameDuplicate();
+    if (
+      this.recipients.To.length === 0 ||
+      this.recipients.distributionListName.length === 0 ||
+      flag
+    ) {
+      this.emailService.stepperDisable.next({ id: 2, isValid: false });
+    } else {
+      this.emailService.stepperDisable.next({ id: 2, isValid: true });
+    }
   }
 
   /**
@@ -217,7 +234,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   validateDistributionList(): void {
     this.emailService.disableSaveAndProceed.next(
       this.recipients.To.length === 0 ||
-        this.recipients.distributionListName.length === 0
+        this.recipients.distributionListName.length === 0 ||
+        this.isNameDuplicate()
     );
+    this.triggerDuplicateChecker();
   }
 }

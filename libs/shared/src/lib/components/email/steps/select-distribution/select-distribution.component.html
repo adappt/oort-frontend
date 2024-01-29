@@ -30,11 +30,12 @@
         {{'components.select.distribution.label' | translate}}
       </label>
       <input
-        [ngClass]="{'form-error': isNameDuplicate() && !emailService.isEdit }"
+      (input)="validateDistributionList()"
+        [ngClass]="{'form-error': isNameDuplicate()}"
         class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         (change)="validateDistributionList()"
         [(ngModel)]="recipients.distributionListName" [placeholder]="'common.name' | translate" />
-        <div *ngIf="isNameDuplicate() && !emailService.isEdit" class="text-red-500 text-sm mt-1">
+        <div *ngIf="isNameDuplicate() " class="text-red-500 text-sm mt-1">
           Name already exists.
         </div>
     </div>

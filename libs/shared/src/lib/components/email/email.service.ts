@@ -39,6 +39,7 @@ export class EmailService {
   public footerTextColor = '#000000';
   public datasetSave: EventEmitter<boolean> = new EventEmitter();
   public disableSaveAndProceed = new BehaviorSubject<boolean>(false);
+  public stepperDisable = new BehaviorSubject<any>('');
   public showExistingDistributionList = false;
   public recipients: {
     distributionListName: string;

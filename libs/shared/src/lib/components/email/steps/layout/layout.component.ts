@@ -64,7 +64,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.emailService.disableSaveAndProceed.next(true);
+    this.onTxtSubjectChange();
     this.initInTheLastDropdown();
     if (this.emailService.allLayoutdata.headerLogo) {
       if (this.emailService.allLayoutdata.headerLogo.__zone_symbol__value) {
@@ -125,7 +125,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
       !this.emailService.allLayoutdata.txtSubject ||
       this.emailService.allLayoutdata.txtSubject.trim() === '';
     if (this.shouldDisable) {
-      alert('Subject cannot be Empty!');
+      this.emailService.stepperDisable.next({ id: 4, isValid: false });
+    } else {
+      this.emailService.stepperDisable.next({ id: 4, isValid: true });
     }
     this.emailService.disableSaveAndProceed.next(this.shouldDisable);
   }

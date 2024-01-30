@@ -125,7 +125,6 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
             ele.node.recipients.distributionListName !== null &&
             ele.node.recipients.distributionListName !== ''
           ) {
-            this.distributionLists.push(ele.node.recipients);
             this.emailService.distributionListNames.push(
               ele.node?.recipients?.distributionListName.trim().toLowerCase()
             );
@@ -175,6 +174,23 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
           this.emailService.emailNotificationNames.push(
             ele.node.name.trim().toLowerCase()
           );
+        });
+        let uniquDistributionLists = Array.from(
+          new Set(this.emailService.distributionListNames)
+        );
+        this.distributionLists = this.distributionLists.filter((ele: any) => {
+          if (
+            uniquDistributionLists.includes(
+              ele.distributionListName.toLowerCase()
+            )
+          ) {
+            uniquDistributionLists = uniquDistributionLists.filter(
+              (name) => ele.distributionListName.toLowerCase() !== name
+            );
+            return true;
+          } else {
+            return false;
+          }
         });
         this.filterTemplateData = this.templateActualData;
         this.emailNotifications = this.filterTemplateData.slice(

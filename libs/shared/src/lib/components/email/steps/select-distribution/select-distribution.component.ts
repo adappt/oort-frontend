@@ -194,6 +194,24 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
       .getEmailNotifications(this.applicationId)
       .subscribe((res: any) => {
         this.distributionLists = res?.data?.emailNotifications?.edges ?? [];
+        let uniquDistributionLists = Array.from(
+          new Set(this.emailService.distributionListNames)
+        );
+        this.distributionLists = this.distributionLists.filter((ele: any) => {
+          if (
+            uniquDistributionLists.includes(
+              ele.node.recipients.distributionListName.toLowerCase()
+            )
+          ) {
+            uniquDistributionLists = uniquDistributionLists.filter(
+              (name) =>
+                ele.node.recipients.distributionListName.toLowerCase() !== name
+            );
+            return true;
+          } else {
+            return false;
+          }
+        });
       });
   }
 

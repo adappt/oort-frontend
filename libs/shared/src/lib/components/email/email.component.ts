@@ -483,9 +483,9 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   public deleteEmailNotification(data: any) {
     const dialogRef = this.confirmService.openConfirmModal({
       title: this.translate.instant('common.deleteObject', {
-        name: this.translate.instant('common.page.one'),
+        name: this.translate.instant('common.email.notification.one'),
       }),
-      content: 'Do you confirm the deletion of ' + data.name,
+      content: 'Do you confirm the deletion of ' + data.name + ' ?',
       confirmText: this.translate.instant('components.confirmModal.delete'),
       confirmVariant: 'danger',
     });

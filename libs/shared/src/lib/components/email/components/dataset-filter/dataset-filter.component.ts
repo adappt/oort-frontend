@@ -226,9 +226,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     this.availableFields = [];
     this.selectedFields = [];
     this.filterFields = [];
-    fromHtml ? this.query.controls.fields.setValue([]) : ''; // Assuming 'fields' is the form control name
-    console.log(this.emailService.resourcesNameId);
-    console.log(this.selectedResourceId);
+    fromHtml ? this.query.controls.fields.setValue([]) : '';
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
       this.query.controls.resource.setValue(
         this.emailService.resourcesNameId.find(
@@ -748,7 +746,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   );
                   this.loading = false;
                   this.navigateToPreview.emit(allPreviewData);
-                  console.log(this.query.value);
                   this.emailService.setAllPreviewData(allPreviewData);
                 }
               }

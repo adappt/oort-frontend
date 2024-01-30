@@ -407,8 +407,8 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     if (isSendEmail) {
       this.emailService.getDataSet(emailData, true);
     } else {
+      this.emailService.getDataSet(emailData, false);
       this.emailService.stepperStep = 0;
-      this.emailService.emailListLoading = false;
     }
   }
 

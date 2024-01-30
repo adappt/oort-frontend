@@ -716,7 +716,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   this.dataSetFields = [
                     ...new Set(
                       this.queryValue[tempIndex].fields
-                        .map((data: any) => data.name)
+                        .map((data: any) => data.name.replaceAll('.', '_'))
                         .flat()
 
                       // this.dataList

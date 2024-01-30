@@ -116,7 +116,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
       }
     }
     this.initialiseFieldSelectDropdown();
-    console.log(this.emailService.datasetsForm.get('filter'));
   }
 
   /**

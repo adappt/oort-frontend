@@ -316,6 +316,8 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
             this.emailService
               .editEmailNotification(this.emailService.editId, queryData)
               .subscribe((res) => {
+                this.emailService.isEdit = false;
+                this.emailService.editId = '';
                 this.emailService.configId =
                   res.data?.editAndGetEmailNotification?.id;
                 resolve();
@@ -373,7 +375,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
           .addEmailNotification(queryData)
           .subscribe((res: any) => {
             this.emailService.configId = res.data.addEmailNotification.id;
-            //window.location.reload();
+
             this.snackBar.openSnackBar(
               this.translate.instant('pages.application.settings.emailCreated')
             );

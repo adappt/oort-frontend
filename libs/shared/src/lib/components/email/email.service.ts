@@ -258,9 +258,6 @@ export class EmailService {
    * @param previewData An array of preview data objects for each tab.
    */
   setAllPreviewData(previewData: any[]): void {
-    for (let i = 0; i < previewData.length; i++) {
-      console.log(previewData[i].tabName);
-    }
     this.allPreviewData = previewData;
   }
 
@@ -329,7 +326,6 @@ export class EmailService {
       this.allLayoutdata?.headerLogo instanceof File
         ? this.convertFileToBase64(this.allLayoutdata?.headerLogo)
             .then((base64String) => {
-              console.log('Base64 string:', base64String);
               return base64String;
             })
             .catch((error) => {
@@ -341,7 +337,6 @@ export class EmailService {
       this.allLayoutdata?.footerLogo instanceof File
         ? this.convertFileToBase64(this.allLayoutdata?.footerLogo)
             .then((base64String) => {
-              console.log('Base64 string:', base64String);
               return base64String;
             })
             .catch((error) => {
@@ -353,7 +348,6 @@ export class EmailService {
       this.allLayoutdata?.bannerImage instanceof File
         ? this.convertFileToBase64(this.allLayoutdata?.bannerImage)
             .then((base64String) => {
-              console.log('Base64 string:', base64String);
               return base64String;
             })
             .catch((error) => {
@@ -411,8 +405,6 @@ export class EmailService {
       trStyle: this.defaultTableStyle?.trStyle,
       tdStyle: this.defaultTableStyle?.tdStyle,
     };
-
-    console.log(tableStyles);
 
     this.datasetsForm.get('dataSets')?.get('tableStyle')?.setValue(tableStyles);
   }
@@ -728,7 +720,6 @@ export class EmailService {
    * @returns rest post to end point.
    */
   sendEmail(configId: string | undefined, emailData: any): Observable<any> {
-    console.log(this.restService.apiUrl);
     const urlWithConfigId = `${this.restService.apiUrl}/notification/send-email/${configId}`;
     return this.http.post<any>(urlWithConfigId, emailData);
   }
@@ -747,7 +738,6 @@ export class EmailService {
       query.pageSize = Number(query.pageSize);
       this.fetchDataSet(query).subscribe((res: { data: { dataSet: any } }) => {
         if (res?.data?.dataSet) {
-          console.log(res);
           // this.dataSetResponse = res?.data?.dataSet;
           this.dataList = res?.data?.dataSet.records?.map((record: any) => {
             const flattenedObject = this.flattenRecord(record);

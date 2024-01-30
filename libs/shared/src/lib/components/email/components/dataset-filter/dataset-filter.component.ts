@@ -101,7 +101,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       const name = 'Block ' + (this.activeTab.index + 1);
       this.query.controls['name'].setValue(name);
     }
-    if (
+    if (this.query?.value?.resource?.id) {
+      ITEMS_PER_PAGE = 70;
+      this.getResourceDataOnScroll();
+    } else if (
       !this.emailService?.resourcesNameId?.length ||
       (this.query?.value?.cacheData?.resource === undefined &&
         this.query?.value?.resource?.id)
@@ -202,6 +205,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
             if (!found && ITEMS_PER_PAGE !== -1) {
               this.getResourceDataOnScroll();
             }
+            const resources =
+              data?.resources?.edges?.map((edge) => edge.node) || [];
+            this.emailService.resourcesNameId = resources.map((element) => {
+              return { id: element?.id?.toString(), name: element?.name };
+            });
             this.getResourceData(false);
           }
         });
@@ -219,8 +227,8 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     this.selectedFields = [];
     this.filterFields = [];
     fromHtml ? this.query.controls.fields.setValue([]) : ''; // Assuming 'fields' is the form control name
-    // this.query.get('fields').reset();
-    // console.log(this.query.value.fields);
+    console.log(this.emailService.resourcesNameId);
+    console.log(this.selectedResourceId);
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
       this.query.controls.resource.setValue(
         this.emailService.resourcesNameId.find(
@@ -565,8 +573,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       this.query.controls.fields.setValue(fieldExists);
       this.selectedFields = fieldExists;
     }
-
-    console.log(`Field type of ${field.name}: ${field.type}`); // Print the field type to the console
     // Removes the selected field from the available fields list
     this.availableFields = this.availableFields
       .filter((f: { name: string }) => f.name !== field.name)

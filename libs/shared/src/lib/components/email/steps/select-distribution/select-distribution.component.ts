@@ -265,7 +265,6 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
       this.recipients
     );
     if (isSaveAndProceedNotAllowed) {
-      console.log('behavioursubject is calling');
       this.emailService.disableFormSteps.next({
         stepperIndex: 2,
         disableAction: true,

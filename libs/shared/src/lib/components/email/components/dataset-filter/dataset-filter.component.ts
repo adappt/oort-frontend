@@ -103,6 +103,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       (this.query?.value?.cacheData?.resource === undefined &&
         this.query?.value?.resource?.id)
     ) {
+      ITEMS_PER_PAGE = 0;
       this.getResourceDataOnScroll();
     } else {
       if (this.query?.value?.resource?.id && this.metaData == undefined) {

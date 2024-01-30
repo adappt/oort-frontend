@@ -123,6 +123,7 @@ export class EmailService {
   public isEdit = false;
   public isPreview = false;
   public isLinear = true;
+  public emailListLoading = true;
   //private apiUrl = 'http://localhost:3000/notification/send-email/';
 
   //private apiUrl = 'https://emspocdev.adapptlabs.com/api/notification/send-email/';
@@ -735,8 +736,9 @@ export class EmailService {
   /**
    *
    * @param emailData
+   * @param isSendEmail
    */
-  getDataSet(emailData: any) {
+  getDataSet(emailData: any, isSendEmail?: boolean) {
     let count = 0;
     let allPreviewData: any = [];
     for (const query of emailData.dataSets) {
@@ -785,10 +787,20 @@ export class EmailService {
             // this.loading = false;
             this.navigateToPreview.emit(allPreviewData);
             this.setAllPreviewData(allPreviewData);
-            this.stepperStep = 5;
+            if (isSendEmail) {
+              this.stepperStep = 5;
+              this.isPreview = true;
+              this.isLinear = false;
+            }
+            this.emailListLoading = false;
           }
+        } else {
+          this.emailListLoading = false;
         }
       });
+    }
+    if (emailData?.dataSets?.length == 0) {
+      this.emailListLoading = false;
     }
   }
 

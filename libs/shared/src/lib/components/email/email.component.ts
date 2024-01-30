@@ -28,7 +28,7 @@ const DISTRIBUTION_PAGE_SIZE = 5;
 export class EmailComponent extends UnsubscribeComponent implements OnInit {
   filterTemplateData: any = [];
   templateActualData: any = [];
-  public loading = true;
+  // public loading = true;
   public applicationId = '';
   public distributionLists: any = [];
   public emailNotifications: any = [];
@@ -113,14 +113,14 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       this.emailService.setDatasetForm();
     }
     this.emailService.isEdit ? (this.emailService.isEdit = false) : null;
-    this.loading = true;
+    this.emailService.emailListLoading = true;
     this.emailService
       .getEmailNotifications(this.applicationId)
       .subscribe((res: any) => {
         this.emailService.distributionListNames = [];
         this.emailService.emailNotificationNames = [];
         res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
-          this.loading = false;
+          this.emailService.emailListLoading = false;
           if (
             ele.node.recipients.distributionListName !== null &&
             ele.node.recipients.distributionListName !== ''
@@ -141,7 +141,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    * Retrieves existing Email Notification.
    */
   getExistingTemplate() {
-    this.loading = true;
+    this.emailService.emailListLoading = true;
     this.emailService.isExisting = true;
     this.emailService.isPreview = false;
     this.emailService.isEdit = false;
@@ -155,14 +155,14 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
       .subscribe((res: any) => {
         this.templateActualData = [];
         if (res?.data?.emailNotifications?.edges?.length === 0) {
-          this.loading = false;
+          this.emailService.emailListLoading = false;
         }
         this.distributionLists = [];
         this.emailService.distributionListNames = [];
         this.emailService.emailNotificationNames = [];
         res?.data?.emailNotifications?.edges?.forEach((ele: any) => {
           this.templateActualData.push(ele.node);
-          this.loading = false;
+          this.emailService.emailListLoading = false;
           if (
             ele.node.recipients.distributionListName !== null &&
             ele.node.recipients.distributionListName !== ''
@@ -223,7 +223,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     isClone?: boolean,
     isSendEmail?: boolean
   ) {
-    this.loading = true;
+    this.emailService.emailListLoading = true;
     this.emailService.enableAllSteps.next(true);
     this.emailService
       .getEmailNotification(id, this.applicationId)
@@ -253,7 +253,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
           this.emailService
             .addEmailNotification(emailData)
             .subscribe((res: any) => {
-              this.loading = false;
+              this.emailService.emailListLoading = false;
               this.emailService.configId = res.data.addEmailNotification.id;
               this.getEmailNotificationById(
                 res.data.addEmailNotification.id,
@@ -405,16 +405,10 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
 
     // this.emailService.datasetSave.emit(true);
     if (isSendEmail) {
-      this.emailService.stepperStep = 5;
-      this.emailService.isPreview = true;
-      this.emailService.isLinear = false;
-      this.emailService.getDataSet(emailData);
-      setTimeout(() => {
-        this.loading = false;
-      }, 1500);
+      this.emailService.getDataSet(emailData, true);
     } else {
       this.emailService.stepperStep = 0;
-      this.loading = false;
+      this.emailService.emailListLoading = false;
     }
   }
 
@@ -491,7 +485,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     });
     dialogRef.closed.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       if (value) {
-        this.loading = true;
+        this.emailService.emailListLoading = true;
         this.emailService
           .deleteEmailNotification(data.id, this.applicationId)
           .subscribe(() => {

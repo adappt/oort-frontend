@@ -612,28 +612,33 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
           .get('filters') as FormArray;
 
         // Iterate over the filters and update the value for 'inthelast' operators
-        filtersArray.controls.forEach((filterControl: AbstractControl) => {
-          const filterFormGroup = filterControl as FormGroup;
-          const operatorControl = filterFormGroup.get('operator');
+        filtersArray.controls.forEach(
+          (filterControl: AbstractControl, filterIndex: number) => {
+            const filterFormGroup = filterControl as FormGroup;
+            const operatorControl = filterFormGroup.get('operator');
 
-          if (operatorControl && operatorControl.value === 'inthelast') {
-            const inTheLastGroup = filterFormGroup.get(
-              'inTheLast'
-            ) as FormGroup;
-            if (inTheLastGroup) {
-              const inTheLastNumberControl = inTheLastGroup.get('number');
-              const inTheLastUnitControl = inTheLastGroup.get('unit');
+            if (operatorControl && operatorControl.value === 'inthelast') {
+              const inTheLastGroup = filterFormGroup.get(
+                'inTheLast'
+              ) as FormGroup;
+              if (inTheLastGroup) {
+                const inTheLastNumberControl = inTheLastGroup.get('number');
+                const inTheLastUnitControl = inTheLastGroup.get('unit');
 
-              if (inTheLastNumberControl && inTheLastUnitControl) {
-                const days = this.emailService.convertToMinutes(
-                  inTheLastNumberControl.value,
-                  inTheLastUnitControl.value
-                );
-                filterFormGroup.get('value')?.setValue(days);
+                if (inTheLastNumberControl && inTheLastUnitControl) {
+                  const days = this.emailService.convertToMinutes(
+                    inTheLastNumberControl.value,
+                    inTheLastUnitControl.value
+                  );
+                  filterFormGroup.get('value')?.setValue(days);
+                  this.queryValue[this.activeTab.index].filter.filters[
+                    filterIndex
+                  ].value = days;
+                }
               }
             }
           }
-        });
+        );
       }
 
       if (tabName == 'filter') {

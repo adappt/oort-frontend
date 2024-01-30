@@ -24,6 +24,7 @@ import { EmailService } from '../../email.service';
 import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
 import { GET_RESOURCE, GET_RESOURCES } from '../../graphql/queries';
 import { Subscription } from 'rxjs';
+import { SnackbarService } from '@oort-front/ui';
 /** Default items per query, for pagination */
 let ITEMS_PER_PAGE = 0;
 /**
@@ -86,11 +87,13 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
    * @param emailService helper functions
    * @param apollo server
    * @param formGroup Angular form builder
+   * @param snackBar snackbar helper function
    */
   constructor(
     public emailService: EmailService,
     private apollo: Apollo,
-    private formGroup: FormBuilder
+    private formGroup: FormBuilder,
+    public snackBar: SnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -652,8 +655,14 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
               this.emailService.disableSaveAndProceed.next(true);
             }
           },
-          () => {
+          (error: any) => {
             this.loading = false;
+            this.showDatasetLimitWarning = false;
+            this.emailService.disableSaveAndProceed.next(true);
+            this.snackBar.openSnackBar(
+              error?.message ?? 'Something Went Wrong',
+              { error: true }
+            );
           }
         );
       }

@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { clone } from 'lodash';
-import { debounceTime } from 'rxjs/operators';
 import { EmailService } from '../../email.service';
 import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
 
@@ -52,6 +51,14 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   @Input() emailFilter: FormGroup | undefined;
   @Output() listChange = new EventEmitter<void>();
   @Input() existingId = '';
+  public activeSegmentIndex = 0;
+  public segmentButtons = [
+    'Add Manually',
+    'Select From List',
+    'Select With Filter',
+  ];
+  public selectedItemIndexes: number[] | any[] = [];
+  public isAllSelected = false;
 
   /**
    * Composite filter group.
@@ -87,58 +94,6 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
       });
     }
     this.filterFields = this.filterQuery.get('filters') as FormArray;
-    this.filterQuery.valueChanges
-      .pipe(debounceTime(1500))
-      .subscribe((res: any) => {
-        if (res?.filters?.length && res?.logic) {
-          const { logic } = res;
-          let emailsList: string[] | undefined;
-          if (logic === 'and') {
-            emailsList = this.dataSet?.records
-              ?.map((data) => {
-                if (
-                  res.filters.every((filter: any) =>
-                    this.filterData(
-                      filter.operator,
-                      this.fetchValue(data, filter.field.replace(/-/g, '.'))
-                        ?.toString()
-                        .toLowerCase(),
-                      filter?.value?.toLowerCase()
-                    )
-                  )
-                ) {
-                  return data.email;
-                }
-              })
-              ?.filter(Boolean);
-          } else if (logic === 'or') {
-            emailsList = this.dataSet?.records
-              ?.map((data) => {
-                if (
-                  res.filters.some(
-                    (filter: any) =>
-                      data?.filter?.field &&
-                      this.filterData(
-                        filter.operator,
-                        this.fetchValue(data, filter.field.replace(/-/g, '.'))
-                          ?.toString()
-                          .toLowerCase(),
-                        filter?.value?.toLowerCase()
-                      )
-                  )
-                ) {
-                  return data.email;
-                }
-              })
-              ?.filter(Boolean);
-          }
-          if (emailsList?.length) {
-            this.selectedEmails = [
-              ...new Set([...this.selectedEmails, ...emailsList]),
-            ];
-          }
-        }
-      });
   }
 
   /**
@@ -373,5 +328,113 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
       emails: this.selectedEmails,
       emailFilter: this.filterQuery,
     });
+  }
+
+  /**
+   * selecting all email items from the dataset list
+   *
+   * @param $event checkbox selection Event
+   */
+  selectAllEmailItems($event: any): void {
+    this.isAllSelected = $event.target.checked;
+    if (this.isAllSelected) {
+      this.selectedItemIndexes = this.dataList?.map((_, index) => index);
+    } else {
+      this.selectedItemIndexes = [];
+    }
+  }
+
+  /**
+   * selecting items from the table
+   *
+   * @param rowIndex
+   * @param $event
+   */
+  selectUnselectIndividualEmails(rowIndex: number, $event: any): void {
+    if ($event.target.checked) {
+      this.selectedItemIndexes.push(rowIndex);
+    } else {
+      this.selectedItemIndexes = this.selectedItemIndexes?.map(
+        (item: number) => {
+          if (item !== rowIndex) {
+            return item;
+          } else {
+            return undefined;
+          }
+        }
+      );
+    }
+    this.isAllSelected = false;
+  }
+
+  /**
+   * to add all the selected emails into the list
+   */
+  addSelectedEmails(): void {
+    this.selectedItemIndexes?.forEach((itemIndex: number) => {
+      /* duplicate check */
+      if (this.selectedEmails.indexOf(this.emails[itemIndex]) === -1) {
+        if (itemIndex !== undefined) {
+          this.selectedEmails.push(this.emails[itemIndex]);
+        }
+      }
+    });
+    this.selectedItemIndexes = [];
+    this.isAllSelected = false;
+  }
+
+  /**
+   * apply filter via dataset filters
+   */
+  applyFilter(): void {
+    const filterObject = this.filterQuery.value;
+    if (filterObject?.filters?.length && filterObject?.logic) {
+      const { logic } = filterObject;
+      let emailsList: string[] | undefined;
+      if (logic === 'and') {
+        emailsList = this.dataSet?.records
+          ?.map((data) => {
+            if (
+              filterObject.filters.every((filter: any) =>
+                this.filterData(
+                  filter.operator,
+                  this.fetchValue(data, filter.field.replace(/-/g, '.'))
+                    ?.toString()
+                    .toLowerCase(),
+                  filter?.value?.toLowerCase()
+                )
+              )
+            ) {
+              return data.email;
+            }
+          })
+          ?.filter(Boolean);
+      } else if (logic === 'or') {
+        emailsList = this.dataSet?.records
+          ?.map((data) => {
+            if (
+              filterObject.filters.some(
+                (filter: any) =>
+                  data?.filter?.field &&
+                  this.filterData(
+                    filter.operator,
+                    this.fetchValue(data, filter.field.replace(/-/g, '.'))
+                      ?.toString()
+                      .toLowerCase(),
+                    filter?.value?.toLowerCase()
+                  )
+              )
+            ) {
+              return data.email;
+            }
+          })
+          ?.filter(Boolean);
+      }
+      if (emailsList?.length) {
+        this.selectedEmails = [
+          ...new Set([...this.selectedEmails, ...emailsList]),
+        ];
+      }
+    }
   }
 }

@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { EmailService } from '../../email.service';
 import { FormGroup } from '@angular/forms';
 import { ApplicationService } from '../../../../services/application/application.service';
@@ -76,6 +82,10 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
     Cc: [],
     Bcc: [],
   };
+
+  @ViewChild('fileUpload', { static: true }) fileElement:
+    | ElementRef
+    | undefined;
 
   ngOnInit(): void {
     this.recipients = this.emailService.recipients;
@@ -234,18 +244,22 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
 
   /**
    * @param event file selection Event
+   * 1. After import action from the file duplicates email will be removed.
    */
   fileSelectionHandler(event: any): void {
     this.showEmailTemplate = false;
     const file: File = event.target.files[0];
     if (file) {
       this.downloadService.importDistributionList(file).subscribe((res) => {
-        this.recipients.To = [...this.recipients.To, ...res.To];
-        this.recipients.Cc = [...this.recipients.Cc, ...res.Cc];
-        this.recipients.Bcc = [...this.recipients.Bcc, ...res.Bcc];
+        this.recipients.To = [...new Set([...this.recipients.To, ...res.To])];
+        this.recipients.Cc = [...new Set([...this.recipients.Cc, ...res.Cc])];
+        this.recipients.Bcc = [
+          ...new Set([...this.recipients.Bcc, ...res.Bcc]),
+        ];
         this.showEmailTemplate = true;
         this.templateFor = 'to';
         this.validateDistributionList();
+        if (this.fileElement) this.fileElement.nativeElement.value = '';
       });
     }
   }
@@ -259,11 +273,6 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
       this.recipients.To.length === 0 ||
       this.recipients.distributionListName.length === 0;
     this.emailService.disableSaveAndProceed.next(isSaveAndProceedNotAllowed);
-    console.log(
-      '============> distribution list component',
-      isSaveAndProceedNotAllowed,
-      this.recipients
-    );
     if (isSaveAndProceedNotAllowed) {
       this.emailService.disableFormSteps.next({
         stepperIndex: 2,

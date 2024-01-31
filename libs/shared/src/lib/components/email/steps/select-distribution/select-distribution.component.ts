@@ -210,12 +210,12 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
         this.distributionLists = this.distributionLists.filter((ele: any) => {
           if (
             uniquDistributionLists.includes(
-              ele.node.recipients.distributionListName.toLowerCase()
+              ele.node.recipients.distributionListName?.toLowerCase()
             )
           ) {
             uniquDistributionLists = uniquDistributionLists.filter(
               (name) =>
-                ele.node.recipients.distributionListName.toLowerCase() !== name
+                ele.node.recipients.distributionListName?.toLowerCase() !== name
             );
             return true;
           } else {

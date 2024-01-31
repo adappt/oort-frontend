@@ -33,7 +33,7 @@
         </ng-template>
 
       <ng-template kendoTabContent>
-        <div style="width: 100%; overflow-x: auto;">
+        <div>
           <ng-container *ngFor="let previewData of allPreviewData; let preIndex = index">
             <div class="flex flex-col items-center w-9/10 mx-auto">
                 <label
@@ -41,7 +41,8 @@
                   class="block text-left pl-5 p-2 shadow-none text-sm w-full">
                   {{ previewData?.tabName }}
                 </label>
-              <table
+              <div style="width: 100%; overflow-x: auto;">
+                <table
               id="tblPreview"
               *ngIf="previewData?.dataList?.length"
               class="w-full border-collapse border border-gray-300 shadow-xs"
@@ -72,6 +73,7 @@
                 </tr>
               </tbody>
             </table>
+              </div>
         </div>
           <label class="block text-gray-700 text-sm" *ngIf="previewData?.dataList?.length === 0">
             no data found

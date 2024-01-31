@@ -485,6 +485,26 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     if (this.operators?.[index]) {
       delete this.operators[index];
     }
+
+    //Updated Object key number as Operators missing in filter when we try to delete few of the filters
+    const new_Operators: any[] = [];
+    Object.keys(this.operators)
+      .filter((op: any) => parseInt(op) < index)
+      .forEach((ele: any) => {
+        new_Operators[ele] = this.operators[ele];
+      });
+    Object.keys(this.operators)
+      .filter((op: any) => parseInt(op) > index)
+      .forEach((ele: any) => {
+        if (parseInt(ele) !== 0) {
+          const old_key = parseInt(ele);
+          const new_key = old_key - 1;
+          new_Operators[new_key] = this.operators[old_key];
+        } else {
+          new_Operators[ele] = this.operators[ele];
+        }
+      });
+    this.operators = new_Operators;
   }
 
   /**
@@ -720,7 +740,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   this.dataSetFields = [
                     ...new Set(
                       this.queryValue[tempIndex].fields
-                        .map((data: any) => data.name.replaceAll('.', '_'))
+                        .map((data: any) => data.name)
                         .flat()
 
                       // this.dataList

@@ -196,16 +196,16 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'tableDiv':
         styles[
           'tableDivStyle'
-        ] = `display: flex; flex-direction: column; align-items: center; width: 90%; margin-left: auto; margin-right: auto;`;
+        ] = `display: flex; flex-direction: column; align-items: center; width: 90%; margin: 0 auto;`;
         break;
       case 'label':
         styles[
           'labelStyle'
-        ] = `display: block; text-align: left !important; padding-left: 1.25rem; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-right: 0.5rem; box-shadow: 0 0 #0000; width: 100%; font-size: 0.875rem; line-height: 1.25rem; font-family: 'Source Sans Pro', sans-serif; border: 3px solid #00205C; background-color: #00205C !important; color: #FFFFFF !important; font-style: normal; font-weight: 700;`;
+        ] = `display: block; text-align: left; padding-left: 1rem; padding-top: 0.5rem; padding-bottom: 0.5rem; width: 100%; font-size: 0.875rem; line-height: 1.25rem; font-family: 'Source Sans Pro', sans-serif; background-color: #00205C; color: white; font-style: normal; font-weight: 700;`;
         break;
       case 'table':
         styles['tableStyle'] =
-          'width: 100%; border-collapse: collapse; border: 1px solid #d1d5db; overflow:auto;';
+          'width: 100%; border-collapse: collapse; border: 1px solid #d1d5db; overflow:auto; padding-left: 1.25rem; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-right: 0.5rem;';
         break;
       case 'thead':
         styles[
@@ -224,7 +224,9 @@ export class PreviewComponent implements OnInit, OnDestroy {
           'border-top: 1px solid #d1d5db; background-color: white;';
         break;
       case 'td':
-        styles['tdStyle'] = 'padding: 0.5rem; text-align: center;';
+        styles[
+          'tdStyle'
+        ] = `padding: 0.5rem; text-align: center; font-family: 'Source Sans Pro', Roboto, 'Helvetica Neue', sans-serif;`;
         break;
     }
     this.emailService.setTableStyles(styles);
@@ -396,20 +398,20 @@ export class PreviewComponent implements OnInit, OnDestroy {
       .join('');
 
     const tableHtml = `
-  <div style="${this.getTableStyle('tableDiv')}>
-   <label style="${this.getTableStyle('label')}">${previewData.tabName}</label>
-  <table id="tblPreview" style="${this.getTableStyle(
-    'table'
-  )}" class="dataset-preview">
-    <thead style="${this.getTableStyle('thead')}">
-      <tr style="${this.getTableStyle('tr')}">
-        ${theadHtml}
-      </tr>
-    </thead>
-    <tbody style="${this.getTableStyle('tbody')}">
-      ${tbodyHtml}
-    </tbody>
-  </table>
+  <div style="${this.getTableStyle('tableDiv')}">
+    <label style="${this.getTableStyle('label')}">${previewData.tabName}</label>
+    <div style="width: 100%; overflow-x: auto;">
+      <table style="${this.getTableStyle('table')}" class="dataset-preview">
+        <thead style="${this.getTableStyle('thead')}">
+          <tr style="${this.getTableStyle('tr')}">
+            ${theadHtml}
+          </tr>
+        </thead>
+        <tbody style="${this.getTableStyle('tbody')}">
+          ${tbodyHtml}
+        </tbody>
+      </table>
+    </div>
   </div>
 `;
     return tableHtml;

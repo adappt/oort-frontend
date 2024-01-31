@@ -2404,6 +2404,7 @@
 				"actions": "Actions",
 				"emailCreated": "New Email Notification Created",
 				"emailEdited": "Email Notification Edited Successfully",
+				"emailFailMsg": "Ooop!... Something is wrong while sending an email",
 				"emailSent": "Email Notification has Successfully been Saved and Sent"
 			}
 		},

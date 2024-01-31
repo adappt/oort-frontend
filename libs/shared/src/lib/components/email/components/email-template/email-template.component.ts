@@ -302,6 +302,12 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
     if (!this.selectedEmails.includes(email)) {
       this.selectedEmails.push(email);
     }
+    if (this.selectedEmails.length > 0) {
+      this.emailLoad.emit({
+        emails: this.selectedEmails,
+        emailFilter: this.filterQuery,
+      });
+    }
   }
 
   /**

@@ -266,6 +266,12 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.error('Error sending email:', error);
+            this.snackBar.openSnackBar(
+              this.translate.instant('pages.application.settings.emailFailMsg'),
+              { error: true }
+            );
+            this.emailService.datasetsForm.reset();
+            this.navigateToEms.emit();
           }
         );
     } catch (error) {
@@ -307,32 +313,25 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
           queryData.applicationId = res?.id;
           queryData.recipients = this.emailService.recipients;
         });
-        this.applicationService.application$.subscribe((res: any) => {
-          this.emailService.datasetsForm
-            .get('applicationId')
-            ?.setValue(res?.id);
-          // For email notification edit operation.
-          if (this.emailService.isEdit) {
-            this.emailService
-              .editEmailNotification(this.emailService.editId, queryData)
-              .subscribe((res) => {
-                this.emailService.isEdit = false;
-                this.emailService.editId = '';
-                this.emailService.configId =
-                  res.data?.editAndGetEmailNotification?.id;
-                resolve();
-              }, reject);
-          } else {
-            // For email notification create operation.
-            this.emailService
-              .addEmailNotification(queryData)
-              .subscribe((res: any) => {
-                this.emailService.configId = res.data?.addEmailNotification?.id;
-                //window.location.reload();
-                resolve();
-              }, reject);
-          }
-        }, reject);
+        //For email notification edit operation.
+        if (this.emailService.isEdit) {
+          this.emailService
+            .editEmailNotification(this.emailService.editId, queryData)
+            .subscribe((res) => {
+              this.emailService.configId =
+                res.data?.editAndGetEmailNotification?.id;
+              resolve();
+            }, reject);
+        } else {
+          // For email notification create operation.
+          this.emailService
+            .addEmailNotification(queryData)
+            .subscribe((res: any) => {
+              this.emailService.configId = res.data?.addEmailNotification?.id;
+              //window.location.reload();
+              resolve();
+            }, reject);
+        }
       } else {
         resolve();
       }

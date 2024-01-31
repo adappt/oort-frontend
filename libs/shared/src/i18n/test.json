@@ -2404,6 +2404,7 @@
 				"actions": "******",
 				"emailCreated": "******",
 				"emailEdited": "******",
+				"emailFailMsg": "******",
 				"emailSent": "******"
 			}
 		},

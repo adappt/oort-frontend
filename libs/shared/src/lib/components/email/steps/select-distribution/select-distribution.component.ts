@@ -10,6 +10,8 @@ import { FormGroup } from '@angular/forms';
 import { ApplicationService } from '../../../../services/application/application.service';
 import { DownloadService } from '../../../../services/download/download.service';
 import { UIPageChangeEvent, handleTablePageEvent } from '@oort-front/ui';
+import { TranslateService } from '@ngx-translate/core';
+import { SnackbarService } from '@oort-front/ui';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;
@@ -32,11 +34,15 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * @param emailService helper functions
    * @param applicationService helper functions
    * @param downloadService helper functions
+   * @param snackBar snackbar helper function
+   * @param translate translate helper function
    */
   constructor(
     public emailService: EmailService,
     public applicationService: ApplicationService,
-    public downloadService: DownloadService
+    public downloadService: DownloadService,
+    public snackBar: SnackbarService,
+    public translate: TranslateService
   ) {
     this.getExistingTemplate();
     this.showExistingDistributionList =
@@ -264,6 +270,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
     const file: File = event.target.files[0];
     if (file) {
       this.downloadService.importDistributionList(file).subscribe((res) => {
+        this.snackBar.openSnackBar(
+          this.translate.instant('common.notifications.file.import')
+        );
         this.recipients.To = [...new Set([...this.recipients.To, ...res.To])];
         this.recipients.Cc = [...new Set([...this.recipients.Cc, ...res.Cc])];
         this.recipients.Bcc = [

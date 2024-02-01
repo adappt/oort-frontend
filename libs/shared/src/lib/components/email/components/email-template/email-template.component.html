@@ -63,6 +63,7 @@
             <button (click)="addSelectedEmails()" *ngIf="selectedItemIndexes.length">Apply</button>
         </div>
     </div>
+    <!-- Filter -->
     <div class="Create filters" *ngIf="activeSegmentIndex === 2">
         <div class="w-1/2 mt-6 flex-row gap-4">
             <label htmlFor="select__data__set" class="block text-gray-700 text-sm mb-1">
@@ -86,18 +87,23 @@
                 <div class="flex-row gap-4 mt-6">
                     <div class="flex gap-4" *ngIf="selectedDataset?.fields?.length && !this.loading">
                         <div class="mt-2">
-                            <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
-                                {{ 'components.queryBuilder.filter.logic' | translate }}
-                            </label>
-                            <select formControlName="logic"
-                                class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <option value="and">
-                                    {{ 'components.queryBuilder.filter.and' | translate }}
-                                </option>
-                                <option value="or">
-                                    {{ 'components.queryBuilder.filter.or' | translate }}
-                                </option>
-                            </select>
+                          <label htmlFor="exampleSelect">
+                            {{ 'components.queryBuilder.filter.logic' | translate }}
+                          </label>
+                          <!-- Filter Logic -->
+                          <div
+                              uiFormFieldDirective
+                              [defaultMargin]="false"
+                              class="w-28">
+                            <ui-select-menu formControlName="logic">
+                              <ui-select-option value="and">
+                                {{ 'components.queryBuilder.filter.and' | translate }}
+                              </ui-select-option>
+                              <ui-select-option value="or">
+                                {{ 'components.queryBuilder.filter.or' | translate }}
+                              </ui-select-option>
+                            </ui-select-menu>
+                          </div>
                         </div>
 
                         <div class="mt-2">
@@ -106,11 +112,9 @@
                             class="block text-gray-700 text-sm" style="color: white;"
                             >a
                             </label>
-                            <button type="button"
-                                (click)="addNewDatasetFilter()"
-                                class="mt-1 block w-32 py-1 px-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm btnDataSet">
-                                {{ 'components.queryBuilder.filter.new' | translate }}
-                            </button>
+                            <ui-button category="tertiary" (click)="addNewDatasetFilter()">
+                              {{ 'components.queryBuilder.filter.new' | translate }}
+                            </ui-button>
                         </div>
 
                     </div>
@@ -118,64 +122,212 @@
                 <div>
                     <div formArrayName="filters">
                         <div *ngFor="
-                let data of filterFields?.controls;
-                let fieldIndex = index
-              ">
+                            let data of filterFields?.controls;
+                            let fieldIndex = index
+                          ">
                             <div class="flex gap-5 ml-6" [formGroupName]="fieldIndex">
-                                <div class="mt-4 w-1/3">
+                                <!-- Filter Field -->
+                                <div
+                                  uiFormFieldDirective
+                                  [defaultMargin]="false"
+                                  class="mt-4 w-1/3">
                                     <label htmlFor="exampleSelect"
-                                    class="block text-gray-700 text-sm">
+                                    >
                                         {{ 'components.queryBuilder.filter.field' | translate }}
                                     </label>
-                                    <select id="exampleSelect" name="exampleSelect" (change)="setField($event)"
-                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    <ui-select-menu id="exampleSelect"
+                                        name="exampleSelect"
+                                        (ngModelChange)="setField($event, fieldIndex)"
                                         formControlName="field">
-                                        <ng-container *ngFor="let fieldName of dataSetFields">
-                                            <option [value]="fieldName">
-                                                {{ replaceUnderscores(fieldName) | titlecase }}
-                                            </option>
+                                        <ng-container
+                                          *ngFor="let fieldDetails of dataSetFields">
+                                            <ui-select-option [value]="fieldDetails">
+                                                {{ replaceUnderscores(fieldDetails) | titlecase }}
+                                            </ui-select-option>
                                         </ng-container>
-                                    </select>
+                                    </ui-select-menu>
                                 </div>
-                                <div class="mt-4 w-1/3">
-                                    <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
+                                <!-- Filter Operator -->
+                                <div
+                                  uiFormFieldDirective
+                                  [defaultMargin]="false"
+                                  class="mt-4 w-1/3">
+                                    <label htmlFor="exampleSelect">
                                         {{ 'components.queryBuilder.filter.operator' | translate }}
                                     </label>
-                                    <select id="exampleSelect" name="exampleSelect"
-                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        formControlName="operator">
-                                        <option [value]="operator?.value" *ngFor="let operator of operators">
-                                            {{ operator.label | translate | titlecase }}
-                                        </option>
-                                    </select>
+                                    <ui-select-menu id="exampleSelect" name="exampleSelect"
+                                        formControlName="operator"
+                                        (ngModelChange)="onOperatorChange($event, data)">
+                                        <ui-select-option
+                                          *ngFor="let operatorDetail of operators[fieldIndex]"
+                                          [value]="operatorDetail?.value"
+                                          >
+                                            {{ operatorDetail.label | translate | titlecase }}
+                                        </ui-select-option>
+                                    </ui-select-menu>
                                 </div>
-                                <div class="mt-4 w-1/3">
-                                    <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
-                                        {{ 'components.queryBuilder.filter.value' | translate }}
-                                    </label>
-                                    <input
-                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        placeholder="Enter the value" formControlName="value" />
-                                </div>
+                                <!-- Filter Value -->
+                                <div
+                                  class="mt-4 w-1/3"
+                                  *ngIf="operators?.[fieldIndex] && !data.get('hideEditor')?.value"
+
+                                  >
+                                  <!-- Text Input for non-date/datetime fields -->
+                                  <ng-container *ngIf="!isDateOrDatetimeOperator(fieldIndex) && !isNumericOperator(fieldIndex)">
+                                    <div uiFormFieldDirective [defaultMargin]="false">
+                                      <label>{{ 'common.value.one' | translate }}</label>
+                                      <input formControlName="value" type="text"placeholder="Enter the value" />
+                                    </div>
+                                  </ng-container>
+                                  <!-- Numeric Input -->
+                                  <ng-container *ngIf="isNumericOperator(fieldIndex)" #numericEditor>
+                                    <div uiFormFieldDirective [defaultMargin]="false">
+                                      <label>{{ 'common.value.one' | translate }}</label>
+                                      <input formControlName="value" type="number" />
+                                    </div>
+                                  </ng-container>
+                                  <!-- Date / DateTime picker or within the Last... picker -->
+                                  <ng-container *ngIf="isDateOrDatetimeOperator(fieldIndex)">
+                                    <!-- Date Picker -->
+                                    <div uiFormFieldDirective [defaultMargin]="false" *ngIf="getFieldType(fieldIndex) === 'date' && data.get('operator')?.value !== 'inthelast'">
+                                      <label class="block text-gray-700 text-sm">{{ 'components.queryBuilder.filter.value' | translate }}</label>
+                                      <div class="grid grid-cols-6 gap-2">
+                                        <!-- Conditional rendering based on useExpression -->
+                                        <ng-container *ngIf="!useExpression; else textInput">
+                                          <div [uiDateWrapper]="calendar" class="col-span-5">
+                                            <input
+                                              [uiDatePicker]
+                                              formControlName="value"
+                                              [label]="'kendo.datepicker.dateLabel' | translate"
+                                              class="w-full"
+                                            />
+                                            <ui-date-picker #calendar></ui-date-picker>
+                                          </div>
+                                        </ng-container>
+                                        <ng-template #textInput>
+                                          <input
+                                            uiTooltip="YYYY/MM/DD"
+                                            formControlName="value"
+                                            type="text"
+                                            placeholder="YYYY/MM/DD"
+                                            class="col-span-5 w-full"
+                                          />
+                                        </ng-template>
+
+                                        <!-- Date and text Button -->
+                                        <div class="col-span-1">
+                                          <ui-button
+                                            [isIcon]="true"
+                                            icon="change_circle_outline"
+                                            variant="primary"
+                                            (click)="changeEditor()"
+                                            [uiTooltip]="
+                                              (useExpression
+                                                ? 'components.queryBuilder.tooltip.filter.date.usePicker'
+                                                : 'components.queryBuilder.tooltip.filter.date.useExpression'
+                                              ) | translate
+                                            "
+                                            class="w-full"
+                                          ></ui-button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- Date Time Picker -->
+                                    <div uiFormFieldDirective [defaultMargin]="false" *ngIf="(getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local') && data.get('operator')?.value !== 'inthelast'">
+                                      <label class="block text-gray-700 text-sm">{{ 'components.queryBuilder.filter.value' | translate }}</label>
+                                      <div class="grid grid-cols-6 gap-2">
+                                        <ng-container *ngIf="!useExpression; else textInput">
+                                          <div [uiDateWrapper]="calendar" class="col-span-5">
+                                            <input
+                                              [uiDatePicker]
+                                              formControlName="value"
+                                              [label]="'kendo.datepicker.dateLabel' | translate"
+                                              class="w-full"
+                                            />
+                                            <ui-date-picker #calendar></ui-date-picker>
+                                          </div>
+                                        </ng-container>
+                                        <ng-template #textInput>
+                                          <input
+                                            uiTooltip="YYYY/MM/DD"
+                                            formControlName="value"
+                                            type="text"
+                                            placeholder="YYYY/MM/DD"
+                                            class="col-span-5 w-full"
+                                          />
+                                        </ng-template>
+
+                                        <!-- Date to text Button -->
+                                        <div class="col-span-1">
+                                          <ui-button
+                                            [isIcon]="true"
+                                            icon="change_circle_outline"
+                                            variant="primary"
+                                            (click)="changeEditor()"
+                                            [uiTooltip]="
+                                              (useExpression
+                                                ? 'components.queryBuilder.tooltip.filter.date.usePicker'
+                                                : 'components.queryBuilder.tooltip.filter.date.useExpression'
+                                              ) | translate
+                                            "
+                                            class="w-full"
+                                          ></ui-button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- within the Last... picker -->
+                                    <div
+                                      *ngIf="data.get('operator')?.value === 'inthelast'"
+                                      formGroupName="inTheLast"
+                                      class="flex">
+                                      <div
+                                      uiFormFieldDirective
+                                      [defaultMargin]="false"
+                                      class="mr-2">
+                                        <label>Number</label>
+                                        <ui-select-menu
+                                          formControlName="number"
+                                          >
+                                          <ui-select-option
+                                            *ngFor="let num of getNumbersArray()"
+                                            [value]="num">
+                                            {{ num }}
+                                          </ui-select-option>
+                                        </ui-select-menu>
+                                      </div>
+                                      <div
+                                        uiFormFieldDirective
+                                        [defaultMargin]="false"
+                                      >
+                                        <label>Unit</label>
+                                        <ui-select-menu formControlName="unit">
+                                          <ng-container *ngFor="let timeUnit of timeUnits">
+                                            <ui-select-option [value]="timeUnit.value">
+                                              {{ timeUnit.label }}
+                                            </ui-select-option>
+                                          </ng-container>
+                                        </ui-select-menu>
+                                      </div>
+                                    </div>
+                                    <div
+                                      *ngIf="data.get('operator')?.value === 'inthelast'" [hidden]="true">
+                                      <input
+                                        formControlName="value"
+                                        type="text"
+                                      />
+                                    </div>
+                                  </ng-container>
+                                  </div>
                                 <button
                                     class="ui-button-icon primary medium button-danger mt-8"
                                     (click)="deleteDatasetFilter(fieldIndex)">
                                     <ui-icon class="text-3xl" icon="delete" variant="danger"> </ui-icon>
                                 </button>
-                                <!-- <div class="deleteIcon mt-5" (click)="deleteDatasetFilter(fieldIndex)">
-                                    <svg class="mt-4" xmlns="http://www.w3.org/2000/svg" width="25" height="24"
-                                        viewBox="0 0 25 24" fill="none">
-                                        <path
-                                            d="M9.5 3H15.5M3.5 6H21.5M19.5 6L18.7987 16.5193C18.6935 18.0975 18.6409 18.8867 18.3 19.485C17.9999 20.0118 17.5472 20.4353 17.0017 20.6997C16.382 21 15.5911 21 14.0093 21H10.9907C9.40891 21 8.61803 21 7.99834 20.6997C7.45276 20.4353 7.00009 20.0118 6.69998 19.485C6.35911 18.8867 6.3065 18.0975 6.20129 16.5193L5.5 6M10.5 10.5V15.5M14.5 10.5V15.5"
-                                            stroke="#667085" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <div class="button-wrapper" *ngIf="datasetFilterInfo.controls.length">
@@ -197,5 +349,4 @@
             </svg>
         </div>
     </div>
-    
 </div>

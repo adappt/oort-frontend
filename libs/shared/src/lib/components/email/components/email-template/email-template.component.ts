@@ -6,7 +6,12 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import { clone } from 'lodash';
 import { EmailService } from '../../email.service';
 import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
@@ -37,13 +42,16 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   public dataSetFields!: string[];
   public filterQuery: FormGroup | any | undefined;
   public selectedEmails: string[] | any = [];
-  public operators!: { value: string; label: string }[];
+  public filterOperators = FILTER_OPERATORS;
+  public operators: { [key: number]: { value: string; label: string }[] } = {};
   public filterFields: FormArray | any = new FormArray([]);
   public replaceUnderscores: any = this.emailService.replaceUnderscores;
   public datasetsForm: FormGroup | any = this.emailService.datasetsForm;
   public filterData = this.emailService.filterData;
   public isDropdownVisible = false;
   public dataSets: any;
+  /**  Changes from date picker to text expression */
+  public useExpression = false;
   public selectField = '';
   public emailValidationError = '';
   @Output() emailLoad = new EventEmitter<{
@@ -63,6 +71,14 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   public selectedItemIndexes: number[] | any[] = [];
   public isAllSelected = false;
   public loading = false;
+  /** IN THE LAST TIME UNITS */
+  public timeUnits = [
+    { value: 'hours', label: 'Hours' },
+    { value: 'days', label: 'Days' },
+    { value: 'weeks', label: 'Weeks' },
+    { value: 'months', label: 'Months' },
+    { value: 'years', label: 'Years' },
+  ];
 
   /**
    * Composite filter group.
@@ -102,11 +118,92 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
     if (this.emailFilter) {
       this.filterQuery = this.emailFilter;
       this.filterFields = this.filterQuery.get('filters') as FormArray;
-      this.emailFilter.value?.filters.forEach((obj: any) => {
-        this.setField(obj?.field);
+      this.emailFilter.value?.filters.forEach((obj: any, index: number) => {
+        this.setField(obj?.field, index);
       });
     }
     this.filterFields = this.filterQuery.get('filters') as FormArray;
+  }
+
+  /**
+   * Retrieves the field type of the field.
+   *
+   * @param fieldIndex - Index of the field in graphql.
+   * @returns field type
+   */
+  getFieldType(fieldIndex: number): string | undefined {
+    const fieldControl = this.filterQuery.get('filters').at(fieldIndex);
+    const fieldName = fieldControl ? fieldControl.value : null;
+    const field = fieldName
+      ? this.resource?.metadata?.find(
+          (data: any) => data.name === fieldName.field
+        )
+      : null;
+    return field ? field.type : '';
+  }
+
+  /**
+   * Update input type of date editor.
+   */
+  public changeEditor(): void {
+    this.useExpression = !this.useExpression;
+  }
+
+  /**
+   * Checks if the current field is date or time field.
+   *
+   * @param fieldIndex - Index of the field in graphql.
+   * @returns true if the field is date or datetime
+   */
+  isDateOrDatetimeOperator(fieldIndex: number): boolean {
+    const operators = ['eq', 'neq', 'gte', 'gt', 'lte', 'lt', 'inthelast'];
+    const fieldType = this.getFieldType(fieldIndex);
+    const operatorControl = this.filterQuery
+      .get('filters')
+      .at(fieldIndex)
+      .get('operator');
+    const fieldOperator = operatorControl ? operatorControl.value : null;
+    return (
+      (fieldType === 'date' ||
+        fieldType === 'datetime' ||
+        fieldType === 'datetime-local') &&
+      operators.includes(fieldOperator)
+    );
+  }
+
+  /**
+   * Checks if the selected operator for a field is numeric.
+   *
+   * @param fieldIndex The index of the field in the dataset filter.
+   * @returns Returns true if the operator is numeric, otherwise false.
+   */
+  isNumericOperator(fieldIndex: number): boolean {
+    const operators = [
+      'eq',
+      'neq',
+      'gte',
+      'gt',
+      'lte',
+      'lt',
+      'isnull',
+      'isnotnull',
+    ];
+    const operatorControl = this.filterFields.at(fieldIndex).get('operator');
+    const fieldOperator = operatorControl ? operatorControl.value : null;
+    return (
+      this.getFieldType(fieldIndex) === 'numeric' &&
+      operators.includes(fieldOperator)
+    );
+  }
+
+  /**
+   * Returns an array of numbers from 1 to 90
+   * for the "In the last" dropdown.
+   *
+   * @returns an array of numbers from 1 to 90.
+   */
+  getNumbersArray(): number[] {
+    return Array.from({ length: 90 }, (_, i) => i + 1);
   }
 
   /**
@@ -173,47 +270,66 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Operator Change for null and empty values.
+   *
+   * @param selectedOperator selected operator
+   * @param filterData filter form (field, operator, value)
+   */
+  onOperatorChange(selectedOperator: string, filterData: any) {
+    const operator = this.filterOperators.find(
+      (x) => x.value === selectedOperator
+    );
+    if (operator?.disableValue) {
+      filterData.get('hideEditor').setValue(true);
+    } else {
+      filterData.get('hideEditor').setValue(false);
+    }
+  }
+
+  /**
    * Set field.
    *
    * @param event field name
+   * @param fieldIndex Index of field
    */
-  public setField(event: any) {
-    const name = event?.target?.value.replace(/^_+/, '') ?? event;
+  public setField(event: any, fieldIndex: number) {
+    const name = event?.target?.value || event;
     const fields = clone(this.resource?.metadata);
     const field = fields.find(
-      (x: { name: any }) => x.name === name.split('-')[0]
+      (x: { name: any }) => x.name === name.split('.')[0]
     );
+
     let type: { operators: any; editor: string; defaultOperator: string } = {
       operators: undefined,
       editor: '',
       defaultOperator: '',
     };
+
     if (field) {
-      type = {
-        ...FIELD_TYPES.find((x) => x.editor === (field.type || 'text')),
-        ...field.filter,
-      };
-      if (!Object.keys(type).length) {
+      // Find the field type in FIELD_TYPES array
+      const fieldType = FIELD_TYPES.find(
+        (x) =>
+          x.editor ===
+          (field.type === 'datetime-local' ? 'datetime' : field.type || 'text')
+      );
+
+      if (fieldType) {
         type = {
-          editor: 'text',
-          defaultOperator: 'eq',
-          operators: [
-            'eq',
-            'neq',
-            'contains',
-            'doesnotcontain',
-            'startswith',
-            'endswith',
-            'isnull',
-            'isnotnull',
-            'isempty',
-            'isnotempty',
-          ],
+          ...fieldType,
+          ...field.filter,
         };
       }
-      this.operators = FILTER_OPERATORS.filter((x) =>
-        type?.operators?.includes(x.value)
+
+      // Filter the FILTER_OPERATORS based on the operators allowed for the field type
+      const fieldOperator = FILTER_OPERATORS.filter((x) =>
+        type.operators.includes(x.value)
       );
+
+      // Map the field index to its corresponding operators
+      this.operators = {
+        ...(this.operators && { ...this.operators }),
+        [fieldIndex]: fieldOperator,
+      };
     }
   }
 
@@ -224,6 +340,24 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
     this.filterQuery = this.fb.group({
       logic: 'and',
       filters: new FormArray([]),
+    });
+  }
+
+  /**
+   * To get the new dataset filter
+   *
+   *  @returns FormGroup
+   */
+  get getNewFilterFields(): FormGroup {
+    return this.fb.group({
+      field: [],
+      operator: ['eq'],
+      value: [],
+      hideEditor: false,
+      inTheLast: this.fb.group({
+        number: [1],
+        unit: ['days'],
+      }),
     });
   }
 
@@ -250,19 +384,6 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * To get the new dataset filter
-   *
-   *  @returns FormGroup
-   */
-  get getNewFilterFields(): FormGroup {
-    return this.fb.group({
-      field: '',
-      operator: '',
-      value: '',
-    });
-  }
-
-  /**
    * To
    *
    * @returns Form array
@@ -275,6 +396,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
    * To add new dataset filter in the form
    */
   addNewDatasetFilter(): void {
+    // Filter Form values
     this.filterFields = this.filterQuery.get('filters') as FormArray;
     this.filterFields.push(this.getNewFilterFields);
   }
@@ -296,9 +418,6 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   removeEmailChip(chipIndex: number): void {
     this.selectedEmails.splice(chipIndex, 1);
     this.listChange.emit();
-    // if (this.dataSetEmails.includes(email) && !this.emails.includes(email)) {
-    //   this.emails.push(email);
-    // }
   }
 
   /**
@@ -447,7 +566,32 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
    * apply filter via dataset filters
    */
   applyFilter(): void {
+    const filtersArray = this.filterQuery.get('filters') as FormArray;
+
+    // Iterate over the filters and update the value for 'inthelast' operators
+    filtersArray.controls.forEach((filterControl: AbstractControl) => {
+      const filterFormGroup = filterControl as FormGroup;
+      const operatorControl = filterFormGroup.get('operator');
+
+      if (operatorControl && operatorControl.value === 'inthelast') {
+        const inTheLastGroup = filterFormGroup.get('inTheLast') as FormGroup;
+        if (inTheLastGroup) {
+          const inTheLastNumberControl = inTheLastGroup.get('number');
+          const inTheLastUnitControl = inTheLastGroup.get('unit');
+
+          if (inTheLastNumberControl && inTheLastUnitControl) {
+            const days = this.emailService.convertToMinutes(
+              inTheLastNumberControl.value,
+              inTheLastUnitControl.value
+            );
+            filterFormGroup.get('value')?.setValue(days);
+          }
+        }
+      }
+    });
+
     const filterObject = this.filterQuery.value;
+
     if (filterObject?.filters?.length && filterObject?.logic) {
       const { logic } = filterObject;
       let emailsList: string[] | undefined;

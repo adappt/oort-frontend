@@ -64,7 +64,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public totalMatchingRecords = 0;
   /** FIELD TAB */
   public currentTabIndex = 0;
-  // Changes from date picker to text expression
+  /**  Changes from date picker to text expression */
   public useExpression = false;
   filterOperators = FILTER_OPERATORS;
   /** IN THE LAST TIME UNITS */

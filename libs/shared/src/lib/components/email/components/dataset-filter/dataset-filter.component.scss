@@ -57,7 +57,7 @@ button.disabled-button {
 
 .form-error {
   border: 1px solid red;
-  border-radius: 5px;
+  outline-color: red;
   .ng-select-container {
       border: transparent !important;
   }

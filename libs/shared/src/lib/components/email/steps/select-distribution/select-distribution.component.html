@@ -47,10 +47,10 @@
     </div>
   </div>
   <div class="use-existing"  *ngIf="!showExistingDistributionList">
-    <p (click)="showExistingDistributionList = !showExistingDistributionList">Or Use Existing</p>
+    <p (click)="toggleExistingDistributionList()">Or Use Existing</p>
   </div>
   <div *ngIf="showExistingDistributionList">
-    <div class="mt-4">
+    <div class="mt-4" *ngIf="!isLoading;else loaderContainer">
       <div class="mt-4 overflow-x-hidden shadow-2lg">
         <div class="overflow-x-auto">
           <table cdk-table uiTableWrapper [dataSource]="distributionLists">
@@ -89,19 +89,26 @@
           </table>
         </div>
       </div>
-
+      
       <!-- Pagination -->
       <ui-paginator
-      [disabled]="true"
+      [disabled]="false"
       [pageIndex]="distributionPageInfo.pageIndex"
       [pageSize]="distributionPageInfo.pageSize"
       [pageSizeOptions]="[10, 25, 50]"
       [totalItems]="distributionPageInfo.length"
       [ariaLabel]="'components.notifications.paginator.ariaLabel' | translate"
+      (pageChange)="onExistingList($event)"
       >
       </ui-paginator>
 
       </div>
+      <ng-template #loaderContainer>
+        <div class="loadingSign">
+          <ui-spinner style="position: relative;"></ui-spinner>
+        </div>
+      </ng-template>
+
   </div>
   <div class="flex flex-col gap-4 p-4 pl-0 pr-0" *ngIf="!showExistingDistributionList">
     <!-- TO -->

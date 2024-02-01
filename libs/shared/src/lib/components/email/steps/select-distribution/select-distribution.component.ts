@@ -9,6 +9,7 @@ import { EmailService } from '../../email.service';
 import { FormGroup } from '@angular/forms';
 import { ApplicationService } from '../../../../services/application/application.service';
 import { DownloadService } from '../../../../services/download/download.service';
+import { UIPageChangeEvent, handleTablePageEvent } from '@oort-front/ui';
 
 /** Default number of items per request for pagination */
 const DEFAULT_PAGE_SIZE = 5;
@@ -82,6 +83,8 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
     Cc: [],
     Bcc: [],
   };
+  public isLoading = false;
+  public cachedData: any = {};
 
   @ViewChild('fileUpload', { static: true }) fileElement:
     | ElementRef
@@ -200,6 +203,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
       this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
       this.applicationId = res?.id;
     });
+    this.isLoading = true;
     this.emailService
       .getEmailNotifications(this.applicationId)
       .subscribe((res: any) => {
@@ -222,6 +226,15 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
             return false;
           }
         });
+        this.cacheDistributionList = this.distributionLists;
+        this.distributionLists = this.cacheDistributionList.slice(
+          this.distributionPageInfo.pageSize *
+            this.distributionPageInfo.pageIndex,
+          this.distributionPageInfo.pageSize *
+            (this.distributionPageInfo.pageIndex + 1)
+        );
+        this.distributionPageInfo.length = this.cacheDistributionList.length;
+        this.isLoading = false;
       });
   }
 
@@ -279,5 +292,34 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
         disableAction: true,
       });
     }
+  }
+
+  /**
+   * Maintains paginator data
+   */
+  toggleExistingDistributionList() {
+    this.showExistingDistributionList = !this.showExistingDistributionList;
+    const event: UIPageChangeEvent = {
+      pageIndex: 0,
+      pageSize: DEFAULT_PAGE_SIZE,
+      previousPageIndex: 0,
+      skip: 0,
+      totalItems: this.cacheDistributionList.length,
+    };
+    this.onExistingList(event);
+  }
+
+  /**
+   * Maintains distribution page data.
+   *
+   * @param event The page change event.
+   */
+  onExistingList(event: UIPageChangeEvent) {
+    this.cachedData = handleTablePageEvent(
+      event,
+      this.pageInfo,
+      this.cacheDistributionList
+    );
+    this.distributionLists = this.cachedData;
   }
 }

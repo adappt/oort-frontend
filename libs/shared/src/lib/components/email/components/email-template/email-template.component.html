@@ -18,7 +18,7 @@
             <label htmlFor="select__data__set" class="block text-gray-700 text-sm mb-1">
                 {{ 'components.queryBuilder.dataset.title' | translate }}*
             </label>
-            <ng-select id="select__data__set" name="select__data__set" [(ngModel)]="selectedDataset" [ngModelOptions]="{ standalone: true }"
+            <ng-select id="select__data__set" name="select__data__set"  [ngModelOptions]="{ standalone: true }"
                 [items]="dataSets" bindLabel="name" [searchable]="true"  [virtualScroll]="true"
                 (change)="bindDataSetDetails($event)" placeholder="{{
                     'components.queryBuilder.dataset.select' | translate}}">
@@ -62,7 +62,6 @@
             <button (click)="addSelectedEmails()" *ngIf="selectedItemIndexes.length">Apply</button>
         </div>
     </div>
-
     <div class="Create filters" *ngIf="activeSegmentIndex === 2">
         <div class="w-1/2 mt-6 flex-row gap-4">
             <label htmlFor="select__data__set" class="block text-gray-700 text-sm mb-1">
@@ -181,6 +180,9 @@
             <button (click)="applyFilter()">Apply</button>
         </div>
     </div>
+    <div class="loadingSign" [ngClass]="{active: loading}">
+        <ui-spinner *ngIf="loading" style="position: relative;"></ui-spinner>
+      </div>
     <div class="p-3 pl-0 flex flex-wrap gap-4 items-center justify-start">
         <div class="flex gap-2 p-2 w-fit-content rounded-full items-center justify-center bg-gray-300 email-chips"
             *ngFor="let emailText of selectedEmails; let chipIndex = index">

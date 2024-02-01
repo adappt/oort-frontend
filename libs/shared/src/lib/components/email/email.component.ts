@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { EmailService } from './email.service';
 import { ApplicationService } from '../../services/application/application.service';
 import { UnsubscribeComponent } from '../utils/unsubscribe/unsubscribe.component';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import { ConfirmService } from '../../services/confirm/confirm.service';
 import { TranslateService } from '@ngx-translate/core';
 import { takeUntil } from 'rxjs';
@@ -111,6 +116,17 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
     if (!this.emailService.isExisting) {
       this.emailService.resetDataSetForm();
       this.emailService.setDatasetForm();
+    } else {
+      const dataSetArray = this.emailService.datasetsForm.get(
+        'dataSets'
+      ) as FormArray;
+      dataSetArray.controls.forEach(
+        (datasetControl: AbstractControl<any, any>) => {
+          const datasetFormGroup = datasetControl as FormGroup | null;
+          datasetFormGroup?.get('cacheData')?.reset();
+        }
+      );
+      this.emailService.selectedDataSet = '';
     }
     this.emailService.isEdit ? (this.emailService.isEdit = false) : null;
     this.emailService.emailListLoading = true;

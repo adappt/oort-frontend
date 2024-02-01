@@ -776,6 +776,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     } else {
       this.query.controls['name'].markAsTouched();
     }
+    this.emailService.selectedDataSet = '';
+    this.emailService.toEmailFilter = '';
+    this.emailService.ccEmailFilter = '';
+    this.emailService.bccEmailFilter = '';
   }
 
   /**

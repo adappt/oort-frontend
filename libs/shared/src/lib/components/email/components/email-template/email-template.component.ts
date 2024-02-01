@@ -10,6 +10,9 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { clone } from 'lodash';
 import { EmailService } from '../../email.service';
 import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
+import { ResourceQueryResponse } from '../../../../models/resource.model';
+import { GET_RESOURCE } from '../../graphql/queries';
+import { Apollo } from 'apollo-angular';
 
 /**
  * Email template to create distribution list
@@ -25,11 +28,11 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
     records: any[];
   };
   public dataList!: any[];
-  public emails!: string[];
+  public emails: string[] = [];
   public resource!: any;
   public selectedValue!: string;
   public cacheFilterData!: string;
-  public selectedDataset!: any | undefined;
+  public selectedDataset: any | undefined = '';
   public dataSetEmails!: string[];
   public dataSetFields!: string[];
   public filterQuery: FormGroup | any | undefined;
@@ -59,18 +62,28 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   ];
   public selectedItemIndexes: number[] | any[] = [];
   public isAllSelected = false;
+  public loading = false;
 
   /**
    * Composite filter group.
    *
    * @param fb Angular form builder
    * @param emailService helper functions
+   * @param apollo
    */
-  constructor(private fb: FormBuilder, public emailService: EmailService) {}
+  constructor(
+    private fb: FormBuilder,
+    public emailService: EmailService,
+    private apollo: Apollo
+  ) {}
 
   ngOnInit(): void {
     this.selectedDataset = this.emailService.getSelectedDataSet();
-    if (this.selectedDataset?.cacheData) {
+    if (
+      this.selectedDataset &&
+      Object.keys(this.selectedDataset?.cacheData).length &&
+      this.selectedDataset?.cacheData?.dataSetResponse
+    ) {
       const { dataList, resource, dataSetFields, dataSetResponse } =
         this.selectedDataset.cacheData;
       this.dataList = dataList;
@@ -102,7 +115,11 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
    * @param dataSet data of the data set
    */
   bindDataSetDetails(dataSet: any): void {
-    if (dataSet.cacheData) {
+    if (
+      Object.keys(dataSet?.cacheData).length &&
+      dataSet?.cacheData.dataSetResponse
+    ) {
+      this.loading = true;
       const { dataList, resource, dataSetFields, dataSetResponse } =
         dataSet.cacheData;
       this.dataList = dataList;
@@ -114,8 +131,39 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
         ?.filter(Boolean)
         ?.flat();
       this.emails = [...this.dataSetEmails];
+      this.emailService.setSelectedDataSet(dataSet);
+      this.loading = false;
+    } else {
+      this.loading = true;
+      this.apollo
+        .query<ResourceQueryResponse>({
+          query: GET_RESOURCE,
+          variables: {
+            id: dataSet.resource.id,
+          },
+        })
+        .subscribe((res) => {
+          if (res?.data?.resource) {
+            this.resource = res.data?.resource;
+            dataSet.pageSize = 50;
+            this.emailService.fetchDataSet(dataSet).subscribe((res) => {
+              if (res?.data.dataSet) {
+                this.dataSet = res?.data?.dataSet;
+                this.dataSetEmails = res?.data?.dataSet?.emails;
+                this.dataList = res.data?.dataSet?.records;
+                this.dataSetFields = dataSet.fields.map((ele: any) => ele.name);
+                this.emails = [...this.dataSetEmails];
+                dataSet.cacheData.dataSetResponse = this.dataSet;
+                dataSet.cacheData.dataList = this.dataList;
+                dataSet.cacheData.dataSetFields = this.dataSetFields;
+                dataSet.cacheData.resource = this.resource;
+                this.emailService.setSelectedDataSet(dataSet);
+              }
+              this.loading = false;
+            });
+          }
+        });
     }
-    this.emailService.setSelectedDataSet(dataSet);
   }
 
   /**
@@ -379,6 +427,12 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
         }
       }
     });
+    if (this.selectedEmails.length > 0) {
+      this.emailLoad.emit({
+        emails: this.selectedEmails,
+        emailFilter: this.filterQuery,
+      });
+    }
     this.selectedItemIndexes = [];
     this.isAllSelected = false;
   }
@@ -434,6 +488,12 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
         this.selectedEmails = [
           ...new Set([...this.selectedEmails, ...emailsList]),
         ];
+      }
+      if (this.selectedEmails.length > 0) {
+        this.emailLoad.emit({
+          emails: this.selectedEmails,
+          emailFilter: this.filterQuery,
+        });
       }
     }
   }

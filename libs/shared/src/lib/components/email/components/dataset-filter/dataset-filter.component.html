@@ -53,9 +53,9 @@
       <ui-spinner *ngIf="loading" style="position: relative;"></ui-spinner>
     </div>
   </div>
-  <kendo-tabstrip #datasetPreview *ngIf="resource?.fields?.length">
+  <kendo-tabstrip (tabSelect)="onTabSelect($event)" #datasetPreview *ngIf="resource?.fields?.length">
     <!-- Filter Tab -->
-    <kendo-tabstrip-tab  *ngIf="showPreview === false" [selected]="true">
+    <kendo-tabstrip-tab  [title]="'Filter'" [disabled]="false" *ngIf="showPreview === false" [selected]="true">
       <ng-template kendoTabTitle>
         {{ 'components.queryBuilder.filter.title' | translate }}
       </ng-template>
@@ -290,18 +290,26 @@
           </div>
 
           <button
-            *ngIf="datasetFilterInfo.controls"
+            *ngIf="datasetFilterInfo.controls && showDatasetLimitWarning"
             type="button"
             (click)="getDataSet('filter')"
             class="bg-sky-600 float-right hover:bg-sky-800 text-white ml-3 px-4 py-2 rounded-md transition-colors duration-150 ease-in-out mt-2"
           >
-            {{ 'components.queryBuilder.filter.apply' | translate }}
+            <ui-icon class="text-3xl" icon="check" variant="light"> </ui-icon>
           </button>
+          <button
+          *ngIf="datasetFilterInfo.controls && !showDatasetLimitWarning"
+          type="button"
+          (click)="getDataSet('filter')"
+          class="bg-sky-600 float-right hover:bg-sky-800 text-white ml-3 px-4 py-2 rounded-md transition-colors duration-150 ease-in-out mt-2"
+        >
+          {{ 'components.queryBuilder.filter.apply' | translate }}
+        </button>
         </ng-container>
       </ng-template>
     </kendo-tabstrip-tab>
     <!-- Fields Tab -->
-    <kendo-tabstrip-tab *ngIf="showPreview === false">
+    <kendo-tabstrip-tab [title]="'Fields'" [disabled]="showDatasetLimitWarning" *ngIf="showPreview === false">
       <ng-template kendoTabTitle>
         {{ 'components.queryBuilder.fields.title' | translate }}
       </ng-template>
@@ -401,6 +409,8 @@
         *ngIf="tabs?.length === 1 || activeTab?.index === tabs?.length-1"
         type="button"
         (click)="getDataSet('preview');showPreview=true"
+        [disabled]="showDatasetLimitWarning"
+        [class.disabled-button]="showDatasetLimitWarning"
         class="text-white text-sm float-right block mt-2 w-24 rounded-md bg-sky-600 hover:bg-sky-700 px-4 py-2 transition-colors duration-150 ease-in-out"
       >
         {{ 'common.preview' | translate }}

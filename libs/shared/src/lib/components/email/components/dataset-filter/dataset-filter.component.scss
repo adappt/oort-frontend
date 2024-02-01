@@ -8,6 +8,13 @@
   flex: 1;
 }
 
+button:disabled,
+button.disabled-button {
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+
 .field-box {
   padding: 20px 10px;
   @apply border-b-zinc-200 bg-white border-b border-solid;
@@ -255,13 +262,13 @@ button.ui-button-icon:disabled {
       li {
         padding: 0px;
         min-height: 40px;
-      
+
         .k-link {
           padding-block: 0px;
         }
-      }      
-    }    
-  }  
+      }
+    }
+  }
 }
 ::ng-deep .loadingSign {
   .overflow-hidden {

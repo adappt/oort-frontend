@@ -25,6 +25,7 @@ import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
 import { GET_RESOURCE, GET_RESOURCES } from '../../graphql/queries';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from '@oort-front/ui';
+import { TranslateService } from '@ngx-translate/core';
 /** Default items per query, for pagination */
 let ITEMS_PER_PAGE = 0;
 /**
@@ -62,6 +63,8 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public operators: { [key: number]: { value: string; label: string }[] } = {};
   public showDatasetLimitWarning = false;
   public totalMatchingRecords = 0;
+  /** FIELD TAB */
+  public currentTabIndex = 0;
   // Changes from date picker to text expression
   public useExpression = false;
   filterOperators = FILTER_OPERATORS;
@@ -169,6 +172,24 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Handles Filter, Field, Style Tab selection changes
+   *
+   * @param event The tab selected
+   */
+  onTabSelect(event: any): void {
+    const newIndex = event.index;
+    const previousIndex = this.currentTabIndex;
+    const filterTabIndex = 0;
+    const fieldsTabIndex = 1;
+
+    // Check if the current active tab is "Filter" and the selected tab is "Fields"
+    if (newIndex === fieldsTabIndex && previousIndex === filterTabIndex) {
+      this.getDataSet('filter');
+    }
+    this.currentTabIndex = newIndex;
+  }
+
+  /**
    * To fetch Resource Data On Scroll
    */
   getResourceDataOnScroll() {
@@ -227,6 +248,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     this.selectedFields = [];
     this.filterFields = [];
     fromHtml ? this.query.controls.fields.setValue([]) : '';
+    this.showDatasetLimitWarning = false;
+    this.emailService.disableSaveAndProceed.next(false);
+    this.currentTabIndex = 0;
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
       this.query.controls.resource.setValue(
         this.emailService.resourcesNameId.find(

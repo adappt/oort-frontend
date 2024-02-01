@@ -25,7 +25,6 @@ import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
 import { GET_RESOURCE, GET_RESOURCES } from '../../graphql/queries';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from '@oort-front/ui';
-import { TranslateService } from '@ngx-translate/core';
 /** Default items per query, for pagination */
 let ITEMS_PER_PAGE = 0;
 /**

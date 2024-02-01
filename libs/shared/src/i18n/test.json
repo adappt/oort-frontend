@@ -298,9 +298,7 @@
 					"processing": "******",
 					"ready": "******"
 				},
-				"import": {
-					"success": "******"
-				},
+				"import": "******",
 				"upload": {
 					"error": "******",
 					"maxFileSize": "****** {{size}} ******",

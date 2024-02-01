@@ -8,10 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import {
-  StepperActivateEvent,
-  StepperComponent,
-} from '@progress/kendo-angular-layout';
+import { StepperComponent } from '@progress/kendo-angular-layout';
 import { EmailService } from '../../email.service';
 import { Router } from '@angular/router';
 import { ApplicationService } from '../../../../services/application/application.service';
@@ -390,27 +387,6 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
    */
   navigateToListScreen() {
     this.navigateToEms.emit();
-  }
-
-  /**
-   *
-   * @param ev
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public onStepActivate(ev: StepperActivateEvent): void {
-    this.currentStep = 0;
-    // this.emailService.isLinear =
-    //   this.emailService.isEdit || this.emailService.isPreview
-    //     ? false
-    //     : this.emailService.isLinear;
-    if (this.disableActionButton) {
-      this.steps[ev.index].disabled = true;
-    }
-    // if (ev.index === 4 || ev.index === 5) {
-    //   this.isLinear = false;
-    // } else {
-    //   this.isLinear = true;
-    // }
   }
 
   ngOnDestroy(): void {

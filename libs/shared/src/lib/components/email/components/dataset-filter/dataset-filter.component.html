@@ -323,7 +323,7 @@
           *ngIf="datasetFilterInfo.controls && !showDatasetLimitWarning"
           type="button"
           (click)="getDataSet('filter')"
-          class="bg-sky-600 float-right hover:bg-sky-800 text-white ml-3 px-4 py-2 rounded-md transition-colors duration-150 ease-in-out mt-2"
+          class="bg-sky-600 float-right hover:bg-sky-800 text-white ml-3 px-4 py-2 rounded-md transition-colors duration-150 ease-in-out mt-2 btn-width"
         >
           {{ 'components.queryBuilder.filter.apply' | translate }}
         </button>
@@ -423,7 +423,7 @@
         *ngIf="tabs?.length > 1 && datasetFilterInfo.controls && activeTab.index !== tabs.length-1"
         type="button"
         (click)="getDataSet('fields')"
-        class="text-white text-sm float-right block mt-2 w-24 rounded-md bg-sky-600 hover:bg-sky-700 px-4 py-2 transition-colors duration-150 ease-in-out"
+        class="text-white text-sm float-right block mt-2 w-24 rounded-md bg-sky-600 hover:bg-sky-700 px-4 py-2 transition-colors duration-150 ease-in-out btn-width"
       >
         {{ 'components.queryBuilder.filter.apply' | translate }}
       </button>

@@ -85,7 +85,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
    *
    * @param fb Angular form builder
    * @param emailService helper functions
-   * @param apollo
+   * @param apollo Apollo server
    */
   constructor(
     private fb: FormBuilder,
@@ -362,11 +362,11 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * fetching data from object
+   * Fetches a value from an object using a dot notation string.
    *
-   * @param data
-   * @param field
-   * @returns data
+   * @param data - The object from which to fetch the value.
+   * @param field - The dot notation string representing the object path.
+   * @returns The object, or null if it doesn't exist.
    */
   fetchValue(data: any, field: string) {
     const keys = field.split('.');
@@ -460,8 +460,9 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Validates the email address entered in the input element.
    *
-   * @param element HTML input element
+   * @param element email string
    */
   validateEmail(element: HTMLInputElement): void {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -518,10 +519,10 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * selecting items from the table
+   * Email select
    *
-   * @param rowIndex
-   * @param $event
+   * @param rowIndex The index of the row in the table
+   * @param $event The event triggered by the checkbox selection
    */
   selectUnselectIndividualEmails(rowIndex: number, $event: any): void {
     if ($event.target.checked) {

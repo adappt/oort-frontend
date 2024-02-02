@@ -11,7 +11,7 @@
         variant="primary"
         (click)="downloadDistributionListTemplate()"
       >
-      Download Template
+      {{'components.email.distributionList.import.download' | translate}}
       </ui-button>
       <ui-button
         class="float-right import"
@@ -20,7 +20,7 @@
         variant="primary"
         (click)="fileUpload.click()"
       >
-      Import
+      {{'components.email.distributionList.import.name' | translate}}
       </ui-button>
       <br>
   </div>
@@ -36,7 +36,7 @@
         (change)="validateDistributionList()"
         [(ngModel)]="recipients.distributionListName" [placeholder]="'common.name' | translate" />
         <div *ngIf="isNameDuplicate() && !distributionListId " class="text-red-500 text-sm mt-1">
-          Name already exists.
+          {{'components.email.distributionList.duplicate' | translate}}
         </div>
             </div>
     <div class="text-gray-700 text-xs gap-1 flex items-end" style="font-weight: 500;">
@@ -77,7 +77,7 @@
             <ng-container cdkColumnDef="email">
               <th uiCellHeader *cdkHeaderCellDef scope="col">
                 <span class="headerTitle">
-                  Email
+                  {{'components.email.name' | translate}}
                 </span>
               </th>
               <td uiCell *cdkCellDef="let element" class="max-w-[30vw]">
@@ -89,7 +89,7 @@
           </table>
         </div>
       </div>
-      
+
       <!-- Pagination -->
       <ui-paginator
       [disabled]="false"

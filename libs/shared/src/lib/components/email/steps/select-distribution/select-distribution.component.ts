@@ -105,7 +105,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   * This method is used to show/hide the existing distribution list.
    */
   toggleDistributionListVisibility(): void {
     this.emailService.showExistingDistributionList =
@@ -200,9 +200,8 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   * Get existing distribution list template.
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   getExistingTemplate() {
     this.loading = true;
     this.applicationService.application$.subscribe((res: any) => {
@@ -245,6 +244,8 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Select Distribution List table row
+   *
    * @param index table row index
    */
   selectDistributionListRow(index: number): void {
@@ -255,15 +256,16 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   * Download Distribution List Template
    */
   downloadDistributionListTemplate(): void {
     this.downloadService.downloadDistributionListTemplate();
   }
 
   /**
+   * Import Distribution List
+   *
    * @param event file selection Event
-   * 1. After import action from the file duplicates email will be removed.
    */
   fileSelectionHandler(event: any): void {
     this.showEmailTemplate = false;
@@ -271,7 +273,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
     if (file) {
       this.downloadService.importDistributionList(file).subscribe((res) => {
         this.snackBar.openSnackBar(
-          this.translate.instant('common.notifications.file.import')
+          this.translate.instant(
+            'components.email.distributionList.import.loading'
+          )
         );
         this.recipients.To = [...new Set([...this.recipients.To, ...res.To])];
         this.recipients.Cc = [...new Set([...this.recipients.Cc, ...res.Cc])];
@@ -283,7 +287,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
         this.validateDistributionList();
         if (this.fileElement) this.fileElement.nativeElement.value = '';
         this.snackBar.openSnackBar(
-          this.translate.instant('common.notifications.file.import.success')
+          this.translate.instant(
+            'components.email.distributionList.import.success'
+          )
         );
       });
     }

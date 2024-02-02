@@ -92,7 +92,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   /**
    * Resets email notification for user to go back to list.
    *
-   * @param isNew
+   * @param isNew value of if the user is creating a new email notification.
    */
   toggle(isNew?: boolean) {
     this.emailService.isLinear = true;

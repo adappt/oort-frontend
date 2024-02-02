@@ -298,10 +298,6 @@
 					"processing": "Downloading file...",
 					"ready": "Your file is ready"
 				},
-				"import": {
-					"loading": "Importing file...",
-					"success": "Import Successful"
-				},
 				"upload": {
 					"error": "Something went wrong during the upload",
 					"maxFileSize": "Maximum file size is {{size}} MB.",
@@ -754,6 +750,27 @@
 				"name": {
 					"required": "Please provide a name"
 				}
+			}
+		},
+		"email": {
+			"distributionList": {
+				"duplicate": "Name already exists",
+				"import": {
+					"download": "Download Template",
+					"loading": "Importing file...",
+					"name": "Import",
+					"success": "Import Successful"
+				},
+				"list": "Distribution List"
+			},
+			"name": "Email",
+			"notification": {
+				"create": "Create Notification",
+				"list": "Notification List",
+				"type": "Alert Type"
+			},
+			"preview": {
+				"subject": "Subject:"
 			}
 		},
 		"emailBuilder": {

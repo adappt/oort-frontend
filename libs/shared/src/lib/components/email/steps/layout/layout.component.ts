@@ -50,7 +50,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   /**
    * Component used for the selection of fields to display the fields in tabs.
    *
-   * @param fb
+   * @param fb Form builder used for form creation
    * @param editorService Editor service used to get main URL and current language
    * @param emailService Service used for email-related operations and state management
    */
@@ -167,7 +167,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   * Initialises the in the last dropdown and forms options.
    */
   private initInTheLastDropdown(): void {
     const blocks = this.emailService.datasetsForm.get('dataSets') as FormArray;
@@ -188,9 +188,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Inserts token at cursor position.
    *
-   * @param token
-   * @param event
+   * @param event The position to insert the token.
    */
   insertTokenAtCursor(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
@@ -215,7 +215,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   * Initialises the field select dropdown.
    */
   initialiseFieldSelectDropdown(): void {
     const firstBlock = this.emailService.getAllPreviewData()[0];
@@ -441,8 +441,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   /**
    * Handles changes to the editor content and updates the layout data accordingly.
-   *
-   * @param event The event object containing the updated content.
    */
   onEditorContentChange(): void {
     if (this.emailService.allLayoutdata.bodyHtml === '') {

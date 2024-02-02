@@ -298,10 +298,6 @@
 					"processing": "Téléchargement du fichier en cours...",
 					"ready": "Votre fichier est prêt"
 				},
-				"import": {
-					"loading": "Importer des e-mails...",
-					"success": "importation réussie"
-				},
 				"upload": {
 					"error": "Un problème est survenu lors de l'import",
 					"maxFileSize": "La taille maximale du fichier est de {{size}} Mo.",
@@ -760,6 +756,27 @@
 				"name": {
 					"required": "Veuillez fournir un nom"
 				}
+			}
+		},
+		"email": {
+			"distributionList": {
+				"duplicate": "Le nom existe déjà",
+				"import": {
+					"download": "Télécharger le modèle",
+					"loading": "Importation du fichier...",
+					"name": "Importer",
+					"success": "Importation réussie"
+				},
+				"list": "Liste de distribution"
+			},
+			"name": "Email",
+			"notification": {
+				"create": "Créer une notification",
+				"list": "Liste des notifications",
+				"type": "Type d'alerte"
+			},
+			"preview": {
+				"subject": "Sujet:"
 			}
 		},
 		"emailBuilder": {

@@ -298,10 +298,6 @@
 					"processing": "******",
 					"ready": "******"
 				},
-				"import": {
-					"loading": "******",
-					"success": "******"
-				},
 				"upload": {
 					"error": "******",
 					"maxFileSize": "****** {{size}} ******",
@@ -754,6 +750,27 @@
 				"name": {
 					"required": "******"
 				}
+			}
+		},
+		"email": {
+			"distributionList": {
+				"duplicate": "******",
+				"import": {
+					"download": "******",
+					"loading": "******",
+					"name": "******",
+					"success": "******"
+				},
+				"list": "******"
+			},
+			"name": "******",
+			"notification": {
+				"create": "******",
+				"list": "******",
+				"type": "******"
+			},
+			"preview": {
+				"subject": "******"
 			}
 		},
 		"emailBuilder": {

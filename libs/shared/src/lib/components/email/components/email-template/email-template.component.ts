@@ -115,6 +115,12 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
    * @param dataSet data of the data set
    */
   bindDataSetDetails(dataSet: any): void {
+    if (dataSet === undefined) {
+      this.dataList = [];
+      this.resource = [];
+      this.dataSetFields = [];
+      return;
+    }
     if (
       Object.keys(dataSet?.cacheData).length &&
       dataSet?.cacheData.dataSetResponse
@@ -494,6 +500,29 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
           emails: this.selectedEmails,
           emailFilter: this.filterQuery,
         });
+      }
+    }
+  }
+
+  /**
+   * To clear the persisted data
+   */
+  clearDatasetSelection(): void {
+    this.dataList = [];
+    this.resource = [];
+    this.dataSetFields = [];
+    this.filterFields = new FormArray([]);
+
+    const filterConditionCount = this.datasetFilterInfo.controls.length;
+    if (filterConditionCount !== 0) {
+      for (
+        let filterControlIndex = 0;
+        filterControlIndex < filterConditionCount;
+        filterControlIndex++
+      ) {
+        /* this should be always first index.
+        if we remove element from form array element indexes will be automatically rearranging */
+        this.datasetFilterInfo.removeAt(0);
       }
     }
   }

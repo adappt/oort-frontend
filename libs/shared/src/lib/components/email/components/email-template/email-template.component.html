@@ -18,8 +18,9 @@
             <label htmlFor="select__data__set" class="block text-gray-700 text-sm mb-1">
                 {{ 'components.queryBuilder.dataset.title' | translate }}*
             </label>
-            <ng-select id="select__data__set" name="select__data__set"  [ngModelOptions]="{ standalone: true }"
+            <ng-select id="select__data__set" name="select__data__set" [(ngModel)]="selectedDataset"  [ngModelOptions]="{ standalone: true }"
                 [items]="dataSets" bindLabel="name" [searchable]="true"  [virtualScroll]="true"
+                (clear)="clearDatasetSelection()"
                 (change)="bindDataSetDetails($event)" placeholder="{{
                     'components.queryBuilder.dataset.select' | translate}}">
                 <ng-template disabled selected>
@@ -69,6 +70,7 @@
             </label>
             <ng-select id="select__data__set" name="select__data__set" [(ngModel)]="selectedDataset" [ngModelOptions]="{ standalone: true }"
                 [items]="dataSets" bindLabel="name" [searchable]="true"  [virtualScroll]="true"
+                (clear)="clearDatasetSelection()"
                 (change)="bindDataSetDetails($event)" placeholder="{{
                     'components.queryBuilder.dataset.select' | translate}}">
                 <ng-template disabled selected>
@@ -82,7 +84,7 @@
         <div>
             <div [formGroup]="filterQuery">
                 <div class="flex-row gap-4 mt-6">
-                    <div class="flex gap-4">
+                    <div class="flex gap-4" *ngIf="selectedDataset?.fields?.length && !this.loading">
                         <div class="mt-2">
                             <label htmlFor="exampleSelect" class="block text-gray-700 text-sm">
                                 {{ 'components.queryBuilder.filter.logic' | translate }}
@@ -176,7 +178,7 @@
                 
             </div>
         </div>
-        <div class="button-wrapper">
+        <div class="button-wrapper" *ngIf="datasetFilterInfo.controls.length">
             <button (click)="applyFilter()">Apply</button>
         </div>
     </div>

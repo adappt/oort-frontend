@@ -282,6 +282,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
         this.templateFor = 'to';
         this.validateDistributionList();
         if (this.fileElement) this.fileElement.nativeElement.value = '';
+        this.snackBar.openSnackBar(
+          this.translate.instant('common.notifications.file.import.success')
+        );
       });
     }
   }

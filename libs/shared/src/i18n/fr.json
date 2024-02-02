@@ -298,7 +298,10 @@
 					"processing": "Téléchargement du fichier en cours...",
 					"ready": "Votre fichier est prêt"
 				},
-				"import": "Importer des e-mails...",
+				"import": {
+					"loading": "Importer des e-mails...",
+					"success": "importation réussie"
+				},
 				"upload": {
 					"error": "Un problème est survenu lors de l'import",
 					"maxFileSize": "La taille maximale du fichier est de {{size}} Mo.",

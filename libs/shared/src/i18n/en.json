@@ -298,7 +298,10 @@
 					"processing": "Downloading file...",
 					"ready": "Your file is ready"
 				},
-				"import": "Importing file...",
+				"import": {
+					"loading": "Importing file...",
+					"success": "Import Successful"
+				},
 				"upload": {
 					"error": "Something went wrong during the upload",
 					"maxFileSize": "Maximum file size is {{size}} MB.",

@@ -609,7 +609,8 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
    */
   addSelectedFields(field: any): void {
     const fieldExists = clone(this.query.value.fields) || [];
-    if (!JSON.stringify(fieldExists).includes(field.name)) {
+    const fieldExistsArray = fieldExists?.map((ele: any) => ele?.name);
+    if (!fieldExistsArray.includes(field.name)) {
       fieldExists.push(field);
       this.query.controls.fields.setValue(fieldExists);
       this.selectedFields = fieldExists;

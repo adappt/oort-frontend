@@ -58,6 +58,7 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.allPreviewData = this.emailService.getAllPreviewData();
     this.filteredFields = this.resource?.fields;
     this.tabIndex = this.activeTab.index;
     if (this.emailService.notificationTypes.length > 0) {
@@ -143,7 +144,6 @@ export class CreateDatasetComponent implements OnInit {
    * Adds a tab
    */
   public addTab() {
-    this.datasetsFormArray.push(this.dataSetGroup);
     this.tabs.forEach((tab) => (tab.active = false));
     this.tabs.push({
       title: `Block ${this.tabs.length + 1}`,
@@ -167,6 +167,10 @@ export class CreateDatasetComponent implements OnInit {
   public deleteTab(index: number, event: Event) {
     event.stopPropagation();
     this.datasetsFormArray.removeAt(index); // Remove the associated form group from datasetsFormArray
+    this.allPreviewData = this.allPreviewData.filter(
+      (ele: any, count: number) => index !== count
+    );
+    this.emailService.setAllPreviewData(this.allPreviewData);
     this.tabs.splice(index, 1);
     this.activeTab =
       this.activeTab.active == true && this.tabs.length > 0

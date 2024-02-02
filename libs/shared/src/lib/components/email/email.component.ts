@@ -149,6 +149,22 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
             ele.node.name.trim().toLowerCase()
           );
         });
+        const distributionListPaginationConfig = {
+          pageIndex: 0,
+          pageSize: this.distributionPageInfo.pageSize,
+          previousPageIndex: 0,
+          skip: 0,
+          totalItems: this.cacheDistributionList.length,
+        };
+        const notificationListPaginationConfig = {
+          pageIndex: 0,
+          pageSize: this.pageInfo.pageSize,
+          previousPageIndex: 0,
+          skip: 0,
+          totalItems: this.templateActualData.length,
+        };
+        this.onDistributionPage(distributionListPaginationConfig);
+        this.onPage(notificationListPaginationConfig);
       });
   }
 
@@ -571,7 +587,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   onDistributionPage(e: UIPageChangeEvent): void {
     const cachedData = handleTablePageEvent(
       e,
-      this.pageInfo,
+      this.distributionPageInfo,
       this.cacheDistributionList
     );
     this.distributionLists = cachedData;

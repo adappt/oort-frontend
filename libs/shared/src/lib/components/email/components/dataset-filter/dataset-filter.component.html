@@ -741,6 +741,9 @@
       </ng-template>
     </kendo-tabstrip-tab>
   </kendo-tabstrip>
+  <div *ngIf="query?.value?.resource !== null && !resource?.fields?.length" class="mt-5">
+    {{showerrorMsg}}
+  </div>
 
 </form>
 <div class="max-limit-note" *ngIf="showDatasetLimitWarning">

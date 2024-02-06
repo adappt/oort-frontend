@@ -27,7 +27,7 @@
                     <span></span>
                 </ng-template>
                 <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                    <span>{{ replaceUnderscores(item.name || '') | titlecase }}</span>
+                    <span>{{ this.emailService.replaceUnderscores(item.name || '') | titlecase }}</span>
                 </ng-template>
             </ng-select>
         </div>
@@ -40,7 +40,7 @@
                     </th>
                     <ng-container *ngFor="let field of dataSetFields">
                         <th class="bg-blue-600 border-white-600 shadow-xs text-white p-2 text-center">
-                            {{ replaceUnderscores(field) | titlecase }}
+                            {{ this.emailService.replaceUnderscores(field) | titlecase }}
                         </th>
                     </ng-container>
                 </tr>
@@ -66,7 +66,7 @@
     <!-- Filter -->
     <div class="Create filters" *ngIf="activeSegmentIndex === 2">
         <div class="w-1/2 mt-6 flex-row gap-4">
-            <label htmlFor="select__data__set" class="block text-gray-700 text-sm mb-1">
+            <label htmlFor="select__data__set" class="block text-sm font-medium leading-6 text-gray-900 mb-1">
                 {{ 'components.queryBuilder.dataset.title' | translate }}*
             </label>
             <ng-select id="select__data__set" name="select__data__set" [(ngModel)]="selectedDataset" [ngModelOptions]="{ standalone: true }"
@@ -78,7 +78,7 @@
                     <span></span>
                 </ng-template>
                 <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                    <span>{{ replaceUnderscores(item.name || '') | titlecase }}</span>
+                    <span>{{ this.emailService.replaceUnderscores(item.name || '') | titlecase }}</span>
                 </ng-template>
             </ng-select>
         </div>
@@ -86,37 +86,34 @@
             <div [formGroup]="filterQuery">
                 <div class="flex-row gap-4 mt-6">
                     <div class="flex gap-4" *ngIf="selectedDataset?.fields?.length && !this.loading">
+                      <div class="flex gap-4 mt-2">
                         <div class="mt-2">
-                          <label htmlFor="exampleSelect">
-                            {{ 'components.queryBuilder.filter.logic' | translate }}
-                          </label>
-                          <!-- Filter Logic -->
-                          <div
-                              uiFormFieldDirective
-                              [defaultMargin]="false"
-                              class="w-28">
-                            <ui-select-menu formControlName="logic">
-                              <ui-select-option value="and">
-                                {{ 'components.queryBuilder.filter.and' | translate }}
-                              </ui-select-option>
-                              <ui-select-option value="or">
-                                {{ 'components.queryBuilder.filter.or' | translate }}
-                              </ui-select-option>
-                            </ui-select-menu>
+                          <!-- Label for Filter Logic -->
+                          <div>
+                            <label class="block text-sm font-medium leading-6 text-gray-900" htmlFor="exampleSelect">{{ 'components.queryBuilder.filter.logic' | translate }}</label>
                           </div>
-                        </div>
 
-                        <div class="mt-2">
-                            <label
-                            htmlFor="exampleSelect"
-                            class="block text-gray-700 text-sm" style="color: white;"
-                            >a
-                            </label>
+                          <div class="flex items-center gap-5 mt-1">
+                            <!-- Filter Logic -->
+                            <div uiFormFieldDirective [defaultMargin]="false" class="w-28">
+                              <ui-select-menu formControlName="logic">
+                                <ui-select-option value="or">
+                                  {{ 'components.queryBuilder.filter.or' | translate }}
+                                </ui-select-option>
+                                <ui-select-option value="and">
+                                  {{ 'components.queryBuilder.filter.and' | translate }}
+                                </ui-select-option>
+                              </ui-select-menu>
+                            </div>
+
+                            <!-- Filter Row Button -->
                             <ui-button category="tertiary" (click)="addNewDatasetFilter()">
                               {{ 'components.queryBuilder.filter.new' | translate }}
                             </ui-button>
-                        </div>
 
+                          </div>
+                        </div>
+                      </div>
                     </div>
                 </div>
                 <div>
@@ -142,7 +139,7 @@
                                         <ng-container
                                           *ngFor="let fieldDetails of dataSetFields">
                                             <ui-select-option [value]="fieldDetails">
-                                                {{ replaceUnderscores(fieldDetails) | titlecase }}
+                                                {{ this.emailService.replaceUnderscores(fieldDetails) | titlecase }}
                                             </ui-select-option>
                                         </ng-container>
                                     </ui-select-menu>

@@ -548,7 +548,7 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
     this.selectedItemIndexes?.forEach((itemIndex: number) => {
       /* duplicate check */
       if (this.selectedEmails.indexOf(this.emails[itemIndex]) === -1) {
-        if (itemIndex !== undefined) {
+        if (itemIndex !== undefined && this.emails[itemIndex] !== undefined) {
           this.selectedEmails.push(this.emails[itemIndex]);
         }
       }

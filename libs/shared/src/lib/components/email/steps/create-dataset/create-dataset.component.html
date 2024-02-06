@@ -52,7 +52,7 @@
                     <th
                       class="text-center p-2"
                     >
-                      {{ replaceUnderscores(fieldKeyString) | titlecase }}
+                      {{ this.emailService.replaceUnderscores(fieldKeyString) | titlecase }}
                     </th>
                   </ng-container>
                 </tr>

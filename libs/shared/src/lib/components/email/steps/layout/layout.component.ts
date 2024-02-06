@@ -22,7 +22,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
   showSubjectValidator = false;
   /** Tinymce editor configuration */
   public editor: any = EMAIL_LAYOUT_CONFIG;
-  public replaceUnderscores = this.emailService.replaceUnderscores;
   bodyHtml: any = '';
   headerHtml: any = '';
   footerHtml: any = '';

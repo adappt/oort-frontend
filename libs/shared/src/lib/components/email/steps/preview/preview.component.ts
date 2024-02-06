@@ -118,7 +118,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Retrieves the style based on the item name.
+   * Retrieves the style based on the item name then sets the style in the email service.
    *
    * @param item The item you are retrieving the inline styling of.
    * @returns The inline styling of the item.
@@ -185,7 +185,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Retrieves the table object based on the item name.
+   * Retrieves the table object based on the item name then sets the style in the email service.
    *
    * @param item The table part you are retrieving the inline styling of.
    * @returns The inline style of the item.
@@ -242,23 +242,30 @@ export class PreviewComponent implements OnInit, OnDestroy {
    */
   formatInLastString(minutes: number): string {
     const currentDate = new Date();
+    // Current date offset by minutes param
     const pastDate = new Date(currentDate.getTime() - minutes * 60000);
 
+    // Past Date to date (mm/dd/yyyy)
     const formattedPastDate = pastDate.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: '2-digit',
     });
+
+    // Past Date to time (hh:mm)
     const formattedPastTime = pastDate.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
     });
 
+    // Current Date to date (mm/dd/yyyy)
     const formattedCurrentDate = currentDate.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: '2-digit',
     });
+
+    // Current Date to time (hh:mm)
     const formattedCurrentTime = currentDate.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
@@ -278,6 +285,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
    * @param headerString The current header text value.
    */
   replaceInTheLast(headerString: string | any): void {
+    // Token matching {{String.String.number}}
     const tokenRegex = /{{([^}]+)\.([^}]+)\.(\d+)}}/g;
     let match;
     while ((match = tokenRegex.exec(this.headerString)) !== null) {
@@ -294,6 +302,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
    */
   replaceTokensWithTables(): void {
     this.bodyString = this.emailService.allLayoutdata.bodyHtml;
+    // Token matching {{String}}
     const tokenRegex = /{{([^}]+)}}/g;
     let match;
     while ((match = tokenRegex.exec(this.bodyString)) !== null) {
@@ -318,6 +327,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
     const timeString = currentDate.toLocaleTimeString();
     const dateTimeString = currentDate.toLocaleString();
 
+    // Tokens to match
     const tokens = {
       '{{today.date}}': dateString,
       '{{now.datetime}}': dateTimeString,
@@ -415,16 +425,6 @@ export class PreviewComponent implements OnInit, OnDestroy {
   </div>
 `;
     return tableHtml;
-  }
-
-  /**
-   * To replace all special characters with space
-   *
-   * @param value The string to process and replace special characters with spaces.
-   * @returns The processed string with special characters replaced by spaces.
-   */
-  replaceUnderscores(value: string): string {
-    return value ? value.replace(/[^a-zA-Z0-9-]/g, ' ') : '';
   }
 
   ngOnDestroy(): void {

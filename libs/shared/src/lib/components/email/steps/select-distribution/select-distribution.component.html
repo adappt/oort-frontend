@@ -1,6 +1,6 @@
 <div class="distribution_list">
-
   <div class="mt-4">
+    <!-- Email List Import Button -->
     <div>
       <input type="file" class="hidden" #fileUpload (change)="fileSelectionHandler($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
      </div>
@@ -9,15 +9,18 @@
         icon="download"
         category="secondary"
         variant="primary"
+        uiTooltip="Upload Email List"
         (click)="downloadDistributionListTemplate()"
       >
       {{'components.email.distributionList.import.download' | translate}}
       </ui-button>
+      <!-- Email List Template Button -->
       <ui-button
         class="float-right import"
         icon="cloud_download"
         category="secondary"
         variant="primary"
+        uiTooltip="Download Template"
         (click)="fileUpload.click()"
       >
       {{'components.email.distributionList.import.name' | translate}}
@@ -49,6 +52,7 @@
   <div class="use-existing"  *ngIf="!showExistingDistributionList">
     <p (click)="toggleExistingDistributionList()">Or Use Existing</p>
   </div>
+  <!-- Existing Distribution List -->
   <div *ngIf="showExistingDistributionList">
     <div class="mt-4" *ngIf="!isLoading;else loaderContainer">
       <div class="mt-4 overflow-x-hidden shadow-2lg">
@@ -90,7 +94,7 @@
         </div>
       </div>
 
-      <!-- Pagination -->
+      <!-- Distribution List Pagination -->
       <ui-paginator
       [disabled]="false"
       [pageIndex]="distributionPageInfo.pageIndex"
@@ -111,7 +115,7 @@
 
   </div>
   <div class="flex flex-col gap-4 p-4 pl-0 pr-0" *ngIf="!showExistingDistributionList">
-    <!-- TO -->
+    <!-- TO dropdown -->
     <div class="w-full flex p-1 pl-2 space-y-4 flex-row items-start self-stretch bg-blue-50 cursor-pointer"
     (click)="toggleDropdown('to')">
       <span class="w-96 text-style">{{'components.select.distribution.to' | translate}}</span>
@@ -120,7 +124,7 @@
     </div>
     <shared-email-template [existingId]="this.distributionListId" (emailLoad)="to($event)" (listChange)="validateDistributionList()" [emailBackLoad]="recipients.To" [emailFilter]="toEmailFilter" *ngIf="showToTemplate && templateFor === 'to'">To</shared-email-template>
 
-    <!-- CC -->
+    <!-- CC dropdown -->
     <div class="w-full flex p-1 pl-2 space-y-4 flex-row items-start self-stretch bg-blue-50 cursor-pointer"
       (click)="toggleDropdown('cc')">
       <span class="w-96 text-style">{{'components.select.distribution.cc' | translate}}</span>
@@ -129,7 +133,7 @@
     </div>
     <shared-email-template [existingId]="this.distributionListId" (emailLoad)="cc($event)" (listChange)="validateDistributionList()" [emailBackLoad]="recipients.Cc" [emailFilter]="ccEmailFilter" *ngIf="showCCTemplate && templateFor === 'cc'">cc</shared-email-template>
 
-    <!-- BCC -->
+    <!-- BCC dropdown -->
     <div class="w-full flex p-1 pl-2 space-y-4 flex-row items-start self-stretch bg-blue-50 cursor-pointer"
       (click)="toggleDropdown('bcc')">
       <span class="w-96 text-style">{{'components.select.distribution.bcc' | translate}}</span>

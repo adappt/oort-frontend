@@ -291,8 +291,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
-   * submission
+   * Submission for sending and saving emails
    */
   saveAndSend(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -325,7 +324,6 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
             .addEmailNotification(queryData)
             .subscribe((res: any) => {
               this.emailService.configId = res.data?.addEmailNotification?.id;
-              //window.location.reload();
               resolve();
             }, reject);
         }
@@ -336,8 +334,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
-   * submission
+   * Submission
    */
   submit() {
     if (Object.keys(this.emailService.datasetsForm.value).length) {
@@ -383,7 +380,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   * Navigates to list screen.
    */
   navigateToListScreen() {
     this.navigateToEms.emit();
@@ -394,6 +391,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Disables all next steps from the specified stepper index.
    *
    * @param stepperIndex - current stepper index
    */

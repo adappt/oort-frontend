@@ -45,7 +45,6 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
   public filterOperators = FILTER_OPERATORS;
   public operators: { [key: number]: { value: string; label: string }[] } = {};
   public filterFields: FormArray | any = new FormArray([]);
-  public replaceUnderscores: any = this.emailService.replaceUnderscores;
   public datasetsForm: FormGroup | any = this.emailService.datasetsForm;
   public filterData = this.emailService.filterData;
   public isDropdownVisible = false;

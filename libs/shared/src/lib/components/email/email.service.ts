@@ -124,9 +124,6 @@ export class EmailService {
   public isPreview = false;
   public isLinear = true;
   public emailListLoading = true;
-  //private apiUrl = 'http://localhost:3000/notification/send-email/';
-
-  //private apiUrl = 'https://emspocdev.adapptlabs.com/api/notification/send-email/';
 
   /**
    * To replace all special characters with space

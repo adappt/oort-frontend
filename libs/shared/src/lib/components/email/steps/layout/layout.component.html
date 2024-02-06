@@ -16,7 +16,7 @@
         </label>
         <select id="fieldSelect" (change)="insertSubjectFieldToken($event)" placeholder="Field Select" uiTooltip="First Row of first created block" class="block w-full mt-1 text-sm py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm">
           <option value="" disabled selected>{{'common.notifications.email.field.selectPlaceholder' | translate}}</option>
-          <option *ngFor="let field of firstBlockFields" [value]="'{{' + field + '}}'">{{ replaceUnderscores(field) | titlecase }}</option>
+          <option *ngFor="let field of firstBlockFields" [value]="'{{' + field + '}}'">{{ this.emailService.replaceUnderscores(field) | titlecase }}</option>
         </select>
       </div>
       <div class="w-1/3 px-2">

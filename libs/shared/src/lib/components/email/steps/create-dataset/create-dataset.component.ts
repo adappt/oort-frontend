@@ -44,7 +44,6 @@ export class CreateDatasetComponent implements OnInit {
   public selectedFields!: { name: string; type: string }[];
   public allPreviewData: any = {};
   public showPreview = false;
-  public replaceUnderscores: any = this.emailService.replaceUnderscores;
   @ViewChild('kendoStrip') kendoStrip: any;
 
   /**

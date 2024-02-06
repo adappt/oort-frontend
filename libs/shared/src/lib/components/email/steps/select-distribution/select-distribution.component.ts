@@ -91,6 +91,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
   };
   public isLoading = false;
   public cachedData: any = {};
+  public showToTemplate = false;
+  public showCCTemplate = false;
+  public showBccTemplate = false;
 
   @ViewChild('fileUpload', { static: true }) fileElement:
     | ElementRef
@@ -120,6 +123,19 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * @param templateFor distribution email template for [ to | cc | bcc ]
    */
   toggleDropdown(templateFor: string): void {
+    if (templateFor.toLocaleLowerCase() === 'to') {
+      this.showToTemplate = !this.showToTemplate;
+      this.showCCTemplate = false;
+      this.showBccTemplate = false;
+    } else if (templateFor.toLocaleLowerCase() === 'cc') {
+      this.showCCTemplate = !this.showCCTemplate;
+      this.showToTemplate = false;
+      this.showBccTemplate = false;
+    } else if (templateFor.toLocaleLowerCase() === 'bcc') {
+      this.showBccTemplate = !this.showBccTemplate;
+      this.showToTemplate = false;
+      this.showCCTemplate = false;
+    }
     if (!this.templateFor || this.templateFor === templateFor) {
       this.showEmailTemplate = !this.showEmailTemplate;
     }

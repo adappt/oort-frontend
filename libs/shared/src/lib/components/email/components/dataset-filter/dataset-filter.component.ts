@@ -82,7 +82,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public loading = false;
   fieldOptions: any;
   currentFieldName: any;
-  showerrorMsg: any = '';
+  showErrorMessage: any = '';
 
   /**
    * To use helper functions, Apollo serve
@@ -259,7 +259,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       );
       this.resource = {};
       this.loading = true;
-      this.showerrorMsg = '';
+      this.showErrorMessage = '';
       this.apollo
         .query<ResourceQueryResponse>({
           query: GET_RESOURCE,
@@ -391,11 +391,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
             this.query?.value?.resource !== null &&
             !this.resource?.fields?.length
           ) {
-            this.showerrorMsg = "Selected Form doesn't contanin any fields";
+            this.showErrorMessage = "Selected form doesn't contain any fields";
           }
         });
     } else {
-      this.showerrorMsg = "Selected Form doesn't contanin any fields";
+      this.showErrorMessage = "Selected form doesn't contain any fields";
     }
   }
 

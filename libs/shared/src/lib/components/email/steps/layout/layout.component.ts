@@ -375,7 +375,11 @@ export class LayoutComponent implements OnInit, OnDestroy {
   insertDataSetToBodyHtmlByTabName(tabName: any): void {
     const token = `{{${tabName.target.value}}}`;
 
-    if (this.bodyEditor && this.bodyEditor.editor) {
+    if (
+      this.bodyEditor &&
+      this.bodyEditor.editor &&
+      tabName.target.value !== ''
+    ) {
       this.bodyEditor.editor.insertContent(token);
       this.onEditorContentChange();
     } else {

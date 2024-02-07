@@ -55,7 +55,7 @@
     <div class="flex-grow px-2">
       <label for="inTheLastDropdown" class="block text-gray-700 text-sm">{{'common.notifications.email.field.filtered' | translate}}</label>
       <select id="inTheLastDropdown" (change)="insertTokenAtCursor($event)" uiTooltip="Date Fields filtered by within the last" class="block w-full mt-1 text-sm py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm">
-        <option value="" disabled selected>{{'common.notifications.email.dropdown.inTheLast' | translate}}</option>
+        <option value="" selected>{{'common.notifications.email.dropdown.inTheLast' | translate}}</option>
         <option *ngFor="let control of inTheLastDropdown.controls" [value]="control.value">{{ control.value }}</option>
       </select>
     </div>
@@ -106,7 +106,7 @@
         <div class="block text-gray-700 text-sm mb-1">{{'common.notifications.email.field.selectBlock' | translate}}</div>
         <ng-container *ngIf="emailService.getAllPreviewData().length; else noBlocks">
           <select id="fieldSelect" (change)="insertDataSetToBodyHtmlByTabName($event)" class="block w-full mt-1 text-sm py-1.5 px-3 border border-gray-300 bg-white rounded-md shadow-sm">
-            <option value="" disabled selected>{{'common.notifications.email.dropdown.selectBlock' | translate}}</option>
+            <option value="" selected>{{'common.notifications.email.dropdown.selectBlock' | translate}}</option>
             <option *ngFor="let previewData of emailService.getAllPreviewData(); let i = index" [value]="previewData.tabName">{{ previewData.tabName }}</option>
           </select>
         </ng-container>

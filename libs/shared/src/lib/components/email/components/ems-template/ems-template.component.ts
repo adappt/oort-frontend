@@ -188,6 +188,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
    */
   public next(): void {
     this.setLayoutValidation = false;
+    this.emailService.isLinear = false;
     if (this.currentStep === 0) {
       if (
         this.emailService.datasetsForm.controls['name'].valid &&

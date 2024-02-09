@@ -132,7 +132,9 @@
                                     >
                                         {{ 'components.queryBuilder.filter.field' | translate }}
                                     </label>
-                                    <ui-select-menu id="exampleSelect"
+                                    <ui-select-menu
+                                        [filterable]="true"
+                                        id="exampleSelect"
                                         name="exampleSelect"
                                         (ngModelChange)="setField($event, fieldIndex)"
                                         formControlName="field">

@@ -245,32 +245,33 @@ export class PreviewComponent implements OnInit, OnDestroy {
     // Current date offset by minutes param
     const pastDate = new Date(currentDate.getTime() - minutes * 60000);
 
-    // Past Date to date (mm/dd/yyyy)
+    // Past Date in date format (mm/dd/yyyy)
     const formattedPastDate = pastDate.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: '2-digit',
     });
 
-    // Past Date to time (hh:mm)
+    // Past Date in time format (hh:mm)
     const formattedPastTime = pastDate.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
     });
 
-    // Current Date to date (mm/dd/yyyy)
+    // Current Date in date format (mm/dd/yyyy)
     const formattedCurrentDate = currentDate.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: '2-digit',
     });
 
-    // Current Date to time (hh:mm)
+    // Current Date in time format (hh:mm)
     const formattedCurrentTime = currentDate.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
     });
 
+    // If minutes is greater than a week then set past time as current time
     const minutesInAWeek = 7 * 24 * 60;
     if (minutes > minutesInAWeek) {
       return `From ${formattedPastDate} ${formattedCurrentTime} as of ${formattedCurrentDate} ${formattedCurrentTime}`;

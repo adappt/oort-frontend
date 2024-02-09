@@ -116,6 +116,7 @@
                     <ui-select-menu
                       id="exampleSelect"
                       name="exampleSelect"
+                      [filterable]="true"
                       (ngModelChange)="setField($event, fieldIndex)"
                       formControlName="field"
                     >

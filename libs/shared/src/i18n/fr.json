@@ -769,6 +769,10 @@
 				},
 				"list": "Liste de distribution"
 			},
+			"image": {
+				"rectangleValidation": "Veuillez télécharger une image avec un rapport hauteur/largeur plus rectangulaire, similaire à 960x80.",
+				"squareValidation": "Veuillez télécharger une image avec un rapport hauteur/largeur plus carré, ou similaire à 200x200."
+			},
 			"name": "Email",
 			"notification": {
 				"create": "Créer une notification",

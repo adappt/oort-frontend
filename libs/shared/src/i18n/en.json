@@ -763,6 +763,10 @@
 				},
 				"list": "Distribution List"
 			},
+			"image": {
+				"rectangleValidation": "Please upload an image with a more rectangular aspect ratio, similar to 960x80.",
+				"squareValidation": "Please upload an image with a more square aspect ratio, or similar to 200x200."
+			},
 			"name": "Email",
 			"notification": {
 				"create": "Create Notification",

@@ -275,13 +275,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
             this.metaData.forEach((field: any) => {
               if (
                 field &&
-                ![
-                  'resource',
-                  'resources',
-                  'matrix',
-                  'matrixdynamic',
-                  'matrixdropdown',
-                ].includes(field.type)
+                !['matrix', 'matrixdynamic', 'matrixdropdown'].includes(
+                  field.type
+                )
               ) {
                 if (field) {
                   if (field.name === 'createdBy' && field.fields?.length) {

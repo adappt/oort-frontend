@@ -175,7 +175,12 @@ export class EmailService {
       }),
       fields: [],
       cacheData: {},
+      blockType: 'table', // Either Table or Text
       tableStyle: this.defaultTableStyle,
+      textStyle: this.formBuilder.group({
+        fields: new FormArray([]),
+        blockStyle: '',
+      }), // Fields (field selected and style), Block Style (HTML wrapping field with token)
     });
   }
 

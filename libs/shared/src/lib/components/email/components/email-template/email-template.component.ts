@@ -113,6 +113,10 @@ export class EmailTemplateComponent implements OnInit, OnDestroy {
     }
     this.selectedEmails = this.emailBackLoad;
     this.dataSets = this.datasetsForm.value.dataSets;
+    this.dataSets?.forEach((ele: any) => {
+      ele.blockName = ele.name;
+      ele.name = ele.resource.name;
+    });
     this.prepareDatasetFilters();
     if (this.emailFilter) {
       this.filterQuery = this.emailFilter;

@@ -1,10 +1,12 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { EMAIL_LAYOUT_CONFIG } from '../../../../const/tinymce.const';
 import { EditorService } from '../../../../services/editor/editor.service';
 import { EmailService } from '../../email.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { SnackbarService } from '@oort-front/ui';
+import { TranslateService } from '@ngx-translate/core';
 /**
  * layout page component.
  */
@@ -18,6 +20,12 @@ export class LayoutComponent implements OnInit, OnDestroy {
   bodyEditor: EditorComponent | null = null;
   @ViewChild('headerEditor', { static: false })
   headerEditor: EditorComponent | null = null;
+  @ViewChild('headerLogoInput', { static: false })
+  headerLogoInput?: ElementRef;
+  @ViewChild('footerLogoInput', { static: false })
+  footerLogoInput?: ElementRef;
+  @ViewChild('bannerInput', { static: false })
+  bannerInput?: ElementRef;
   showBodyValidator = false;
   showSubjectValidator = false;
   /** Tinymce editor configuration */
@@ -52,11 +60,15 @@ export class LayoutComponent implements OnInit, OnDestroy {
    * @param fb Form builder used for form creation
    * @param editorService Editor service used to get main URL and current language
    * @param emailService Service used for email-related operations and state management
+   * @param snackbar snackbar helper function
+   * @param translate i18 translate service
    */
   constructor(
     private fb: FormBuilder,
     private editorService: EditorService,
-    public emailService: EmailService
+    public emailService: EmailService,
+    public snackbar: SnackbarService,
+    public translate: TranslateService
   ) {
     // Set the editor base url based on the environment file
     this.editor.base_url = editorService.url;
@@ -115,6 +127,24 @@ export class LayoutComponent implements OnInit, OnDestroy {
       }
     }
     this.initialiseFieldSelectDropdown();
+    if (this.headerLogoInput) {
+      if (this.emailService.allLayoutdata.headerLogo) {
+        this.headerLogoInput.nativeElement.value =
+          this.emailService.allLayoutdata.headerLogo;
+      }
+    }
+    if (this.bannerInput) {
+      if (this.emailService.allLayoutdata.bannerImage) {
+        this.bannerInput.nativeElement.value =
+          this.emailService.allLayoutdata.bannerImage;
+      }
+    }
+    if (this.footerLogoInput) {
+      if (this.emailService.allLayoutdata.footerLogo) {
+        this.footerLogoInput.nativeElement.value =
+          this.emailService.allLayoutdata.footerLogo;
+      }
+    }
   }
 
   /**
@@ -242,9 +272,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
         .catch((error) => {
           this.showInvalidHeaderSizeMessage = true;
           console.error(error.message);
-          alert(
-            'Please upload an image with a more square aspect ratio, or similar to 200x200.'
+          this.snackbar.openSnackBar(
+            this.translate.instant('components.email.image.squareValidation')
           );
+          if (this.headerLogoInput && this.headerLogoInput.nativeElement) {
+            if (this.emailService.allLayoutdata.headerLogo) {
+              this.headerLogoInput.nativeElement.value =
+                this.emailService.allLayoutdata.headerLogo;
+            } else {
+              this.headerLogoInput.nativeElement.value = null;
+            }
+          }
         });
     }
   }
@@ -255,6 +293,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   removeHeaderLogo() {
     this.headerLogo = null;
     this.emailService.allLayoutdata.headerLogo = null;
+    if (this.headerLogoInput && this.headerLogoInput.nativeElement) {
+      this.headerLogoInput.nativeElement.value = null;
+    }
   }
 
   /**
@@ -275,9 +316,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
         })
         .catch((error) => {
           console.error(error.message);
-          alert(
-            'Please upload an image with a more rectangular aspect ratio, similar to 960x80.'
+          this.snackbar.openSnackBar(
+            this.translate.instant('components.email.image.rectangleValidation')
           );
+          if (this.bannerInput && this.bannerInput.nativeElement) {
+            if (this.emailService.allLayoutdata.bannerImage) {
+              this.bannerInput.nativeElement.value =
+                this.emailService.allLayoutdata.bannerImage;
+            } else {
+              this.bannerInput.nativeElement.value = null;
+            }
+          }
         });
     }
   }
@@ -309,6 +358,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   removeBannerImage() {
     this.bannerImage = null;
     this.emailService.allLayoutdata.bannerImage = null;
+    if (this.bannerInput && this.bannerInput.nativeElement) {
+      this.bannerInput.nativeElement.value = null;
+    }
   }
 
   /**
@@ -330,9 +382,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
         .catch((error) => {
           this.showInvalidFooterSizeMessage = true;
           console.error(error.message);
-          alert(
-            'Please upload an image with a more square aspect ratio, or similar to 200x200.'
+          this.snackbar.openSnackBar(
+            this.translate.instant('components.email.image.squareValidation')
           );
+          if (this.footerLogoInput && this.footerLogoInput.nativeElement) {
+            if (this.emailService.allLayoutdata.footerLogo) {
+              this.footerLogoInput.nativeElement.value =
+                this.emailService.allLayoutdata.footerLogo;
+            } else {
+              this.footerLogoInput.nativeElement.value = null;
+            }
+          }
         });
     }
   }
@@ -343,6 +403,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   removeFooterLogo() {
     this.footerLogo = null;
     this.emailService.allLayoutdata.footerLogo = null;
+    if (this.footerLogoInput && this.footerLogoInput.nativeElement) {
+      this.footerLogoInput.nativeElement.value = null;
+    }
   }
 
   /**

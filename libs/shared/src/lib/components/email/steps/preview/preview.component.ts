@@ -139,7 +139,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
       case 'headerLogo':
         styles[
           'headerLogoStyle'
-        ] = `margin: 0.5rem; display: block; width: 20%; padding: 0.25rem 0.5rem; border-radius: 0.375rem; background-color: ${this.emailService.headerBackgroundColor};`;
+        ] = `margin: 0.5rem; display: block; width: 15%; padding: 0.25rem 0.5rem; border-radius: 0.375rem; background-color: ${this.emailService.headerBackgroundColor};`;
         break;
       case 'headerHtml':
         styles[
@@ -387,7 +387,22 @@ export class PreviewComponent implements OnInit, OnDestroy {
    */
   convertPreviewDataToHtml(previewData: any): string {
     if (!previewData?.dataList?.length) {
-      return '<label style="display: block; color: #4a5568; font-size: 0.875rem;">no data found</label>';
+      return `
+      <div style="${this.getTableStyle('tableDiv')}">
+        <div style="width: 100%;">
+          <label style="${this.getTableStyle('label')}">
+          ${previewData.tabName}</label>
+        </div>
+        <div style="width: 100%; overflow-x: auto;">
+          <table style="${this.getTableStyle('table')};">
+            <tbody style="${this.getTableStyle('tbody')}">
+              <tr style="${this.getTableStyle('tr')}">
+                <td style="${this.getTableStyle('td')}">no data found</td>
+              <tr>
+            </tbody>
+          </table>
+        </div>
+      </div>`;
     }
 
     const theadHtml = previewData.dataSetFields

@@ -12,19 +12,40 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./preview.component.scss'],
 })
 export class PreviewComponent implements OnInit, OnDestroy {
+  /** Selected resource ID. */
   public selectedResourceId: string | undefined = '653642baa37293bb1706506e';
+
+  /** List of data items. */
   public dataList!: { [key: string]: string }[];
+
+  /** List of keys for data items. */
   public dataListKey!: { [key: string]: string }[];
+
+  /** Image data for the email header. */
   public headerLogo: string | ArrayBuffer | null = null;
+
+  /** Image data for the email banner. */
   public bannerImage: string | ArrayBuffer | null = null;
+
+  /** Image data for the email footer. */
   public footerLogo: string | ArrayBuffer | null = null;
+
+  /** Subject string for the email. */
   public subjectString: string | any =
     this.emailService.allLayoutdata.txtSubject;
+
+  /** Body string for the email. */
   public bodyString: string | any = this.emailService.allLayoutdata.bodyHtml;
+
+  /** Header string for the email. */
   public headerString: string | any =
     this.emailService.allLayoutdata.headerhtml;
+
+  /** Footer string for the email. */
   public footerString: string | any =
     this.emailService.allLayoutdata.footerHtml;
+
+  /** Subscription for query. */
   private querySubscription: Subscription | null = null;
 
   /**

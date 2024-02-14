@@ -61,10 +61,10 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
    * initializing Email Service
    *
    * @param emailService helper functions
-   * @param router
-   * @param applicationService
-   * @param snackBar
-   * @param translate
+   * @param router Angular Router
+   * @param applicationService Shared application service
+   * @param snackBar Shared snackbar service
+   * @param translate Angular Translate service
    */
   constructor(
     public emailService: EmailService,

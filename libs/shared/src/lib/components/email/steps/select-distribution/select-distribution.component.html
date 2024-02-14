@@ -146,7 +146,7 @@
     <p (click)="showExistingDistributionList = !showExistingDistributionList" >Or Create New</p>
   </div>
 </div>
-<div class="validation-note" *ngIf="recipients?.distributionListName?.length === 0 || recipients?.To?.length === 0">
+<ui-alert class="mb-4" *ngIf="recipients?.distributionListName?.length === 0 || recipients?.To?.length === 0">
  Please fill <strong *ngIf="recipients?.distributionListName?.length === 0"> Distribution List name,</strong> <strong *ngIf="recipients?.To?.length === 0">at least one To email address </strong> to proceed
-</div>
+</ui-alert>
 

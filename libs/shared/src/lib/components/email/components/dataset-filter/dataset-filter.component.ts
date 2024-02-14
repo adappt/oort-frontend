@@ -110,8 +110,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
 
   /** Flag to switch between date picker and text expression. */
   public useExpression = false;
-
-  /** Filter operators. */
+  /** FILTER OPERATORS FROM FILTER CONSTANT */
   filterOperators = FILTER_OPERATORS;
 
   /** Time units for filtering. */
@@ -128,6 +127,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
 
   /** Event emitter for changing the main tab. */
   @Output() changeMainTab: EventEmitter<any> = new EventEmitter();
+  /** NAVIGATE TO DATASET PREVIEW SCREEN EMITTER */
 
   /** Event emitter for navigating to the preview. */
   @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
@@ -140,8 +140,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
 
   /** Current field name. */
   currentFieldName: any;
-
-  /** Error message to show. */
+  /** VALIDATION ERROR MESSAGE */
   showErrorMessage: any = '';
 
   /**
@@ -856,6 +855,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   );
                   this.loading = false;
                   this.navigateToPreview.emit(allPreviewData);
+                  console.log(allPreviewData);
                   this.emailService.setAllPreviewData(allPreviewData);
                 }
               }

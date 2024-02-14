@@ -12,36 +12,29 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./preview.component.scss'],
 })
 export class PreviewComponent implements OnInit, OnDestroy {
-  /** Selected resource ID. */
+  /** Selected resource ID. -TO DELETE? */
   public selectedResourceId: string | undefined = '653642baa37293bb1706506e';
 
-  /** List of data items. */
+  /** List of data items. -TO DELETE? */
   public dataList!: { [key: string]: string }[];
 
-  /** List of keys for data items. */
+  /** List of keys for data items. -TO DELETE? */
   public dataListKey!: { [key: string]: string }[];
-
-  /** Image data for the email header. */
+  /** HEADER LOGO FILE SRC STRING */
   public headerLogo: string | ArrayBuffer | null = null;
-
-  /** Image data for the email banner. */
+  /** BANNER IMAGE FILE SRC STRING */
   public bannerImage: string | ArrayBuffer | null = null;
-
-  /** Image data for the email footer. */
+  /** FOOTER LOGO FILE SRC STRING */
   public footerLogo: string | ArrayBuffer | null = null;
-
-  /** Subject string for the email. */
+  /** SUBJECT STRING */
   public subjectString: string | any =
     this.emailService.allLayoutdata.txtSubject;
-
-  /** Body string for the email. */
+  /** BODY HTML STRING */
   public bodyString: string | any = this.emailService.allLayoutdata.bodyHtml;
-
-  /** Header string for the email. */
+  /** HEADER HTML STRING */
   public headerString: string | any =
     this.emailService.allLayoutdata.headerhtml;
-
-  /** Footer string for the email. */
+  /** FOOTER HTML STRING */
   public footerString: string | any =
     this.emailService.allLayoutdata.footerHtml;
 

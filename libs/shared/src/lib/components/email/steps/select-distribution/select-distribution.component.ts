@@ -330,7 +330,9 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
    * @param event file selection Event
    */
   fileSelectionHandler(event: any): void {
-    this.showEmailTemplate = false;
+    this.showToTemplate = false;
+    this.showCCTemplate = false;
+    this.showBccTemplate = false;
     const file: File = event.target.files[0];
     if (file) {
       this.downloadService.importDistributionList(file).subscribe((res) => {
@@ -344,7 +346,7 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
         this.recipients.Bcc = [
           ...new Set([...this.recipients.Bcc, ...res.Bcc]),
         ];
-        this.showEmailTemplate = true;
+        this.showToTemplate = true;
         this.templateFor = 'to';
         this.validateDistributionList();
         if (this.fileElement) this.fileElement.nativeElement.value = '';

@@ -146,7 +146,7 @@
     <p (click)="showExistingDistributionList = !showExistingDistributionList" >Or Create New</p>
   </div>
 </div>
-<ui-alert class="mb-4" *ngIf="recipients?.distributionListName?.length === 0 || recipients?.To?.length === 0">
+<ui-alert class="mb-4" variant="warning" *ngIf="recipients?.distributionListName?.length === 0 || recipients?.To?.length === 0">
   To proceed, please enter <strong *ngIf="recipients?.distributionListName?.length === 0"> a distribution list name</strong> <strong *ngIf="recipients?.To?.length === 0 && recipients?.distributionListName?.length === 0"> and </strong><strong *ngIf="recipients?.To?.length === 0">at least one recipient email address</strong>.
 </ui-alert>
 

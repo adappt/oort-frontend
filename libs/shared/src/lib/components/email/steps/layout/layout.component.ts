@@ -598,6 +598,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
    * patch the data in service file.
    */
   ngOnDestroy(): void {
+    this.getColors();
     this.emailService.patchEmailLayout();
   }
 }

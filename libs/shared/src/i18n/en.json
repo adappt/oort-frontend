@@ -261,7 +261,7 @@
 					"noTemplate": "Something went wrong during the email sending: no template found"
 				},
 				"field": {
-					"filtered": "Select filtered field",
+					"filtered": "Select Filtered Field",
 					"noBlocks": "No blocks configured",
 					"selectBlock": "Block Select",
 					"selectPlaceholder": "Select block field",
@@ -738,7 +738,7 @@
 				"confirmationMessage": "Are you sure you want to delete the distribution list '{{name}}'?"
 			},
 			"edit": {
-				"name": "Distribution list name",
+				"name": "Distribution List Name",
 				"new": "New distribution list",
 				"update": "Edit distribution list"
 			},
@@ -1030,7 +1030,7 @@
 			},
 			"dataset": {
 				"select": "Select a dataset",
-				"title": "Data set"
+				"title": "Dataset"
 			},
 			"errors": {
 				"field": {
@@ -1283,11 +1283,11 @@
 		},
 		"select": {
 			"distribution": {
-				"SelectFromList": "Select from List",
+				"SelectFromList": "Select from list",
 				"alertMe": "Alert me",
 				"bcc": "bcc",
 				"cc": "cc",
-				"createFilterLogic": "Create Filter Logic",
+				"createFilterLogic": "Create filter logic",
 				"email": "Email",
 				"label": "Distribution List Name*",
 				"to": "To"

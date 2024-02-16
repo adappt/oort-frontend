@@ -312,6 +312,10 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         });
         //For email notification edit operation.
         if (this.emailService.isEdit) {
+          queryData.emailLayout.header.headerLogo =
+            this.emailService.allLayoutdata.headerLogo;
+          queryData.emailLayout.footer.footerLogo =
+            this.emailService.allLayoutdata.footerLogo;
           this.emailService
             .editEmailNotification(this.emailService.editId, queryData)
             .subscribe((res) => {

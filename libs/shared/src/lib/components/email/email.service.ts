@@ -175,8 +175,8 @@ export class EmailService {
       }),
       fields: [],
       cacheData: {},
-      blockType: 'table', // Either Table or Text
       tableStyle: this.defaultTableStyle,
+      blockType: 'table', // Either Table or Text
       textStyle: this.formBuilder.group({
         fields: new FormArray([]),
         blockStyle: '',
@@ -835,6 +835,7 @@ export class EmailService {
     if (emailData?.dataSets?.length == 0) {
       this.emailListLoading = false;
     }
+    console.log(allPreviewData);
   }
 
   /**

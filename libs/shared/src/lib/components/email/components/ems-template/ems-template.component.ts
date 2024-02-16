@@ -34,6 +34,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
   @Input() currentStep = 0;
   /** NAVIGATE TO MAIN EMAIL LIST SCREEN */
   @Output() navigateToEms: EventEmitter<any> = new EventEmitter();
+  /** DISABLE ACTION BUTTON */
   public disableActionButton = false;
   /** Email Subject Subscription */
   private disableSub!: Subscription;

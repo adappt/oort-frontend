@@ -754,7 +754,7 @@
 		},
 		"email": {
 			"distributionList": {
-				"duplicate": "Name already exists",
+				"duplicate": "Title already exists",
 				"import": {
 					"download": "Download Template",
 					"loading": "Importing file...",
@@ -771,7 +771,8 @@
 			"notification": {
 				"create": "Create Notification",
 				"list": "Notification List",
-				"type": "Alert Type"
+				"type": "Alert Type",
+				"validTitle": "Please enter a title"
 			},
 			"preview": {
 				"subject": "Subject:"

@@ -9,7 +9,7 @@
         icon="download"
         category="secondary"
         variant="primary"
-        uiTooltip="Upload Email List"
+        uiTooltip="Download Template"
         (click)="downloadDistributionListTemplate()"
       >
       {{'components.email.distributionList.import.download' | translate}}
@@ -20,7 +20,7 @@
         icon="cloud_download"
         category="secondary"
         variant="primary"
-        uiTooltip="Download Template"
+        uiTooltip="Upload Email List"
         (click)="fileUpload.click()"
       >
       {{'components.email.distributionList.import.name' | translate}}
@@ -42,7 +42,7 @@
           {{'components.email.distributionList.duplicate' | translate}}
         </div>
             </div>
-    <div class="text-gray-700 text-xs gap-1 flex items-end" style="font-weight: 500;">
+    <div class="text-gray-700 text-xs gap-1 flex items-end" *ngIf="false" style="font-weight: 500;">
       <input id="Alert_me" type="checkbox">
       <label for="Alert_me">
         {{'components.select.distribution.alertMe' | translate}}

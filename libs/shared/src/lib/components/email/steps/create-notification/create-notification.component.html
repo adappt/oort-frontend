@@ -1,4 +1,5 @@
 <!-- <h1>first step create notification </h1> -->
+<ui-spinner *ngIf="emailService.emailListLoading" class="spinnerCss"></ui-spinner>
 <div *ngIf="!emailService.isExisting">
   <div class="flex gap-5" [formGroup]="dataSetFormGroup">
     <div class="mt-4 w-1/3">

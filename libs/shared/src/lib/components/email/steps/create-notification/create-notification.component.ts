@@ -83,6 +83,9 @@ export class CreateNotificationComponent implements OnInit {
     this.navigateToListScreen.emit();
   }
 
+  /**
+   * Sends alert if name is duplicate or invalid.
+   */
   nameAlert() {
     if (this.isNameDuplicate()) {
       this.snackBar.openSnackBar(

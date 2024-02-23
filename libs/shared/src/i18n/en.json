@@ -1292,7 +1292,7 @@
 				"cc": "CC",
 				"createFilterLogic": "Create filter logic",
 				"email": "Email",
-				"label": "Distribution list name*",
+				"label": "Distribution List Name*",
 				"separateEmail": "Send separate email",
 				"to": "To"
 			}

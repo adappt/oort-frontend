@@ -1293,6 +1293,7 @@
 				"createFilterLogic": "Create filter logic",
 				"email": "Email",
 				"label": "Distribution list name*",
+				"separateEmail": "Send separate email",
 				"to": "To"
 			}
 		},

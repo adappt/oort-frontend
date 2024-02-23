@@ -158,6 +158,7 @@ export class EmailService {
   public isLinear = true;
   /** EMAIL LIST LOADING CHECKER */
   public emailListLoading = true;
+  public separateEmail = false;
 
   /**
    * To replace all special characters with space
@@ -759,11 +760,32 @@ export class EmailService {
    *
    * @param configId id of the config.
    * @param emailData data to be send.
+   * @param separateEmail trigger for sending individual emails
    * @returns rest post to end point.
    */
-  sendEmail(configId: string | undefined, emailData: any): Observable<any> {
-    const urlWithConfigId = `${this.restService.apiUrl}/notification/send-email/${configId}`;
-    return this.http.post<any>(urlWithConfigId, emailData);
+  sendEmail(
+    configId: string | undefined,
+    emailData: any,
+    separateEmail: boolean
+  ): Observable<any> {
+    if (separateEmail) {
+      const urlWithConfigId = `${this.restService.apiUrl}/notification/send-individual-email/${configId}`;
+      console.log('separate');
+      return this.http.post<any>(urlWithConfigId, emailData);
+    } else {
+      const urlWithConfigId = `${this.restService.apiUrl}/notification/send-email/${configId}`;
+      return this.http.post<any>(urlWithConfigId, emailData);
+    }
+  }
+
+  /**
+   * persisting the state of the boolean variable for sending separete emails
+   * @param separateEmail - boolean variable triggering sending separate emails
+   * @returns binded variable between service and dist list component
+   */
+  updateSeparateEmail(separateEmail: boolean): boolean {
+    this.separateEmail = separateEmail;
+    return separateEmail;
   }
 
   /**

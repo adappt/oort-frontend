@@ -1304,6 +1304,7 @@
 				"createFilterLogic": "Créer une logique de filtre",
 				"email": "Email",
 				"label": "Nom de la liste de distribution*",
+				"separateEmail": "Envoyer un e-mail séparé",
 				"to": "À"
 			}
 		},

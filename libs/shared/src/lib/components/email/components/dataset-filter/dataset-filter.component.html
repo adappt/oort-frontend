@@ -161,7 +161,7 @@
                   <ng-container *ngIf="!isDateOrDatetimeOperator(fieldIndex) && !isNumericOperator(fieldIndex)">
                     <div uiFormFieldDirective [defaultMargin]="false">
                       <label>{{ 'common.value.one' | translate }}</label>
-                      <input formControlName="value" type="text"placeholder="Enter the value" />
+                      <input formControlName="value" type="text" />
                     </div>
                   </ng-container>
                   <!-- Numeric Input -->
@@ -344,29 +344,32 @@
           <div class="flex gap-5">
             <!-- Available Fields -->
             <div class="mt-4 w-1/2">
-              <label
+              <h3
                 htmlFor="exampleSelect"
-                class="block text-gray-700 text-sm mb-1"
+                class="block text-base font-medium leading-6 text-gray-900 mb-1"
               >
                 {{ 'components.queryBuilder.fields.available' | translate }}
-              </label>
-              <div uiFormFieldDirective class="!w-full divFields">
-                <input
-                  id="searchBar"
-                  type="text"
-                  [(ngModel)]="searchAvailableField"
-                  [ngModelOptions]="{ standalone: true }"
-                  placeholder="{{ 'components.queryBuilder.fields.search' | translate }}"
-                />
-                <ui-button
-                  uiSuffix
-                  (click)="searchAvailableField = ''"
-                  [isIcon]="true"
-                  [icon]="searchAvailableField ? 'cancel' : 'search'"
-                  [uiTooltip]="
-                    'common.' + (searchAvailableField ? 'cancel' : 'search') | translate
-                  "
-                ></ui-button>
+            </h3>
+              <div class="flex flex-col">
+                <label class="mb-1">{{ 'components.queryBuilder.fields.search' | translate }}</label>
+                <div uiFormFieldDirective class="!w-full divFields">
+                  <input
+                    id="searchBar"
+                    type="text"
+                    [(ngModel)]="searchAvailableField"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="{{ 'components.queryBuilder.fields.search' | translate }}"
+                  />
+                  <ui-button
+                    uiSuffix
+                    (click)="searchAvailableField = ''"
+                    [isIcon]="true"
+                    [icon]="searchAvailableField ? 'cancel' : 'search'"
+                    [uiTooltip]="
+                      'common.' + (searchAvailableField ? 'cancel' : 'search') | translate
+                    "
+                  ></ui-button>
+                </div>
               </div>
               <div class="field-list overflow-auto max-h-[400px]">
                 <ng-container *ngFor="let fieldDetails of availableFields">
@@ -384,29 +387,31 @@
 
             <!-- Selected Fields -->
             <div class="mt-4 w-1/2">
-              <label
+              <h3
                 htmlFor="exampleSelect"
-                class="block text-gray-700 text-sm mb-1"
-              >
-                {{ 'components.queryBuilder.fields.selected' | translate }}
-              </label>
-              <div uiFormFieldDirective class="!w-full divFields">
-                <input
-                  id="searchBarSelected"
-                  type="text"
-                  [(ngModel)]="searchSelectedField"
-                  [ngModelOptions]="{ standalone: true }"
-                  placeholder="{{ 'components.queryBuilder.fields.search' | translate }}"
-                />
-                <ui-button
-                  uiSuffix
-                  (click)="searchSelectedField = ''"
-                  [isIcon]="true"
-                  [icon]="searchSelectedField ? 'cancel' : 'search'"
-                  [uiTooltip]="
-                    'common.' + (searchSelectedField ? 'cancel' : 'search') | translate
-                  "
-                ></ui-button>
+                class="block text-base font-medium leading-6 text-gray-900 mb-1">
+                  {{ 'components.queryBuilder.fields.selected' | translate }}
+              </h3>
+              <div class="flex flex-col">
+                <label class="mb-1">{{ 'components.queryBuilder.fields.search' | translate }}</label>
+                <div uiFormFieldDirective class="!w-full divFields">
+                  <input
+                    id="searchBarSelected"
+                    type="text"
+                    [(ngModel)]="searchSelectedField"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="{{ 'components.queryBuilder.fields.search' | translate }}"
+                  />
+                  <ui-button
+                    uiSuffix
+                    (click)="searchSelectedField = ''"
+                    [isIcon]="true"
+                    [icon]="searchSelectedField ? 'cancel' : 'search'"
+                    [uiTooltip]="
+                      'common.' + (searchSelectedField ? 'cancel' : 'search') | translate
+                    "
+                  ></ui-button>
+                </div>
               </div>
               <div class="field-list overflow-auto max-h-[400px]">
                 <ng-container *ngFor="let fields of selectedFields; let index = index">
@@ -415,7 +420,6 @@
                     class="field-box cursor-pointer hover:bg-blue-500 hover:text-white"
                     (click)="removeSelectiveFields(fields)"
                   >
-                    <!-- <ui-icon icon="arrow_left" variant="grey" class="text-gray-500"></ui-icon> -->
                     {{ this.emailService.replaceUnderscores(removeUserString(fields.name)) | titlecase }}
                   </div>
                 </ng-container>

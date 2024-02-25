@@ -54,3 +54,10 @@
   color: white !important;
   background-color: #4dafd9 !important;
 }
+
+::ng-deep .ng-select-container {
+  cursor: pointer !important;
+  input{
+    cursor: pointer !important;
+  }
+}

@@ -1,6 +1,6 @@
 <div class="Email_Template">
     <div class="mt-4 w-1/4"[formGroup]="segmentForm"  uiFormFieldDirective [defaultMargin]="false">
-      <label class="mb-1">Email Input</label>
+      <label class="mb-1">{{ 'components.notifications.email.dropdown.emailInput' | translate }}</label>
       <ui-select-menu id="segmentSelect"
         formControlName="segment"
         (ngModelChange)="onSegmentChange($event)"

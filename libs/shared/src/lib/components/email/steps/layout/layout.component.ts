@@ -20,92 +20,74 @@ export class LayoutComponent implements OnInit, OnDestroy {
   /** Reference to the body editor component. */
   @ViewChild('bodyEditor', { static: false })
   bodyEditor: EditorComponent | null = null;
-
   /** Reference to the header editor component. */
   @ViewChild('headerEditor', { static: false })
   headerEditor: EditorComponent | null = null;
-
   /** Reference to the header logo input element. */
   @ViewChild('headerLogoInput', { static: false })
   headerLogoInput?: ElementRef;
-
   /** Reference to the footer logo input element. */
   @ViewChild('footerLogoInput', { static: false })
   footerLogoInput?: ElementRef;
-
   /** Reference to the banner input element. */
   @ViewChild('bannerInput', { static: false })
   bannerInput?: ElementRef;
-
   /** Flag indicating whether body validation is shown. */
   showBodyValidator = false;
-
   /** Flag indicating whether subject validation is shown. */
   showSubjectValidator = false;
-
   /** Configuration object for the Tinymce editor. */
   public editor: any = EMAIL_LAYOUT_CONFIG;
-
   /** HTML content for the body. */
   bodyHtml: any = '';
-
   /** HTML content for the header. */
   headerHtml: any = '';
-
   /** HTML content for the footer. */
   footerHtml: any = '';
-
   /** Text subject for the email. */
   txtSubject: any = '';
-
-  /** Flag indicating whether banner size is invalid. */
+  /** Message indicating whether banner size is invalid. */
   showInvalidBannerSizeMessage = false;
-
-  /** Flag indicating whether header size is invalid. */
+  /** Message indicating whether header size is invalid. */
   showInvalidHeaderSizeMessage = false;
-
-  /** Flag indicating whether footer size is invalid. */
+  /** Message indicating whether footer logo size is invalid. */
   showInvalidFooterSizeMessage = false;
-
-  /** Flag indicating whether inputs should be disabled. */
+  /** Flag indicating whether save and proceed buttion should be disabled. */
   shouldDisable = false;
-
   /** Image data for the email header. */
   headerLogo: string | ArrayBuffer | null = null;
-
   /** Image data for the email banner. */
   bannerImage: string | ArrayBuffer | null = null;
-
   /** Image data for the email footer. */
   footerLogo: string | ArrayBuffer | null = null;
-
   /** Flag indicating whether dropdown is shown. */
   showDropdown = false;
-
   /** List of fields for the first block. */
   firstBlockFields: string[] = [];
-
   /** Options for time in the email. */
   timeOptions = [
     { value: '{{today.date}}', label: "Today's Date" },
     { value: '{{now.time}}', label: 'Current Time' },
     { value: '{{now.datetime}}', label: 'Date and Time' },
   ];
-
   /** Flag indicating whether layout validation is set. */
   @Input() setLayoutValidation = false;
-
   /** Form array for 'in the last' dropdown. */
   public inTheLastDropdown = new FormArray<FormControl>([]);
-  selectTitle: any = null;
+  /** NgSelect component */
   @ViewChild('ngSelectComponent', { static: false })
   ngSelectComponent!: NgSelectComponent;
+  /** Timestamp NgSelect component */
   @ViewChild('ngTimestampComponent', { static: false })
   ngTimestampComponent!: NgSelectComponent;
+  /** Filtered Field NgSelect component */
   @ViewChild('ngFilteredFieldComponent', { static: false })
   ngFilteredFieldComponent!: NgSelectComponent;
+  /** Field NgSelect component */
   @ViewChild('ngFieldComponent', { static: false })
   ngFieldComponent!: NgSelectComponent;
+  /** DATASETS LIST GREATER THAN 1 CHECK */
+  public datasetOverflow = false;
 
   /**
    * Component used for the selection of fields to display the fields in tabs.
@@ -130,6 +112,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.datasetOverflow =
+      this.emailService.allPreviewData.length > 1 ||
+      this.emailService.allPreviewData.length === 0;
     this.onTxtSubjectChange();
     this.initInTheLastDropdown();
     if (this.emailService.allLayoutdata.headerLogo) {

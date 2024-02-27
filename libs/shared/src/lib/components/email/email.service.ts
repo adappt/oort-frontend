@@ -158,7 +158,7 @@ export class EmailService {
   public isLinear = true;
   /** EMAIL LIST LOADING CHECKER */
   public emailListLoading = true;
-  public separateEmail = false;
+  public separateEmail = [];
 
   /**
    * To replace all special characters with space
@@ -182,6 +182,7 @@ export class EmailService {
         fields: new FormArray([]),
         blockStyle: '',
       }), // Fields (field selected and style), Block Style (HTML wrapping field with token)
+      individualEmail: false,
     });
   }
 
@@ -783,9 +784,27 @@ export class EmailService {
    * @param separateEmail - boolean variable triggering sending separate emails
    * @returns binded variable between service and dist list component
    */
-  updateSeparateEmail(separateEmail: boolean): boolean {
-    this.separateEmail = separateEmail;
-    return separateEmail;
+  updateSeparateEmail(index: number): boolean {
+    const datasetArray = this.datasetsForm?.get('dataSets') as FormArray;
+    const isSeparate = datasetArray?.at(index)?.get('individualEmail')?.value;
+    return isSeparate;
+  }
+
+  getSeparateEmails(): boolean[] {
+    const datasetArray = this.datasetsForm.get('dataSets') as FormArray;
+    datasetArray.controls.forEach((email: any) => {
+      //this.separateEmail.push(email.individualEmail);
+      console.log(email);
+    });
+    return this.separateEmail;
+  }
+
+  /**
+   *
+   */
+  setSeperateEmail(seperateEmail: boolean, index: number): void {
+    const datasetArray = this.datasetsForm?.get('dataSets') as FormArray;
+    datasetArray?.at(index)?.get('individualEmail')?.setValue(seperateEmail);
   }
 
   /**

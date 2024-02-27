@@ -270,7 +270,8 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         .sendEmail(
           this.emailService.configId,
           emailData,
-          this.emailService.separateEmail
+          //this.emailService.separateEmail.includes(true)
+          false
         )
         .subscribe(
           (response) => {

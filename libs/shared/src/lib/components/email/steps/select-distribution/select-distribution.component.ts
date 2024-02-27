@@ -49,9 +49,6 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
       this.emailService.showExistingDistributionList;
   }
 
-  /** Flag for sending indivuial emails */
-  public separateEmail = false;
-
   /** Flag indicating whether the email template is shown. */
   public showEmailTemplate = false;
   /** Type of email template. */
@@ -384,12 +381,5 @@ export class SelectDistributionComponent implements OnInit, OnDestroy {
       this.cacheDistributionList
     );
     this.distributionLists = this.cachedData;
-  }
-
-  /**
-   * Updating the separate email boolean flag on change
-   */
-  onChangeSeparateEmail() {
-    this.emailService.updateSeparateEmail(this.separateEmail);
   }
 }

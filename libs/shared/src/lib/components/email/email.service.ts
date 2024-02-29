@@ -781,7 +781,8 @@ export class EmailService {
 
   /**
    * persisting the state of the boolean variable for sending separete emails
-   * @param separateEmail - boolean variable triggering sending separate emails
+   *
+   * @param index - dataset index
    * @returns binded variable between service and dist list component
    */
   updateSeparateEmail(index: number): boolean {
@@ -790,21 +791,31 @@ export class EmailService {
     return isSeparate;
   }
 
-  getSeparateEmails(): boolean[] {
-    const datasetArray = this.datasetsForm.get('dataSets') as FormArray;
-    datasetArray.controls.forEach((email: any) => {
-      //this.separateEmail.push(email.individualEmail);
-      console.log(email);
-    });
-    return this.separateEmail;
-  }
-
   /**
+   * persisting the state of the boolean variable for sending separete emails
    *
+   * @param seperateEmail - boolean value for checkbox
+   * @param index - dataset index
    */
   setSeperateEmail(seperateEmail: boolean, index: number): void {
     const datasetArray = this.datasetsForm?.get('dataSets') as FormArray;
     datasetArray?.at(index)?.get('individualEmail')?.setValue(seperateEmail);
+  }
+
+  /**
+   * method for checking whether any of the datasets have had the checkbox for induvidual emails ticked
+   *
+   * @returns boolean for triggering endpoints
+   */
+  sendSeperateEmail(): boolean {
+    let seperateEmail = false;
+    const datasetArray = this.datasetsForm.get('dataSets') as FormArray;
+    datasetArray.controls.forEach((datasetControl: any) => {
+      if (datasetControl.get('individualEmail')?.value === true) {
+        seperateEmail = true;
+      }
+    });
+    return seperateEmail;
   }
 
   /**

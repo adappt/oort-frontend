@@ -31,7 +31,7 @@ import {
 import { GraphQLError } from 'graphql';
 
 /** Default items per query, for pagination */
-const ITEMS_PER_PAGE = 10;
+let ITEMS_PER_PAGE = 10;
 
 /** Static columns ( appear whatever the form ) */
 const DEFAULT_COLUMNS = ['_incrementalId', '_actions'];
@@ -170,12 +170,13 @@ export class FormRecordsComponent
    */
   onPage(e: UIPageChangeEvent): void {
     this.pageInfo.pageIndex = e.pageIndex;
+    ITEMS_PER_PAGE = e.pageSize;
+    this.loadingMore = true;
     if (
       e.pageIndex > e.previousPageIndex &&
       e.totalItems > this.cachedRecords.length &&
       ITEMS_PER_PAGE * this.pageInfo.pageIndex >= this.cachedRecords.length
     ) {
-      this.loadingMore = true;
       this.recordsQuery.refetch({
         id: this.id,
         first: ITEMS_PER_PAGE,
@@ -186,6 +187,11 @@ export class FormRecordsComponent
         ITEMS_PER_PAGE * this.pageInfo.pageIndex,
         ITEMS_PER_PAGE * (this.pageInfo.pageIndex + 1)
       );
+      this.recordsQuery.refetch({
+        id: this.id,
+        first: e.pageSize,
+        afterCursor: this.pageInfo.endCursor,
+      });
     }
   }
 

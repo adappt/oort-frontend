@@ -991,6 +991,11 @@
 			"value": "Valeur"
 		},
 		"notifications": {
+			"email": {
+				"dropdown": {
+					"emailInput": "Type de saisie d'e-mail"
+				}
+			},
 			"paginator": {
 				"ariaLabel": "Sélectionnez la page de notifications"
 			},

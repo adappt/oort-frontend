@@ -980,6 +980,11 @@
 			"value": "******"
 		},
 		"notifications": {
+			"email": {
+				"dropdown": {
+					"emailInput": "******"
+				}
+			},
 			"paginator": {
 				"ariaLabel": "******"
 			},

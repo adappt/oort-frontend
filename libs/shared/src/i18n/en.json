@@ -247,7 +247,7 @@
 					"removeTooltip": "Remove banner image"
 				},
 				"body": {
-					"title": "Body"
+					"title": "Body*"
 				},
 				"dropdown": {
 					"emailInput": "Email input",

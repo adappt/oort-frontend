@@ -4,7 +4,7 @@ import { EditorService } from '../../../../services/editor/editor.service';
 import { EmailService } from '../../email.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SnackbarService } from '@oort-front/ui';
 import { TranslateService } from '@ngx-translate/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
@@ -64,6 +64,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   showDropdown = false;
   /** List of fields for the first block. */
   firstBlockFields: string[] = [];
+  /** Form group for the layout form. */
+  layoutForm!: FormGroup;
   /** Options for time in the email. */
   timeOptions = [
     { value: '{{today.date}}', label: "Today's Date" },
@@ -112,6 +114,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.layoutForm = this.fb.group({
+      subjectField: [''],
+      timeInput: [''],
+      subjectInput: [this.emailService.allLayoutdata.txtSubject],
+      inTheLastDropdown: [''],
+      block: [''],
+    });
+
     this.datasetOverflow =
       this.emailService.allPreviewData.length > 1 ||
       this.emailService.allPreviewData.length === 0;
@@ -508,59 +518,37 @@ export class LayoutComponent implements OnInit, OnDestroy {
   /**
    * Inserts a dataset token into the subject field based on the selected field.
    *
-   * @param event The event object containing the selected field.
+   * @param control The control to take the token from.
+   * @param inputRef The input element, to insert the token into.
    */
-  insertSubjectFieldToken(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    const value = selectElement.value;
+  insertSubjectFieldToken(control: string, inputRef: HTMLInputElement): void {
+    const value =
+      control === 'field' || control === 'time'
+        ? control === 'field'
+          ? this.layoutForm.get('subjectField')?.value
+          : this.layoutForm.get('timeInput')?.value
+        : '';
+
     if (value) {
-      const subjectInput = document.getElementById(
-        'subjectInput'
-      ) as HTMLInputElement;
+      // Get the current value of the subjectInput FormControl
+      let subjectInput = this.layoutForm.get('subjectInput')?.value;
       if (subjectInput) {
-        const cursorPos =
-          subjectInput.selectionStart ?? subjectInput.value.length;
-        const textBefore = subjectInput.value.substring(0, cursorPos);
-        const textAfter = subjectInput.value.substring(cursorPos);
-        subjectInput.value = textBefore + value + textAfter;
-
-        // Trigger the input event to ensure ngModel updates
-        const inputEvent = new Event('input', { bubbles: true });
-        subjectInput.dispatchEvent(inputEvent);
-        selectElement.value = '';
+        // Get the cursor position
+        const cursorPos = inputRef.selectionStart ?? subjectInput.length;
+        // Split the current value at the cursor position
+        const textBefore = subjectInput.substring(0, cursorPos);
+        const textAfter = subjectInput.substring(cursorPos);
+        // Insert the value at the cursor position
+        subjectInput = textBefore + ' ' + value + ' ' + textAfter;
+        // Update the FormControl value
+        this.layoutForm.get('subjectInput')?.setValue(subjectInput.trim());
+        // Clear the select element value
+        if (control === 'field') {
+          this.layoutForm.get('subjectField')?.reset();
+        } else if (control === 'time') {
+          this.layoutForm.get('timeInput')?.reset();
+        }
       }
-    }
-  }
-
-  /**
-   *
-   * @param event
-   */
-  insertSubjectFieldToken_New(event: any) {
-    let selectElement = event?.value ? event?.value : '{{' + event + '}}';
-    const value = selectElement;
-    if (event && value) {
-      const subjectInput = document.getElementById(
-        'subjectInput'
-      ) as HTMLInputElement;
-      if (subjectInput) {
-        const cursorPos =
-          subjectInput.selectionStart ?? subjectInput.value.length;
-        const textBefore = subjectInput.value.substring(0, cursorPos);
-        const textAfter = subjectInput.value.substring(cursorPos);
-        subjectInput.value = textBefore + value + textAfter;
-
-        // Trigger the input event to ensure ngModel updates
-        const inputEvent = new Event('input', { bubbles: true });
-        subjectInput.dispatchEvent(inputEvent);
-        selectElement = '';
-      }
-      event?.value
-        ? this.ngTimestampComponent.clearModel()
-        : this.ngSelectComponent.clearModel();
-      return true;
-    } else {
-      return false;
     }
   }
 
@@ -625,6 +613,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.getColors();
+    this.emailService.allLayoutdata.txtSubject =
+      this.layoutForm.get('subjectInput')?.value;
     this.emailService.patchEmailLayout();
   }
 }

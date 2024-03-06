@@ -247,7 +247,7 @@
 					"removeTooltip": "Supprimer Bannière Image"
 				},
 				"body": {
-					"title": "Corps"
+					"title": "Corps*"
 				},
 				"dropdown": {
 					"emailInput": "Type de saisie d'e-mail",

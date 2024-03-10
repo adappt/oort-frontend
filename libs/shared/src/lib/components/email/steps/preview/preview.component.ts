@@ -308,13 +308,14 @@ export class PreviewComponent implements OnInit, OnDestroy {
     // Token matching {{String.String.number}}
     const tokenRegex = /{{([^}]+)\.([^}]+)\.(\d+)}}/g;
     let match;
-    while ((match = tokenRegex.exec(this.headerString)) !== null) {
+    while ((match = tokenRegex.exec(headerString)) !== null) {
       // Extract the unitInMinutes from the token
       const unitInMinutes = Number(match[3]);
       const formattedDateTime = this.formatInLastString(unitInMinutes);
       // Replace the entire token with the formatted date and time
-      this.headerString = headerString.replace(match[0], formattedDateTime);
+      headerString = headerString.replace(match[0], formattedDateTime);
     }
+    this.headerString = headerString;
   }
 
   /**

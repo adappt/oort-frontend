@@ -269,28 +269,49 @@ export class LayoutComponent implements OnInit, OnDestroy {
    *
    * @param event The position to insert the token.
    */
-  insertTokenAtCursor(event: any): void {
-    const selectElement = event?.value ? event.value : ''; //event.target as HTMLSelectElement;
-    if (selectElement !== '') {
-      const selectedOptionText = selectElement;
-      const [blockName, fieldWithInLast] = selectedOptionText.split(', ');
-      const [field, inTheLastText] = fieldWithInLast.split(' - last ');
-      const [numberString, unit] = inTheLastText.split(' ');
+  insertTokenAtCursor(event: string): void {
+    // Converts dropdown label to token
+    const [blockName, fieldWithInLast] = event.split(', ');
+    const [field, inTheLastText] = fieldWithInLast.split(' - last ');
+    const [numberString, unit] = inTheLastText.split(' ');
 
-      const unitInMinutes = this.emailService.convertToMinutes(
-        +numberString,
-        unit
-      );
+    // Converts in the last value to minutes
+    const unitInMinutes = this.emailService.convertToMinutes(
+      +numberString,
+      unit
+    );
 
-      const token = `{{${blockName}.${field}.${unitInMinutes}}}`;
+    // Builds Token
+    const token = ` {{${blockName}.${field}.${unitInMinutes}}} `;
 
-      if (this.headerEditor && this.headerEditor.editor) {
-        this.headerEditor.editor.insertContent(token);
+    // Inserts Token and resets dropdown value
+    if (this.headerEditor && this.headerEditor.editor) {
+      // Get the current range of the editor
+      const range = this.headerEditor.editor.selection.getRng();
+
+      // Get the current cursor position as a number
+      const cursorPosition = range.startOffset;
+
+      // Get the current content of the editor
+      const currentContent = this.headerEditor.editor.getContent();
+
+      // Check if the cursor is at the beginning or end of the content
+      if (cursorPosition === 0) {
+        // If at the beginning, remove the leading whitespace from the token
+        this.headerEditor.editor.insertContent(token.trimStart());
+      } else if (cursorPosition === currentContent.length) {
+        // If at the end, remove the trailing whitespace from the token
+        this.headerEditor.editor.insertContent(token.trimEnd());
       } else {
-        console.error('Header TinyMCE editor is not initialised');
+        // If in the middle, insert the token with spaces before and after it
+        this.headerEditor.editor.insertContent(token);
       }
+
+      // Reset the dropdown value
+      this.layoutForm.get('inTheLastDropdown')?.reset();
+    } else {
+      console.error('Header TinyMCE editor is not initialised');
     }
-    this.ngFilteredFieldComponent.handleClearClick();
   }
 
   /**

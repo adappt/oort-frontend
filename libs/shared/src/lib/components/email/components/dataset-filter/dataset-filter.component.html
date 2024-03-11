@@ -378,18 +378,29 @@
                 </div>
               </div>
               <div class="field-list overflow-auto max-h-[400px]">
-                <ng-container *ngFor="let fieldDetails of availableFields">
+                <ng-container *ngFor="let fieldDetails of availableFields; let index = index">
                   <div
                     *ngIf="fieldDetails?.name?.toLowerCase()?.includes(searchAvailableField.toLowerCase())"
                     class="field-box cursor-pointer hover:bg-blue-500 hover:text-white"
-                    (click)="addSelectedFields(fieldDetails)"
+                    (click)="availableFieldIndex = index"
+                    [ngClass]="{'field-select': availableFieldIndex === index}"
                   >
                     {{ this.emailService.replaceUnderscores(removeUserString(fieldDetails?.name)) | titlecase }}
-                    <!-- <ui-icon icon="arrow_right" variant="grey" class="text-gray-500 hover:text-white"></ui-icon> -->
                   </div>
                 </ng-container>
               </div>
             </div>
+          <!-- Move Left and Right -->
+          <div class="flex flex-col items-center justify-center">
+            <!-- Add All Available Fields Button -->
+            <button class="bg-gray-200 hover:bg-gray-400 text-gray-800 font-semibold py-1 px-2 border border-gray-500 rounded shadow mt-1" (click)="addAllAvailableFields()"><ui-icon class="text-base" icon="keyboard_double_arrow_right" variant="default"></ui-icon></button>
+            <!-- Add Selected Available Field Button -->
+            <button class="bg-gray-200 hover:bg-gray-400 text-gray-800 font-semibold py-1 px-2 border border-gray-500 rounded shadow mt-1" (click)="addSelectedField()"><ui-icon class="text-base" icon="keyboard_arrow_right" variant="default"></ui-icon></button>
+            <!-- Move Selected Field Back Button -->
+            <button class="bg-gray-200 hover:bg-gray-400 text-gray-800 font-semibold py-1 px-2 border border-gray-500 rounded shadow mt-1" (click)="removeSelectiveFields(selectedFieldIndex)"><ui-icon class="text-base" icon="keyboard_arrow_left" variant="default"></ui-icon></button>
+            <!-- Remove All Selected Fields Button -->
+            <button class="bg-gray-200 hover:bg-gray-400 text-gray-800 font-semibold py-1 px-2 border border-gray-500 rounded shadow mt-1" (click)="removeAllSelectedFields()"><ui-icon class="text-base" icon="keyboard_double_arrow_left" variant="default"></ui-icon></button>
+          </div>
 
             <!-- Selected Fields -->
             <div class="mt-4 w-1/2">
@@ -424,14 +435,26 @@
                   <div
                     *ngIf="fields?.name?.toLowerCase()?.includes(searchSelectedField.toLowerCase())"
                     class="field-box cursor-pointer hover:bg-blue-500 hover:text-white"
-                    (click)="removeSelectiveFields(fields)"
+                    (click)="selectedFieldIndex = index"
+                  [ngClass]="{'field-select': selectedFieldIndex === index}"
                   >
                     {{ this.emailService.replaceUnderscores(removeUserString(fields.name)) | titlecase }}
-                  </div>
-                </ng-container>
-              </div>
+                </div>
+              </ng-container>
             </div>
           </div>
+          <!-- Up and Down buttons -->
+          <div class="flex flex-col items-center justify-center">
+            <!-- Move Selected Field To Top Button -->
+            <button class="bg-gray-200 hover:bg-gray-400 text-gray-800 font-semibold py-1 px-2 border border-gray-500 rounded shadow mt-1" (click)="moveTop(selectedFieldIndex)"><ui-icon class="text-base" icon="keyboard_double_arrow_up" variant="default"></ui-icon></button>
+            <!-- Move Selected Field Up Button -->
+            <button class="bg-gray-200 hover:bg-gray-400 text-gray-800 font-semibold py-1 px-2 border border-gray-500 rounded shadow mt-1" (click)="moveUp(selectedFieldIndex)"><ui-icon class="text-base" icon="keyboard_arrow_up" variant="default"></ui-icon></button>
+            <!-- Move Selected Field Down Button -->
+            <button class="bg-gray-200 hover:bg-gray-400 text-gray-800 font-semibold py-1 px-2 border border-gray-500 rounded shadow mt-1" (click)="moveDown(selectedFieldIndex)"><ui-icon class="text-base" icon="keyboard_arrow_down" variant="default"></ui-icon></button>
+            <!-- Move Selected Field To Bottom Button -->
+            <button class="bg-gray-200 hover:bg-gray-400 text-gray-800 font-semibold py-1 px-2 border border-gray-500 rounded shadow mt-1" (click)="moveBottom(selectedFieldIndex)"><ui-icon class="text-base" icon="keyboard_double_arrow_down" variant="default"></ui-icon></button>
+          </div>
+        </div>
         </ng-container>
         <button
         *ngIf="tabs?.length > 1 && datasetFilterInfo.controls && activeTab.index !== tabs.length-1"

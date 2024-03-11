@@ -507,15 +507,18 @@ export class LayoutComponent implements OnInit, OnDestroy {
    * @param tabName The name of the tab to insert the dataset token for.
    */
   insertDataSetToBodyHtmlByTabName(tabName: string): void {
-    const token = `{{${tabName}}}`;
+    if (tabName) {
+      const token = `{{${tabName}}}`;
 
-    if (this.bodyEditor && this.bodyEditor.editor) {
-      this.bodyEditor.editor.insertContent(token);
-      this.onEditorContentChange();
-    } else {
-      console.error('Body TinyMCE editor is not initialised');
+      if (this.bodyEditor && this.bodyEditor.editor) {
+        this.bodyEditor.editor.insertContent(token);
+        this.onEditorContentChange();
+      } else {
+        console.error('Body TinyMCE editor is not initialised');
+      }
     }
-    this.ngFieldComponent.handleClearClick();
+    // Resets Block dropdown value to blank
+    this.layoutForm.get('block')?.reset();
   }
 
   /**

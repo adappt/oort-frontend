@@ -506,10 +506,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
    *
    * @param tabName The name of the tab to insert the dataset token for.
    */
-  insertDataSetToBodyHtmlByTabName(tabName: any): void {
-    const token = `{{${tabName.tabName}}}`;
+  insertDataSetToBodyHtmlByTabName(tabName: string): void {
+    const token = `{{${tabName}}}`;
 
-    if (this.bodyEditor && this.bodyEditor.editor && tabName.tabName !== '') {
+    if (this.bodyEditor && this.bodyEditor.editor) {
       this.bodyEditor.editor.insertContent(token);
       this.onEditorContentChange();
     } else {

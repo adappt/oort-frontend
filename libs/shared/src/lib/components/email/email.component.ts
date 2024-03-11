@@ -306,7 +306,10 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
             this.emailService.emailNotificationNames
               .map((notification: string) => notification.split('_clone'))
               .filter(
-                (cloneNotificationName) => cloneNotificationName.length > 1
+                (cloneNotificationName) =>
+                  cloneNotificationName.length > 1 &&
+                  cloneNotificationName[0] ===
+                    emailData.name.toLowerCase().split('_clone')[0]
               );
           if (filteredEmailList.length > 0) {
             filteredEmailList.forEach(

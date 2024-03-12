@@ -340,6 +340,8 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
             } else {
               emailData.name = emailData.name + '_Clone';
             }
+          } else {
+            emailData.name = emailData.name + '_Clone';
           }
           delete emailData.createdAt;
           delete emailData.id;

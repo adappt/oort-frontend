@@ -137,7 +137,7 @@
         <div class="w-1/6">
           <label for="headerBackgroundColor" class="block text-sm font-normal leading-6 text-gray-900">{{'common.notifications.email.style.background' | translate}}</label>
           <div [ngClass]="{'mt-3 mb-2': headerLogo}" class="color-picker-container">
-            <input type="color" id="headerBackgroundColor" name="headerBackgroundColor" [value]="emailService.allLayoutdata.headerBackgroundColor"
+            <input type="color" id="headerBackgroundColor" name="headerBackgroundColor" [value]="emailService.allLayoutdata.headerBackgroundColor ?? '#00205C'"
               class="h-10 w-full rounded-md"
               style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
             >
@@ -147,7 +147,7 @@
         <div class="w-1/6">
           <label for="headerColor" class="block text-sm font-normal leading-6 text-gray-900">{{'common.notifications.email.style.text' | translate}}</label>
           <div [ngClass]="{'mt-3 mb-2': headerLogo}">
-            <input type="color" id="headerColor" name="headerColor" [value]="emailService.allLayoutdata.headerTextColor"
+            <input type="color" id="headerColor" name="headerColor" [value]="emailService.allLayoutdata.headerTextColor ?? '#FFFFFF'"
               class="h-10 w-full rounded-md"
               style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
             >
@@ -188,7 +188,7 @@
         <!-- Color Picker for Background Color -->
         <div class="w-1/6">
           <label for="bodyBackgroundColor" class="block text-sm font-normal leading-6 text-gray-900">{{'common.notifications.email.style.background' | translate}}</label>
-          <input type="color" id="bodyBackgroundColor" name="bodyBackgroundColor" [value]="emailService.allLayoutdata.bodyBackgroundColor"
+          <input type="color" id="bodyBackgroundColor" name="bodyBackgroundColor" [value]="emailService.allLayoutdata.bodyBackgroundColor ?? '#FFFFFF'"
             class="h-10 w-full rounded-md"
             style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
           >
@@ -196,7 +196,7 @@
         <!-- Color Picker for Text Color -->
         <div class="w-1/6">
           <label for="bodyColor" class="block text-sm font-normal leading-6 text-gray-900">{{'common.notifications.email.style.text' | translate}}</label>
-          <input type="color" id="bodyColor" name="bodyColor" [value]="emailService.allLayoutdata.bodyTextColor"
+          <input type="color" id="bodyColor" name="bodyColor" [value]="emailService.allLayoutdata.bodyTextColor ?? '#000000'"
             class="h-10 w-full rounded-md"
             style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
           >
@@ -237,7 +237,7 @@
               type="color"
               id="footerBackgroundColor"
               name="footerBackgroundColor"
-              [value]="emailService.allLayoutdata.footerBackgroundColor"
+              [value]="emailService.allLayoutdata.footerBackgroundColor ?? '#FFFFFF'"
               class="h-10 w-full rounded-md"
               style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
             >
@@ -250,7 +250,7 @@
             <input type="color"
               id="footerColor"
               name="footerColor"
-              [value]="emailService.allLayoutdata.footerTextColor"
+              [value]="emailService.allLayoutdata.footerTextColor ?? '#000000'"
               class="h-10 w-full rounded-md"
               style="border: none !important; background-color: transparent; -webkit-appearance: none; appearance: none;"
             >

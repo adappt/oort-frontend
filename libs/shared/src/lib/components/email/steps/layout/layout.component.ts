@@ -701,12 +701,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
         .value,
     };
 
-    this.emailService.headerBackgroundColor = colors.headerBackground;
-    this.emailService.headerTextColor = colors.headerColor;
-    this.emailService.bodyBackgroundColor = colors.bodyBackground;
-    this.emailService.bodyTextColor = colors.bodyColor;
-    this.emailService.footerBackgroundColor = colors.footerBackground;
-    this.emailService.footerTextColor = colors.footerColor;
+    this.emailService.allLayoutdata.headerBackgroundColor =
+      colors.headerBackground;
+    this.emailService.allLayoutdata.headerTextColor = colors.headerColor;
+    this.emailService.allLayoutdata.bodyBackgroundColor = colors.bodyBackground;
+    this.emailService.allLayoutdata.bodyTextColor = colors.bodyColor;
+    this.emailService.allLayoutdata.footerBackgroundColor =
+      colors.footerBackground;
+    this.emailService.allLayoutdata.footerTextColor = colors.footerColor;
     return colors;
   }
 

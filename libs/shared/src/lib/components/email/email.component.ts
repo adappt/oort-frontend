@@ -109,6 +109,23 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   }
 
   /**
+   * Confirmation Tab
+   */
+  confirmClose(): void {
+    const dialogRef = this.confirmService.openConfirmModal({
+      title: this.translate.instant('common.close'),
+      content: this.translate.instant('components.form.update.exit'),
+      confirmText: 'Confirm',
+      confirmVariant: 'danger',
+    });
+    dialogRef.closed.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      if (value) {
+        this.toggle();
+      }
+    });
+  }
+
+  /**
    * Resets email notification for user to go back to list.
    *
    * @param isNew value of if the user is creating a new email notification.
@@ -529,6 +546,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    * This function creates a new dataset group.
    *
    * @param ele The element to create the dataset group from.
+   * @param index
    * @returns The newly created dataset group.
    */
   createNewDataSetGroup(ele: any, index: number): FormGroup {

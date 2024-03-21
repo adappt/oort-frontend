@@ -257,6 +257,7 @@
 				},
 				"error": "******",
 				"errors": {
+					"noBody": "******",
 					"noDistributionList": "******",
 					"noSubject": "******",
 					"noTemplate": "******"

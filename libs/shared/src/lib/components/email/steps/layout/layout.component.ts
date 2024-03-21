@@ -52,8 +52,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   showInvalidHeaderSizeMessage = false;
   /** Message indicating whether footer logo size is invalid. */
   showInvalidFooterSizeMessage = false;
-  /** Flag indicating whether save and proceed buttion should be disabled. */
-  shouldDisable = false;
+  /** Flag indicating whether save and proceed button should be disabled. */
+  shouldDisable = true;
   /** Image data for the email header. */
   headerLogo: string | ArrayBuffer | null = null;
   /** Image data for the email banner. */
@@ -199,28 +199,58 @@ export class LayoutComponent implements OnInit, OnDestroy {
    * Disables or enables save and proceed button based on if subject is empty.
    */
   onTxtSubjectChange(): void {
-    if (
-      !this.emailService.allLayoutdata.txtSubject ||
-      this.emailService.allLayoutdata.txtSubject.trim() === ''
-    ) {
-      this.showSubjectValidator = true;
+    let subjectInvalid = false;
+    console.log(!this.layoutForm.get('subjectInput')?.value);
+    console.log(this.layoutForm.get('subjectInput'));
+    // Validates subject if user Enters new subject or edits current subject
+    if (this.layoutForm.get('subjectInput')?.touched) {
+      if (
+        !this.layoutForm.get('subjectInput')?.value ||
+        this.layoutForm.get('subjectInput')?.value.trim() === ''
+      ) {
+        this.shouldDisable = true;
+        subjectInvalid = true;
+        this.snackbar.openSnackBar(
+          this.translate.instant(
+            'common.notifications.email.errors.noSubject',
+            { error: true }
+          )
+        );
+      }
     } else {
-      this.showSubjectValidator = false;
+      if (
+        !this.layoutForm.get('subjectInput')?.value ||
+        this.layoutForm.get('subjectInput')?.value.trim() === ''
+      ) {
+        this.shouldDisable = true;
+        subjectInvalid = true;
+        this.snackbar.openSnackBar(
+          this.translate.instant('common.notifications.email.errors.noSubject'),
+          {
+            error: true,
+          }
+        );
+      }
     }
 
-    if (
-      this.emailService.allLayoutdata.txtSubject !== undefined &&
-      this.emailService.allLayoutdata.bodyHtml !== undefined
-    ) {
-      this.shouldDisable =
-        !this.emailService.allLayoutdata.txtSubject ||
-        this.emailService.allLayoutdata.txtSubject.trim() === '' ||
-        this.emailService.allLayoutdata.bodyHtml.trim() === '';
-    } else {
-      this.shouldDisable = true;
-    }
+    this.showSubjectValidator = subjectInvalid;
 
-    if (this.shouldDisable) {
+    this.shouldDisable =
+      (subjectInvalid ||
+        !this.emailService.allLayoutdata.bodyHtml ||
+        this.emailService.allLayoutdata.bodyHtml.trim() === '') ??
+      false;
+
+    this.disableProceed(this.shouldDisable);
+  }
+
+  /**
+   * Disables or enables save and proceed button
+   *
+   * @param disable disable state of button
+   */
+  disableProceed(disable: boolean): void {
+    if (disable) {
       this.emailService.stepperDisable.next({ id: 4, isValid: false });
     } else {
       this.emailService.stepperDisable.next({ id: 4, isValid: true });
@@ -344,7 +374,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
           this.showInvalidHeaderSizeMessage = true;
           console.error(error.message);
           this.snackbar.openSnackBar(
-            this.translate.instant('components.email.image.squareValidation')
+            this.translate.instant('components.email.image.squareValidation'),
+            { error: true }
           );
           if (this.headerLogoInput && this.headerLogoInput.nativeElement) {
             if (this.emailService.allLayoutdata.headerLogo) {
@@ -388,7 +419,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
         .catch((error) => {
           console.error(error.message);
           this.snackbar.openSnackBar(
-            this.translate.instant('components.email.image.rectangleValidation')
+            this.translate.instant(
+              'components.email.image.rectangleValidation'
+            ),
+            { error: true }
           );
           if (this.bannerInput && this.bannerInput.nativeElement) {
             if (this.emailService.allLayoutdata.bannerImage) {
@@ -454,7 +488,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
           this.showInvalidFooterSizeMessage = true;
           console.error(error.message);
           this.snackbar.openSnackBar(
-            this.translate.instant('components.email.image.squareValidation')
+            this.translate.instant('components.email.image.squareValidation'),
+            { error: true }
           );
           if (this.footerLogoInput && this.footerLogoInput.nativeElement) {
             if (this.emailService.allLayoutdata.footerLogo) {
@@ -566,6 +601,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
         subjectInput = textBefore + ' ' + value + ' ' + textAfter;
         // Update the FormControl value
         this.layoutForm.get('subjectInput')?.setValue(subjectInput.trim());
+        this.emailService.allLayoutdata.txtSubject =
+          this.layoutForm.get('subjectInput')?.value;
         // Clear the select element value
         if (control === 'field') {
           this.layoutForm.get('subjectField')?.reset();
@@ -592,6 +629,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
   onEditorContentChange(): void {
     if (this.emailService.allLayoutdata.bodyHtml === '') {
       this.showBodyValidator = true;
+      this.snackbar.openSnackBar(
+        this.translate.instant('common.notifications.email.errors.noBody'),
+        { error: true }
+      );
     } else {
       this.showBodyValidator = false;
     }

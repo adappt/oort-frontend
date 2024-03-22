@@ -73,6 +73,7 @@
       </ng-template>
       <ng-template kendoTabContent>
         <ng-container class="mt-2" *ngTemplateOutlet="datasetAlert"></ng-container>
+        <ng-container class="mt-2" *ngTemplateOutlet="missingFieldAlert"></ng-container>
         <ng-container *ngIf="resource?.fields?.length">
           <div class="flex gap-4 mt-2">
             <div class="mt-2">
@@ -346,6 +347,7 @@
       </ng-template>
       <ng-template kendoTabContent>
         <ng-container class="mt-2" *ngTemplateOutlet="datasetAlert"></ng-container>
+        <ng-container class="mt-2" *ngTemplateOutlet="missingFieldAlert"></ng-container>
         <ng-container>
           <div class="flex gap-5">
             <!-- Available Fields -->
@@ -491,9 +493,15 @@
 
 </form>
 <ng-template #datasetAlert>
-  <ui-alert variant="warning" *ngIf="showDatasetLimitWarning">
+  <ui-alert variant="warning" *ngIf="showDatasetLimitWarning" [closable]="true">
     At this moment, we are limited to fetch only 50 records.
     Based on the provided filter conditions there are <strong>{{totalMatchingRecords}}</strong> matching records.
     Kindly add some additional filters to bring the record count less than or equals to 50.
   </ui-alert>
+</ng-template>
+<ng-template #missingFieldAlert>
+   <ui-alert *ngIf="disabledFields.length > 0" variant="danger" [closable]="true">
+    The following fields are not available for selection:
+    <strong>{{disabledFields.join(', ')}}</strong> as they are of type <strong>{{disabledTypes.join(', ')}}</strong>.
+   </ui-alert>
 </ng-template>

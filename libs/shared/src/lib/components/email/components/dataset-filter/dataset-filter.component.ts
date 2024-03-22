@@ -116,6 +116,12 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   /** Flag for sending indivuial emails */
   public separateEmail = false;
 
+  /** Disabled Fields List */
+  public disabledFields: string[] = [];
+
+  /** Disabled Fields Type List */
+  public disabledTypes: string[] = [];
+
   /** Time units for filtering. */
   public timeUnits = [
     { value: 'hours', label: 'Hours' },
@@ -317,6 +323,8 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     fromHtml ? this.query.controls.fields.setValue([]) : '';
     this.showDatasetLimitWarning = false;
     this.emailService.disableSaveAndProceed.next(false);
+    this.disabledFields = [];
+    this.disabledTypes = [];
     this.currentTabIndex = 0;
     if (this.selectedResourceId && this.emailService?.resourcesNameId?.length) {
       this.query.controls.resource.setValue(
@@ -422,6 +430,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                     a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
                   );
                 }
+              } else {
+                this.disabledFields.push(field.name);
+                this.disabledTypes.push(field.type);
+                this.disabledTypes = [...new Set(this.disabledTypes)];
               }
             });
 

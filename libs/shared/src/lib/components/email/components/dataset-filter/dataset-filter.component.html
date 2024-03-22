@@ -502,6 +502,7 @@
 <ng-template #missingFieldAlert>
    <ui-alert *ngIf="disabledFields.length > 0" variant="danger" [closable]="true">
     The following fields are not available for selection:
-    <strong>{{disabledFields.join(', ')}}</strong> as they are of type <strong>{{disabledTypes.join(', ')}}</strong>.
+    <strong>{{disabledFields.join(', ')}}</strong> as they are of type <strong>{{disabledTypes.join(', ')}}</strong>
+    and cannot be properly displayed in the table for this form.
    </ui-alert>
 </ng-template>

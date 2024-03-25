@@ -707,6 +707,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       );
       this.availableFieldIndex = null;
       this.selectedFieldIndex = this.selectedFields.length - 1;
+      this.query.controls.fields.setValue(this.selectedFields);
     }
   }
 

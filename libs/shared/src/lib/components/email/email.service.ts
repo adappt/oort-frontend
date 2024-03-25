@@ -159,6 +159,7 @@ export class EmailService {
   /** EMAIL LIST LOADING CHECKER */
   public emailListLoading = true;
   public separateEmail = [];
+  dataSetResponse: any;
 
   /**
    * To replace all special characters with space
@@ -833,9 +834,10 @@ export class EmailService {
       query.pageSize = Number(query.pageSize);
       this.fetchDataSet(query).subscribe((res: { data: { dataSet: any } }) => {
         if (res?.data?.dataSet) {
-          // this.dataSetResponse = res?.data?.dataSet;
-          this.dataList = res?.data?.dataSet.records?.map((record: any) => {
+          this.dataSetResponse = res?.data?.dataSet.records;
+          this.dataList = this.dataSetResponse?.map((record: any) => {
             const flattenedObject = this.flattenRecord(record);
+
 
             delete flattenedObject.data;
 
@@ -847,15 +849,20 @@ export class EmailService {
 
             return flatData;
           });
+          console.log('data list');
+          console.log(this.dataList);
           if (this.dataList?.length) {
-            this.dataSetFields = [
-              ...new Set(
-                this.dataList
-                  .map((data: { [key: string]: any }) => Object.keys(data))
-                  .flat()
-              ),
-            ];
+            const existfields = emailData.dataSets[
+              res?.data?.dataSet?.tabIndex
+            ].fields.map((x: any) => x.name);
+            const temp = Object.keys(this.dataList[0]);
+            const notmatching = temp.filter(
+              (currentId) => !existfields.some((item: any) => item == currentId)
+            );
+            existfields.concat(notmatching);
+            this.dataSetFields = existfields;
           }
+          console.log(`Dataset Fields: ${this.dataSetFields}`);
           allPreviewData.push({
             dataList: this.dataList,
             dataSetFields: this.dataSetFields,
@@ -865,6 +872,10 @@ export class EmailService {
                 ? this.tabs[res.data.dataSet.tabIndex].title
                 : '',
           });
+          console.log('Dataset Fields');
+          console.log(this.dataSetFields);
+          console.log('All Preview Data from Email Service');
+          console.log(allPreviewData);
           if (this.tabs.length == allPreviewData.length) {
             allPreviewData = allPreviewData.sort(
               (a: any, b: any) => a.tabIndex - b.tabIndex

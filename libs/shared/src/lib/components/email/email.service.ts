@@ -838,7 +838,6 @@ export class EmailService {
           this.dataList = this.dataSetResponse?.map((record: any) => {
             const flattenedObject = this.flattenRecord(record);
 
-
             delete flattenedObject.data;
 
             const flatData = Object.fromEntries(

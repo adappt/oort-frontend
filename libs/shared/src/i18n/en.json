@@ -249,6 +249,7 @@
 				"body": {
 					"title": "Body*"
 				},
+				"close": "Are you sure you want to close this notification? Any changes made will not be saved.",
 				"dropdown": {
 					"emailInput": "Email input",
 					"inTheLast": "Select timestamp from filters...",

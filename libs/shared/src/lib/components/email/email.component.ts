@@ -114,7 +114,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
   confirmClose(): void {
     const dialogRef = this.confirmService.openConfirmModal({
       title: this.translate.instant('common.close'),
-      content: this.translate.instant('components.form.update.exit'),
+      content: this.translate.instant('common.notifications.email.close'),
       confirmText: 'Confirm',
       confirmVariant: 'danger',
     });

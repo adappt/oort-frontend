@@ -249,6 +249,7 @@
 				"body": {
 					"title": "Corps*"
 				},
+				"close": "Êtes-vous sûr de vouloir fermer cette notification? Les modifications apportées ne seront pas enregistrées.",
 				"dropdown": {
 					"emailInput": "Type de saisie d'e-mail",
 					"inTheLast": "Select Horodatage from filters...",

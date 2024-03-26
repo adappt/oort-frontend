@@ -199,63 +199,36 @@ export class LayoutComponent implements OnInit, OnDestroy {
    * Disables or enables save and proceed button based on if subject is empty.
    */
   onTxtSubjectChange(): void {
-    let subjectInvalid = false;
-    console.log(!this.layoutForm.get('subjectInput')?.value);
-    console.log(this.layoutForm.get('subjectInput'));
-    // Validates subject if user Enters new subject or edits current subject
-    if (this.layoutForm.get('subjectInput')?.touched) {
-      if (
-        !this.layoutForm.get('subjectInput')?.value ||
-        this.layoutForm.get('subjectInput')?.value.trim() === ''
-      ) {
-        this.shouldDisable = true;
-        subjectInvalid = true;
-        this.snackbar.openSnackBar(
-          this.translate.instant(
-            'common.notifications.email.errors.noSubject',
-            { error: true }
-          )
-        );
-      }
-    } else {
-      if (
-        !this.layoutForm.get('subjectInput')?.value ||
-        this.layoutForm.get('subjectInput')?.value.trim() === ''
-      ) {
-        this.shouldDisable = true;
-        subjectInvalid = true;
-        this.snackbar.openSnackBar(
-          this.translate.instant('common.notifications.email.errors.noSubject'),
-          {
-            error: true,
-          }
-        );
-      }
+    this.emailService.disableSaveAndProceed.next(true);
+    this.showSubjectValidator =
+      this.layoutForm.controls['subjectInput'].value.trim() === '' ||
+      !this.layoutForm.controls['subjectInput'].value;
+
+    if (
+      this.layoutForm.controls['subjectInput'].touched &&
+      this.showSubjectValidator
+    ) {
+      this.snackbar.openSnackBar(
+        this.translate.instant('common.notifications.email.errors.noSubject'),
+        {
+          error: true,
+        }
+      );
     }
 
-    this.showSubjectValidator = subjectInvalid;
+    const bodyHtml = this.emailService.allLayoutdata.bodyHtml;
+    const isUndefined = /^<p>\s*<\/p>$/.test(bodyHtml.trim());
 
-    this.shouldDisable =
-      (subjectInvalid ||
-        !this.emailService.allLayoutdata.bodyHtml ||
-        this.emailService.allLayoutdata.bodyHtml.trim() === '') ??
-      false;
+    this.showBodyValidator =
+      bodyHtml.trim() === '' || bodyHtml === '<p></p>' || isUndefined;
 
-    this.disableProceed(this.shouldDisable);
-  }
-
-  /**
-   * Disables or enables save and proceed button
-   *
-   * @param disable disable state of button
-   */
-  disableProceed(disable: boolean): void {
-    if (disable) {
+    if (this.showSubjectValidator || this.showBodyValidator) {
+      this.emailService.disableSaveAndProceed.next(true);
       this.emailService.stepperDisable.next({ id: 4, isValid: false });
     } else {
+      this.emailService.disableSaveAndProceed.next(false);
       this.emailService.stepperDisable.next({ id: 4, isValid: true });
     }
-    this.emailService.disableSaveAndProceed.next(this.shouldDisable);
   }
 
   /**
@@ -627,17 +600,22 @@ export class LayoutComponent implements OnInit, OnDestroy {
    * Handles changes to the editor content and updates the layout data accordingly.
    */
   onEditorContentChange(): void {
-    if (this.emailService.allLayoutdata.bodyHtml === '') {
+    const bodyHtml = this.emailService.allLayoutdata.bodyHtml;
+    const isUndefined = /^<p>\s*<\/p>$/.test(bodyHtml.trim());
+
+    this.showBodyValidator =
+      bodyHtml.trim() === '' || bodyHtml === '<p></p>' || isUndefined;
+    if (this.showBodyValidator) {
       this.showBodyValidator = true;
+      this.onTxtSubjectChange();
       this.snackbar.openSnackBar(
         this.translate.instant('common.notifications.email.errors.noBody'),
         { error: true }
       );
     } else {
       this.showBodyValidator = false;
+      this.onTxtSubjectChange();
     }
-
-    this.onTxtSubjectChange();
   }
 
   /**

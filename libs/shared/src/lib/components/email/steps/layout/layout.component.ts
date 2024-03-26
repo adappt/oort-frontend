@@ -617,10 +617,16 @@ export class LayoutComponent implements OnInit, OnDestroy {
    */
   onEditorContentChange(): void {
     const bodyHtml = this.emailService.allLayoutdata.bodyHtml;
-    const isUndefined = /^<p>\s*<\/p>$/.test(bodyHtml.trim());
+    console.log(bodyHtml);
+    let isUndefined = !bodyHtml;
+    if (bodyHtml) {
+      isUndefined =
+        /^<p>\s*<\/p>$/.test(bodyHtml.trim()) ||
+        bodyHtml.trim() === '' ||
+        bodyHtml === '<p></p>';
+    }
 
-    this.showBodyValidator =
-      bodyHtml.trim() === '' || bodyHtml === '<p></p>' || isUndefined;
+    this.showBodyValidator = isUndefined;
     if (this.showBodyValidator) {
       this.showBodyValidator = true;
       this.onTxtSubjectChange();

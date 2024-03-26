@@ -8,6 +8,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SnackbarService } from '@oort-front/ui';
 import { TranslateService } from '@ngx-translate/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { isUndefined } from 'lodash';
 /**
  * layout page component.
  */
@@ -201,8 +202,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   onTxtSubjectChange(): void {
     this.emailService.disableSaveAndProceed.next(true);
     this.showSubjectValidator =
-      this.layoutForm.controls['subjectInput'].value.trim() === '' ||
-      !this.layoutForm.controls['subjectInput'].value;
+      !this.layoutForm.controls['subjectInput'].value ||
+      this.layoutForm.controls['subjectInput'].value.trim() === '';
 
     if (
       this.layoutForm.controls['subjectInput'].touched &&
@@ -217,10 +218,15 @@ export class LayoutComponent implements OnInit, OnDestroy {
     }
 
     const bodyHtml = this.emailService.allLayoutdata.bodyHtml;
-    const isUndefined = /^<p>\s*<\/p>$/.test(bodyHtml.trim());
+    let isUndefined = !bodyHtml;
+    if (bodyHtml) {
+      isUndefined =
+        /^<p>\s*<\/p>$/.test(bodyHtml.trim()) ||
+        bodyHtml.trim() === '' ||
+        bodyHtml === '<p></p>';
+    }
 
-    this.showBodyValidator =
-      bodyHtml.trim() === '' || bodyHtml === '<p></p>' || isUndefined;
+    this.showBodyValidator = isUndefined;
 
     if (this.showSubjectValidator || this.showBodyValidator) {
       this.emailService.disableSaveAndProceed.next(true);
@@ -574,6 +580,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
         subjectInput = textBefore + ' ' + value + ' ' + textAfter;
         // Update the FormControl value
         this.layoutForm.get('subjectInput')?.setValue(subjectInput.trim());
+        this.emailService.allLayoutdata.txtSubject =
+          this.layoutForm.get('subjectInput')?.value;
+        // Clear the select element value
+        if (control === 'field') {
+          this.layoutForm.get('subjectField')?.reset();
+        } else if (control === 'time') {
+          this.layoutForm.get('timeInput')?.reset();
+        }
+      } else {
+        // Update the FormControl value
+        this.layoutForm.get('subjectInput')?.setValue(value);
         this.emailService.allLayoutdata.txtSubject =
           this.layoutForm.get('subjectInput')?.value;
         // Clear the select element value

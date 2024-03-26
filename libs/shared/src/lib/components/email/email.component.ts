@@ -546,7 +546,7 @@ export class EmailComponent extends UnsubscribeComponent implements OnInit {
    * This function creates a new dataset group.
    *
    * @param ele The element to create the dataset group from.
-   * @param index
+   * @param index The index of the dataset.
    * @returns The newly created dataset group.
    */
   createNewDataSetGroup(ele: any, index: number): FormGroup {

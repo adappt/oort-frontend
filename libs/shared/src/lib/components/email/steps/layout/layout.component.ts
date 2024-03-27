@@ -119,7 +119,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
       timeInput: [''],
       subjectInput: [this.emailService.allLayoutdata.txtSubject],
       inTheLastDropdown: [''],
+      headerTimeInput: [''],
+      header: [this.emailService.allLayoutdata.headerHtml],
       block: [''],
+      body: [this.emailService.allLayoutdata.bodyHtml],
     });
 
     this.datasetOverflow =
@@ -216,11 +219,12 @@ export class LayoutComponent implements OnInit, OnDestroy {
       );
     }
 
-    const bodyHtml = this.emailService.allLayoutdata.bodyHtml;
+    const bodyHtml = this.layoutForm.get('body')?.value;
     let isUndefined = !bodyHtml;
     if (bodyHtml) {
       isUndefined =
         /^<p>\s*<\/p>$/.test(bodyHtml.trim()) ||
+        /^<p>(&nbsp;)*<\/p>$/.test(bodyHtml.trim()) ||
         bodyHtml.trim() === '' ||
         bodyHtml === '<p></p>';
     }
@@ -275,50 +279,69 @@ export class LayoutComponent implements OnInit, OnDestroy {
   /**
    * Inserts token at cursor position.
    *
-   * @param event The position to insert the token.
+   * @param tokenType The input type of form element
+   * @param event The value of the form element
    */
-  insertTokenAtCursor(event: string): void {
-    // Converts dropdown label to token
-    const [blockName, fieldWithInLast] = event.split(', ');
-    const [field, inTheLastText] = fieldWithInLast.split(' - last ');
-    const [numberString, unit] = inTheLastText.split(' ');
+  insertTokenAtCursor(tokenType: string, event: string): void {
+    if (event) {
+      // Builds Token based on the tokenType
+      let token = '';
+      if (tokenType === 'time') {
+        token = ` ${event} `;
+      } else if (tokenType === 'inTheLast') {
+        // Converts dropdown label to token
+        const [blockName, fieldWithInLast] = event.split(', ');
+        const [field, inTheLastText] = fieldWithInLast.split(' - last ');
+        const [numberString, unit] = inTheLastText.split(' ');
 
-    // Converts in the last value to minutes
-    const unitInMinutes = this.emailService.convertToMinutes(
-      +numberString,
-      unit
-    );
+        // Converts in the last value to minutes
+        const unitInMinutes = this.emailService.convertToMinutes(
+          +numberString,
+          unit
+        );
 
-    // Builds Token
-    const token = ` {{${blockName}.${field}.${unitInMinutes}}} `;
-
-    // Inserts Token and resets dropdown value
-    if (this.headerEditor && this.headerEditor.editor) {
-      // Get the current range of the editor
-      const range = this.headerEditor.editor.selection.getRng();
-
-      // Get the current cursor position as a number
-      const cursorPosition = range.startOffset;
-
-      // Get the current content of the editor
-      const currentContent = this.headerEditor.editor.getContent();
-
-      // Check if the cursor is at the beginning or end of the content
-      if (cursorPosition === 0) {
-        // If at the beginning, remove the leading whitespace from the token
-        this.headerEditor.editor.insertContent(token.trimStart());
-      } else if (cursorPosition === currentContent.length) {
-        // If at the end, remove the trailing whitespace from the token
-        this.headerEditor.editor.insertContent(token.trimEnd());
-      } else {
-        // If in the middle, insert the token with spaces before and after it
-        this.headerEditor.editor.insertContent(token);
+        // Builds Token
+        token = ` {{${blockName}.${field}.${unitInMinutes}}} `;
       }
+      // Inserts Token and resets dropdown value
+      if (this.headerEditor && this.headerEditor.editor) {
+        // Get the current range of the editor
+        const range = this.headerEditor.editor.selection.getRng();
 
-      // Reset the dropdown value
-      this.layoutForm.get('inTheLastDropdown')?.reset();
-    } else {
-      console.error('Header TinyMCE editor is not initialised');
+        // Get the current cursor position as a number
+        const cursorPosition = range.startOffset;
+
+        // Get the current content of the editor
+        const currentContent = this.headerEditor.editor.getContent();
+
+        // Check if the cursor is at the beginning or end of the content
+        if (cursorPosition === 0) {
+          // If at the beginning, remove the leading whitespace from the token
+          this.headerEditor.editor.insertContent(token.trimStart());
+        } else if (cursorPosition === currentContent.length) {
+          // If at the end, remove the trailing whitespace from the token
+          this.headerEditor.editor.insertContent(token.trimEnd());
+        } else {
+          // If in the middle, insert the token with spaces before and after it
+          this.headerEditor.editor.insertContent(token);
+        }
+
+        // Reset the dropdown value
+        if (tokenType === 'time') {
+          this.layoutForm.get('headerTimeInput')?.reset();
+        } else if (tokenType === 'inTheLast') {
+          this.layoutForm.get('inTheLastDropdown')?.reset();
+        }
+
+        this.layoutForm
+          .get('header')
+          ?.setValue(this.headerEditor.editor.getContent());
+
+        this.emailService.allLayoutdata.headerHtml =
+          this.layoutForm.get('header')?.value;
+      } else {
+        console.error('Header TinyMCE editor is not initialised');
+      }
     }
   }
 
@@ -525,13 +548,18 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
       if (this.bodyEditor && this.bodyEditor.editor) {
         this.bodyEditor.editor.insertContent(token);
-        this.onEditorContentChange();
+        this.layoutForm
+          .get('body')
+          ?.setValue(this.bodyEditor.editor.getContent());
       } else {
         console.error('Body TinyMCE editor is not initialised');
       }
+      // Resets Block dropdown value to blank
+      this.layoutForm.get('block')?.reset();
+
+      // Trigger the content change event to update the editor and perform validation
+      this.onEditorContentChange();
     }
-    // Resets Block dropdown value to blank
-    this.layoutForm.get('block')?.reset();
   }
 
   /**
@@ -616,24 +644,33 @@ export class LayoutComponent implements OnInit, OnDestroy {
    * Handles changes to the editor content and updates the layout data accordingly.
    */
   onEditorContentChange(): void {
-    const bodyHtml = this.emailService.allLayoutdata.bodyHtml;
+    const bodyHtml = this.layoutForm.get('body')?.value;
     console.log(bodyHtml);
     let isUndefined = !bodyHtml;
     if (bodyHtml) {
       isUndefined =
         /^<p>\s*<\/p>$/.test(bodyHtml.trim()) ||
+        /^<p>(&nbsp;)*<\/p>$/.test(bodyHtml.trim()) ||
         bodyHtml.trim() === '' ||
         bodyHtml === '<p></p>';
     }
 
     this.showBodyValidator = isUndefined;
     if (this.showBodyValidator) {
-      this.showBodyValidator = true;
       this.onTxtSubjectChange();
       this.snackbar.openSnackBar(
         this.translate.instant('common.notifications.email.errors.noBody'),
         { error: true }
       );
+    } else if (this.layoutForm.get('body')?.touched) {
+      if (isUndefined) {
+        this.showBodyValidator = true;
+        this.snackbar.openSnackBar(
+          this.translate.instant('common.notifications.email.errors.noBody'),
+          { error: true }
+        );
+      }
+      this.onTxtSubjectChange();
     } else {
       this.showBodyValidator = false;
       this.onTxtSubjectChange();
@@ -680,6 +717,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
     this.getColors();
     this.emailService.allLayoutdata.txtSubject =
       this.layoutForm.get('subjectInput')?.value;
+    this.emailService.allLayoutdata.bodyHtml =
+      this.layoutForm.get('body')?.value;
+    this.emailService.allLayoutdata.headerHtml =
+      this.layoutForm.get('header')?.value;
     this.emailService.patchEmailLayout();
   }
 }

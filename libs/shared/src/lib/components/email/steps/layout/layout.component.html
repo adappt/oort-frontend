@@ -87,16 +87,31 @@
     <!-- Header -->
     <div class="bg-[#F5FAFF] mb-4 p-5">
       <label class="text-md font-semibold text-left text-[#1D2939] mb-2">{{'common.notifications.email.header.style' | translate}}</label>
-      <div uiFormFieldDirective [defaultMargin]="false" class="flex-grow w-1/3">
-        <label for="inTheLastDropdown" class="block text-sm font-normal leading-6 text-gray-900">{{'common.notifications.email.field.filtered' | translate}}</label>
-        <ui-select-menu
-          id="inTheLastDropdown"
-          formControlName="inTheLastDropdown"
-          (ngModelChange)="insertTokenAtCursor($event)"
-          uiTooltip="Date fields filtered by within the last"
-          [placeholder]="'common.notifications.email.dropdown.inTheLast' | translate">
-          <ui-select-option *ngFor="let control of inTheLastDropdown.controls" [value]="control.value">{{ control.value }}</ui-select-option>
-        </ui-select-menu>
+      <div class="flex mb-4 gap-5 mt-2">
+        <div uiFormFieldDirective [defaultMargin]="false" class="w-1/3">
+          <label for="inTheLastDropdown" class="block text-sm font-normal leading-6 text-gray-900">{{'common.notifications.email.field.filtered' | translate}}</label>
+          <ui-select-menu
+            id="inTheLastDropdown"
+            formControlName="inTheLastDropdown"
+            (ngModelChange)="insertTokenAtCursor('inTheLast', $event)"
+            uiTooltip="Date fields filtered by within the last"
+            [placeholder]="'common.notifications.email.dropdown.inTheLast' | translate">
+            <ui-select-option *ngFor="let control of inTheLastDropdown.controls" [value]="control.value">{{ control.value }}</ui-select-option>
+          </ui-select-menu>
+        </div>
+        <div uiFormFieldDirective [defaultMargin]="false" class="w-1/3">
+          <label for="timeInput" class="block text-sm font-normal leading-6 text-gray-900">
+            {{'common.notifications.email.timestamp' | translate}}
+          </label>
+          <ui-select-menu
+            id="timeInput"
+            formControlName="headerTimeInput"
+            (ngModelChange)="insertTokenAtCursor('time', $event)"
+            placeholder="{{'common.notifications.email.dropdown.timestamp' | translate}}"
+            class="w-full">
+            <ui-select-option *ngFor="let option of timeOptions" [value]="option.value">{{ option.label }}</ui-select-option>
+          </ui-select-menu>
+        </div>
       </div>
       <div class="flex flex-row mb-4 gap-5 mt-2">
         <div class="w-1/3">
@@ -139,7 +154,7 @@
           </div>
         </div>
       </div>
-      <editor #headerEditor [(ngModel)]="emailService.allLayoutdata.headerHtml" [ngModelOptions]="{ standalone: true }" [init]="editor"></editor>
+      <editor #headerEditor formControlName="header" [init]="editor"></editor>
     </div>
 
     <!-- Body -->
@@ -188,7 +203,7 @@
         </div>
       </div>
       <!-- Body Text Editor -->
-      <editor #bodyEditor [(ngModel)]="emailService.allLayoutdata.bodyHtml" [ngModelOptions]="{ standalone: true }" class="rounded" [ngClass]="{'form-error': showBodyValidator}" [init]="editor" (onChange)="onEditorContentChange()"></editor>
+      <editor #bodyEditor formControlName="body" class="rounded" [ngClass]="{'form-error': showBodyValidator}" [init]="editor" (onChange)="onEditorContentChange()"></editor>
     </div>
 
     <!-- Footer -->

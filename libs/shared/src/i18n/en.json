@@ -1040,7 +1040,7 @@
 			},
 			"dataset": {
 				"select": "Select a dataset",
-				"title": "Dataset"
+				"title": "Resource"
 			},
 			"errors": {
 				"field": {

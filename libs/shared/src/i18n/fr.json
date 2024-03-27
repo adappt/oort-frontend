@@ -1051,7 +1051,7 @@
 			},
 			"dataset": {
 				"select": "Sélectionner un jeu de données",
-				"title": "Jeu de données"
+				"title": "Ressource"
 			},
 			"errors": {
 				"field": {

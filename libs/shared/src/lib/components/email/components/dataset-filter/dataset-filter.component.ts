@@ -88,13 +88,13 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public filteredFields: any[] = [];
 
   /** Selected fields for filtering. */
-  public selectedFields!: { name: string; type: string }[];
+  public selectedFields: any[] = [];
 
   /** Fields for filtering. */
-  public filterFields!: { name: string; type: string }[];
+  public filterFields: any[] = [];
 
   /** Available fields for filtering. */
-  public availableFields!: { name: string; type: string }[];
+  public availableFields: any[] = [];
 
   /** Operators for filtering. */
   public operators: { [key: number]: { value: string; label: string }[] } = {};
@@ -355,6 +355,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                 )
               ) {
                 if (field) {
+                  // console.log(
+                  //   `Field Name: ${field.name}, Field Type: ${field.type}`
+                  // );
                   if (field.name === 'createdBy' && field.fields?.length) {
                     field.fields.forEach((obj: any) => {
                       obj.name = '_createdBy.user.' + obj.name;
@@ -403,14 +406,22 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                     });
                   } else if (field.type === 'resource') {
                     field.fields.forEach((obj: any) => {
-                      obj.name = `${field.name}.${obj.name}`;
-                      obj.type = 'resource';
+                      obj.parentName = field.name;
                       this.availableFields.filter((x) => x.name == obj.name)
                         .length === 0
                         ? this.availableFields.push(clone(obj))
                         : '';
-                      this.filterFields.push(obj);
+                      // console.log(obj);
                     });
+                    // console.log('Field');
+                    // console.log(field);
+                    this.filterFields.push(field);
+                  } else if (field.type === 'resources') {
+                    this.availableFields.filter((x) => x.name == field.name)
+                      .length === 0
+                      ? this.availableFields.push(clone(field))
+                      : '';
+                    this.filterFields.push(field);
                   } else {
                     this.availableFields =
                       this.availableFields == undefined
@@ -483,11 +494,18 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   getFieldType(fieldIndex: number): string | undefined {
     const fieldControl = this.datasetFilterInfo.at(fieldIndex);
     const fieldName = fieldControl ? fieldControl.value : null;
-    const field = fieldName
+    let field = fieldName
       ? this.resource?.metadata?.find(
-          (data: any) => data.name === fieldName.field
+          (data: any) => data.name === fieldName.field.split('.')[0]
         )
       : null;
+    if (field && (field?.type === 'resource' || field?.type === 'resources')) {
+      field = fieldName
+        ? field.fields?.find(
+            (data: any) => data.name === fieldName.field.split('.')[1]
+          )
+        : null;
+    }
     return field ? field.type : '';
   }
 
@@ -657,9 +675,12 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public setField(event: any, fieldIndex: number) {
     const name = event?.target?.value || event;
     const fields = clone(this.metaData);
-    const field = fields.find(
+    let field = fields.find(
       (x: { name: any }) => x.name === name.split('.')[0]
     );
+    if (field && (field.type === 'resource' || field.type === 'resources')) {
+      field = name.split('.')[1];
+    }
     let type: { operators: any; editor: string; defaultOperator: string } = {
       operators: undefined,
       editor: '',
@@ -967,12 +988,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                       this.queryValue[tempIndex].fields
                         .map((data: any) => data.name)
                         .flat()
-
-                      // this.dataList
-                      //   .map((data: { [key: string]: any }) =>
-                      //     Object.keys(data)
-                      //   )
-                      //   .flat()
                     ),
                   ];
                 }
@@ -991,7 +1006,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   );
                   this.loading = false;
                   this.navigateToPreview.emit(allPreviewData);
-                  console.log(allPreviewData);
                   this.emailService.setAllPreviewData(allPreviewData);
                 }
               }

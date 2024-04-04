@@ -95,22 +95,6 @@
     height: 40px;
     border-radius: 5px;
     border-color: #d1d5db;
-  }
-
-  ui-button {
-    .ui-button {
-        background: none !important;
-        ui-icon {
-            i {
-                color: #000 !important;
-            }
-        }
-    }
-  }
-
-  .search-icon {
-    background-color: transparent;
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
+    align-items: center;
+    padding: 0 5px;
   }

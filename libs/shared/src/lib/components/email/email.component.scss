@@ -54,20 +54,20 @@
   border-bottom: 2px solid #717171 !important;
   background-color: #F5FAFF !important;
 }
-  
+
   ::ng-deep .k-tabstrip-items .k-item.k-state-active {
     border-bottom: 2px solid #2E90FA !important;
     background-color: #F5FAFF !important;
   }
-  
+
   ::ng-deep .k-tabstrip-items-wrapper, ::ng-deep .ng-trigger-state.k-content.k-active {
     border: none;
     overflow-x: hidden;
   }
-  
+
   ::ng-deep .k-tabstrip-top {
     > .k-tabstrip-items-wrapper {
-  
+
         .k-item:active,
         .k-item.k-active {
           margin-bottom: 0px !important;
@@ -76,17 +76,17 @@
         }
     }
   }
-  
+
   ::ng-deep .k-tabstrip-items-wrapper {
     .k-item.k-state-active::after {
       border-color: #2E90FA !important;
     }
-  
+
     .k-item:focus {
       box-shadow: none !important;
     }
   }
-  
+
   ::ng-deep .k-tabstrip-items .k-item {
     border: none;
     border-bottom: 2px solid;

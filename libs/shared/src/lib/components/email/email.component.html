@@ -79,7 +79,7 @@
                   </button>
                   </td>
                 </ng-container>
-                         
+
                 <ng-container cdkColumnDef="createdby">
                   <th uiCellHeader *cdkHeaderCellDef scope="col">
                     <span class="headerTitle">
@@ -90,7 +90,7 @@
                     {{element?.createdBy?.name}}
                   </td>
                 </ng-container>
-      
+
                 <ng-container cdkColumnDef="actions" [stickyEnd]="true">
                   <th uiCellHeader *cdkHeaderCellDef scope="col" class="w-16"></th>
                   <td uiCell *cdkCellDef="let element" class="flex items-center">
@@ -105,7 +105,7 @@
                           [uiTooltip]="'Send Email'"
                         >
                       </ui-button>
-      
+
                       <ui-button
                           [variant]="'grey'"
                           class="hide-icons hover:text-primary-600"
@@ -116,7 +116,7 @@
                           [uiTooltip]="'Edit'"
                         >
                       </ui-button>
-      
+
                       <ui-button
                           [variant]="'grey'"
                           class="hide-icons hover:text-primary-600"
@@ -127,7 +127,7 @@
                           [uiTooltip]="'Clone'"
                         >
                       </ui-button>
-      
+
                       <ui-button
                           [variant]="'danger'"
                           class="hide-icons hover:text-primary-600"
@@ -141,7 +141,7 @@
                     </ng-container>
                   </td>
                 </ng-container>
-      
+
                 <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
                 <tr cdk-row *cdkRowDef="let row; columns: displayedColumns"></tr>
               </table>
@@ -173,7 +173,7 @@
           </div>
           </ng-template>
         </div>
-  
+
     </ui-tab>
     <!-- Automated assignment -->
     <ui-tab>
@@ -198,7 +198,7 @@
             </table>
           </div>
         </div>
-      
+
         <!-- Pagination -->
         <ui-paginator
         [disabled]="emailService.emailListLoading"
@@ -210,7 +210,7 @@
         (pageChange)="onDistributionPage($event)"
         >
         </ui-paginator>
-      
+
         </div>
     </ui-tab>
   </ui-tabs>

@@ -50,13 +50,6 @@
       </ng-select>
     </div>
   </div>
-  <button
-    type="button"
-    class="font-semibold text-blue-700 py-2 px-4 rounded-md"
-    (click)="toggle()"
-  >
-    {{ 'common.notifications.email.existing' | translate}}
-  </button>
 </div>
 <div *ngIf="emailService.isExisting">
   <div class="mt-4">

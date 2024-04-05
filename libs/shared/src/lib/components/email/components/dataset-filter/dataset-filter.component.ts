@@ -1046,7 +1046,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
 
         if (typeof value === 'object' && value !== null) {
           count += 1;
-          if (!/createdBy/.test(key)) {
+          if (key !== 'createdBy') {
             result[key] = count > 1 ? `${count} items` : `${count} item`;
           } else {
             const flattenedValue = this.flattenRecord(value);

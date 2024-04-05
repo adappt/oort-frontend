@@ -355,9 +355,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                 )
               ) {
                 if (field) {
-                  // console.log(
-                  //   `Field Name: ${field.name}, Field Type: ${field.type}`
-                  // );
                   if (field.name === 'createdBy' && field.fields?.length) {
                     field.fields.forEach((obj: any) => {
                       obj.name = '_createdBy.user.' + obj.name;
@@ -1036,20 +1033,30 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
    * @returns The flattened record.
    */
   flattenRecord(record: any): any {
+    // console.log('Record');
+    // console.log(record);
     const result: any = {};
-
+    let count = 1;
     for (const key in record) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (record.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(record, key)) {
         const value = record[key];
+        // console.log('Key');
+        // console.log(record[key]);
+        // console.log(key);
 
         if (typeof value === 'object' && value !== null) {
-          const flattenedValue = this.flattenRecord(value);
+          count += 1;
+          if (!/createdBy/.test(key)) {
+            result[key] = count > 1 ? `${count} items` : `${count} item`;
+          } else {
+            const flattenedValue = this.flattenRecord(value);
 
-          for (const subKey in flattenedValue) {
-            // eslint-disable-next-line no-prototype-builtins
-            if (flattenedValue.hasOwnProperty(subKey)) {
-              result[`${key}-${subKey}`] = flattenedValue[subKey];
+            for (const subKey in flattenedValue) {
+              if (
+                Object.prototype.hasOwnProperty.call(flattenedValue, subKey)
+              ) {
+                result[`${key}.${subKey}`] = flattenedValue[subKey];
+              }
             }
           }
         } else {

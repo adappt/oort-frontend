@@ -910,16 +910,14 @@ export class EmailService {
     const result: any = {};
 
     for (const key in record) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (record.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(record, key)) {
         const value = record[key];
 
         if (typeof value === 'object' && value !== null) {
           const flattenedValue = this.flattenRecord(value);
 
           for (const subKey in flattenedValue) {
-            // eslint-disable-next-line no-prototype-builtins
-            if (flattenedValue.hasOwnProperty(subKey)) {
+            if (Object.prototype.hasOwnProperty.call(flattenedValue, subKey)) {
               result[`${key}-${subKey}`] = flattenedValue[subKey];
             }
           }

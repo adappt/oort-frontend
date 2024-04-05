@@ -37,19 +37,23 @@
 }
 
 ::ng-deep .k-tabstrip-items .k-item {
-    padding: 5px 10px;
-    font-weight: bold;
-    color: black !important;
-    border-top-left-radius: 20%;
-    border-top-right-radius: 20%;
-    border: none;
-    &:hover,
-    &:focus,
-    .k-item.k-state-default.k-state-active{
-      border-bottom: 2px solid #717171 !important;
-      background-color: #F5FAFF !important;
-    }
-  }
+  padding: 5px 10px;
+  font-weight: bold;
+  color: black !important;
+  border-top-left-radius: 20%;
+  border-top-right-radius: 20%;
+  border: none;
+}
+
+::ng-deep .k-tabstrip-items .k-item:not(:last-child) {
+  background-color: #FCFCFD !important;
+}
+::ng-deep .k-tabstrip-items .k-item:not(:last-child):hover,
+::ng-deep .k-tabstrip-items .k-item:not(:last-child):focus,
+::ng-deep .k-tabstrip-items .k-item:not(:last-child).k-state-default.k-state-active {
+  border-bottom: 2px solid #717171 !important;
+  background-color: #F5FAFF !important;
+}
   
   ::ng-deep .k-tabstrip-items .k-item.k-state-active {
     border-bottom: 2px solid #2E90FA !important;

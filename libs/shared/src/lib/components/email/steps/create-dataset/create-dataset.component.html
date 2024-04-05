@@ -2,7 +2,7 @@
   <div class="text-left">
     <div class="tab-container" style="width: 100%;">
       <!-- Block Tabs -->
-      <kendo-tabstrip #kendoStrip formArrayName="dataSets" (tabSelect)="changeTab($event.index)">
+      <kendo-tabstrip #kendoStrip formArrayName="dataSets" (tabSelect)="changeTab($event.index, $event)">
         <ng-container *ngIf="showPreview === false" >
           <kendo-tabstrip-tab *ngFor="let tab of tabs; let tabIndex = index" [title]="tab.title" [selected]="tab.active">
             <ng-template kendoTabTitle>
@@ -19,7 +19,7 @@
                   >
                 </ui-button>
               </div>
-              <ui-button
+              <!-- <ui-button
                     class="hide-icons hover:text-primary-600"
                     [isIcon]="true"
                     size="large"
@@ -28,7 +28,7 @@
                     [uiTooltip]="'Add New Block'"
                     *ngIf="tabIndex === tabs.length-1"
                   >
-                </ui-button>
+                </ui-button> -->
               <ng-template [formGroupName]="tabIndex" kendoTabContent>
                 <shared-dataset-filter [query]="datasetsFormArray.controls[tabIndex]" [queryValue]="datasetsFormArray.value" (changeMainTab)="changeTab($event)"
                   (navigateToPreview)="bindPreviewTbl($event)" [activeTab]="activeTab" [tabs]="tabs"></shared-dataset-filter>
@@ -39,6 +39,19 @@
             </ng-template>
           </kendo-tabstrip-tab>
         </ng-container>
+        <kendo-tabstrip-tab  id="addIcon" class="add-block">
+          <ng-template kendoTabTitle >
+            <ui-button
+            class="hide-icons hover:text-primary-600"
+            [isIcon]="true"
+            size="large"
+            (click)="addTab()"
+            [icon]="'add'"
+            [uiTooltip]="'Add New Block'"
+          >
+        </ui-button>
+          </ng-template>
+        </kendo-tabstrip-tab>
 
         <!-- Preview Tab -->
       <kendo-tabstrip-tab *ngIf="showPreview === true" [selected]="showPreview === true" id="previewTab">
@@ -106,9 +119,6 @@
 
       </kendo-tabstrip-tab>
       </kendo-tabstrip>
-      <button *ngIf="tabs.length  === 0" class="add-tab-button" type="button" (click)="addTab()">
-        <ui-icon icon="add" variant="primary"></ui-icon>
-      </button>
     </div>
   </div>
 </form>

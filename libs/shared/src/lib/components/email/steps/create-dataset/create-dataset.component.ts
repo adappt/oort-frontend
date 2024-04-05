@@ -125,8 +125,14 @@ export class CreateDatasetComponent implements OnInit {
    *  This function is used to change to the correct tab.
    *
    * @param tabIndex The index of the tab thats been selected.
+   * @param event Event of tab selection
    */
-  changeTab(tabIndex: any) {
+  changeTab(tabIndex: any, event?: any) {
+    if (event.title === undefined) {
+      event.preventDefault();
+      return;
+    }
+
     if (tabIndex !== undefined) {
       this.tabIndex = tabIndex;
       this.activeTab = this.emailService.tabs[tabIndex];

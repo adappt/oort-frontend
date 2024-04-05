@@ -16,6 +16,7 @@
         [ngClass]="emailValidationError.length ? 'input-error': ''"
         type="text" [placeholder]="'components.select.distribution.email' | translate" />
         <p class="hint-text" *ngIf="emailValidationError.length">{{emailValidationError}}</p>
+        <p class="email-hint-text" *ngIf="!emailValidationError.length">Type Email and hit ENTER to add</p>
     </div>
 
     <div class="select-from-list" *ngIf="activeSegmentIndex === 1">

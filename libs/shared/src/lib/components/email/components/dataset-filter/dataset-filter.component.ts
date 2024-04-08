@@ -21,7 +21,11 @@ import {
   ResourcesQueryResponse,
 } from '../../../../models/resource.model';
 import { EmailService } from '../../email.service';
-import { FIELD_TYPES, FILTER_OPERATORS } from '../../filter/filter.constant';
+import {
+  FIELD_TYPES,
+  FILTER_OPERATORS,
+  TYPE_LABEL,
+} from '../../filter/filter.constant';
 import { GET_RESOURCE, GET_RESOURCES } from '../../graphql/queries';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from '@oort-front/ui';
@@ -401,7 +405,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                       obj.name = 'form.' + obj.name.split('.')[1];
                       this.filterFields.push(obj);
                     });
-                  } else if (field.type === 'resource') {
+                  } else if (field.type === TYPE_LABEL.resource) {
                     field.fields.forEach((obj: any) => {
                       obj.parentName = field.name;
                       this.availableFields.filter((x) => x.name == obj.name)
@@ -413,7 +417,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                     // console.log('Field');
                     // console.log(field);
                     this.filterFields.push(field);
-                  } else if (field.type === 'resources') {
+                  } else if (field.type === TYPE_LABEL.resources) {
                     this.availableFields.filter((x) => x.name == field.name)
                       .length === 0
                       ? this.availableFields.push(clone(field))
@@ -496,7 +500,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
           (data: any) => data.name === fieldName.field.split('.')[0]
         )
       : null;
-    if (field && (field?.type === 'resource' || field?.type === 'resources')) {
+    if (
+      field &&
+      (field?.type === TYPE_LABEL.resource ||
+        field?.type === TYPE_LABEL.resources)
+    ) {
       field = fieldName
         ? field.fields?.find(
             (data: any) => data.name === fieldName.field.split('.')[1]
@@ -520,9 +528,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       .get('operator');
     const fieldOperator = operatorControl ? operatorControl.value : null;
     return (
-      (fieldType === 'date' ||
-        fieldType === 'datetime' ||
-        fieldType === 'datetime-local') &&
+      (fieldType === TYPE_LABEL.date ||
+        fieldType === TYPE_LABEL.datetime ||
+        fieldType === TYPE_LABEL.datetime_local) &&
       operators.includes(fieldOperator)
     );
   }
@@ -675,7 +683,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     let field = fields.find(
       (x: { name: any }) => x.name === name.split('.')[0]
     );
-    if (field && (field.type === 'resource' || field.type === 'resources')) {
+    if (
+      field &&
+      (field.type === TYPE_LABEL.resource ||
+        field.type === TYPE_LABEL.resources)
+    ) {
       field = name.split('.')[1];
     }
     let type: { operators: any; editor: string; defaultOperator: string } = {
@@ -687,7 +699,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       const fieldType = FIELD_TYPES.find(
         (x) =>
           x.editor ===
-          (field.type === 'datetime-local' ? 'datetime' : field.type || 'text')
+          (field.type === TYPE_LABEL.datetime_local
+            ? TYPE_LABEL.datetime
+            : field.type || TYPE_LABEL.text)
       );
       if (fieldType) {
         type = {

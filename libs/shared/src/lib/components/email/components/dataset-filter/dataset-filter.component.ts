@@ -32,6 +32,16 @@ import { SnackbarService } from '@oort-front/ui';
 /** Default items per query, for pagination */
 let ITEMS_PER_PAGE = 0;
 /**
+ * Available fields object
+ */
+interface fieldStore {
+  name: string;
+  type: string;
+  fields?: string[] | null;
+  __typename: string;
+  parentName?: string | null;
+ }
+/**
  *
  */
 @Component({
@@ -92,13 +102,13 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   public filteredFields: any[] = [];
 
   /** Selected fields for filtering. */
-  public selectedFields: any[] = [];
+  public selectedFields: fieldStore[] = [];
 
   /** Fields for filtering. */
   public filterFields: any[] = [];
 
   /** Available fields for filtering. */
-  public availableFields: any[] = [];
+  public availableFields: fieldStore[] = [];
 
   /** Operators for filtering. */
   public operators: { [key: number]: { value: string; label: string }[] } = {};
@@ -796,7 +806,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   removeAllSelectedFields(): void {
     this.availableFields = [
       ...this.availableFields,
-      ...this.selectedFields.map((field) => JSON.parse(JSON.stringify(field))),
+      ...this.selectedFields.map((field: fieldStore) =>
+        JSON.parse(JSON.stringify(field))
+      ),
     ];
     this.selectedFields = [];
     this.availableFields.sort((a, b) =>
@@ -1061,6 +1073,12 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
         if (typeof value === 'object' && value !== null) {
           count += 1;
           if (key !== 'createdBy') {
+            // console.log('Record');
+            // console.log(record);
+            // console.log('Field');
+            // console.log(key);
+            // console.log('result[key]:');
+            // console.log(result[key]);
             result[key] = count > 1 ? `${count} items` : `${count} item`;
           } else {
             const flattenedValue = this.flattenRecord(value);

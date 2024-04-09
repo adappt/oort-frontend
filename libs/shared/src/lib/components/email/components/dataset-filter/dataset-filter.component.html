@@ -137,7 +137,7 @@
                             {{
                               field.name === '$attribute'
                                 ? subField.text || subField.name
-                                : field.name + ' - ' + (subField.text || subField.name)
+                                : (field.type === 'resource' ? (subField.text || subField.name) : field.name + ' - ' + (subField.text || subField.name))
                             }}
                           </ui-select-option>
                         </ui-select-option>

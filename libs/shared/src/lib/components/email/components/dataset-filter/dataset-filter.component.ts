@@ -40,7 +40,8 @@ interface fieldStore {
   fields?: string[] | null;
   __typename: string;
   parentName?: string | null;
- }
+}
+
 /**
  *
  */
@@ -372,11 +373,15 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   if (field.name === 'createdBy' && field.fields?.length) {
                     field.fields.forEach((obj: any) => {
                       obj.name = '_createdBy.user.' + obj.name;
+                      console.log('Object 1:');
+                      console.log(obj.name);
                       this.availableFields.filter((x) => x.name == obj.name)
                         .length === 0
                         ? this.availableFields.push(clone(obj))
                         : '';
                       obj.name = 'createdBy.' + obj.name.split('.')[2];
+                      console.log('Object 2:');
+                      console.log(obj.name);
                       this.filterFields.push(obj);
                     });
                   } else if (
@@ -418,14 +423,12 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   } else if (field.type === TYPE_LABEL.resource) {
                     field.fields.forEach((obj: any) => {
                       obj.parentName = field.name;
+                      obj.name = field.name + ' - ' + obj.name;
                       this.availableFields.filter((x) => x.name == obj.name)
                         .length === 0
                         ? this.availableFields.push(clone(obj))
                         : '';
-                      // console.log(obj);
                     });
-                    // console.log('Field');
-                    // console.log(field);
                     this.filterFields.push(field);
                   } else if (field.type === TYPE_LABEL.resources) {
                     this.availableFields.filter((x) => x.name == field.name)
@@ -1059,40 +1062,33 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
    * @returns The flattened record.
    */
   flattenRecord(record: any): any {
-    // console.log('Record');
-    // console.log(record);
     const result: any = {};
-    let count = 1;
     for (const key in record) {
       if (Object.prototype.hasOwnProperty.call(record, key)) {
         const value = record[key];
-        // console.log('Key');
-        // console.log(record[key]);
+        // console.log('Record');
+        // console.log(record);
+        // console.log('Field');
         // console.log(key);
+        // console.log('result[key]:');
+        // console.log(result[key]);
 
         if (typeof value === 'object' && value !== null) {
-          count += 1;
-          if (key !== 'createdBy') {
-            // console.log('Record');
-            // console.log(record);
-            // console.log('Field');
-            // console.log(key);
-            // console.log('result[key]:');
-            // console.log(result[key]);
-            result[key] = count > 1 ? `${count} items` : `${count} item`;
-          } else {
-            const flattenedValue = this.flattenRecord(value);
-
-            for (const subKey in flattenedValue) {
-              if (
-                Object.prototype.hasOwnProperty.call(flattenedValue, subKey)
-              ) {
-                result[`${key}.${subKey}`] = flattenedValue[subKey];
-              }
-            }
-          }
+          result[key] =
+            record[key].length > 1
+              ? `${record[key].length} items`
+              : `${record[key].length} item`;
         } else {
-          result[key] = value;
+          if (
+            key.split('_')[1] == 'createdBy' ||
+            key.split('_')[1] == 'lastUpdatedBy'
+          ) {
+            result[
+              `_${key.split('_')[1]}.${key.split('_')[2]}.${key.split('_')[3]}`
+            ] = value;
+          } else {
+            result[key] = value;
+          }
         }
       }
     }

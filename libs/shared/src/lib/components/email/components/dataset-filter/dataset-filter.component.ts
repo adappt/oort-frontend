@@ -373,15 +373,15 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   if (field.name === 'createdBy' && field.fields?.length) {
                     field.fields.forEach((obj: any) => {
                       obj.name = '_createdBy.user.' + obj.name;
-                      console.log('Object 1:');
-                      console.log(obj.name);
+                      // console.log('Object 1:');
+                      // console.log(obj.name);
                       this.availableFields.filter((x) => x.name == obj.name)
                         .length === 0
                         ? this.availableFields.push(clone(obj))
                         : '';
                       obj.name = 'createdBy.' + obj.name.split('.')[2];
-                      console.log('Object 2:');
-                      console.log(obj.name);
+                      // console.log('Object 2:');
+                      // console.log(obj.name);
                       this.filterFields.push(obj);
                     });
                   } else if (

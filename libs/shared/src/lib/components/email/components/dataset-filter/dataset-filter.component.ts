@@ -43,7 +43,7 @@ interface fieldStore {
 }
 
 /**
- *
+ * Component for filtering, selecting fields and styling block data sets.
  */
 @Component({
   selector: 'shared-dataset-filter',
@@ -994,7 +994,8 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                 this.dataSetResponse = res?.data?.dataSet;
                 this.dataList = res?.data?.dataSet.records?.map(
                   (record: any) => {
-                    const flattenedObject = this.flattenRecord(record);
+                    const flattenedObject =
+                      this.emailService.flattenRecord(record);
 
                     delete flattenedObject.data;
 
@@ -1053,47 +1054,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
    */
   public changeEditor(): void {
     this.useExpression = !this.useExpression;
-  }
-
-  /**
-   * Flattens the given record object into a single level object.
-   *
-   * @param record The record to flatten.
-   * @returns The flattened record.
-   */
-  flattenRecord(record: any): any {
-    const result: any = {};
-    for (const key in record) {
-      if (Object.prototype.hasOwnProperty.call(record, key)) {
-        const value = record[key];
-        // console.log('Record');
-        // console.log(record);
-        // console.log('Field');
-        // console.log(key);
-        // console.log('result[key]:');
-        // console.log(result[key]);
-
-        if (typeof value === 'object' && value !== null) {
-          result[key] =
-            record[key].length > 1
-              ? `${record[key].length} items`
-              : `${record[key].length} item`;
-        } else {
-          if (
-            key.split('_')[1] == 'createdBy' ||
-            key.split('_')[1] == 'lastUpdatedBy'
-          ) {
-            result[
-              `_${key.split('_')[1]}.${key.split('_')[2]}.${key.split('_')[3]}`
-            ] = value;
-          } else {
-            result[key] = value;
-          }
-        }
-      }
-    }
-
-    return result;
   }
 
   /**

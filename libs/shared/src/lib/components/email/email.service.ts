@@ -567,6 +567,16 @@ export class EmailService {
    * @returns the dataset.
    */
   fetchDataSet(filterQuery: any) {
+    // console.log('filterQuery', filterQuery);
+    // console.log(filterQuery);
+    // console.log(
+    //   this.apollo.query<any>({
+    //     query: GET_DATA_SET,
+    //     variables: {
+    //       query: filterQuery,
+    //     },
+    //   })
+    // );
     return this.apollo.query<any>({
       query: GET_DATA_SET,
       variables: {
@@ -871,10 +881,6 @@ export class EmailService {
                 ? this.tabs[res.data.dataSet.tabIndex].title
                 : '',
           });
-          console.log('Dataset Fields');
-          console.log(this.dataSetFields);
-          console.log('All Preview Data from Email Service');
-          console.log(allPreviewData);
           if (this.tabs.length == allPreviewData.length) {
             allPreviewData = allPreviewData.sort(
               (a: any, b: any) => a.tabIndex - b.tabIndex
@@ -901,28 +907,41 @@ export class EmailService {
   }
 
   /**
-   * Flattens the record.
+   * Flattens the given record object into a single level object.
    *
    * @param record The record to be flattened.
    * @returns The flattened record.
    */
   flattenRecord(record: any): any {
     const result: any = {};
-
     for (const key in record) {
+      // console.log('Record');
+      // console.log(record);
+      // console.log('Field');
+      // console.log(key);
+      // console.log('result[key]:');
+      // console.log(result[key]);
       if (Object.prototype.hasOwnProperty.call(record, key)) {
         const value = record[key];
 
         if (typeof value === 'object' && value !== null) {
-          const flattenedValue = this.flattenRecord(value);
-
-          for (const subKey in flattenedValue) {
-            if (Object.prototype.hasOwnProperty.call(flattenedValue, subKey)) {
-              result[`${key}-${subKey}`] = flattenedValue[subKey];
-            }
-          }
+          // Takes the resources count and maps it to the resource name.
+          result[key] =
+            record[key].length > 1
+              ? `${record[key].length} items`
+              : `${record[key].length} item`;
         } else {
-          result[key] = value;
+          if (
+            key.split('_')[1] == 'createdBy' ||
+            key.split('_')[1] == 'lastUpdatedBy'
+          ) {
+            // Takes the created by and last updated by values and persists them.
+            result[
+              `_${key.split('_')[1]}.${key.split('_')[2]}.${key.split('_')[3]}`
+            ] = value;
+          } else {
+            result[key] = value;
+          }
         }
       }
     }

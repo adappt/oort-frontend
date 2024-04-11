@@ -40,6 +40,8 @@ interface fieldStore {
   fields?: string[] | null;
   __typename: string;
   parentName?: string | null;
+  childName?: string | null;
+  childType?: string | null;
 }
 
 /**
@@ -386,8 +388,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                     });
                   } else if (field.type === TYPE_LABEL.resource) {
                     field.fields.forEach((obj: any) => {
-                      obj.parentName = field.name;
                       obj.name = field.name + ' - ' + obj.name;
+                      obj.parentName = field.name;
+                      obj.childName = field.name + ' - ' + obj.name;
                       this.availableFields.filter((x) => x.name == obj.name)
                         .length === 0
                         ? this.availableFields.push(clone(obj))
@@ -946,6 +949,16 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       if (tabName == 'preview') {
         let count = 0;
         for (const query of this.queryValue) {
+          query.fields.forEach((x: any) => {
+            if (x.parentName) {
+              const child = x.name;
+              x.childName = child.split(' - ')[1];
+              x.name = x.parentName;
+              x.childType = x.type;
+              x.type = 'resource';
+            }
+          });
+
           if (count == 0) {
             this.loading = true;
           }
@@ -958,8 +971,16 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                 this.dataSetResponse = res?.data?.dataSet;
                 this.dataList = res?.data?.dataSet.records?.map(
                   (record: any) => {
-                    const flattenedObject =
-                      this.emailService.flattenRecord(record);
+                    const flattenedObject = this.emailService.flattenRecord(
+                      record,
+                      query
+                    );
+                    query.fields.forEach((x: any) => {
+                      if (x.parentName) {
+                        x.name = `${x.parentName} - ${x.childName}`;
+                        x.type = x.childType;
+                      }
+                    });
 
                     delete flattenedObject.data;
 

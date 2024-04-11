@@ -137,7 +137,7 @@
                           {{ field.text || field.name }}
                           <ui-select-option
                             *ngFor="let subField of field.fields"
-                            [value]="field.name + '.' + subField.name"
+                            [value]="subField.parentName ? subField.name.split(' - ').join('.') : field.name + '.' + subField.name"
                           >
                             {{
                               field.name === '$attribute'

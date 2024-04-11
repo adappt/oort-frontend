@@ -828,6 +828,15 @@ export class EmailService {
     let count = 0;
     let allPreviewData: any = [];
     for (const query of emailData.dataSets) {
+      query.fields.forEach((x: any) => {
+        if (x.parentName) {
+          const child = x.name;
+          x.childName = child.split(' - ')[1];
+          x.name = x.parentName;
+          x.childType = x.type;
+          x.type = 'resource';
+        }
+      });
       query.tabIndex = count;
       count++;
       query.pageSize = Number(query.pageSize);
@@ -835,7 +844,14 @@ export class EmailService {
         if (res?.data?.dataSet) {
           this.dataSetResponse = res?.data?.dataSet.records;
           this.dataList = this.dataSetResponse?.map((record: any) => {
-            const flattenedObject = this.flattenRecord(record);
+            const flattenedObject = this.flattenRecord(record, query);
+
+            query.fields.forEach((x: any) => {
+              if (x.parentName) {
+                x.name = `${x.parentName} - ${x.childName}`;
+                x.type = x.childType;
+              }
+            });
 
             delete flattenedObject.data;
 
@@ -895,20 +911,38 @@ export class EmailService {
    * Flattens the given record object into a single level object.
    *
    * @param record The record to be flattened.
+   * @param query
    * @returns The flattened record.
    */
-  flattenRecord(record: any): any {
+  flattenRecord(record: any, query?: any): any {
     const result: any = {};
     for (const key in record) {
       if (Object.prototype.hasOwnProperty.call(record, key)) {
         const value = record[key];
 
         if (typeof value === 'object' && value !== null) {
-          // Takes the resources count and maps it to the resource name.
-          result[key] =
-            record[key].length > 1
-              ? `${record[key].length} items`
-              : `${record[key].length} item`;
+          if (value.data) {
+            query.fields.forEach((x: any) => {
+              if (x.childName) {
+                // Check if the childName exists in the records object
+                const matchingKey = Object.keys(record[key].data).find(
+                  (child) => child === x.childName
+                );
+
+                if (matchingKey) {
+                  // If a match is found, map the child field to the corresponding value in records
+                  result[`${x.parentName} - ${x.childName}`] =
+                    value.data[matchingKey];
+                }
+              }
+            });
+          } else {
+            // Takes the resources count and maps it to the resource name.
+            result[key] =
+              record[key].length > 1
+                ? `${record[key].length} items`
+                : `${record[key].length} item`;
+          }
         } else {
           if (
             key.split('_')[1] == 'createdBy' ||

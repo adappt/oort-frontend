@@ -567,16 +567,6 @@ export class EmailService {
    * @returns the dataset.
    */
   fetchDataSet(filterQuery: any) {
-    // console.log('filterQuery', filterQuery);
-    // console.log(filterQuery);
-    // console.log(
-    //   this.apollo.query<any>({
-    //     query: GET_DATA_SET,
-    //     variables: {
-    //       query: filterQuery,
-    //     },
-    //   })
-    // );
     return this.apollo.query<any>({
       query: GET_DATA_SET,
       variables: {
@@ -782,7 +772,6 @@ export class EmailService {
   ): Observable<any> {
     if (separateEmail) {
       const urlWithConfigId = `${this.restService.apiUrl}/notification/send-individual-email/${configId}`;
-      console.log('separate');
       return this.http.post<any>(urlWithConfigId, emailData);
     } else {
       const urlWithConfigId = `${this.restService.apiUrl}/notification/send-email/${configId}`;
@@ -858,8 +847,6 @@ export class EmailService {
 
             return flatData;
           });
-          console.log('data list');
-          console.log(this.dataList);
           if (this.dataList?.length) {
             const existfields = emailData.dataSets[
               res?.data?.dataSet?.tabIndex
@@ -871,7 +858,6 @@ export class EmailService {
             existfields.concat(notmatching);
             this.dataSetFields = existfields;
           }
-          console.log(`Dataset Fields: ${this.dataSetFields}`);
           allPreviewData.push({
             dataList: this.dataList,
             dataSetFields: this.dataSetFields,
@@ -903,7 +889,6 @@ export class EmailService {
     if (emailData?.dataSets?.length == 0) {
       this.emailListLoading = false;
     }
-    console.log(allPreviewData);
   }
 
   /**
@@ -915,12 +900,6 @@ export class EmailService {
   flattenRecord(record: any): any {
     const result: any = {};
     for (const key in record) {
-      // console.log('Record');
-      // console.log(record);
-      // console.log('Field');
-      // console.log(key);
-      // console.log('result[key]:');
-      // console.log(result[key]);
       if (Object.prototype.hasOwnProperty.call(record, key)) {
         const value = record[key];
 

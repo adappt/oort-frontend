@@ -51,93 +51,67 @@ interface fieldStore {
   styleUrls: ['./dataset-filter.component.scss'],
 })
 export class DatasetFilterComponent implements OnInit, OnDestroy {
-  /** Active tab in the component. */
+  /** ACTIVE TAB IN THE COMPONENT. */
   @Input() activeTab: any;
-
-  /** Array of tabs in the component. */
+  /** ARRAY OF TABS IN THE COMPONENT. */
   @Input() tabs: any;
-
-  /** Query FormGroup used for filtering. */
+  /** QUERY FORMGROUP USED FOR FILTERING. */
   @Input() query: FormGroup | any;
-
-  /** Value of the query FormGroup. */
+  /** VALUE OF THE QUERY FORMGROUP. */
   @Input() queryValue: FormGroup | any;
-
-  /** Flag to control the visibility of the preview. */
+  /** FLAG TO CONTROL THE VISIBILITY OF THE PREVIEW. */
   showPreview = false;
-
-  /** Subscription to dataset saving. */
+  /** SUBSCRIPTION TO DATASET SAVING. */
   private datasetSaveSubscription?: Subscription;
-
-  /** GraphQL query reference for fetching resources. */
+  /** GRAPHQL QUERY REFERENCE FOR FETCHING RESOURCES. */
   public resourcesQuery!: QueryRef<ResourcesQueryResponse>;
-
-  /** Method to fetch data sets. */
+  /** METHOD TO FETCH DATA SETS. */
   public fetchDataSet: any = this.emailService.fetchDataSet;
-
-  /** Selected resource. */
+  /** SELECTED RESOURCE. */
   public resource!: Resource;
-
-  /** Metadata of the selected resource. */
+  /** METADATA OF THE SELECTED RESOURCE. */
   public metaData!: any;
-
-  /** Response of the data set. */
+  /** RESPONSE OF THE DATA SET. */
   public dataSetResponse: any;
-
-  /** Fields of the data set. */
+  /** FIELDS OF THE DATA SET. */
   public dataSetFields!: any[];
-
-  /** Selected resource ID. */
+  /** SELECTED RESOURCE ID. */
   public selectedResourceId!: string;
-
-  /** List of data. */
+  /** LIST OF DATA. */
   public dataList!: { [key: string]: any }[];
-
-  /** Selected search field. */
+  /** SELECTED SEARCH FIELD. */
   public searchSelectedField = '';
-
-  /** Available search field. */
+  /** AVAILABLE SEARCH FIELD. */
   public searchAvailableField = '';
-
-  /** Filtered fields for search. */
+  /** FILTERED FIELDS FOR SEARCH. */
   public filteredFields: any[] = [];
-
-  /** Selected fields for filtering. */
+  /** SELECTED FIELDS FOR FILTERING. */
   public selectedFields: fieldStore[] = [];
-
-  /** Fields for filtering. */
+  /** FIELDS FOR FILTERING. */
   public filterFields: any[] = [];
-
-  /** Available fields for filtering. */
+  /** AVAILABLE FIELDS FOR FILTERING. */
   public availableFields: fieldStore[] = [];
-
-  /** Operators for filtering. */
+  /** OPERATORS FOR FILTERING. */
   public operators: { [key: number]: { value: string; label: string }[] } = {};
-
-  /** Flag to show the dataset limit warning. */
+  /** FLAG TO SHOW THE DATASET LIMIT WARNING. */
   public showDatasetLimitWarning = false;
-
-  /** Total number of matching records. */
+  /** TOTAL NUMBER OF MATCHING RECORDS. */
   public totalMatchingRecords = 0;
-
-  /** Current tab index. */
+  /** CURRENT TAB INDEX. */
   public currentTabIndex = 0;
-
-  /** Flag to switch between date picker and text expression. */
+  /** FLAG TO SWITCH BETWEEN DATE PICKER AND TEXT EXPRESSION. */
   public useExpression = false;
   /** FILTER OPERATORS FROM FILTER CONSTANT */
   filterOperators = FILTER_OPERATORS;
-
-  /** Flag for sending indivuial emails */
+  /** FLAG FOR SENDING INDIVUAL EMAILS */
   public separateEmail = false;
-
-  /** Disabled Fields List */
+  /** DISABLED FIELDS LIST */
   public disabledFields: string[] = [];
-
-  /** Disabled Fields Type List */
+  /** DISABLED FIELDS TYPE LIST */
   public disabledTypes: string[] = [];
-
-  /** Time units for filtering. */
+  /** TYPE LABELS */
+  public TYPE_LABEL = TYPE_LABEL;
+  /** TIME UNITS FOR FILTERING. */
   public timeUnits = [
     { value: 'hours', label: 'Hours' },
     { value: 'days', label: 'Days' },
@@ -145,24 +119,18 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     { value: 'months', label: 'Months' },
     { value: 'years', label: 'Years' },
   ];
-
-  /** Dataset preview ViewChild. */
+  /** DATASET PREVIEW VIEWCHILD. */
   @ViewChild('datasetPreview') datasetPreview: any;
-
-  /** Event emitter for changing the main tab. */
+  /** EVENT EMITTER FOR CHANGING THE MAIN TAB. */
   @Output() changeMainTab: EventEmitter<any> = new EventEmitter();
   /** NAVIGATE TO DATASET PREVIEW SCREEN EMITTER */
-
-  /** Event emitter for navigating to the preview. */
+  /** EVENT EMITTER FOR NAVIGATING TO THE PREVIEW. */
   @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
-
-  /** Loading status. */
+  /** LOADING STATUS. */
   public loading = false;
-
-  /** Field options. */
+  /** FIELD OPTIONS. */
   fieldOptions: any;
-
-  /** Current field name. */
+  /** CURRENT FIELD NAME. */
   currentFieldName: any;
   /** VALIDATION ERROR MESSAGE */
   showErrorMessage: any = '';
@@ -373,15 +341,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                   if (field.name === 'createdBy' && field.fields?.length) {
                     field.fields.forEach((obj: any) => {
                       obj.name = '_createdBy.user.' + obj.name;
-                      // console.log('Object 1:');
-                      // console.log(obj.name);
                       this.availableFields.filter((x) => x.name == obj.name)
                         .length === 0
                         ? this.availableFields.push(clone(obj))
                         : '';
                       obj.name = 'createdBy.' + obj.name.split('.')[2];
-                      // console.log('Object 2:');
-                      // console.log(obj.name);
                       this.filterFields.push(obj);
                     });
                   } else if (

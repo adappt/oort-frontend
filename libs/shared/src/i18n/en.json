@@ -1303,7 +1303,7 @@
 				"cc": "CC",
 				"createFilterLogic": "Create filter logic",
 				"email": "Email",
-				"emailError": "Type Email and hit ENTER to add",
+				"emailError": "Type emails here and hit ENTER to add them to the distribution list",
 				"label": "Distribution List Name*",
 				"separateEmail": "Send separate email",
 				"to": "To"

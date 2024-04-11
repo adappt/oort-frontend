@@ -1314,7 +1314,7 @@
 				"cc": "Cc",
 				"createFilterLogic": "Créer une logique de filtre",
 				"email": "Email",
-				"emailError": "Tapez Email et appuyez sur ENTRÉE pour ajouter",
+				"emailError": "Tapez les e-mails ici et appuyez sur ENTRÉE pour les ajouter à la liste de distribution",
 				"label": "Nom de la liste de distribution*",
 				"separateEmail": "Envoyer un e-mail séparé",
 				"to": "À"

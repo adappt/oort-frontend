@@ -446,6 +446,9 @@
 			"one": "Notification template"
 		},
 		"title": "Title",
+		"toolTip": {
+			"newBlock": "Add New Block"
+		},
 		"tooltip": {
 			"dragDrop": "Drag and drop to reorder",
 			"editor": {
@@ -1299,6 +1302,7 @@
 				"cc": "CC",
 				"createFilterLogic": "Create filter logic",
 				"email": "Email",
+				"emailError": "Type Email and hit ENTER to add",
 				"label": "Distribution List Name*",
 				"separateEmail": "Send separate email",
 				"to": "To"

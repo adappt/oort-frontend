@@ -15,7 +15,7 @@
                     size="large"
                     (click)="deleteTab(tabIndex, $event)"
                     [icon]="'delete'"
-                    [uiTooltip]="'Delete'"
+                    [uiTooltip]="'common.archive.delete' | translate"
                   >
                 </ui-button>
               </div>
@@ -39,15 +39,15 @@
             </ng-template>
           </kendo-tabstrip-tab>
         </ng-container>
-        <kendo-tabstrip-tab  id="addIcon" class="add-block">
+        <kendo-tabstrip-tab  id="addIcon" class="add-block" >
           <ng-template kendoTabTitle >
-            <ui-button
+            <ui-button  *ngIf="!showPreview"
             class="hide-icons hover:text-primary-600"
             [isIcon]="true"
             size="large"
             (click)="addTab()"
             [icon]="'add'"
-            [uiTooltip]="'Add New Block'"
+            [uiTooltip]="'common.toolTip.newBlock' | translate"
           >
         </ui-button>
           </ng-template>

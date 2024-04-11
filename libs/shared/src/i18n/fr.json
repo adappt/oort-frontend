@@ -446,6 +446,9 @@
 			"one": "Modèle de notification"
 		},
 		"title": "Titre",
+		"toolTip": {
+			"newBlock": "Ajouter un nouveau bloc"
+		},
 		"tooltip": {
 			"dragDrop": "Glissez-déposez pour réorganiser",
 			"editor": {
@@ -1310,6 +1313,7 @@
 				"cc": "Cc",
 				"createFilterLogic": "Créer une logique de filtre",
 				"email": "Email",
+				"emailError": "Tapez Email et appuyez sur ENTRÉE pour ajouter",
 				"label": "Nom de la liste de distribution*",
 				"separateEmail": "Envoyer un e-mail séparé",
 				"to": "À"

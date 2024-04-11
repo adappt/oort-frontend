@@ -446,6 +446,9 @@
 			"one": "******"
 		},
 		"title": "******",
+		"toolTip": {
+			"newBlock": "******"
+		},
 		"tooltip": {
 			"dragDrop": "******",
 			"editor": {
@@ -1299,6 +1302,7 @@
 				"cc": "******",
 				"createFilterLogic": "******",
 				"email": "******",
+				"emailError": "******",
 				"label": "******",
 				"separateEmail": "******",
 				"to": "******"

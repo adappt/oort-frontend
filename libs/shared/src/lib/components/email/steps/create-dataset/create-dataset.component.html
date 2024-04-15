@@ -39,9 +39,9 @@
             </ng-template>
           </kendo-tabstrip-tab>
         </ng-container>
-        <kendo-tabstrip-tab  id="addIcon" class="add-block" >
+        <kendo-tabstrip-tab *ngIf="!showPreview"  id="addIcon" class="add-block" >
           <ng-template kendoTabTitle >
-            <ui-button  *ngIf="!showPreview"
+            <ui-button  
             class="hide-icons hover:text-primary-600"
             [isIcon]="true"
             size="large"

@@ -33,6 +33,7 @@
       variant="primary"
       (click)="next()"
       [disabled]="disableActionButton"
+      *ngIf="currentStep !== 5"
     >
       {{ 'common.next' | translate }}
     </ui-button>

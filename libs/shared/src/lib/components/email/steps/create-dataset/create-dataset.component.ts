@@ -20,6 +20,8 @@ export class CreateDatasetComponent implements OnInit {
   /** Tab index for filtering. */
   public tabIndex = 'filter';
 
+  blockIndex!: number;
+
   /** GraphQL query reference for fetching resources. */
   public resourcesQuery!: QueryRef<ResourcesQueryResponse>;
 
@@ -190,12 +192,15 @@ export class CreateDatasetComponent implements OnInit {
    * Adds a tab
    */
   public addTab() {
-    this.tabs.forEach((tab) => (tab.active = false));
+    this.tabs.forEach(
+      (tab) => ((tab.active = false), (this.blockIndex = tab.index))
+    );
+    console.log(this.blockIndex);
     this.tabs.push({
-      title: `Block ${this.tabs.length + 1}`,
-      content: `Block ${this.tabs.length + 1} Content`,
+      title: `Block ${this.blockIndex + 2}`,
+      content: `Block ${this.blockIndex + 2} Content`,
       active: true,
-      index: this.tabs.length,
+      index: this.blockIndex + 1,
     });
     this.activeTab =
       this.tabs.filter((tab: any) => tab.active == true).length > 0

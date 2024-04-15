@@ -126,7 +126,6 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   /** EVENT EMITTER FOR CHANGING THE MAIN TAB. */
   @Output() changeMainTab: EventEmitter<any> = new EventEmitter();
   /** NAVIGATE TO DATASET PREVIEW SCREEN EMITTER */
-  /** EVENT EMITTER FOR NAVIGATING TO THE PREVIEW. */
   @Output() navigateToPreview: EventEmitter<any> = new EventEmitter();
   /** LOADING STATUS. */
   public loading = false;
@@ -136,7 +135,9 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   currentFieldName: any;
   /** VALIDATION ERROR MESSAGE */
   showErrorMessage: any = '';
+  /** INDEX OF CURRENT HIGHLIGHTED FIELD FROM SELECTED FIELD LIST */
   selectedFieldIndex: number | null = null;
+  /** INDEX OF CURRENT HIGHLIGHTED FIELD FROM AVAILABLE FIELD LIST */
   availableFieldIndex: number | null = null;
 
   /**
@@ -200,7 +201,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       this.availableFields = availableFields;
       this.selectedResourceId = selectedResourceId;
     }
-
+    // Saves Dataset form form when called.
     this.datasetSaveSubscription = this.emailService.datasetSave.subscribe(
       (save) => {
         if (save) {
@@ -224,6 +225,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     };
     this.query.controls.cacheData.setValue(cacheData);
 
+    // Safely destroys dataset save subscription
     if (this.datasetSaveSubscription) {
       this.datasetSaveSubscription.unsubscribe();
     }
@@ -480,16 +482,18 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
           (data: any) => data.name === fieldName.field.split('.')[0]
         )
       : null;
-    if (
-      field &&
-      (field?.type === TYPE_LABEL.resource ||
-        field?.type === TYPE_LABEL.resources)
-    ) {
+    if (field && field?.type === TYPE_LABEL.resources) {
       field = fieldName
         ? field.fields?.find(
             (data: any) => data.name === fieldName.field.split('.')[1]
           )
         : null;
+    }
+    if (field && field.type === TYPE_LABEL.resource) {
+      field = field?.fields?.find(
+        (x: { name: any }) =>
+          x.name.split(' - ')[1] === fieldName.field.split('.')[1]
+      );
     }
     return field ? field.type : '';
   }
@@ -635,10 +639,11 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * On the operator change
+   * Maps operator to the correct operator value,
+   * and enables or disables value input box.
    *
-   * @param selectedOperator string
-   * @param filterData any
+   * @param selectedOperator Filter Operator that has been selected
+   * @param filterData Filter form data.
    */
   onOperatorChange(selectedOperator: string, filterData: any) {
     const operator = this.filterOperators.find(
@@ -663,12 +668,14 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
     let field = fields.find(
       (x: { name: any }) => x.name === name.split('.')[0]
     );
-    if (
-      field &&
-      (field.type === TYPE_LABEL.resource ||
-        field.type === TYPE_LABEL.resources)
-    ) {
+    if (field && field.type === TYPE_LABEL.resources) {
       field = name.split('.')[1];
+    }
+
+    if (field && field.type === TYPE_LABEL.resource) {
+      field = field?.fields.find(
+        (x: { name: any }) => x.name.split(' - ')[1] === name.split('.')[1]
+      );
     }
     let type: { operators: any; editor: string; defaultOperator: string } = {
       operators: undefined,
@@ -893,6 +900,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                     inTheLastNumberControl.value,
                     inTheLastUnitControl.value
                   );
+                  // Sets filter value to the in the last filter converted to minutes.
                   filterFormGroup.get('value')?.setValue(days);
                   this.queryValue[this.activeTab.index].filter.filters[
                     filterIndex
@@ -905,11 +913,14 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
       }
 
       if (tabName == 'filter') {
-        // this.datasetPreview.selectTab(1);
         const query = this.queryValue[this.activeTab.index];
         query.pageSize = 1;
         query.tabIndex = this.activeTab.index;
         this.loading = true;
+        /**
+         Fetches the data records for selected fields
+        (by default its all records in the resource).
+         */
         this.fetchDataSet(query).subscribe(
           (res: any) => {
             this.loading = false;
@@ -950,6 +961,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
         let count = 0;
         for (const query of this.queryValue) {
           query.fields.forEach((x: any) => {
+            /**
+             * Converts the resource field name to parents name
+             * so the resource parent is converted back to an object.
+             */
             if (x.parentName) {
               const child = x.name;
               x.childName = child.split(' - ')[1];
@@ -976,6 +991,10 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
                       query
                     );
                     query.fields.forEach((x: any) => {
+                      /**
+                       * Converts the resource field name back to {resourceName} - {resourceField}
+                       * so the field can be mapped to the correct data.
+                       */
                       if (x.parentName) {
                         x.name = `${x.parentName} - ${x.childName}`;
                         x.type = x.childType;

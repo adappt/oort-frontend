@@ -158,13 +158,13 @@ export class EmailService {
   public isLinear = true;
   /** EMAIL LIST LOADING CHECKER */
   public emailListLoading = true;
+  /** SEPARATE EMAIL LIST */
   public separateEmail = [];
-  dataSetResponse: any;
 
   /**
-   * To replace all special characters with space
+   * Generates new dataset group.
    *
-   * @returns form group
+   * @returns new Dataset form group.
    */
   createNewDataSetGroup(): FormGroup {
     return this.formBuilder.group({
@@ -842,8 +842,8 @@ export class EmailService {
       query.pageSize = Number(query.pageSize);
       this.fetchDataSet(query).subscribe((res: { data: { dataSet: any } }) => {
         if (res?.data?.dataSet) {
-          this.dataSetResponse = res?.data?.dataSet.records;
-          this.dataList = this.dataSetResponse?.map((record: any) => {
+          const dataSetResponse = res?.data?.dataSet.records;
+          this.dataList = dataSetResponse?.map((record: any) => {
             const flattenedObject = this.flattenRecord(record, query);
 
             query.fields.forEach((x: any) => {

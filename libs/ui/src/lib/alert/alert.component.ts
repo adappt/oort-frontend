@@ -44,11 +44,9 @@ export class AlertComponent {
 
   /** Closes the alert and emits an event */
   onClose() {
-    // setTimeout(() => {
-    //   this.close.emit();
-    // }, 0);
-    this.ui.ngOnDestroy();
-    console.log(this.host);
+    setTimeout(() => {
+      this.close.emit();
+    }, 500);
     this.host.nativeElement.remove();
   }
 

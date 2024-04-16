@@ -925,7 +925,7 @@ export class EmailService {
             query.fields.forEach((x: any) => {
               if (x.childName) {
                 // Check if the childName exists in the records object
-                const matchingKey = Object.keys(record[key].data).find(
+                let matchingKey = Object.keys(record[key].data).find(
                   (child) => child === x.childName
                 );
 
@@ -933,6 +933,15 @@ export class EmailService {
                   // If a match is found, map the child field to the corresponding value in records
                   result[`${x.parentName} - ${x.childName}`] =
                     value.data[matchingKey];
+                } else {
+                  matchingKey = Object.keys(record[key]).find(
+                    (child) => child === x.childName
+                  );
+                  if (matchingKey) {
+                    // If a match is found, searches for meta data and sets if found
+                    result[`${x.parentName} - ${x.childName}`] =
+                      record[key][matchingKey];
+                  }
                 }
               }
             });

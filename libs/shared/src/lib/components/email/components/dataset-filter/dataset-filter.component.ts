@@ -970,7 +970,7 @@ export class DatasetFilterComponent implements OnInit, OnDestroy {
               x.childName = child.split(' - ')[1];
               x.name = x.parentName;
               x.childType = x.type;
-              x.type = 'resource';
+              x.type = TYPE_LABEL.resource;
             }
           });
 

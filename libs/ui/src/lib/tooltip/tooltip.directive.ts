@@ -103,7 +103,10 @@ export class TooltipDirective implements OnDestroy {
    * Destroy the tooltip and stop its display
    */
   private removeHint() {
+    console.log(this.currentHost);
+    // this.currentHost.removeChild(this.elToolTip);
     if (this.currentHost.contains(this.elToolTip)) {
+      console.log(this.elToolTip);
       this.renderer.removeChild(this.currentHost, this.elToolTip);
     }
   }
@@ -201,6 +204,7 @@ export class TooltipDirective implements OnDestroy {
    * remove the tooltip by default
    */
   ngOnDestroy(): void {
+    console.log('removed');
     this.removeHint();
   }
 }

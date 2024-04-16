@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { AlertVariant } from './types/alert-variant';
 import { Variant } from '../types/variant';
-import { TooltipDirective } from '../tooltip/tooltip.directive';
 
 /**
  * UI Alert Component.
@@ -37,16 +36,13 @@ export class AlertComponent {
    *
    * @param host Angular element ref
    */
-  constructor(
-    private host: ElementRef<HTMLElement>,
-    private ui: TooltipDirective
-  ) {}
+  constructor(private host: ElementRef<HTMLElement>) {}
 
   /** Closes the alert and emits an event */
   onClose() {
     setTimeout(() => {
       this.close.emit();
-    }, 500);
+    }, 300);
     this.host.nativeElement.remove();
   }
 

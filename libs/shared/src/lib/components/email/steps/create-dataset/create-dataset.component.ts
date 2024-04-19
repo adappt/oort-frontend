@@ -88,6 +88,8 @@ export class CreateDatasetComponent implements OnInit {
 
   /** View child for Kendo Strip. */
   @ViewChild('kendoStrip') kendoStrip: any;
+  filteredTab!: any;
+  title!: any;
 
   /**
    * Composite filter group.
@@ -100,6 +102,16 @@ export class CreateDatasetComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.emailService.title.subscribe((data) => {
+      this.title = data;
+    });
+    this.emailService.index.subscribe((index: any) => {
+      this.tabs.map((tab) => {
+        if (tab.index === index) {
+          tab.title = this.title;
+        }
+      });
+    });
     this.allPreviewData = this.emailService.getAllPreviewData();
     this.filteredFields = this.resource?.fields;
     this.tabIndex = this.activeTab.index;

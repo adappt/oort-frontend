@@ -383,6 +383,8 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         delete data.cacheData;
       });
       const queryData = this.emailService.datasetsForm.value;
+      queryData.notificationType =
+        this.emailService.datasetsForm.controls.notificationType.value;
       this.applicationService.application$.subscribe((res: any) => {
         this.emailService.datasetsForm.get('applicationId')?.setValue(res?.id);
         queryData.applicationId = res?.id;
@@ -429,7 +431,6 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         this.emailService
           .addEmailNotification(queryData)
           .subscribe((res: any) => {
-            console.log(res);
             this.emailService.configId = res.data.addEmailNotification.id;
 
             this.snackBar.openSnackBar(

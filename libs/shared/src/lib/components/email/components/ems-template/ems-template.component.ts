@@ -221,10 +221,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         this.disableAllNextSteps(0);
       }
     } else if (this.currentStep === 1) {
-      if (
-        this.emailService.datasetsForm.controls['name'].valid &&
-        this.emailService.datasetsForm.controls['notificationType'].valid
-      ) {
+      if (this.emailService.datasetsForm.controls['name'].valid) {
         this.currentStep += 1;
         this.steps[2].disabled = false;
       } else {
@@ -432,6 +429,7 @@ export class EmsTemplateComponent implements OnInit, OnDestroy {
         this.emailService
           .addEmailNotification(queryData)
           .subscribe((res: any) => {
+            console.log(res);
             this.emailService.configId = res.data.addEmailNotification.id;
 
             this.snackBar.openSnackBar(

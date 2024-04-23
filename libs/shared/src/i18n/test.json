@@ -742,6 +742,9 @@
 			}
 		},
 		"distributionLists": {
+			"actions": {
+				"navigate": "******"
+			},
 			"delete": {
 				"confirmationMessage": "****** {{name}} ******"
 			},
@@ -1316,6 +1319,9 @@
 			}
 		},
 		"templates": {
+			"actions": {
+				"navigate": "******"
+			},
 			"available": "******",
 			"delete": {
 				"confirmationMessage": "****** {{name}} ******"

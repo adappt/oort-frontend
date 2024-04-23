@@ -12,6 +12,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { takeUntil } from 'rxjs';
 import { UnsubscribeComponent } from '../../utils/unsubscribe/unsubscribe.component';
 import { ButtonModule, DialogModule } from '@oort-front/ui';
+import { ApplicationService } from '../../../services/application/application.service';
 
 /** Model for dialog data */
 interface DialogData {
@@ -49,14 +50,24 @@ export class EditWidgetModalComponent
    * @param data The dialog data
    * @param confirmService Shared confirm service
    * @param translate Angular translate service
+   * @param applicationService the application service
    */
   constructor(
     public dialogRef: DialogRef<EditWidgetModalComponent>,
     @Inject(DIALOG_DATA) public data: DialogData,
     private confirmService: ConfirmService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private applicationService: ApplicationService
   ) {
     super();
+    this.applicationService.closeApplicationSettingsDialog.subscribe(
+      (isCloseAction: boolean | undefined) => {
+        if (isCloseAction) {
+          this.dialogRef.close();
+          this.applicationService.closeApplicationSettingsDialog.next(false);
+        }
+      }
+    );
   }
 
   /** Once the template is ready, inject the settings component linked to the widget type passed as a parameter. */

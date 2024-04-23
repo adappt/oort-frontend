@@ -457,4 +457,17 @@ export class ButtonConfigComponent
   public scalarField(fieldName: string): any {
     return this.scalarFields.find((field: any) => field.name === fieldName);
   }
+
+  /**
+   * Navigates to a dynamic link within the application.
+   *
+   * @param {string} link - The dynamic link to be navigated.
+   */
+  public navigateTo(link: string) {
+    const applicationId = this.applicationService.application.value?.id;
+    if (applicationId) {
+      this.applicationService.closeApplicationSettingsDialog.next(true);
+      this.router.navigate([`applications/${applicationId}/${link}`]);
+    }
+  }
 }

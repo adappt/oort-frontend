@@ -786,6 +786,8 @@
 				"validTitle": "******"
 			},
 			"preview": {
+				"less": "******",
+				"more": "****** {{length}} ******",
 				"subject": "******"
 			}
 		},

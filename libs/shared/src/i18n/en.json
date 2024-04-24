@@ -786,6 +786,8 @@
 				"validTitle": "Please enter a title"
 			},
 			"preview": {
+				"less": "Show Less",
+				"more": "Show {{length}} remaining emails...",
 				"subject": "Subject:"
 			}
 		},

@@ -987,11 +987,19 @@ export class EmailService {
               key
             ] = `${record[key].properties.countryName} (${record[key].properties.coordinates.lat}, ${record[key].properties.coordinates.lng})`;
           } else {
-            // Takes the resources count and maps it to the resource name.
-            result[key] =
-              record[key].length > 1
-                ? `${record[key].length} items`
-                : `${record[key].length} item`;
+            const fieldType = query.fields.find((field: any) => {
+              return field.name === key;
+            }).type;
+
+            if (fieldType === 'tagbox') {
+              result[key] = record[key];
+            } else {
+              // Takes the resources count and maps it to the resource name.
+              result[key] =
+                record[key].length > 1
+                  ? `${record[key].length} items`
+                  : `${record[key].length} item`;
+            }
           }
         } else {
           if (

@@ -95,6 +95,8 @@ import { EmsTemplateComponent } from './components/ems-template/ems-template.com
     SelectMenuModule,
     AlertModule,
     CheckboxModule,
+    DividerModule,
+    FixedWrapperModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

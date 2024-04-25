@@ -44,6 +44,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { EmailTemplateComponent } from './components/email-template/email-template.component';
 import { DatasetFilterComponent } from './components/dataset-filter/dataset-filter.component';
 import { EmsTemplateComponent } from './components/ems-template/ems-template.component';
+import { EmptyModule } from '../ui/empty/empty.module';
 
 /**
  * Email module.
@@ -97,6 +98,7 @@ import { EmsTemplateComponent } from './components/ems-template/ems-template.com
     CheckboxModule,
     DividerModule,
     FixedWrapperModule,
+    EmptyModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

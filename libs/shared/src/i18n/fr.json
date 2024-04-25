@@ -229,6 +229,7 @@
 			"none": "Aucune mise en page",
 			"one": "Mise en page"
 		},
+		"legacy": "Obsolète",
 		"loading": "Chargement",
 		"modifiedOn": "Modifié le ",
 		"name": "Nom",

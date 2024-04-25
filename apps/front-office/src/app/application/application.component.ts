@@ -241,6 +241,7 @@ export class ApplicationComponent
         name: this.translate.instant('common.template.few'),
         path: `./settings/templates`,
         icon: 'description',
+        legacy: true,
       });
     }
     if (
@@ -254,6 +255,7 @@ export class ApplicationComponent
         name: this.translate.instant('common.distributionList.few'),
         path: `./settings/distribution-lists`,
         icon: 'mail',
+        legacy: true,
       });
     }
     if (

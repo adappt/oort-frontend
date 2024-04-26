@@ -56,7 +56,7 @@
       </ng-select>
     </div>
     <!-- <div class="text-gray-700 text-xs gap-1 flex items-end w-1/3" style="font-weight: 500;">
-      <ui-checkbox 
+      <ui-checkbox
       formControlName="individualEmail"
       [(ngModel)]="separateEmail" (change)="onChangeSeparateEmail()"
       >
@@ -359,6 +359,7 @@
       <ng-template kendoTabContent>
         <ng-container class="mt-2" *ngTemplateOutlet="datasetAlert"></ng-container>
         <ng-container class="mt-2" *ngTemplateOutlet="missingFieldAlert"></ng-container>
+        <ng-container class="mt-2" *ngTemplateOutlet="selectedFieldAlert"></ng-container>
         <ng-container>
           <div class="flex gap-5">
             <!-- Available Fields -->
@@ -469,11 +470,7 @@
           </div>
         </div>
         <div>
-          
-        </div>
-        <div class="mt-2">
 
-          <ng-container class="mt-5" *ngTemplateOutlet="selectedFieldAlert"></ng-container>
         </div>
         </ng-container>
         <button
@@ -496,7 +493,7 @@
         {{ 'common.preview' | translate }}
       </button>
     </ng-template>
-    
+
     </kendo-tabstrip-tab>
     <!-- Style Tab -->
     <kendo-tabstrip-tab [disabled]="true"  *ngIf="showPreview === false">
@@ -521,7 +518,7 @@
 </ng-template>
 <ng-template #selectedFieldAlert>
   <ui-alert variant="warning" *ngIf="!selectedFields.length" [closable]="true">
-   At least select one field 
+   At least select one field
   </ui-alert>
 </ng-template>
 <ng-template #missingFieldAlert>

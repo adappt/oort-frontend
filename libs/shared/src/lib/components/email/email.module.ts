@@ -16,6 +16,9 @@ import {
   DateModule,
   AlertModule,
   CheckboxModule,
+  DividerModule,
+  FixedWrapperModule,
+  ChipModule,
 } from '@oort-front/ui';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
@@ -61,6 +64,7 @@ import { EmsTemplateComponent } from './components/ems-template/ems-template.com
   ],
   imports: [
     FormsModule,
+    ChipModule,
     ReactiveFormsModule,
     CommonModule,
     EmailRoutingModule,

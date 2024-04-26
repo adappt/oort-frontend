@@ -518,7 +518,7 @@
 </ng-template>
 <ng-template #selectedFieldAlert>
   <ui-alert variant="warning" *ngIf="!selectedFields.length" [closable]="true">
-   At least select one field
+   {{'components.email.noFieldsSelected' | translate}}
   </ui-alert>
 </ng-template>
 <ng-template #missingFieldAlert>

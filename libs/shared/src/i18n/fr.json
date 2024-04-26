@@ -798,6 +798,7 @@
 				"squareValidation": "Veuillez télécharger une image avec un rapport hauteur/largeur plus carré, ou similaire à 200x200."
 			},
 			"name": "Email",
+			"noFieldsSelected": "Veuillez sélectionner au moins 1 champ!",
 			"notification": {
 				"create": "Créer une notification",
 				"list": "Liste des notifications",

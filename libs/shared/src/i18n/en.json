@@ -792,6 +792,7 @@
 				"squareValidation": "Please upload an image with a more square aspect ratio, or similar to 200x200."
 			},
 			"name": "Email",
+			"noFieldsSelected": "Please Select at least 1 field!",
 			"notification": {
 				"create": "Create Notification",
 				"list": "Notification List",

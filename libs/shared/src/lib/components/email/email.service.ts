@@ -992,8 +992,38 @@ export class EmailService {
               return field.name === key;
             }).type;
 
+            // console.log('KEY');
+            // console.log(key);
+            // console.log('FIELDTYPE');
+            // console.log(fieldType);
+
             if (fieldType !== TYPE_LABEL.resources) {
-              result[key] = record[key];
+              const fieldName = query.fields.find((field: any) => {
+                return field.name === key;
+              });
+              // console.log('FIELDNAME');
+              // console.log(fieldName);
+              // console.log('REcord');
+              // console.log(record[key]);
+              if (fieldType === 'owner' || fieldType === 'users') {
+                const options = fieldName?.options?.filter((option: any) => {
+                  return Object.values(record[key]).some((array: any) =>
+                    array.includes(option.value)
+                  );
+                });
+                // console.log('OPTION');
+                // console.log(options);
+                if (options && options.length > 0) {
+                  // Map over the options to extract the text values and join them with commas
+                  result[key] = options
+                    .map((option: any) => option.text)
+                    .join(', ');
+                } else {
+                  result[key] = '';
+                }
+              } else {
+                result[key] = record[key];
+              }
             } else {
               // Takes the resources count and maps it to the resource name.
               result[key] =

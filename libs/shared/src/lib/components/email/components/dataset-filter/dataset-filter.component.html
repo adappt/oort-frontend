@@ -175,151 +175,184 @@
                   *ngIf="operators?.[fieldIndex] && !data.get('hideEditor')?.value"
 
                   >
-                  <!-- Text Input for non-date/datetime fields -->
-                  <ng-container *ngIf="!isDateOrDatetimeOperator(fieldIndex) && !isNumericOperator(fieldIndex)">
-                    <div uiFormFieldDirective [defaultMargin]="false">
-                      <label>{{ 'common.value.one' | translate }}</label>
-                      <input formControlName="value" type="text" />
-                    </div>
-                  </ng-container>
-                  <!-- Numeric Input -->
-                  <ng-container *ngIf="isNumericOperator(fieldIndex)" #numericEditor>
-                    <div uiFormFieldDirective [defaultMargin]="false">
-                      <label>{{ 'common.value.one' | translate }}</label>
-                      <input formControlName="value" type="number" />
-                    </div>
-                  </ng-container>
-                  <!-- Date / DateTime picker or within the Last... picker -->
-                  <ng-container *ngIf="isDateOrDatetimeOperator(fieldIndex)">
-                    <!-- Date Picker -->
-                    <div uiFormFieldDirective [defaultMargin]="false" *ngIf="getFieldType(fieldIndex) === 'date' && data.get('operator')?.value !== 'inthelast'">
-                      <label class="block text-gray-700 text-sm">{{ 'components.queryBuilder.filter.value' | translate }}</label>
-                      <div class="grid grid-cols-6 gap-2">
-                        <!-- Conditional rendering based on useExpression -->
-                        <ng-container *ngIf="!useExpression; else textInput">
-                          <div [uiDateWrapper]="calendar" class="col-span-5">
+                    <!-- Text Input for non-date/datetime fields -->
+                    <ng-container *ngIf="!isDateOrDatetimeOperator(fieldIndex) && !isNumericOperator(fieldIndex) && !isSelectField(fieldIndex)">
+                      <div uiFormFieldDirective [defaultMargin]="false">
+                        <label>{{ 'common.value.one' | translate }}</label>
+                        <input formControlName="value" type="text" />
+                      </div>
+                    </ng-container>
+                    <!-- Numeric Input -->
+                    <ng-container *ngIf="isNumericOperator(fieldIndex)" #numericEditor>
+                      <div uiFormFieldDirective [defaultMargin]="false">
+                        <label>{{ 'common.value.one' | translate }}</label>
+                        <input formControlName="value" type="number" />
+                      </div>
+                    </ng-container>
+                    <!-- Date / DateTime picker or within the Last... picker -->
+                    <ng-container *ngIf="isDateOrDatetimeOperator(fieldIndex)">
+                      <!-- Date Picker -->
+                      <div uiFormFieldDirective [defaultMargin]="false" *ngIf="getFieldType(fieldIndex) === 'date' && data.get('operator')?.value !== 'inthelast'">
+                        <label class="block text-gray-700 text-sm">{{ 'components.queryBuilder.filter.value' | translate }}</label>
+                        <div class="grid grid-cols-6 gap-2">
+                          <!-- Conditional rendering based on useExpression -->
+                          <ng-container *ngIf="!useExpression; else textInput">
+                            <div [uiDateWrapper]="calendar" class="col-span-5">
+                              <input
+                                [uiDatePicker]
+                                formControlName="value"
+                                [label]="'kendo.datepicker.dateLabel' | translate"
+                                class="w-full"
+                              />
+                              <ui-date-picker #calendar></ui-date-picker>
+                            </div>
+                          </ng-container>
+                          <ng-template #textInput>
                             <input
-                              [uiDatePicker]
+                              [uiTooltip]="'components.email.tooltip.reverseDate'| translate"
                               formControlName="value"
-                              [label]="'kendo.datepicker.dateLabel' | translate"
-                              class="w-full"
+                              type="text"
+                              [placeholder]="'components.email.tooltip.reverseDate' | translate"
+                              class="col-span-5 w-full"
                             />
-                            <ui-date-picker #calendar></ui-date-picker>
-                          </div>
-                        </ng-container>
-                        <ng-template #textInput>
-                          <input
-                            uiTooltip="YYYY/MM/DD"
-                            formControlName="value"
-                            type="text"
-                            placeholder="YYYY/MM/DD"
-                            class="col-span-5 w-full"
-                          />
-                        </ng-template>
+                          </ng-template>
 
-                        <!-- Date and time Button -->
-                        <div class="col-span-1">
-                          <ui-button
-                            [isIcon]="true"
-                            icon="change_circle_outline"
-                            variant="primary"
-                            (click)="changeEditor()"
-                            [uiTooltip]="
-                              (useExpression
-                                ? 'components.queryBuilder.tooltip.filter.date.usePicker'
-                                : 'components.queryBuilder.tooltip.filter.date.useExpression'
-                              ) | translate
-                            "
-                            class="w-full"
-                          ></ui-button>
+                          <!-- Date and time Button -->
+                          <div class="col-span-1">
+                            <ui-button
+                              [isIcon]="true"
+                              icon="change_circle_outline"
+                              variant="primary"
+                              (click)="changeEditor()"
+                              [uiTooltip]="
+                                (useExpression
+                                  ? 'components.queryBuilder.tooltip.filter.date.usePicker'
+                                  : 'components.queryBuilder.tooltip.filter.date.useExpression'
+                                ) | translate
+                              "
+                              class="w-full"
+                            ></ui-button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                     <!-- Date Time Picker -->
-                     <div uiFormFieldDirective [defaultMargin]="false" *ngIf="(getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local') && data.get('operator')?.value !== 'inthelast'">
-                      <label class="block text-gray-700 text-sm">{{ 'components.queryBuilder.filter.value' | translate }}</label>
-                      <div class="grid grid-cols-6 gap-2">
-                        <ng-container *ngIf="!useExpression; else textInput">
-                          <div [uiDateWrapper]="calendar" class="col-span-5">
+                      <!-- Date Time Picker -->
+                      <div uiFormFieldDirective [defaultMargin]="false" *ngIf="(getFieldType(fieldIndex) === 'datetime' || getFieldType(fieldIndex) === 'datetime-local') && data.get('operator')?.value !== 'inthelast'">
+                        <label class="block text-gray-700 text-sm">{{ 'components.queryBuilder.filter.value' | translate }}</label>
+                        <div class="grid grid-cols-6 gap-2">
+                          <ng-container *ngIf="!useExpression; else textInput">
+                            <div [uiDateWrapper]="calendar" class="col-span-5">
+                              <input
+                                [uiDatePicker]
+                                formControlName="value"
+                                [label]="'kendo.datepicker.dateLabel' | translate"
+                                class="w-full"
+                              />
+                              <ui-date-picker #calendar></ui-date-picker>
+                            </div>
+                          </ng-container>
+                          <ng-template #textInput>
                             <input
-                              [uiDatePicker]
+                              [uiTooltip]="'components.email.tooltip.reverseDate'| translate"
                               formControlName="value"
-                              [label]="'kendo.datepicker.dateLabel' | translate"
-                              class="w-full"
+                              type="text"
+                              [placeholder]="'components.email.tooltip.reverseDate' | translate"
+                              class="col-span-5 w-full"
                             />
-                            <ui-date-picker #calendar></ui-date-picker>
-                          </div>
-                        </ng-container>
-                        <ng-template #textInput>
-                          <input
-                            uiTooltip="YYYY/MM/DD"
-                            formControlName="value"
-                            type="text"
-                            placeholder="YYYY/MM/DD"
-                            class="col-span-5 w-full"
-                          />
-                        </ng-template>
+                          </ng-template>
 
-                        <!-- Date to text Button -->
-                        <div class="col-span-1">
-                          <ui-button
-                            [isIcon]="true"
-                            icon="change_circle_outline"
-                            variant="primary"
-                            (click)="changeEditor()"
-                            [uiTooltip]="
-                              (useExpression
-                                ? 'components.queryBuilder.tooltip.filter.date.usePicker'
-                                : 'components.queryBuilder.tooltip.filter.date.useExpression'
-                              ) | translate
-                            "
-                            class="w-full"
-                          ></ui-button>
+                          <!-- Date to text Button -->
+                          <div class="col-span-1">
+                            <ui-button
+                              [isIcon]="true"
+                              icon="change_circle_outline"
+                              variant="primary"
+                              (click)="changeEditor()"
+                              [uiTooltip]="
+                                (useExpression
+                                  ? 'components.queryBuilder.tooltip.filter.date.usePicker'
+                                  : 'components.queryBuilder.tooltip.filter.date.useExpression'
+                                ) | translate
+                              "
+                              class="w-full"
+                            ></ui-button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <!-- within the Last... picker -->
-                    <div
-                      *ngIf="data.get('operator')?.value === 'inthelast'"
-                      formGroupName="inTheLast"
-                      class="flex">
+                      <!-- within the Last... picker -->
                       <div
-                      uiFormFieldDirective
-                      [defaultMargin]="false"
-                      class="mr-2">
-                        <label>Number</label>
-                        <ui-select-menu
-                          formControlName="number"
-                          >
+                        *ngIf="data.get('operator')?.value === 'inthelast'"
+                        formGroupName="inTheLast"
+                        class="flex">
+                        <div
+                        uiFormFieldDirective
+                        [defaultMargin]="false"
+                        class="mr-2">
+                          <label>Number</label>
+                          <ui-select-menu
+                            formControlName="number"
+                            >
+                            <ui-select-option
+                              *ngFor="let num of getNumbersArray()"
+                              [value]="num">
+                              {{ num }}
+                            </ui-select-option>
+                          </ui-select-menu>
+                        </div>
+                        <div
+                          uiFormFieldDirective
+                          [defaultMargin]="false"
+                        >
+                          <label>Unit</label>
+                          <ui-select-menu formControlName="unit">
+                            <ng-container *ngFor="let timeUnit of timeUnits">
+                              <ui-select-option [value]="timeUnit.value">
+                                {{ timeUnit.label }}
+                              </ui-select-option>
+                            </ng-container>
+                          </ui-select-menu>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="data.get('operator')?.value === 'inthelast'" [hidden]="true">
+                        <input
+                          formControlName="value"
+                          type="text"
+                        />
+                      </div>
+                    </ng-container>
+                    <!-- Value picker for Select fields -->
+                    <ng-container *ngIf="isSelectField(fieldIndex)">
+                      <div uiFormFieldDirective [defaultMargin]="false">
+                        <label>{{ 'common.value.one' | translate }}</label>
+                        <ui-select-menu *ngIf="!getField(fieldIndex).multiSelect" formControlName="value">
+                          <ui-select-option>{{
+                            'common.input.none' | translate
+                          }}</ui-select-option>
                           <ui-select-option
-                            *ngFor="let num of getNumbersArray()"
-                            [value]="num">
-                            {{ num }}
+                            *ngFor="let option of getField(fieldIndex).options"
+                            [value]="option.value"
+                          >
+                            {{ option.text }}
+                          </ui-select-option>
+                        </ui-select-menu>
+                        <ui-select-menu
+                          *ngIf="getField(fieldIndex).multiSelect"
+                          formControlName="value"
+                          [multiselect]="true"
+                        >
+                          <ui-select-option>{{
+                            'common.input.none' | translate
+                          }}</ui-select-option>
+                          <ui-select-option
+                            *ngFor="let option of getField(fieldIndex).options"
+                            [value]="option.value"
+                          >
+                            {{ option.text }}
                           </ui-select-option>
                         </ui-select-menu>
                       </div>
-                      <div
-                        uiFormFieldDirective
-                        [defaultMargin]="false"
-                      >
-                        <label>Unit</label>
-                        <ui-select-menu formControlName="unit">
-                          <ng-container *ngFor="let timeUnit of timeUnits">
-                            <ui-select-option [value]="timeUnit.value">
-                              {{ timeUnit.label }}
-                            </ui-select-option>
-                          </ng-container>
-                        </ui-select-menu>
-                      </div>
-                    </div>
-                    <div
-                      *ngIf="data.get('operator')?.value === 'inthelast'" [hidden]="true">
-                      <input
-                        formControlName="value"
-                        type="text"
-                      />
-                    </div>
-                  </ng-container>
+                    </ng-container>
+
                   </div>
                   <button
                     class="ui-button-icon primary medium button-danger mt-8"

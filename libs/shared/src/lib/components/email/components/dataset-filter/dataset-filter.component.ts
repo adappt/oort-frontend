@@ -1135,7 +1135,11 @@ export class DatasetFilterComponent
               if (this.totalMatchingRecords <= 50) {
                 this.datasetPreview.selectTab(1);
                 this.showDatasetLimitWarning = false;
-                this.emailService.disableSaveAndProceed.next(true);
+                if (this.selectedFields.length) {
+                  this.emailService.disableSaveAndProceed.next(false);
+                } else {
+                  this.emailService.disableSaveAndProceed.next(true);
+                }
               } else {
                 this.showDatasetLimitWarning = true;
                 this.emailService.disableSaveAndProceed.next(true);

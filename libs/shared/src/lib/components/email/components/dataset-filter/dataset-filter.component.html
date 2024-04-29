@@ -65,11 +65,11 @@
             | translate
         }}</ng-container>
       </ui-checkbox>
-    </div>
+    </div>  -->
     <div class="w-1/3 flex loadingSign">
       <ui-spinner *ngIf="loading" style="position: relative;"></ui-spinner>
     </div>
-  </div>
+   </div>
   <kendo-tabstrip (tabSelect)="onTabSelect($event)" #datasetPreview *ngIf="resource?.fields?.length">
     <!-- Filter Tab -->
     <kendo-tabstrip-tab  [title]="'Filter'" [disabled]="false" *ngIf="showPreview === false" [selected]="true">

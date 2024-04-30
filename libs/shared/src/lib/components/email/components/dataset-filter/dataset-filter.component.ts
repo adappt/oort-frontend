@@ -36,23 +36,9 @@ import { QueryMetaDataQueryResponse } from '../../../../models/metadata.model';
 import { Subscription, takeUntil } from 'rxjs';
 import { SnackbarService } from '@oort-front/ui';
 import { UnsubscribeComponent } from '../../../utils/unsubscribe/unsubscribe.component';
+import { FieldStore } from '../../models/email.const';
 /** Default items per query, for pagination */
 let ITEMS_PER_PAGE = 0;
-/**
- * Available fields object
- */
-interface fieldStore {
-  name: string;
-  type: string;
-  fields?: string[] | null;
-  __typename: string;
-  parentName?: string | null;
-  childName?: string | null;
-  childType?: string | null;
-  options?: string[] | null;
-  multiSelect?: boolean | null;
-  select?: boolean | null;
-}
 
 /**
  * Component for filtering, selecting fields and styling block data sets.
@@ -101,11 +87,11 @@ export class DatasetFilterComponent
   /** Filtered fields for search. */
   public filteredFields: any[] = [];
   /** Selected fields for filtering. */
-  public selectedFields: fieldStore[] = [];
+  public selectedFields: FieldStore[] = [];
   /** Fields for filtering. */
   public filterFields: any[] = [];
   /** Available fields for filtering. */
-  public availableFields: fieldStore[] = [];
+  public availableFields: FieldStore[] = [];
   /** Operators for filtering. */
   public operators: { [key: number]: { value: string; label: string }[] } = {};
   /** Flag to show the dataset limit warning. */
@@ -640,7 +626,7 @@ export class DatasetFilterComponent
         );
       }
     }
-    if (field && (field as fieldStore)?.select) {
+    if (field && (field as FieldStore)?.select) {
       return 'select';
     }
 
@@ -987,7 +973,7 @@ export class DatasetFilterComponent
     this.emailService.disableSaveAndProceed.next(true);
     this.availableFields = [
       ...this.availableFields,
-      ...this.selectedFields.map((field: fieldStore) =>
+      ...this.selectedFields.map((field: FieldStore) =>
         JSON.parse(JSON.stringify(field))
       ),
     ];

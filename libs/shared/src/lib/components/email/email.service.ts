@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { RestService } from '../../services/rest/rest.service';
 import { TYPE_LABEL } from './filter/filter.constant';
+import { FieldStore } from './models/email.const';
 
 /**
  * Helper functions for emails template
@@ -165,6 +166,8 @@ export class EmailService {
   public emailListLoading = true;
   /** SEPARATE EMAIL LIST */
   public separateEmail = [];
+  /** Fields */
+  public fields: FieldStore[] = [];
 
   /**
    * Generates new dataset group.
@@ -207,6 +210,15 @@ export class EmailService {
     private restService: RestService
   ) {
     this.setDatasetForm();
+  }
+
+  /**
+   * Sets the email service fields
+   *
+   * @param selectedFields The selected fields
+   */
+  setEmailFields(selectedFields: FieldStore[]) {
+    this.fields = selectedFields;
   }
 
   /**
@@ -995,27 +1007,16 @@ export class EmailService {
               return field.name === key;
             }).type;
 
-            // console.log('KEY');
-            // console.log(key);
-            // console.log('FIELDTYPE');
-            // console.log(fieldType);
-
             if (fieldType !== TYPE_LABEL.resources) {
               const fieldName = query.fields.find((field: any) => {
                 return field.name === key;
               });
-              // console.log('FIELDNAME');
-              // console.log(fieldName);
-              // console.log('REcord');
-              // console.log(record[key]);
               if (fieldType === 'owner' || fieldType === 'users') {
                 const options = fieldName?.options?.filter((option: any) => {
                   return Object.values(record[key]).some((array: any) =>
                     array.includes(option.value)
                   );
                 });
-                // console.log('OPTION');
-                // console.log(options);
                 if (options && options.length > 0) {
                   // Map over the options to extract the text values and join them with commas
                   result[key] = options
@@ -1069,11 +1070,14 @@ export class EmailService {
    * Formats date strings into a pretty string representation
    *
    * @param rowData table cell data value
+   * @param field Name of record field
    * @returns formatted date string or the original value if not a date string
    */
-  formatDateStrings(rowData: any): string {
+  formatDateStrings(rowData: any, field: string): string {
+    const select = this.isSelect(field);
+
     // Check if rowData is a string that can be parsed into a date
-    if (typeof rowData === 'string' && !isNaN(Date.parse(rowData))) {
+    if (!select && typeof rowData === 'string' && !isNaN(Date.parse(rowData))) {
       // Parse the string into a Date object
       const date = new Date(rowData);
       // Format the date as MM/DD/YY, hh:mm AM/PM
@@ -1089,10 +1093,21 @@ export class EmailService {
       });
     }
     // If rowData is not a date string, return it as is
-    if (!rowData) {
-      return '';
-    }
-    return rowData as string;
+    // This includes non-string inputs and strings that cannot be parsed into a date
+    return rowData ? rowData.toString() : '';
+  }
+
+  /**
+   * Returns if field is Select
+   *
+   * @param fieldName Name of Field
+   * @returns boolean - true if field is Select
+   */
+  isSelect(fieldName: string) {
+    const field = this.fields.find((field: any) => {
+      return fieldName === field.name;
+    });
+    return field?.select;
   }
 
   /**

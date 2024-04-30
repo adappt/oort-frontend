@@ -906,6 +906,7 @@ export class DatasetFilterComponent
     this.availableFields = this.availableFields
       .filter((f: { name: string }) => f.name !== field.name)
       .sort((a, b) => (a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1));
+    this.emailService.setEmailFields(this.selectedFields);
   }
 
   /**
@@ -923,6 +924,7 @@ export class DatasetFilterComponent
       this.availableFieldIndex = null;
       this.selectedFieldIndex = this.selectedFields.length - 1;
       this.query.controls.fields.setValue(this.selectedFields);
+      this.emailService.setEmailFields(this.selectedFields);
     }
   }
 
@@ -963,6 +965,7 @@ export class DatasetFilterComponent
         (f) => f.name === field.name
       );
       this.selectedFieldIndex = null; // Reset the selected field index
+      this.emailService.setEmailFields(this.selectedFields);
     }
   }
 
@@ -982,6 +985,7 @@ export class DatasetFilterComponent
       a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
     );
     this.query.controls.fields.setValue(this.selectedFields);
+    this.emailService.setEmailFields(this.selectedFields);
   }
 
   /**
@@ -995,6 +999,7 @@ export class DatasetFilterComponent
     this.emailService.disableSaveAndProceed.next(false);
     this.availableFields = [];
     this.query.controls.fields.setValue(this.selectedFields);
+    this.emailService.setEmailFields(this.selectedFields);
   }
 
   /**

@@ -188,15 +188,6 @@ export class PreviewComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Checks if footer is empty
-   *
-   * @returns true if footer is empty
-   */
-  footerIsEmpty() {
-    return !this.footerString || /^<p>\s*<\/p>$/.test(this.footerString);
-  }
-
-  /**
    * Retrieves the style based on the item name then sets the style in the email service.
    *
    * @param item The item you are retrieving the inline styling of.
